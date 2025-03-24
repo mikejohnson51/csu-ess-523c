@@ -25,7 +25,7 @@
     "href": "index.html#schedule",
     "title": "Ecosystem Science and Sustainability 523c",
     "section": "Schedule",
-    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Lab 01: COVID Trends\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Lab 02: Border summaries\n Week 03: Predicates & Tesselations\n Lab 03: Dams in the US\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\nLab 04: Remote Sensing\n\n Week 05: Terrain Modeling\n Lab 05: Terrain & Flood Modeling\n\n\n\nComponent 3: Machine Learning\n Week 06: Feature Engineering & Model Creation\n Lab 06: CAMELS Data\n\n Week 07: Model Evaluation & Tuning\n Lab 07: …"
+    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Tech Talk 01: Quarto/Flextable\n Lab 01: Lab 1: COVID Trends\n\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Tech Talk 02: R as a GIS\n Lab 02: Lab 2: Border summaries\n\n Week 03: Predicates & Tesselations\n Tech Talk 03: Interactive Mapping\n Lab 03: Lab 3: Dams in the US\n\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\n Tech Talk 04: STAC\nLab 04: Lab 4: Remote Sensing\n\n Week 05: Terrain Modeling\n Tech Talk 01:OSM HAND\n Lab 05: Lab 5: Terrain & Flood Modeling\n\n\n\nComponent 3: Machine Learning\n Week 06: Feature Engineering & Model Workflows\n Tech Talk 08: Model Options\n Lab 06: Lab 6: CAMELS Data Part 1\n\n Week 07: Model Evaluation & Tuning\n Tech Talk 07: Wrap up\n Lab 07: Lab 6: CAMELS Data Part 2"
   },
   {
     "objectID": "index.html#component-1-data-science-tools",
@@ -59,8 +59,8 @@
     "objectID": "slides/week-1.html#getting-started-with-r-for-data-science",
     "href": "slides/week-1.html#getting-started-with-r-for-data-science",
     "title": "Week 1",
-    "section": "🚀 Getting Started with R for Data Science",
-    "text": "🚀 Getting Started with R for Data Science\n\nWelcome to 523C: Environmental Data Science Applications: Water Resources!\nThis first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.\nThroughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.\nThe survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics."
+    "section": "",
+    "text": "Welcome to 523C: Environmental Data Science Applications: Water Resources!\nThis first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.\nThroughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.\nThe survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics."
   },
   {
     "objectID": "slides/week-1.html#google-survey",
@@ -81,7 +81,7 @@
     "href": "slides/week-1.html#data-structures",
     "title": "Week 1",
     "section": "Data Structures",
-    "text": "Data Structures\n\nWhen working with multiple values, we need data structures to store and manipulate data efficiently.\nR provides several types of data structures, each suited for different use cases.\n\nVector\n\nA vector is the most basic data structure in R and contains elements of the same type.\nVectors are created using the c() function.\n\n\nchar.vec &lt;- c(\"a\", \"b\", \"c\")\nboolean.vec &lt;- c(TRUE, FALSE, TRUE)\n\n\nLists allow for heterogeneous data types.\n\n\nlist &lt;- list(a = c(1,2,3),\n            b = c(TRUE, FALSE),\n            c = \"test\")"
+    "text": "Data Structures\n\nWhen working with multiple values, we need data structures to store and manipulate data efficiently.\nR provides several types of data structures, each suited for different use cases.\n\n\nVector\n\nA vector is the most basic data structure in R and contains elements of the same type.\nVectors are created using the c() function.\n\n\nchar.vec &lt;- c(\"a\", \"b\", \"c\")\nboolean.vec &lt;- c(TRUE, FALSE, TRUE)\n\n\nLists allow for heterogeneous data types.\n\n\nlist &lt;- list(a = c(1,2,3),\n            b = c(TRUE, FALSE),\n            c = \"test\")\n\n\n\n\nMatrix\n\n# Creating a sequence of numbers:\n(vec &lt;- 1:9)\n#&gt; [1] 1 2 3 4 5 6 7 8 9\n\n\nA matrix is a two-dimensional data structure where a diminision (dim) is added to an atomic vector\nMatrices are created using the matrix() function.\n\n\n# Default column-wise filling\nmatrix(vec, nrow = 3)\n#&gt;      [,1] [,2] [,3]\n#&gt; [1,]    1    4    7\n#&gt; [2,]    2    5    8\n#&gt; [3,]    3    6    9\n\n# Row-wise filling\nmatrix(vec, nrow = 3, byrow = TRUE)\n#&gt;      [,1] [,2] [,3]\n#&gt; [1,]    1    2    3\n#&gt; [2,]    4    5    6\n#&gt; [3,]    7    8    9\n\n\n\n\nArray\n\nAn array extends matrices to higher dimensions.\nIt is useful when working with multi-dimensional data.\n\n\n# Creating a 2x2x2 array\narray(vec, dim = c(2,2,2))\n#&gt; , , 1\n#&gt; \n#&gt;      [,1] [,2]\n#&gt; [1,]    1    3\n#&gt; [2,]    2    4\n#&gt; \n#&gt; , , 2\n#&gt; \n#&gt;      [,1] [,2]\n#&gt; [1,]    5    7\n#&gt; [2,]    6    8\n\n\n\n\nData Frame / Tibble\n\nData Frames: A table-like (rectangular) structure where each column is a vector of equal length.\n\nUsed for storing datasets where different columns can have different data types.\n\nTibble: A modern version of a data frame that supports list-columns and better printing.\n\nOffers improved performance and formatting for large datasets.\n\n\n\n(df  &lt;- data.frame(char.vec, boolean.vec))\n#&gt;   char.vec boolean.vec\n#&gt; 1        a        TRUE\n#&gt; 2        b       FALSE\n#&gt; 3        c        TRUE\n\n(tib &lt;- tibble::tibble(char.vec, list))\n#&gt; # A tibble: 3 × 2\n#&gt;   char.vec list        \n#&gt;   &lt;chr&gt;    &lt;named list&gt;\n#&gt; 1 a        &lt;dbl [3]&gt;   \n#&gt; 2 b        &lt;lgl [2]&gt;   \n#&gt; 3 c        &lt;chr [1]&gt;"
   },
   {
     "objectID": "slides/week-1.html#installing-packages",
@@ -116,7 +116,7 @@
     "href": "slides/week-1.html#tidyverse-a-swiss-army-knife-for-data-science-r",
     "title": "Week 1",
     "section": "🌟 Tidyverse: A Swiss Army Knife for Data Science R ",
-    "text": "🌟 Tidyverse: A Swiss Army Knife for Data Science R \n\nThe tidyverse is a collection of packages designed for data science.\nWe can see what it includes using the tidyverse_packages function:\n\n\ntidyverse_packages()\n#&gt;  [1] \"broom\"         \"conflicted\"    \"cli\"           \"dbplyr\"       \n#&gt;  [5] \"dplyr\"         \"dtplyr\"        \"forcats\"       \"ggplot2\"      \n#&gt;  [9] \"googledrive\"   \"googlesheets4\" \"haven\"         \"hms\"          \n#&gt; [13] \"httr\"          \"jsonlite\"      \"lubridate\"     \"magrittr\"     \n#&gt; [17] \"modelr\"        \"pillar\"        \"purrr\"         \"ragg\"         \n#&gt; [21] \"readr\"         \"readxl\"        \"reprex\"        \"rlang\"        \n#&gt; [25] \"rstudioapi\"    \"rvest\"         \"stringr\"       \"tibble\"       \n#&gt; [29] \"tidyr\"         \"xml2\"          \"tidyverse\""
+    "text": "🌟 Tidyverse: A Swiss Army Knife for Data Science R \n\nThe tidyverse is a collection of packages designed for data science.\nWe can see what it includes using the tidyverse_packages function:\n\n\ntidyverse_packages()\n#&gt;  [1] \"broom\"         \"conflicted\"    \"cli\"           \"dbplyr\"       \n#&gt;  [5] \"dplyr\"         \"dtplyr\"        \"forcats\"       \"ggplot2\"      \n#&gt;  [9] \"googledrive\"   \"googlesheets4\" \"haven\"         \"hms\"          \n#&gt; [13] \"httr\"          \"jsonlite\"      \"lubridate\"     \"magrittr\"     \n#&gt; [17] \"modelr\"        \"pillar\"        \"purrr\"         \"ragg\"         \n#&gt; [21] \"readr\"         \"readxl\"        \"reprex\"        \"rlang\"        \n#&gt; [25] \"rstudioapi\"    \"rvest\"         \"stringr\"       \"tibble\"       \n#&gt; [29] \"tidyr\"         \"xml2\"          \"tidyverse\"\n\n\nWhile all tidyverse packages are valuable, the main ones we will focus on are:\n\nreadr: Reading data\ntibble: Enhanced data frames\ndplyr: Data manipulation\ntidyr: Data reshaping\npurrr: Functional programming\nggplot2: Visualization\n\nCombined, this provides us a complete “data science” toolset:\n\n\n\n\n\n\n\n\n\n\n\n(a)\n\n\n\n\n\n\n\n\n\n\n\n(b)\n\n\n\n\n\n\n\nFigure 1: Data Science: Process and Implementation"
   },
   {
     "objectID": "slides/week-1.html#glimpse",
@@ -130,7 +130,7 @@
     "href": "slides/week-1.html#readr",
     "title": "Week 1",
     "section": "readr ",
-    "text": "readr \n\nThe readr package provides functions for reading data into R.\nThe read_csv() function reads comma-separated files.\nThe read_tsv() function reads tab-separated files.\nThe read_delim() function reads files with custom delimiters.\nIn all cases, more intellegent parsing is done than with base R equivalents.\n\nread_csv \n\npath = 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv'\n\n# base R\nread.csv(path) |&gt; \n  head()\n#&gt;    fips        LON      LAT\n#&gt; 1  1061  -85.83575 31.09404\n#&gt; 2  8125 -102.42587 40.00307\n#&gt; 3 17177  -89.66239 42.35138\n#&gt; 4 28153  -88.69577 31.64132\n#&gt; 5 34041  -74.99570 40.85940\n#&gt; 6 46051  -96.76981 45.17255\n\n# More inutitive readr\nread_csv(path) |&gt; \n  head()\n#&gt; # A tibble: 6 × 3\n#&gt;   fips     LON   LAT\n#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1 01061  -85.8  31.1\n#&gt; 2 08125 -102.   40.0\n#&gt; 3 17177  -89.7  42.4\n#&gt; 4 28153  -88.7  31.6\n#&gt; 5 34041  -75.0  40.9\n#&gt; 6 46051  -96.8  45.2"
+    "text": "readr \n\nThe readr package provides functions for reading data into R.\nThe read_csv() function reads comma-separated files.\nThe read_tsv() function reads tab-separated files.\nThe read_delim() function reads files with custom delimiters.\nIn all cases, more intellegent parsing is done than with base R equivalents.\n\n\nread_csv \n\npath = 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv'\n\n# base R\nread.csv(path) |&gt; \n  head()\n#&gt;    fips        LON      LAT\n#&gt; 1  1061  -85.83575 31.09404\n#&gt; 2  8125 -102.42587 40.00307\n#&gt; 3 17177  -89.66239 42.35138\n#&gt; 4 28153  -88.69577 31.64132\n#&gt; 5 34041  -74.99570 40.85940\n#&gt; 6 46051  -96.76981 45.17255\n\n# More inutitive readr\nread_csv(path) |&gt; \n  head()\n#&gt; # A tibble: 6 × 3\n#&gt;   fips     LON   LAT\n#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1 01061  -85.8  31.1\n#&gt; 2 08125 -102.   40.0\n#&gt; 3 17177  -89.7  42.4\n#&gt; 4 28153  -88.7  31.6\n#&gt; 5 34041  -75.0  40.9\n#&gt; 6 46051  -96.8  45.2"
   },
   {
     "objectID": "slides/week-1.html#dplyr",
@@ -319,7 +319,7 @@
     "href": "slides/week-1.html#summary-algebra",
     "title": "Week 1",
     "section": "Summary / Algebra ",
-    "text": "Summary / Algebra \n\nRasters can be added, subtracted, multiplied, and divided\nAny form of map algebra can be done with rasters\nFor example, multiplying the Larimer mask by 2\n\n\n\nraw\n\nlarimer_mask\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   :    145787 \n#&gt; max value   :    412773\n\n\nData Operation\n\nelev2 &lt;- larimer_mask^2\n\n\nrast modified by rast\n\nlarimer_mask / elev2\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        :    CONUS_dem \n#&gt; min value   : 2.422639e-06 \n#&gt; max value   : 6.859322e-06\n\n\nstatistical methods\n\n(scaled = scale(larimer_mask))\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   : -1.562331 \n#&gt; max value   :  3.053412"
+    "text": "Summary / Algebra \n\nRasters can be added, subtracted, multiplied, and divided\nAny form of map algebra can be done with rasters\nFor example, multiplying the Larimer mask by 2\n\n\n\n\nraw\n\nlarimer_mask\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   :    145787 \n#&gt; max value   :    412773\n\n\n\n\nData Operation\n\nelev2 &lt;- larimer_mask^2\n\n\n\n\nrast modified by rast\n\nlarimer_mask / elev2\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        :    CONUS_dem \n#&gt; min value   : 2.422639e-06 \n#&gt; max value   : 6.859322e-06\n\n\n\n\nstatistical methods\n\n(scaled = scale(larimer_mask))\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   : -1.562331 \n#&gt; max value   :  3.053412"
   },
   {
     "objectID": "slides/week-1.html#raster-data-store",
@@ -557,7 +557,7 @@
     "href": "slides/week-1.html#theme_",
     "title": "Week 1",
     "section": "theme_* ",
-    "text": "theme_* \n\nThe theme_*() functions are used to customize the appearance of the plot.\nThey allow you to modify the plot’s background, gridlines, and text.\nExample: Applying the theme_linedraw() theme to the plot.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species) + \n  theme_linedraw()"
+    "text": "theme_* \n\nThe theme_*() functions are used to customize the appearance of the plot.\nThey allow you to modify the plot’s background, gridlines, and text.\nExample: Applying the theme_linedraw() theme to the plot.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species) + \n  theme_linedraw()\n\n\n\n\n\n\n\n\n\n\nThere are 1000s of themes available in the ggplot2 ecosystem\n\nggthemes\nggpubr\nhrbrthemes\nggsci\n…\n\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species) + \n  ggthemes::theme_economist()"
   },
   {
     "objectID": "slides/week-1.html#pivot_longer",
@@ -628,5 +628,82 @@
     "title": "Week 1",
     "section": "autoplot / rank_results  ",
     "text": "autoplot / rank_results  \n\nThe autoplot() function is used to visualize model performance.\nThe rank_results() function is used to rank models based on a metric.\nExample: Visualizing and ranking the model results based on the roc_auc (area under the curve) metric.\n\n\n\n\nautoplot(workflowset)\n\n\n\n\n\n\n\n\n\n\nrank_results(workflowset, rank_metric = \"roc_auc\")\n#&gt; # A tibble: 6 × 9\n#&gt;   wflow_id          .config .metric  mean std_err     n preprocessor model  rank\n#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;\n#&gt; 1 recipe_multinom_… Prepro… accura… 1     0           5 recipe       mult…     1\n#&gt; 2 recipe_multinom_… Prepro… roc_auc 1     0           5 recipe       mult…     1\n#&gt; 3 recipe_rand_fore… Prepro… accura… 0.981 5.97e-3     5 recipe       rand…     2\n#&gt; 4 recipe_rand_fore… Prepro… roc_auc 1.00  3.60e-4     5 recipe       rand…     2\n#&gt; 5 recipe_decision_… Prepro… accura… 0.955 1.28e-2     5 recipe       deci…     3\n#&gt; 6 recipe_decision_… Prepro… roc_auc 0.953 1.39e-2     5 recipe       deci…     3"
+  },
+  {
+    "objectID": "index.html#structure",
+    "href": "index.html#structure",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Structure",
+    "text": "Structure\nIn general …\n\nMondays will be a lecture,with a mix of slides and discussion.\nWednesdays will be a lab with a introductory ~30 min technical demo, followed by a hands-on lab due the following week.\nGroup work is encouraged, but all assignments should be submitted individually."
+  },
+  {
+    "objectID": "index.html#grades",
+    "href": "index.html#grades",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Grades",
+    "text": "Grades\n\n6 labs will be worth 150 points each.\nThey will be assigned on Wednesdays and due the following Wednesdays before class.\nA final project will be optional and worth 150 extra credit points. It will build on your personal website built in ESS 523a.\n\nThe total points possible is 1050, with the percentage being taken out of 900 using the traditional 90/80/70/60 scales"
+  },
+  {
+    "objectID": "labs/lab1.html",
+    "href": "labs/lab1.html",
+    "title": "Lab 1: Data Science Tools",
+    "section": "",
+    "text": "In this lab you will practice data wrangling and visualization skills using COVID-19 data curated by the New York Times. This data is a large dataset measuring the cases and deaths per US county across the lifespan of COVID from its early beginnings to just past the peak. The data stored in daily cummulative counts, is a great example of data that needs to be wrangled and cleaned before any analysis can be done."
+  },
+  {
+    "objectID": "labs/lab1.html#libraries",
+    "href": "labs/lab1.html#libraries",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Libraries",
+    "text": "Libraries\nYou will need a few libraries for this lab. Make sure they are installed and loaded in your Qmd:\n\ntidyverse (data wrangling and visualization)\nflextable (make nice tables)\nzoo (rolling averages)"
+  },
+  {
+    "objectID": "labs/lab1.html#data",
+    "href": "labs/lab1.html#data",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Data",
+    "text": "Data\nWe are going to practice some data wrangling skills using a real-world dataset about COVID cases curated and maintained by the New York Times. The data was used in the peak of the pandemic to create reports and data visualizations like this, and are archived on a GitHub repo here. A history of the importance can be found here.\nLets pretend it in Feb 1st, 2022. You are a data scientist for the state of Colorado Department of Public Health (this is actually a task I did in California!). You’ve been tasked with giving a report to Governor Polis each morning about the most current COVID-19 conditions at the county level.\nAs it stands, the Colorado Department of Public Health maintains a watch list of counties that are being monitored for worsening corona virus trends. There are six criteria used to place counties on the watch list:\n\nDoing fewer than 150 tests per 100,000 residents daily (over a 7-day average)\nMore than 100 new cases per 100,000 residents over the past 14 days…\n25 new cases per 100,000 residents and an 8% test positivity rate\n10% or greater increase in COVID-19 hospitalized patients over the past 3 days\nFewer than 20% of ICU beds available\nFewer than 25% ventilators available\n\nOf these 6 conditions, you are in charge of monitoring condition number 2."
+  },
+  {
+    "objectID": "labs/lab1.html#steps",
+    "href": "labs/lab1.html#steps",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Steps:",
+    "text": "Steps:\n\nStart by reading in the data from the NY-Times URL with read_csv (make sure to attach the tidyverse). The data read from Github is considered our “raw data”. Remember to always leave “raw-data-raw” and to generate meaningful subsets as you go.\n\n\n\nCode\nlibrary(tidyverse)\nlibrary(flextable)\ndata &lt;- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')\n\n\n\nCreate an object called my.date and set it as “2022-02-01” - ensure this is a date object.\nCreate a object called my.state and set it to “Colorado”.\n\n\n\n\n\n\n\nTip\n\n\n\n\n\nIn R, as.Date() is a function used to convert character strings, numeric values, or other date-related objects into Date objects. It ensures that dates are stored in the correct format for date-based calculations and manipulations.\n\n\nCode\ntxt &lt;- \"2025-02-15\"\nclass(txt)\n\n\n[1] \"character\"\n\n\nCode\ndate_example &lt;- as.Date(txt)\nclass(date_example)\n\n\n[1] \"Date\"\n\n\n\n\n\n\n\nCode\nmy.date  &lt;- as.Date(\"2022-02-01\")\nmy.state &lt;- \"Colorado\"\n\n\n\nStart by making a subset that limits the data to Colorado (filter), and add a new column (mutate) with the daily new cases using diff/lag by county (group_by). Do the same for new deaths. If lag is new to you, lag is a function that shifts a vector by a specified number of positions. The help file can be found with ?lag.\n\n(Hint: you will need some combination of filter, group_by, arrange, mutate, diff/lag, and ungroup)\n\nUsing your subset, generate (2) tables. The first should show the 5 counties with the most CUMULATIVE cases on you date of interest, and the second should show the 5 counties with the most NEW cases on that same date. Remember to use your my.date object as a proxy for today’s date:\n\nYour tables should have clear column names and descriptive captions.\n(Hint: Use flextable::flextable() and flextable::set_caption())"
+  },
+  {
+    "objectID": "labs/lab1.html#steps-1",
+    "href": "labs/lab1.html#steps-1",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Steps:",
+    "text": "Steps:\n\nGiven the above URL, and guidelines on string concatenation, read in the population data and (1) create a five digit FIP variable and only keep columns that contain “NAME” or “2021” (remember the tidyselect option found with ?dplyr::select). Additionally, remove all state level rows (e.g. COUNTY FIP == “000”)\n\n\nNow, explore the data … what attributes does it have, what are the names of the columns? Do any match the COVID data we have? What are the dimensions… In a few sentences describe the data obtained after modification:\n\n(Hint: names(), dim(), nrow(), str(), glimpse(), skimr,…))"
+  },
+  {
+    "objectID": "labs/lab1.html#steps-2",
+    "href": "labs/lab1.html#steps-2",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Steps:",
+    "text": "Steps:\n\nFirst, we need to group/summarize our county level data to the state level, filter it to the four states of interest, and calculate the number of daily new cases (diff/lag) and the 7-day rolling mean.\n\n\n\n\n\n\n\nRolling Averages\n\n\n\n\n\nThe rollmean function from the zoo package in R is used to compute the rolling (moving) mean of a numeric vector, matrix, or zoo/ts object.\nrollmean(x, k, fill = NA, align = \"center\", na.pad = FALSE)\n- x: Numeric vector, matrix, or time series.\n- k: Window size (number of observations).\n- fill: Values to pad missing results (default NA).\n- align: Position of the rolling window (“center”, “left”, “right”).\n- na.pad: If TRUE, pads missing values with NA.\n\n\nExamples\n\nRolling Mean on a Numeric Vector Since align = \"center\" by default, values at the start and end are dropped.\n\n\n\nCode\nlibrary(zoo)\n\n# Sample data\nx &lt;- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)\n\n# Rolling mean with a window size of 3\nrollmean(x, k = 3)\n\n\n[1] 2 3 4 5 6 7 8 9\n\n\n\nRolling Mean with Padding Missing values are filled at the start and end.\n\n\n\nCode\nrollmean(x, k = 3, fill = NA)\n\n\n [1] NA  2  3  4  5  6  7  8  9 NA\n\n\n\nAligning Left or Right The rolling mean is calculated with values aligned to the left or right\n\n\n\nCode\nrollmean(x, k = 3, fill = NA, align = \"left\")\n\n\n [1]  2  3  4  5  6  7  8  9 NA NA\n\n\nCode\nrollmean(x, k = 3, fill = NA, align = \"right\")\n\n\n [1] NA NA  2  3  4  5  6  7  8  9\n\n\n\n\n\n\nHint: You will need two group_by calls and the zoo::rollmean function.\n\nUsing the modified data, make a facet plot of the daily new cases and the 7-day rolling mean. Your plot should use compelling geoms, labels, colors, and themes.\n\n\nThe story of raw case counts can be misleading. To understand why, lets explore the cases per capita of each state. To do this, join the state COVID data to the population estimates and calculate the \\(new cases / total population\\). Additionally, calculate the 7-day rolling mean of the new cases per capita counts. This is a tricky task and will take some thought, time, and modification to existing code (most likely)!\n\nHint: You may need to modify the columns you kept in your original population data. Be creative with how you join data (inner vs outer vs full)!\n\nUsing the per capita data, plot the 7-day rolling averages overlying each other (one plot) with compelling labels, colors, and theme.\n\n\nBriefly describe the influence scaling by population had on the analysis? Does it make some states look better? Some worse? How so?\n\n\n…"
+  },
+  {
+    "objectID": "labs/lab1.html#data-preparation",
+    "href": "labs/lab1.html#data-preparation",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Data Preparation",
+    "text": "Data Preparation\n\nLet’s start with the raw COVID dataset, and compute county level daily new cases and deaths (lag). Then, join it to the census data in order to use population data in the model.\nWe are aware there was a strong seasonal component to the spread of COVID-19. To account for this, lets add a new column to the data for year (lubridate::year()), month (lubridate::month()), and season (dplyr::case_when()) which will be one of four values: “Spring” (Mar-May), “Summer” (Jun-Aug), “Fall” (Sep-Nov), or “Winter” (Dec - Jan) based on the computed Month.\nNext, lets group the data by state, year, and season and summarize the total population, new cases, and new deaths per grouping.\nGiven the case/death counts are not scaled by population, we expect that each will exhibit a right skew behavior (you can confirm this with density plots, shapiro.test, or histrograms). Given an assumption of linear models is normality in the data, let’s apply a log transformation to cases, deaths, and population to normalize them.\n\n\n\n\n\n\n\nNote\n\n\n\nWe know there are 0’s in the data (cases/deaths), so we can add 1 to the data before taking the log. As the log of 0 is undefined, adding 1 ensures that the log of 0 is -Inf.\n\n\nCode\nlog(0)\n\n\n[1] -Inf"
+  },
+  {
+    "objectID": "labs/lab1.html#model-building",
+    "href": "labs/lab1.html#model-building",
+    "title": "Lab 1: Data Science Tools",
+    "section": "Model Building",
+    "text": "Model Building\n\nOnce the data has been prepared, build a linear model (lm) to predict the log of cases using the log of deaths the log of population, and the season. Be sure to add an interaction term for population and deaths since they per capita realtionship is significant!\nOnce the model is built, summarize it (summary) and report the R-squared value and the p-value of the model. What does this mean for the value of its application?"
+  },
+  {
+    "objectID": "slides/week-1.html",
+    "href": "slides/week-1.html",
+    "title": "Week 1",
+    "section": "",
+    "text": "Welcome to 523C: Environmental Data Science Applications: Water Resources!\nThis first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.\nThroughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.\nThe survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics."
   }
 ]
