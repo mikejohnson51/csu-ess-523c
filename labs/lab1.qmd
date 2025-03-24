@@ -7,7 +7,6 @@ format:
     toc: true
     include-before-body: ../slides/header.html
     include-after-body:  ../slides/footer-annotations.html
-subtitle: 'Data Wrangling and Visualization'
 ---
 
 ```{r, include = F}
@@ -31,8 +30,8 @@ In this lab you will practice data wrangling and visualization skills using COVI
 # Set-up
 
 1. Create a `csu-523c` repository
-2. Instatiate it with a git (`usethis::use_git()`) archive and Github repo (`usethis::use_github()`)
-4. Create a new .qmd file called `lab-01.qmd`
+2. Instatiate it with a git archive (`usethis::use_git()`) and Github repo (`usethis::use_github()`)
+4. Create a new Quarto (.qmd) file called `lab-01.qmd`
 5. Populate its YML with a title, author, subtitle, output type and theme. For example:
 
 ```{r, eval = FALSE}
@@ -48,7 +47,7 @@ format: html
 
 ## Libraries
 
-You will need a few libraries for this lab. Make sure they are installed and loaded in your Qmd
+You will need a few libraries for this lab. Make sure they are installed and loaded in your Qmd:
 
 1. `tidyverse` (data wrangling and visualization)
 2. `flextable` (make nice tables)
@@ -71,16 +70,7 @@ As it stands, the Colorado Department of Public Health maintains a watch list of
 
 **Of these 6 conditions, you are in charge of monitoring condition number 2.** 
 
-
-# **Question 1**: Public Data
-
-With public data— particularly in environmental and health sciences — no longer carrying the same [promised persistence it once did](https://www.muckrock.com/news/archives/2025/feb/10/federal-data-is-disappearing-on-thursday-meet-the-teams-working-t o-rescue-it-and-learn-how-you-can-help/), the importance of external archiving efforts by journalists, scientists, and researchers has grown. The availability of reliable, well-documented datasets is crucial for advancing environmental science, informing policy, and fostering transparency.
-
-Take a moment to reflect on the value of open data: How does easy access to historical and real-time environmental data shape our understanding of climate trends, resource management, and public health? What happens when this data disappears or becomes inaccessible? The role of independent archiving and collaborative stewardship has never been more critical in ensuring scientific progress and accountability.
-
-> ...
-
-# **Question 2**: Daily Summary
+# **Question 1**: Daily Summary
 
 Looking at the README in the NYT repository we read:
 
@@ -103,12 +93,12 @@ You should build this analysis so that running it will extract the most current 
 
 ## Steps:
 
-a. Start by reading in the data from the NY-Times URL with `read_csv` (make sure to attach the `tidyverse`)
+a. Start by reading in the data from the NY-Times URL with `read_csv` (make sure to attach the `tidyverse`). The data read from Github is considered our "raw data". Remember to always leave "raw-data-raw" and to generate meaningful subsets as you go. 
 
 ```{r}
 library(tidyverse)
 library(flextable)
-data = read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+data <- read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
 ```
 
 b. Create an object called `my.date` and set it as "2022-02-01" - ensure this is a `date` object. 
@@ -127,16 +117,11 @@ class(date_example)
 :::
 
 ```{r}
-
+my.date  <- as.Date("2022-02-01")
+my.state <- "Colorado"
 ```
 
-d. The data read from Github is considered our "raw data". Remember to always leave "raw-data-raw" and to generate meaningful subsets as you go. 
-
-```{r}
-
-```
-
-e. Start by making a subset that limits the data to Colorado (`filter`), and add a new column (`mutate`) with the daily _new cases_ using `diff/lag` by county (`group_by`). Do the same for _new deaths_. If lag is new to you, `lag` is a function that shifts a vector by a specified number of positions. The help file can be found with `?lag`.
+d. Start by making a subset that limits the data to Colorado (`filter`), and add a new column (`mutate`) with the daily _new cases_ using `diff/lag` by county (`group_by`). Do the same for _new deaths_. If lag is new to you, `lag` is a function that shifts a vector by a specified number of positions. The help file can be found with `?lag`.
 
 (**Hint**: you will need some combination of `filter`, `group_by`, `arrange`, `mutate`, `diff/lag`, and `ungroup`)
 
@@ -154,7 +139,7 @@ Your tables should have clear column names and descriptive captions.
 
 ```
 
-# **Question 3**: Evaluating Census Data (EDA)
+# **Question 2**: Evaluating Census Data (EDA)
 
 Raw count data can be deceiving given the wide range of populations in Colorado countries. To help us normalize data counts, we need additional information on the population of each county. 
 
@@ -218,9 +203,11 @@ b. Now, explore the data ... what attributes does it have, what are the names of
 
 (**Hint**: `names()`, `dim()`, `nrow()`, `str()`, `glimpse()`, `skimr`,...))
 
->
+```{r}
 
-# **Question 4**: Per Capita Summary
+```
+
+# **Question 3**: Per Capita Summary
 
 Join the population data to the Colorado COVID data and compute the per capita cumulative cases, per capita new cases, and per capita new deaths:
 
@@ -236,13 +223,13 @@ Generate (**2**) new tables. The first should show the 5 counties with the most 
 
 ```
 
-# **Question 5:** Rolling thresholds
+# **Question 4:** Rolling thresholds
 
 Filter the merged COVID/Population data for Colorado to only include the last 14 days. *Remember this should be a programmatic request and not hard-coded*. 
 
 Then, use the `group_by`/`summarize` paradigm to determine the total number of new cases in the last 14 days per 100,000 people. 
 
-Print a table of the top 5 counties, and, report the number of counties that meet the watch list condition: "More than 100 new cases per 100,000 residents over the past 14 days..."
+Print a table of the top 5 counties (consider `slice_max`), and, report the number of counties that meet the watch list condition: "More than 100 new cases per 100,000 residents over the past 14 days..."
 
 (**Hint**: Dates are numeric in R and thus operations like `max` `min`, `-`, `+`, `>`, and` < ` work.)
 
@@ -250,7 +237,7 @@ Print a table of the top 5 counties, and, report the number of counties that mee
 
 ```
 
-# **Question 6**: Death toll
+# **Question 5**: Death toll
 
 Given we are assuming it is February 1st, 2022. Your leadership has now asked you to determine what percentage of deaths in each county were attributed to COVID last year (2021). You eagerly tell them that with the current Census data, you can do this!
 
@@ -273,8 +260,7 @@ lubridate::yday(tmp.date)
 
 ```
 
-
-# **Question 7**: Multi-state
+# **Question 6**: Multi-state
 
 Congratulations! You have been promoted to the National COVID-19 Task Force.As part of this exercise, you have been tasked with building anaylsis to compare states to each other.
 
@@ -356,13 +342,14 @@ d. Using the per capita data, plot the 7-day rolling averages overlying each oth
 
 ```
 
+
 e. Briefly describe the influence scaling by population had on the analysis? Does it make some states look better? Some worse? How so?
 
 > ...
 
-# **Question 8**: Space & Time
+# **Question 7**: Space & Time
 
-You've now been tasked with understanding how COVID has pread through time across the country. You will do this by calculating the Weighted Mean Center of the COVID-19 outbreak to better understand the movement of the virus through time. 
+You've now been tasked with understanding how COVID has spread through time across the country. You will do this by calculating the Weighted Mean Center of the COVID-19 outbreak to better understand the movement of the virus through time. 
 
 To do this, we need to join the COVID data with location information. I have staged the latitude and longitude of county centers [here](https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv). For reference, this data was processed like this:
 
@@ -383,33 +370,24 @@ Please read in the data (`readr::read_csv()`); and join it to your raw COVID-19 
 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv'
 ```
 
-- The mean center of a set of spatial points is defined as the average X and Y coordinate. A weighted mean center can be found by weighting the coordinates by another variable, in this total cases such that:
+- The mean center of a set of spatial points is defined as the average X and Y coordinate. A weighted mean center can be found by weighting the coordinates by another variable such that:
 
 $$X_{coord} = \sum{(X_{i} * w_{i})} / \sum(w_{i})$$
 $$Y_{coord} = \sum{(Y_{i} * w_{i})}/ \sum(w_{i})$$
 
-- For each date, calculate the Weighted Mean $X_{coord}$ and $Y_{coord}$ using the daily cumulative cases and the weight $w_{i}$. 
+- For each date, calculate the Weighted Mean $X_{coord}$ and $Y_{coord}$ using the daily cumulative cases _and_ deaths as the respective $w_{i}$. 
 
 ```{r}
 
 ```
 
-- Plot the weighted mean center (`aes(x = LNG, y = LAT)`) sized by total cases for each day. These points should be plotted over a map of the USA states which can be added to a ggplot object with:
+Make two plots next to each other (using `patchwork`) showing cases in navy and deaths in red. Once complete, describe the differences in the plots and what they mean about the spatial patterns seen with COVID impacts. These points should be plotted over a map of the USA states which can be added to a ggplot object with:
 
 ```{r, eval = FALSE}
 borders("state", fill = "gray90", colour = "white")
 ```
 
 (feel free to modify fill and **colour** (must be colour (see documentation)))
-
-- In a few sentences, describe the movement of the COVID-19 weighted mean throughout the USA and possible drivers of its movement given your knowledge of the outbreak hot spots.
-
-
-# **Question 9:** Cases vs. Deaths
-
-Extend your analysis to also compute the weighted mean center of daily COVID deaths. 
-
-Make two plots next to each other (using patchwork) showing cases in navy and deaths in red. Once complete, describe the differences in the plots and what they mean about the spatial patterns seen with COVID impacts.
 
 ::: {.callout-tip collapse="true"}
 ### Multiplots
@@ -438,25 +416,79 @@ This places p1 and p2 next to each other in a single figure.
 
 ```
 
+# **Question 8:** Trends
 
-# **Question 10:** Trends
+OK! This is a job well done. As your final task, your leadership has noticed that it is much easier to have a solid record of deaths, while a record of cases relies on testing protocols and availability. They ask you to explore the relationship between cases and deaths to see if deaths can be used as a proxy for cases. You will explore the relationship between cases and deaths along with other predictors of your chosing from the population data.
 
-OK! This is a job well done. As your final task, your leadership has noticed that it is much easier to have a solid record of deaths, while a record of cases relies on testing protocols and availability. They ask you to explore the relationship between cases and deaths to see if deaths can be used as a proxy for cases. You will explore the relationship between daily new cases and daily new deaths along with other predictors of your chosing from the population data.
+## Data Preparation
 
-Build a linear model that best tries to estimate the death toll. Is nesting useful? What about interaction terms?
+a. Let's start with the raw COVID dataset, and compute county level daily new cases and deaths (`lag`). Then, join it to the census data in order to use population data in the model. 
+
+b. We are aware there was a strong seasonal component to the spread of COVID-19. To account for this, lets add a new column to the data for year (`lubridate::year()`), month (`lubridate::month()`), and `season` (`dplyr::case_when()`) which will be one of four values: "Spring" (Mar-May), "Summer" (Jun-Aug), "Fall" (Sep-Nov), or "Winter" (Dec - Jan) based on the computed Month.
+
+c. Next, lets group the data by state, year, and season and summarize the total population, new cases, and new deaths per grouping. 
+
+d. Given the case/death counts are not scaled by population, we expect that each will exhibit a right skew behavior (you can confirm this with density plots, shapiro.test, or histrograms). Given an assumption of linear models is normality in the data, let's apply a log transformation to cases, deaths, and population to normalize them. 
+
+:::{.callout-note}
+We know there are 0's in the data (cases/deaths), so we can add 1 to the data before taking the log. As the log of 0 is undefined, adding 1 ensures that the log of 0 is -Inf.
+
+```{r}
+log(0)
+```
+:::
 
 ```{r}
 
 ```
 
-# **Question 11:** Evaluation
+## Model Building
 
-Once your model is built, evaluate it using the `broom` package. Report the R-squared value and the p-value of the model and what this means for the the value of its application.
+a. Once the data has been prepared, build a linear model (`lm`) to predict the log of cases using the log of deaths the log of population, and the season. Be sure to add an interaction term for population and deaths since they per capita realtionship is significant!
+
+b. Once the model is built, summarize it (summary) and report the R-squared value and the p-value of the model. What does this mean for the value of its application?
 
 ```{r}
 
 ```
 
+# **Question 9:** Evaluation
+
+Now that you have built a model, it is time to evaluate it. 
+
+a. Start by using `broom::augment` to generate a data frame of predictions and residuals.
+
+b. Lets, create a scatter plot of the predicted cases vs. the actual cases. Add a line of best fit to the plot, and make the plot as appealing as possible using `themes`, `scales_*`, and `labels.` Describe the realtionship that you see... are you happy with the model?
+
+c. A final assumption of an appropriate model is that the residuals are normally distributed. Fortunatly `broom::augment` provides the .resid outputs for each feature. To visually check for residual normality, create a histogram of the residuals. Make the plot as appealing as possible using `themes`, `scales_*`, and `labels.` How does the distribution look? Was a linear model appropriate for this case?
+
+```{r}
+
+```
+
+# Summary
+
+And that's it! In this lab we have explored the COVID-19 data from the New York Times, wrangled it, and built a model to predict cases from deaths and population. This is a great example of how data science can be used to inform public health decisions.
+
+We covered alot of technical tools as well spanning readr, dplyr, ggplot, lubridate, and more. We also used some more advanced tools like `zoo` for rolling averages and `broom` for model evaluation.
+
+Through out the rest of class we will keep building on these skills and tools to become better data scientists.
+
+# Rubric
+
+- [ ] **Question 1**: Daily Summaries (10pts)
+- [ ] **Question 2**: Evaluating Census Data (EDA) (10pts)
+- [ ] **Question 3**: Per Capita Summary (10pts)
+- [ ] **Question 4**: Rolling Thresholds (20pts)
+- [ ] **Question 5**: Death toll (10pts)
+- [ ] **Question 6**: Multi-state (20pts)
+- [ ] **Question 7**: Space and Time (20pts)
+- [ ] **Question 8**: Trends (20pts)
+- [ ] **Question 9**: Evaluation (10pts)
+- [ ] **Well Structured legible Qmd** (10pts)
+- [ ] **Deployed as web page** (10pts)
+
+**Total:** 150 points
 
 # Submission
 
@@ -470,22 +502,3 @@ To submit your lab, you will deploy your knitted HTMLto a webpage hosted with Gi
 `https://USERNAME.github.io/csu-523c/lab-01.html`
 
 Submit this URL in the appropriate Canvas dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be eventually serve as extras credit!
-
-# Rubric
-
-- [ ] **Question 1**  (10pts)
-- [ ] **Question 2**  (10pts)
-- [ ] **Question 3**  (10pts)
-- [ ] **Question 4**  (10pts)
-- [ ] **Question 5**  (10pts)
-- [ ] **Question 6**  (10pts)
-- [ ] **Question 7**  (20pts)
-- [ ] **Question 8**  (10pts)
-- [ ] **Question 9**  (10pts)
-- [ ] **Question 10** (20pts)
-- [ ] **Question 11** (10pts)
-- [ ] **Well Structured legible Qmd** (10pts)
-- [ ] **Deployed as web page** (10pts)
-
-**Total:** 150 points
-
