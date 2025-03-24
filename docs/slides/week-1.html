@@ -503,7 +503,17 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb12-24"><a></a><span class="co">#&gt; 5 34041  -75.0  40.9</span></span>
 <span id="cb12-25"><a></a><span class="co">#&gt; 6 46051  -96.8  45.2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="section"><code>%&gt;%</code> / <code>|&gt;</code> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="dplyr" class="slide level2">
+<h2>dplyr <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>dplyr</code> package provides functions for data manipulation throuhg ‘a grammar for data manipulation’.</li>
+<li>It provides capabilities similar to SQL for data manipulation.</li>
+<li>It includes functions for viewing, filtering, selecting, mutating, summarizing, and joining data.</li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h2><code>%&gt;%</code> / <code>|&gt;</code> <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The pipe operator <code>%&gt;%</code> is used to chain operations in R.</li>
 <li>The pipe operator <code>|&gt;</code> is a base R version of <code>%&gt;%</code> introduced in R 4.1.</li>
@@ -543,13 +553,8 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb14-11"><a></a><span class="co">#&gt; $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="dplyr" class="slide level2">
-<h2>dplyr <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>The <code>dplyr</code> package provides functions for data manipulation.</li>
-<li>It includes functions for filtering, selecting, mutating, summarizing, and joining data.</li>
-</ul>
-<h3 id="select">select <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+<section id="select" class="slide level2">
+<h2>select <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>select()</code> function is used to select columns from a dataset.</li>
 <li>It is useful when you want to work with specific columns.</li>
@@ -572,7 +577,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb15-14"><a></a><span class="co">#&gt; 10 Adelie </span></span>
 <span id="cb15-15"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="filter">filter <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="filter" class="slide level2">
+<h2>filter <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>filter()</code> function is used to filter rows based on a condition.</li>
 <li>It is useful when you want to work with specific rows.</li>
@@ -596,13 +603,16 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb16-15"><a></a><span class="co">#&gt; # ℹ 142 more rows</span></span>
 <span id="cb16-16"><a></a><span class="co">#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="mutate">mutate <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="mutate" class="slide level2">
+<h2>mutate <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>mutate()</code> function is used to create new columns or modify existing ones.</li>
 <li>It is useful when you want to add new information to your dataset.</li>
 <li>Example: Creating a new column <code>bill_length_cm</code> from <code>bill_length_mm</code>.</li>
 </ul>
-<p><em>Note the use of the tidy_select helper <code>starts_with</code></em> ::: {.cell}</p>
+<p><em>Note the use of the tidy_select helper <code>starts_with</code></em></p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="fu">mutate</span>(penguins, <span class="at">bill_length_cm =</span> bill_length_mm <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb17-2"><a></a>  <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"bill"</span>))</span>
 <span id="cb17-3"><a></a><span class="co">#&gt; # A tibble: 344 × 3</span></span>
@@ -619,8 +629,10 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb17-14"><a></a><span class="co">#&gt;  9           34.1          18.1          0.341</span></span>
 <span id="cb17-15"><a></a><span class="co">#&gt; 10           42            20.2          0.42 </span></span>
 <span id="cb17-16"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>:::</p>
-<h3 id="summarize">summarize <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</div>
+</section>
+<section id="summarize" class="slide level2">
+<h2>summarize <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>summarize()</code> function is used to aggregate data.</li>
 <li>It is useful when you want to calculate summary statistics.</li>
@@ -634,7 +646,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb18-4"><a></a><span class="co">#&gt;            &lt;dbl&gt;</span></span>
 <span id="cb18-5"><a></a><span class="co">#&gt; 1           43.9</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="group_by-ungroup">group_by / ungroup <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="group_by-ungroup" class="slide level2">
+<h2>group_by / ungroup <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>group_by()</code> function is used to group data by one or more columns.</li>
 <li>It is useful when you want to perform operations on groups.</li>
@@ -654,7 +668,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb19-10"><a></a>dplyr<span class="sc">::</span><span class="fu">group_indices</span>(groups)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
 <span id="cb19-11"><a></a><span class="co">#&gt; [1] 1 1 1 1 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="group-operations">Group operations<img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="group-operations" class="slide level2">
+<h2>Group operations <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Example: Grouping the <code>penguins</code> dataset by <code>species</code> and calculating the mean <code>bill_length_mm</code>.</li>
 </ul>
@@ -670,13 +686,17 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb20-9"><a></a><span class="co">#&gt; 2 Chinstrap           48.8</span></span>
 <span id="cb20-10"><a></a><span class="co">#&gt; 3 Gentoo              47.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="joins">Joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="joins" class="slide level2">
+<h2>Joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>dplyr</code> package provides functions for joining datasets.</li>
 <li>Common join functions include <code>inner_join()</code>, <code>left_join()</code>, <code>right_join()</code>, and <code>full_join()</code>.</li>
 <li>Joins are used to combine datasets based on shared keys (primary and foreign).</li>
 </ul>
-<h3 id="mutating-joins">Mutating joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="mutating-joins" class="slide level2">
+<h2>Mutating joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Mutating joins add columns from one dataset to another based on a shared key.</li>
 <li>Example: Adding <code>species</code> information to the <code>penguins</code> dataset based on the <code>species_id</code>.</li>
@@ -773,7 +793,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb25-15"><a></a><span class="co">#&gt; 10 Adelie            42            20.2          1</span></span>
 <span id="cb25-16"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="filtering-joins">Filtering Joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="filtering-joins" class="slide level2">
+<h2>Filtering Joins <img data-src="hexes/dplyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Filtering joins retain only rows that match between datasets.</li>
 <li>Example: Filtering the <code>penguins</code> dataset to include only rows with matching <code>species_id</code>.</li>
@@ -801,9 +823,12 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <h2>ggplot2: Visualization <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>ggplot2</code> package is used for data visualization.</li>
-<li>It is based on the grammar of graphics, which allows for a high level of customization.</li>
+<li>It is based on the “grammar of graphics”, which allows for a high level of customization.</li>
+<li><code>ggplot2</code> is built on the concept of layers, where each layer adds a different element to the plot.</li>
 </ul>
-<h3 id="ggplot"><code>ggplot</code> <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="ggplot" class="slide level2">
+<h2><code>ggplot</code> <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>ggplot()</code> function initializes a plot.</li>
 <li>It provides a blank canvas to which layers can be added.</li>
@@ -818,6 +843,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 </div>
 </div>
 </div>
+</section>
+<section id="data-aesthetics" class="slide level2">
+<h2>data / aesthetics <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Data must be provided to <code>ggplot()</code></li>
 <li>The <code>aes()</code> function is used to map variables to aesthetics (e.g., x and y axes).</li>
@@ -834,10 +862,13 @@ Figure&nbsp;1: Data Science: Process and Implementation
 </div>
 </div>
 </div>
-<h3 id="geom_">geom_* <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="geom_" class="slide level2">
+<h2>geom_* <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>geom_*()</code> functions add geometric objects to the plot.</li>
-<li>They describe how to render the mapping created in aes</li>
+<li>They describe how to render the mapping created in <code>aes</code></li>
+<li>Example: Adding points to the plot.</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> bill_length_mm)) <span class="sc">+</span> </span>
@@ -850,10 +881,13 @@ Figure&nbsp;1: Data Science: Process and Implementation
 </div>
 </div>
 </div>
-<h3 id="facet_wrap-facet_grid">facet_wrap / facet_grid <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="facet_wrap-facet_grid" class="slide level2">
+<h2>facet_wrap / facet_grid <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>facet_wrap()</code> function is used to create small multiples of a plot.</li>
 <li>It is useful when you want to compare subsets of data.</li>
+<li>The <code>facet_grid()</code> function is used to create a grid of plots.</li>
 <li>Example: Faceting the plot by <code>species</code>.</li>
 </ul>
 <div class="cell">
@@ -868,7 +902,9 @@ Figure&nbsp;1: Data Science: Process and Implementation
 </div>
 </div>
 </div>
-<h3 id="theme_">theme_* <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="theme_" class="slide level2">
+<h2>theme_* <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>theme_*()</code> functions are used to customize the appearance of the plot.</li>
 <li>They allow you to modify the plot’s background, gridlines, and text.</li>
@@ -887,35 +923,47 @@ Figure&nbsp;1: Data Science: Process and Implementation
 </div>
 </div>
 </div>
+</section>
+<section class="slide level2">
+
 <ul>
 <li>There are 1000s of themes available in the <code>ggplot2</code> ecosystem
 <ul>
-<li>ggthemes</li>
-<li>ggpubr</li>
-<li>hrbrthemes</li>
-<li>ggsci</li>
+<li><code>ggthemes</code></li>
+<li><code>ggpubr</code></li>
+<li><code>hrbrthemes</code></li>
+<li><code>ggsci</code></li>
 <li>…</li>
 </ul></li>
 </ul>
-<h3 id="labs">labs <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> bill_length_mm)) <span class="sc">+</span> </span>
+<span id="cb32-2"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb32-3"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>species) <span class="sc">+</span> </span>
+<span id="cb32-4"><a></a>  ggthemes<span class="sc">::</span><span class="fu">theme_economist</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="week-1_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"></section>
+<section id="labs" class="slide level2">
+<h2>labs <img data-src="hexes/ggplot2.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>labs()</code> function is used to add titles, subtitles, and axis labels to the plot.</li>
 <li>It is useful for providing context and making the plot more informative.</li>
 <li>Example: Adding titles and axis labels to the plot.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> bill_length_mm)) <span class="sc">+</span> </span>
-<span id="cb32-2"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb32-3"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>species) <span class="sc">+</span> </span>
-<span id="cb32-4"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span> </span>
-<span id="cb32-5"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Penguins Weight by Bill Size"</span>, </span>
-<span id="cb32-6"><a></a>       <span class="at">x =</span> <span class="st">"Body Mass"</span>,</span>
-<span id="cb32-7"><a></a>       <span class="at">y =</span> <span class="st">"Bill Length"</span>, </span>
-<span id="cb32-8"><a></a>       <span class="at">subtitle =</span> <span class="st">"Made for 523c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> bill_length_mm)) <span class="sc">+</span> </span>
+<span id="cb33-2"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb33-3"><a></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>species) <span class="sc">+</span> </span>
+<span id="cb33-4"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span> </span>
+<span id="cb33-5"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Penguins Weight by Bill Size"</span>, </span>
+<span id="cb33-6"><a></a>       <span class="at">x =</span> <span class="st">"Body Mass"</span>,</span>
+<span id="cb33-7"><a></a>       <span class="at">y =</span> <span class="st">"Bill Length"</span>, </span>
+<span id="cb33-8"><a></a>       <span class="at">subtitle =</span> <span class="st">"Made for 523c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-33-1.png" width="960"></p>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-34-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -925,87 +973,68 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <h2><code>tidyr</code> <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>tidyr</code> package provides functions for data reshaping.</li>
-<li>It includes functions for pivotingand nesting data.</li>
+<li>It includes functions for pivoting and nesting data.</li>
 </ul>
-<h3 id="pivot_longer">pivot_longer <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="pivot_longer" class="slide level2">
+<h2>pivot_longer <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>pivot_longer()</code> function is used to convert wide data to long data.</li>
 <li>It is useful when you want to work with data in a tidy format.</li>
 <li>Example: Converting the <code>penguins</code> dataset from wide to long format.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>(<span class="at">data.long =</span> penguins <span class="sc">|&gt;</span> </span>
-<span id="cb33-2"><a></a>  <span class="fu">select</span>(species, bill_length_mm, body_mass_g) <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a></a>  <span class="fu">mutate</span>(<span class="at">penguin_id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb33-4"><a></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(penguin_id, species), </span>
-<span id="cb33-5"><a></a>               <span class="at">names_to =</span> <span class="st">"Measure"</span>, </span>
-<span id="cb33-6"><a></a>               <span class="at">values_to =</span> <span class="st">"value"</span>))</span>
-<span id="cb33-7"><a></a><span class="co">#&gt; # A tibble: 688 × 4</span></span>
-<span id="cb33-8"><a></a><span class="co">#&gt;    species penguin_id Measure         value</span></span>
-<span id="cb33-9"><a></a><span class="co">#&gt;    &lt;fct&gt;        &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;</span></span>
-<span id="cb33-10"><a></a><span class="co">#&gt;  1 Adelie           1 bill_length_mm   39.1</span></span>
-<span id="cb33-11"><a></a><span class="co">#&gt;  2 Adelie           1 body_mass_g    3750  </span></span>
-<span id="cb33-12"><a></a><span class="co">#&gt;  3 Adelie           2 bill_length_mm   39.5</span></span>
-<span id="cb33-13"><a></a><span class="co">#&gt;  4 Adelie           2 body_mass_g    3800  </span></span>
-<span id="cb33-14"><a></a><span class="co">#&gt;  5 Adelie           3 bill_length_mm   40.3</span></span>
-<span id="cb33-15"><a></a><span class="co">#&gt;  6 Adelie           3 body_mass_g    3250  </span></span>
-<span id="cb33-16"><a></a><span class="co">#&gt;  7 Adelie           4 bill_length_mm   NA  </span></span>
-<span id="cb33-17"><a></a><span class="co">#&gt;  8 Adelie           4 body_mass_g      NA  </span></span>
-<span id="cb33-18"><a></a><span class="co">#&gt;  9 Adelie           5 bill_length_mm   36.7</span></span>
-<span id="cb33-19"><a></a><span class="co">#&gt; 10 Adelie           5 body_mass_g    3450  </span></span>
-<span id="cb33-20"><a></a><span class="co">#&gt; # ℹ 678 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>(<span class="at">data.long =</span> penguins <span class="sc">|&gt;</span> </span>
+<span id="cb34-2"><a></a>  <span class="fu">select</span>(species, bill_length_mm, body_mass_g) <span class="sc">|&gt;</span> </span>
+<span id="cb34-3"><a></a>  <span class="fu">mutate</span>(<span class="at">penguin_id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb34-4"><a></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(penguin_id, species), </span>
+<span id="cb34-5"><a></a>               <span class="at">names_to =</span> <span class="st">"Measure"</span>, </span>
+<span id="cb34-6"><a></a>               <span class="at">values_to =</span> <span class="st">"value"</span>))</span>
+<span id="cb34-7"><a></a><span class="co">#&gt; # A tibble: 688 × 4</span></span>
+<span id="cb34-8"><a></a><span class="co">#&gt;    species penguin_id Measure         value</span></span>
+<span id="cb34-9"><a></a><span class="co">#&gt;    &lt;fct&gt;        &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span id="cb34-10"><a></a><span class="co">#&gt;  1 Adelie           1 bill_length_mm   39.1</span></span>
+<span id="cb34-11"><a></a><span class="co">#&gt;  2 Adelie           1 body_mass_g    3750  </span></span>
+<span id="cb34-12"><a></a><span class="co">#&gt;  3 Adelie           2 bill_length_mm   39.5</span></span>
+<span id="cb34-13"><a></a><span class="co">#&gt;  4 Adelie           2 body_mass_g    3800  </span></span>
+<span id="cb34-14"><a></a><span class="co">#&gt;  5 Adelie           3 bill_length_mm   40.3</span></span>
+<span id="cb34-15"><a></a><span class="co">#&gt;  6 Adelie           3 body_mass_g    3250  </span></span>
+<span id="cb34-16"><a></a><span class="co">#&gt;  7 Adelie           4 bill_length_mm   NA  </span></span>
+<span id="cb34-17"><a></a><span class="co">#&gt;  8 Adelie           4 body_mass_g      NA  </span></span>
+<span id="cb34-18"><a></a><span class="co">#&gt;  9 Adelie           5 bill_length_mm   36.7</span></span>
+<span id="cb34-19"><a></a><span class="co">#&gt; 10 Adelie           5 body_mass_g    3450  </span></span>
+<span id="cb34-20"><a></a><span class="co">#&gt; # ℹ 678 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<h3 id="pivot_wider">pivot_wider <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
+</section>
+<section id="pivot_wider" class="slide level2">
+<h2>pivot_wider <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>pivot_wider()</code> function is used to convert long data to wide data.</li>
 <li>It is useful when you want to work with data in a wide format.</li>
 <li>Example: Converting the <code>data.long</code> dataset from long to wide format.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>data.long <span class="sc">|&gt;</span> </span>
-<span id="cb34-2"><a></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"Measure"</span>, </span>
-<span id="cb34-3"><a></a>              <span class="at">values_from =</span> <span class="st">"value"</span>)</span>
-<span id="cb34-4"><a></a><span class="co">#&gt; # A tibble: 344 × 4</span></span>
-<span id="cb34-5"><a></a><span class="co">#&gt;    species penguin_id bill_length_mm body_mass_g</span></span>
-<span id="cb34-6"><a></a><span class="co">#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;       &lt;dbl&gt;</span></span>
-<span id="cb34-7"><a></a><span class="co">#&gt;  1 Adelie           1           39.1        3750</span></span>
-<span id="cb34-8"><a></a><span class="co">#&gt;  2 Adelie           2           39.5        3800</span></span>
-<span id="cb34-9"><a></a><span class="co">#&gt;  3 Adelie           3           40.3        3250</span></span>
-<span id="cb34-10"><a></a><span class="co">#&gt;  4 Adelie           4           NA            NA</span></span>
-<span id="cb34-11"><a></a><span class="co">#&gt;  5 Adelie           5           36.7        3450</span></span>
-<span id="cb34-12"><a></a><span class="co">#&gt;  6 Adelie           6           39.3        3650</span></span>
-<span id="cb34-13"><a></a><span class="co">#&gt;  7 Adelie           7           38.9        3625</span></span>
-<span id="cb34-14"><a></a><span class="co">#&gt;  8 Adelie           8           39.2        4675</span></span>
-<span id="cb34-15"><a></a><span class="co">#&gt;  9 Adelie           9           34.1        3475</span></span>
-<span id="cb34-16"><a></a><span class="co">#&gt; 10 Adelie          10           42          4250</span></span>
-<span id="cb34-17"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>data.long <span class="sc">|&gt;</span> </span>
+<span id="cb35-2"><a></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"Measure"</span>, </span>
+<span id="cb35-3"><a></a>              <span class="at">values_from =</span> <span class="st">"value"</span>)</span>
+<span id="cb35-4"><a></a><span class="co">#&gt; # A tibble: 344 × 4</span></span>
+<span id="cb35-5"><a></a><span class="co">#&gt;    species penguin_id bill_length_mm body_mass_g</span></span>
+<span id="cb35-6"><a></a><span class="co">#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb35-7"><a></a><span class="co">#&gt;  1 Adelie           1           39.1        3750</span></span>
+<span id="cb35-8"><a></a><span class="co">#&gt;  2 Adelie           2           39.5        3800</span></span>
+<span id="cb35-9"><a></a><span class="co">#&gt;  3 Adelie           3           40.3        3250</span></span>
+<span id="cb35-10"><a></a><span class="co">#&gt;  4 Adelie           4           NA            NA</span></span>
+<span id="cb35-11"><a></a><span class="co">#&gt;  5 Adelie           5           36.7        3450</span></span>
+<span id="cb35-12"><a></a><span class="co">#&gt;  6 Adelie           6           39.3        3650</span></span>
+<span id="cb35-13"><a></a><span class="co">#&gt;  7 Adelie           7           38.9        3625</span></span>
+<span id="cb35-14"><a></a><span class="co">#&gt;  8 Adelie           8           39.2        4675</span></span>
+<span id="cb35-15"><a></a><span class="co">#&gt;  9 Adelie           9           34.1        3475</span></span>
+<span id="cb35-16"><a></a><span class="co">#&gt; 10 Adelie          10           42          4250</span></span>
+<span id="cb35-17"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="drop_na-na.omit" class="slide level2">
-<h2>drop_na / na.omit <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<ul>
-<li>The <code>drop_na()</code> function is used to remove rows with missing values.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb35-3"><a></a><span class="co">#&gt; # A tibble: 333 × 8</span></span>
-<span id="cb35-4"><a></a><span class="co">#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
-<span id="cb35-5"><a></a><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;</span></span>
-<span id="cb35-6"><a></a><span class="co">#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750</span></span>
-<span id="cb35-7"><a></a><span class="co">#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800</span></span>
-<span id="cb35-8"><a></a><span class="co">#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250</span></span>
-<span id="cb35-9"><a></a><span class="co">#&gt;  4 Adelie  Torgersen           36.7          19.3               193        3450</span></span>
-<span id="cb35-10"><a></a><span class="co">#&gt;  5 Adelie  Torgersen           39.3          20.6               190        3650</span></span>
-<span id="cb35-11"><a></a><span class="co">#&gt;  6 Adelie  Torgersen           38.9          17.8               181        3625</span></span>
-<span id="cb35-12"><a></a><span class="co">#&gt;  7 Adelie  Torgersen           39.2          19.6               195        4675</span></span>
-<span id="cb35-13"><a></a><span class="co">#&gt;  8 Adelie  Torgersen           41.1          17.6               182        3200</span></span>
-<span id="cb35-14"><a></a><span class="co">#&gt;  9 Adelie  Torgersen           38.6          21.2               191        3800</span></span>
-<span id="cb35-15"><a></a><span class="co">#&gt; 10 Adelie  Torgersen           34.6          21.1               198        4400</span></span>
-<span id="cb35-16"><a></a><span class="co">#&gt; # ℹ 323 more rows</span></span>
-<span id="cb35-17"><a></a><span class="co">#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<h3 id="nest-unnest">nest / unnest</h3>
+<section id="nest-unnest" class="slide level2">
+<h2>nest / unnest <img data-src="hexes/tidyr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>nest()</code> function is used to nest data into a list-column.</li>
 <li>It is useful when you want to group data together.</li>
@@ -1019,11 +1048,206 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb36-5"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;            </span></span>
 <span id="cb36-6"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt;</span></span>
 <span id="cb36-7"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt;</span></span>
-<span id="cb36-8"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb36-8"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;</span></span>
+<span id="cb36-9"><a></a></span>
+<span id="cb36-10"><a></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb36-11"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb36-12"><a></a>  <span class="fu">unnest</span>(data)</span>
+<span id="cb36-13"><a></a><span class="co">#&gt; # A tibble: 344 × 8</span></span>
+<span id="cb36-14"><a></a><span class="co">#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g</span></span>
+<span id="cb36-15"><a></a><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;</span></span>
+<span id="cb36-16"><a></a><span class="co">#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750</span></span>
+<span id="cb36-17"><a></a><span class="co">#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800</span></span>
+<span id="cb36-18"><a></a><span class="co">#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250</span></span>
+<span id="cb36-19"><a></a><span class="co">#&gt;  4 Adelie  Torgersen           NA            NA                  NA          NA</span></span>
+<span id="cb36-20"><a></a><span class="co">#&gt;  5 Adelie  Torgersen           36.7          19.3               193        3450</span></span>
+<span id="cb36-21"><a></a><span class="co">#&gt;  6 Adelie  Torgersen           39.3          20.6               190        3650</span></span>
+<span id="cb36-22"><a></a><span class="co">#&gt;  7 Adelie  Torgersen           38.9          17.8               181        3625</span></span>
+<span id="cb36-23"><a></a><span class="co">#&gt;  8 Adelie  Torgersen           39.2          19.6               195        4675</span></span>
+<span id="cb36-24"><a></a><span class="co">#&gt;  9 Adelie  Torgersen           34.1          18.1               193        3475</span></span>
+<span id="cb36-25"><a></a><span class="co">#&gt; 10 Adelie  Torgersen           42            20.2               190        4250</span></span>
+<span id="cb36-26"><a></a><span class="co">#&gt; # ℹ 334 more rows</span></span>
+<span id="cb36-27"><a></a><span class="co">#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="linear-modeling-lm" class="slide level2">
+<h2>linear modeling: lm</h2>
+<ul>
+<li>The <code>lm()</code> function is used to fit linear models.</li>
+<li>It is useful when you want to model the relationship between two variables.</li>
+<li>Example: Fitting a linear model to predict <code>body_mass_g</code> from <code>flipper_length_mm</code>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> <span class="fu">drop_na</span>(penguins))</span>
+<span id="cb37-2"><a></a></span>
+<span id="cb37-3"><a></a><span class="fu">summary</span>(model)</span>
+<span id="cb37-4"><a></a><span class="co">#&gt; </span></span>
+<span id="cb37-5"><a></a><span class="co">#&gt; Call:</span></span>
+<span id="cb37-6"><a></a><span class="co">#&gt; lm(formula = body_mass_g ~ flipper_length_mm, data = drop_na(penguins))</span></span>
+<span id="cb37-7"><a></a><span class="co">#&gt; </span></span>
+<span id="cb37-8"><a></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb37-9"><a></a><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
+<span id="cb37-10"><a></a><span class="co">#&gt; -1057.33  -259.79   -12.24   242.97  1293.89 </span></span>
+<span id="cb37-11"><a></a><span class="co">#&gt; </span></span>
+<span id="cb37-12"><a></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb37-13"><a></a><span class="co">#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb37-14"><a></a><span class="co">#&gt; (Intercept)       -5872.09     310.29  -18.93   &lt;2e-16 ***</span></span>
+<span id="cb37-15"><a></a><span class="co">#&gt; flipper_length_mm    50.15       1.54   32.56   &lt;2e-16 ***</span></span>
+<span id="cb37-16"><a></a><span class="co">#&gt; ---</span></span>
+<span id="cb37-17"><a></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb37-18"><a></a><span class="co">#&gt; </span></span>
+<span id="cb37-19"><a></a><span class="co">#&gt; Residual standard error: 393.3 on 331 degrees of freedom</span></span>
+<span id="cb37-20"><a></a><span class="co">#&gt; Multiple R-squared:  0.7621, Adjusted R-squared:  0.7614 </span></span>
+<span id="cb37-21"><a></a><span class="co">#&gt; F-statistic:  1060 on 1 and 331 DF,  p-value: &lt; 2.2e-16</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="broom" class="slide level2">
+<h2>broom <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>broom</code> package is used to tidy model outputs.</li>
+<li>It provides functions to convert model outputs into tidy data frames.</li>
+<li>Example: Tidying the <code>model</code> output.</li>
+</ul>
+</section>
+<section id="tidy" class="slide level2">
+<h2>tidy <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>tidy()</code> function is used to tidy model coefficients.</li>
+<li>It is useful when you want to extract model coefficients.</li>
+<li>Example: Tidying the <code>model</code> output.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a><span class="fu">tidy</span>(model)</span>
+<span id="cb38-2"><a></a><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span id="cb38-3"><a></a><span class="co">#&gt;   term              estimate std.error statistic   p.value</span></span>
+<span id="cb38-4"><a></a><span class="co">#&gt;   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb38-5"><a></a><span class="co">#&gt; 1 (Intercept)        -5872.     310.       -18.9 1.18e- 54</span></span>
+<span id="cb38-6"><a></a><span class="co">#&gt; 2 flipper_length_mm     50.2      1.54      32.6 3.13e-105</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="glance" class="slide level2">
+<h2>glance <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>glance()</code> function is used to provide a summary of model fit.</li>
+<li>It is useful when you want to assess model performance.</li>
+<li>Example: Glancing at the <code>model</code> output.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="fu">glance</span>(model)</span>
+<span id="cb39-2"><a></a><span class="co">#&gt; # A tibble: 1 × 12</span></span>
+<span id="cb39-3"><a></a><span class="co">#&gt;   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC</span></span>
+<span id="cb39-4"><a></a><span class="co">#&gt;       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb39-5"><a></a><span class="co">#&gt; 1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.</span></span>
+<span id="cb39-6"><a></a><span class="co">#&gt; # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="augment" class="slide level2">
+<h2>augment <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>augment()</code> function is used to add model predictions and residuals to the dataset.</li>
+<li>It is useful when you want to visualize model performance.</li>
+<li>Example: Augmenting the <code>model</code> output.</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>a <span class="ot">&lt;-</span> <span class="fu">augment</span>(model)</span>
+<span id="cb40-2"><a></a></span>
+<span id="cb40-3"><a></a><span class="fu">ggplot</span>(a, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> body_mass_g)) <span class="sc">+</span></span>
+<span id="cb40-4"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb40-5"><a></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-41-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a><span class="fu">ggplot</span>(a, <span class="fu">aes</span>(<span class="at">x =</span> .resid)) <span class="sc">+</span></span>
+<span id="cb41-2"><a></a>  <span class="fu">geom_histogram</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-42-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="purrr" class="slide level2">
+<h2>purrr <img data-src="hexes/purrr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>purrr</code> package is used for functional programming.</li>
+<li>It provides functions for working with lists and vectors.</li>
+</ul>
+</section>
+<section id="map" class="slide level2">
+<h2>map <img data-src="hexes/purrr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>map()</code> function is used to apply a function to each element of a list.</li>
+<li>It is useful when you want to iterate over a list.</li>
+<li>Example: Fitting a linear model to each species in the <code>penguins</code> dataset.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb42-2"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb42-3"><a></a>  <span class="fu">mutate</span>(<span class="at">lm =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)))</span>
+<span id="cb42-4"><a></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb42-5"><a></a><span class="co">#&gt;   species   data               lm    </span></span>
+<span id="cb42-6"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt;</span></span>
+<span id="cb42-7"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;  </span></span>
+<span id="cb42-8"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;  </span></span>
+<span id="cb42-9"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="map_" class="slide level2">
+<h2>map_* <img data-src="hexes/purrr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>map_*()</code> functions are used to extract specific outputs from a list.</li>
+<li>They are useful when you want to extract specific outputs from a list.</li>
+<li>Example: Extracting the R-squared values (doubles) from the linear models.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb43-2"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a></a>  <span class="fu">mutate</span>(<span class="at">lm =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)),</span>
+<span id="cb43-4"><a></a>         <span class="at">r2 =</span> <span class="fu">map_dbl</span>(lm, <span class="sc">~</span><span class="fu">summary</span>(.x)<span class="sc">$</span>r.squared))</span>
+<span id="cb43-5"><a></a><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span id="cb43-6"><a></a><span class="co">#&gt;   species   data               lm        r2</span></span>
+<span id="cb43-7"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt;</span></span>
+<span id="cb43-8"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;   0.219</span></span>
+<span id="cb43-9"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;   0.494</span></span>
+<span id="cb43-10"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="map2" class="slide level2">
+<h2>map2 <img data-src="hexes/purrr.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>map2()</code> function is used to iterate over two lists in parallel.</li>
+<li>It is useful when you want to apply a function to two lists simultaneously.</li>
+<li>Example: Augmenting the linear models with the original data.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a></a>  <span class="fu">mutate</span>(<span class="at">lm_mod =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)),</span>
+<span id="cb44-5"><a></a>         <span class="at">r2 =</span> <span class="fu">map_dbl</span>(lm_mod, <span class="sc">~</span><span class="fu">summary</span>(.x)<span class="sc">$</span>r.squared),</span>
+<span id="cb44-6"><a></a>         <span class="at">a  =</span> <span class="fu">map2</span>(lm_mod, data, <span class="sc">~</span>broom<span class="sc">::</span><span class="fu">augment</span>(.x, .y))) </span>
+<span id="cb44-7"><a></a><span class="co">#&gt; # A tibble: 3 × 5</span></span>
+<span id="cb44-8"><a></a><span class="co">#&gt;   species   data               lm_mod    r2 a                  </span></span>
+<span id="cb44-9"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt; &lt;list&gt;             </span></span>
+<span id="cb44-10"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [146 × 7]&gt; &lt;lm&gt;   0.216 &lt;tibble [146 × 13]&gt;</span></span>
+<span id="cb44-11"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [119 × 7]&gt; &lt;lm&gt;   0.506 &lt;tibble [119 × 13]&gt;</span></span>
+<span id="cb44-12"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412 &lt;tibble [68 × 13]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
-<section id="spatial-data-vector" class="title-slide slide level1 center">
-<h1>Spatial Data: Vector</h1>
+<section id="week-2-3-spatial-data-vector" class="title-slide slide level1 center">
+<h1>~ Week 2-3: Spatial Data (Vector)</h1>
 
 </section>
 
@@ -1032,41 +1256,169 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <h1>sf <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h1>
 <ul>
 <li>The <code>sf</code> package is used for working with spatial data.</li>
+<li>sf binds to common spatial libraries like GDAL, GEOS, and PROJ.</li>
 <li>It provides functions for reading, writing, and manipulating spatial data.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="fu">library</span>(sf)</span>
+<span id="cb45-2"><a></a></span>
+<span id="cb45-3"><a></a>sf<span class="sc">::</span><span class="fu">sf_extSoftVersion</span>()</span>
+<span id="cb45-4"><a></a><span class="co">#&gt;           GEOS           GDAL         proj.4 GDAL_with_GEOS     USE_PROJ_H </span></span>
+<span id="cb45-5"><a></a><span class="co">#&gt;       "3.11.0"        "3.5.3"        "9.1.0"         "true"         "true" </span></span>
+<span id="cb45-6"><a></a><span class="co">#&gt;           PROJ </span></span>
+<span id="cb45-7"><a></a><span class="co">#&gt;        "9.1.0"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="io" class="slide level2">
 <h2>I/O <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>st_read()</code> function is used to read spatial data.</li>
-<li>It is useful when you want to import spatial data into R.</li>
+<li>It is useful when you want to import spatial data into R for local or remote files.</li>
 <li>Example: Reading a Major Global Rivers.</li>
 </ul>
+</section>
+<section id="from-package" class="slide level2">
+<h2>From package <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a><span class="co"># via packages</span></span>
-<span id="cb38-2"><a></a>counties <span class="ot">&lt;-</span> AOI<span class="sc">::</span><span class="fu">aoi_get</span>(<span class="at">state =</span> <span class="st">"conus"</span>, <span class="at">county =</span> <span class="st">"all"</span>)</span>
-<span id="cb38-3"><a></a></span>
-<span id="cb38-4"><a></a><span class="co"># file</span></span>
-<span id="cb38-5"><a></a>rivers <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">'data/majorrivers_0_0/MajorRivers.shp'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a><span class="co"># via packages</span></span>
+<span id="cb46-2"><a></a>(counties <span class="ot">&lt;-</span> AOI<span class="sc">::</span><span class="fu">aoi_get</span>(<span class="at">state =</span> <span class="st">"conus"</span>, <span class="at">county =</span> <span class="st">"all"</span>))</span>
+<span id="cb46-3"><a></a><span class="co">#&gt; Simple feature collection with 3108 features and 14 fields</span></span>
+<span id="cb46-4"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span id="cb46-5"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb46-6"><a></a><span class="co">#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448</span></span>
+<span id="cb46-7"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb46-8"><a></a><span class="co">#&gt; First 10 features:</span></span>
+<span id="cb46-9"><a></a><span class="co">#&gt;    state_region state_division feature_code state_name state_abbr     name</span></span>
+<span id="cb46-10"><a></a><span class="co">#&gt; 1             3              6      0161526    Alabama         AL  Autauga</span></span>
+<span id="cb46-11"><a></a><span class="co">#&gt; 2             3              6      0161527    Alabama         AL  Baldwin</span></span>
+<span id="cb46-12"><a></a><span class="co">#&gt; 3             3              6      0161528    Alabama         AL  Barbour</span></span>
+<span id="cb46-13"><a></a><span class="co">#&gt; 4             3              6      0161529    Alabama         AL     Bibb</span></span>
+<span id="cb46-14"><a></a><span class="co">#&gt; 5             3              6      0161530    Alabama         AL   Blount</span></span>
+<span id="cb46-15"><a></a><span class="co">#&gt; 6             3              6      0161531    Alabama         AL  Bullock</span></span>
+<span id="cb46-16"><a></a><span class="co">#&gt; 7             3              6      0161532    Alabama         AL   Butler</span></span>
+<span id="cb46-17"><a></a><span class="co">#&gt; 8             3              6      0161533    Alabama         AL  Calhoun</span></span>
+<span id="cb46-18"><a></a><span class="co">#&gt; 9             3              6      0161534    Alabama         AL Chambers</span></span>
+<span id="cb46-19"><a></a><span class="co">#&gt; 10            3              6      0161535    Alabama         AL Cherokee</span></span>
+<span id="cb46-20"><a></a><span class="co">#&gt;    fip_class tiger_class combined_area_code metropolitan_area_code</span></span>
+<span id="cb46-21"><a></a><span class="co">#&gt; 1         H1       G4020                388                   &lt;NA&gt;</span></span>
+<span id="cb46-22"><a></a><span class="co">#&gt; 2         H1       G4020                380                   &lt;NA&gt;</span></span>
+<span id="cb46-23"><a></a><span class="co">#&gt; 3         H1       G4020                 NA                   &lt;NA&gt;</span></span>
+<span id="cb46-24"><a></a><span class="co">#&gt; 4         H1       G4020                142                   &lt;NA&gt;</span></span>
+<span id="cb46-25"><a></a><span class="co">#&gt; 5         H1       G4020                142                   &lt;NA&gt;</span></span>
+<span id="cb46-26"><a></a><span class="co">#&gt; 6         H1       G4020                 NA                   &lt;NA&gt;</span></span>
+<span id="cb46-27"><a></a><span class="co">#&gt; 7         H1       G4020                 NA                   &lt;NA&gt;</span></span>
+<span id="cb46-28"><a></a><span class="co">#&gt; 8         H1       G4020                 NA                   &lt;NA&gt;</span></span>
+<span id="cb46-29"><a></a><span class="co">#&gt; 9         H1       G4020                122                   &lt;NA&gt;</span></span>
+<span id="cb46-30"><a></a><span class="co">#&gt; 10        H1       G4020                 NA                   &lt;NA&gt;</span></span>
+<span id="cb46-31"><a></a><span class="co">#&gt;    functional_status  land_area water_area fip_code</span></span>
+<span id="cb46-32"><a></a><span class="co">#&gt; 1                  A 1539634184   25674812    01001</span></span>
+<span id="cb46-33"><a></a><span class="co">#&gt; 2                  A 4117656514 1132955729    01003</span></span>
+<span id="cb46-34"><a></a><span class="co">#&gt; 3                  A 2292160149   50523213    01005</span></span>
+<span id="cb46-35"><a></a><span class="co">#&gt; 4                  A 1612188717    9572303    01007</span></span>
+<span id="cb46-36"><a></a><span class="co">#&gt; 5                  A 1670259090   14860281    01009</span></span>
+<span id="cb46-37"><a></a><span class="co">#&gt; 6                  A 1613083467    6030667    01011</span></span>
+<span id="cb46-38"><a></a><span class="co">#&gt; 7                  A 2012002546    2701199    01013</span></span>
+<span id="cb46-39"><a></a><span class="co">#&gt; 8                  A 1569246126   16536293    01015</span></span>
+<span id="cb46-40"><a></a><span class="co">#&gt; 9                  A 1545085601   16971700    01017</span></span>
+<span id="cb46-41"><a></a><span class="co">#&gt; 10                 A 1433620850  120310807    01019</span></span>
+<span id="cb46-42"><a></a><span class="co">#&gt;                          geometry</span></span>
+<span id="cb46-43"><a></a><span class="co">#&gt; 1  MULTIPOLYGON (((-86.81491 3...</span></span>
+<span id="cb46-44"><a></a><span class="co">#&gt; 2  MULTIPOLYGON (((-87.59883 3...</span></span>
+<span id="cb46-45"><a></a><span class="co">#&gt; 3  MULTIPOLYGON (((-85.41644 3...</span></span>
+<span id="cb46-46"><a></a><span class="co">#&gt; 4  MULTIPOLYGON (((-87.01916 3...</span></span>
+<span id="cb46-47"><a></a><span class="co">#&gt; 5  MULTIPOLYGON (((-86.5778 33...</span></span>
+<span id="cb46-48"><a></a><span class="co">#&gt; 6  MULTIPOLYGON (((-85.65767 3...</span></span>
+<span id="cb46-49"><a></a><span class="co">#&gt; 7  MULTIPOLYGON (((-86.4482 31...</span></span>
+<span id="cb46-50"><a></a><span class="co">#&gt; 8  MULTIPOLYGON (((-85.79605 3...</span></span>
+<span id="cb46-51"><a></a><span class="co">#&gt; 9  MULTIPOLYGON (((-85.59315 3...</span></span>
+<span id="cb46-52"><a></a><span class="co">#&gt; 10 MULTIPOLYGON (((-85.51361 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="geometries" class="slide level2">
-<h2>Geometries <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<section id="from-file" class="slide level2">
+<h2>From file <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>(rivers <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">'data/majorrivers_0_0/MajorRivers.shp'</span>))</span>
+<span id="cb47-2"><a></a><span class="co">#&gt; Simple feature collection with 98 features and 4 fields</span></span>
+<span id="cb47-3"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
+<span id="cb47-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb47-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -164.8874 ymin: -36.96945 xmax: 160.7636 ymax: 71.39249</span></span>
+<span id="cb47-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb47-7"><a></a><span class="co">#&gt; # A tibble: 98 × 5</span></span>
+<span id="cb47-8"><a></a><span class="co">#&gt;    NAME          SYSTEM MILES KILOMETERS                                geometry</span></span>
+<span id="cb47-9"><a></a><span class="co">#&gt;    &lt;chr&gt;         &lt;chr&gt;  &lt;dbl&gt;      &lt;dbl&gt;                   &lt;MULTILINESTRING [°]&gt;</span></span>
+<span id="cb47-10"><a></a><span class="co">#&gt;  1 Kolyma        &lt;NA&gt;   2552.      4106. ((144.8419 61.75915, 144.8258 61.8036,…</span></span>
+<span id="cb47-11"><a></a><span class="co">#&gt;  2 Parana        Parana 1616.      2601. ((-51.0064 -20.07941, -51.02972 -20.22…</span></span>
+<span id="cb47-12"><a></a><span class="co">#&gt;  3 San Francisco &lt;NA&gt;   1494.      2404. ((-46.43639 -20.25807, -46.49835 -20.2…</span></span>
+<span id="cb47-13"><a></a><span class="co">#&gt;  4 Japura        Amazon 1223.      1968. ((-76.71056 1.624166, -76.70029 1.6883…</span></span>
+<span id="cb47-14"><a></a><span class="co">#&gt;  5 Putumayo      Amazon  890.      1432. ((-76.86806 1.300553, -76.86695 1.295,…</span></span>
+<span id="cb47-15"><a></a><span class="co">#&gt;  6 Rio Maranon   Amazon  889.      1431. ((-73.5079 -4.459834, -73.79197 -4.621…</span></span>
+<span id="cb47-16"><a></a><span class="co">#&gt;  7 Ucayali       Amazon 1298.      2089. ((-73.5079 -4.459834, -73.51585 -4.506…</span></span>
+<span id="cb47-17"><a></a><span class="co">#&gt;  8 Guapore       Amazon  394.       634. ((-65.39585 -10.39333, -65.39578 -10.3…</span></span>
+<span id="cb47-18"><a></a><span class="co">#&gt;  9 Madre de Dios Amazon  568.       914. ((-65.39585 -10.39333, -65.45279 -10.4…</span></span>
+<span id="cb47-19"><a></a><span class="co">#&gt; 10 Amazon        Amazon 1890.      3042. ((-73.5079 -4.459834, -73.45141 -4.427…</span></span>
+<span id="cb47-20"><a></a><span class="co">#&gt; # ℹ 88 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="via-url" class="slide level2">
+<h2>via url <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a><span class="co"># via url</span></span>
+<span id="cb48-2"><a></a>(gage <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">"https://reference.geoconnex.us/collections/gages/items/1000001"</span>))</span>
+<span id="cb48-3"><a></a><span class="co">#&gt; Simple feature collection with 1 feature and 17 fields</span></span>
+<span id="cb48-4"><a></a><span class="co">#&gt; Geometry type: POINT</span></span>
+<span id="cb48-5"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb48-6"><a></a><span class="co">#&gt; Bounding box:  xmin: -107.2826 ymin: 35.94568 xmax: -107.2826 ymax: 35.94568</span></span>
+<span id="cb48-7"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb48-8"><a></a><span class="co">#&gt; # A tibble: 1 × 18</span></span>
+<span id="cb48-9"><a></a><span class="co">#&gt;   nhdpv2_reachcode mainstem_uri           fid nhdpv2_reach_measure cluster uri  </span></span>
+<span id="cb48-10"><a></a><span class="co">#&gt;   &lt;chr&gt;            &lt;chr&gt;                &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;</span></span>
+<span id="cb48-11"><a></a><span class="co">#&gt; 1 13020205000216   https://geoconnex.u…     1                 80.3 https:… http…</span></span>
+<span id="cb48-12"><a></a><span class="co">#&gt; # ℹ 12 more variables: nhdpv2_comid &lt;dbl&gt;, name &lt;chr&gt;, nhdpv2_totdasqkm &lt;dbl&gt;,</span></span>
+<span id="cb48-13"><a></a><span class="co">#&gt; #   description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;, subjectof &lt;chr&gt;,</span></span>
+<span id="cb48-14"><a></a><span class="co">#&gt; #   nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;, gage_totdasqkm &lt;dbl&gt;,</span></span>
+<span id="cb48-15"><a></a><span class="co">#&gt; #   provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;, geometry &lt;POINT [°]&gt;</span></span>
+<span id="cb48-16"><a></a></span>
+<span id="cb48-17"><a></a><span class="co"># write out data</span></span>
+<span id="cb48-18"><a></a><span class="co"># write_sf(counties, "data/counties.shp")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="geometry-list-columns" class="slide level2">
+<h2>Geometry list columns <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>geometry</code> column contains the spatial information.</li>
 <li>It is stored as a list-column of <code>sfc</code> objects.</li>
 <li>Example: Accessing the first geometry in the <code>rivers</code> dataset.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a>rivers<span class="sc">$</span>geometry[<span class="dv">1</span>]</span>
-<span id="cb39-2"><a></a><span class="co">#&gt; Geometry set for 1 feature </span></span>
-<span id="cb39-3"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
-<span id="cb39-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb39-5"><a></a><span class="co">#&gt; Bounding box:  xmin: 144.8258 ymin: 61.40833 xmax: 160.7636 ymax: 68.8008</span></span>
-<span id="cb39-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>rivers<span class="sc">$</span>geometry[<span class="dv">1</span>]</span>
+<span id="cb49-2"><a></a><span class="co">#&gt; Geometry set for 1 feature </span></span>
+<span id="cb49-3"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
+<span id="cb49-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb49-5"><a></a><span class="co">#&gt; Bounding box:  xmin: 144.8258 ymin: 61.40833 xmax: 160.7636 ymax: 68.8008</span></span>
+<span id="cb49-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="projections" class="slide level2">
+<h2>Projections <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>CRS (Coordinate Reference System) is used to define the spatial reference.</li>
+<li>The <code>st_crs()</code> function is used to get the CRS of a dataset.</li>
+<li>The <code>st_transform()</code> function is used to transform the CRS of a dataset.</li>
+<li>Example: Transforming the <code>rivers</code> dataset to EPSG:5070.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a><span class="fu">st_crs</span>(rivers) <span class="sc">|&gt;</span> sf<span class="sc">::</span><span class="fu">st_is_longlat</span>()</span>
+<span id="cb50-2"><a></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb50-3"><a></a><span class="fu">st_crs</span>(rivers)<span class="sc">$</span>units</span>
+<span id="cb50-4"><a></a><span class="co">#&gt; NULL</span></span>
+<span id="cb50-5"><a></a></span>
+<span id="cb50-6"><a></a>riv_5070  <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(rivers, <span class="dv">5070</span>)</span>
+<span id="cb50-7"><a></a></span>
+<span id="cb50-8"><a></a><span class="fu">st_crs</span>(riv_5070) <span class="sc">|&gt;</span> sf<span class="sc">::</span><span class="fu">st_is_longlat</span>()</span>
+<span id="cb50-9"><a></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb50-10"><a></a></span>
+<span id="cb50-11"><a></a><span class="fu">st_crs</span>(riv_5070)<span class="sc">$</span>units</span>
+<span id="cb50-12"><a></a><span class="co">#&gt; [1] "m"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-manipulation" class="slide level2">
@@ -1076,8 +1428,8 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <li>Example: Filtering the <code>rivers</code> dataset to include only the Mississippi River.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>mississippi <span class="ot">&lt;-</span> <span class="fu">filter</span>(rivers, SYSTEM <span class="sc">==</span> <span class="st">"Mississippi"</span>)</span>
-<span id="cb40-2"><a></a>larimer     <span class="ot">&lt;-</span> <span class="fu">filter</span>(counties, name <span class="sc">==</span> <span class="st">"Larimer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>mississippi <span class="ot">&lt;-</span> <span class="fu">filter</span>(rivers, SYSTEM <span class="sc">==</span> <span class="st">"Mississippi"</span>)</span>
+<span id="cb51-2"><a></a>larimer     <span class="ot">&lt;-</span> <span class="fu">filter</span>(counties, name <span class="sc">==</span> <span class="st">"Larimer"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="unions-combines" class="slide level2">
@@ -1087,26 +1439,26 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <li>It is useful when you want to merge geometries.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>mississippi</span>
-<span id="cb41-2"><a></a><span class="co">#&gt; Simple feature collection with 4 features and 4 fields</span></span>
-<span id="cb41-3"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
-<span id="cb41-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb41-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158</span></span>
-<span id="cb41-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb41-7"><a></a><span class="co">#&gt; # A tibble: 4 × 5</span></span>
-<span id="cb41-8"><a></a><span class="co">#&gt;   NAME        SYSTEM      MILES KILOMETERS                              geometry</span></span>
-<span id="cb41-9"><a></a><span class="co">#&gt; * &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;                 &lt;MULTILINESTRING [°]&gt;</span></span>
-<span id="cb41-10"><a></a><span class="co">#&gt; 1 Arkansas    Mississippi 1446.      2327. ((-106.3789 39.36165, -106.3295 39.3…</span></span>
-<span id="cb41-11"><a></a><span class="co">#&gt; 2 Mississippi Mississippi 2385.      3838. ((-95.02364 47.15609, -94.98973 47.3…</span></span>
-<span id="cb41-12"><a></a><span class="co">#&gt; 3 Missouri    Mississippi 2739.      4408. ((-110.5545 44.76081, -110.6122 44.7…</span></span>
-<span id="cb41-13"><a></a><span class="co">#&gt; 4 Ohio        Mississippi 1368.      2202. ((-89.12166 36.97756, -89.17502 37.0…</span></span>
-<span id="cb41-14"><a></a></span>
-<span id="cb41-15"><a></a><span class="fu">st_union</span>(mississippi)</span>
-<span id="cb41-16"><a></a><span class="co">#&gt; Geometry set for 1 feature </span></span>
-<span id="cb41-17"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
-<span id="cb41-18"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb41-19"><a></a><span class="co">#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158</span></span>
-<span id="cb41-20"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a>mississippi</span>
+<span id="cb52-2"><a></a><span class="co">#&gt; Simple feature collection with 4 features and 4 fields</span></span>
+<span id="cb52-3"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
+<span id="cb52-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb52-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158</span></span>
+<span id="cb52-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb52-7"><a></a><span class="co">#&gt; # A tibble: 4 × 5</span></span>
+<span id="cb52-8"><a></a><span class="co">#&gt;   NAME        SYSTEM      MILES KILOMETERS                              geometry</span></span>
+<span id="cb52-9"><a></a><span class="co">#&gt; * &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;                 &lt;MULTILINESTRING [°]&gt;</span></span>
+<span id="cb52-10"><a></a><span class="co">#&gt; 1 Arkansas    Mississippi 1446.      2327. ((-106.3789 39.36165, -106.3295 39.3…</span></span>
+<span id="cb52-11"><a></a><span class="co">#&gt; 2 Mississippi Mississippi 2385.      3838. ((-95.02364 47.15609, -94.98973 47.3…</span></span>
+<span id="cb52-12"><a></a><span class="co">#&gt; 3 Missouri    Mississippi 2739.      4408. ((-110.5545 44.76081, -110.6122 44.7…</span></span>
+<span id="cb52-13"><a></a><span class="co">#&gt; 4 Ohio        Mississippi 1368.      2202. ((-89.12166 36.97756, -89.17502 37.0…</span></span>
+<span id="cb52-14"><a></a></span>
+<span id="cb52-15"><a></a><span class="fu">st_union</span>(mississippi)</span>
+<span id="cb52-16"><a></a><span class="co">#&gt; Geometry set for 1 feature </span></span>
+<span id="cb52-17"><a></a><span class="co">#&gt; Geometry type: MULTILINESTRING</span></span>
+<span id="cb52-18"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb52-19"><a></a><span class="co">#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158</span></span>
+<span id="cb52-20"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="measures" class="slide level2">
@@ -1118,55 +1470,65 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <li>Example: Calculating the length of the Mississippi River and the area of Larimer County.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a><span class="fu">st_length</span>(mississippi)</span>
-<span id="cb42-2"><a></a><span class="co">#&gt; Units: [m]</span></span>
-<span id="cb42-3"><a></a><span class="co">#&gt; [1] 1912869 3147943 3331900 1785519</span></span>
-<span id="cb42-4"><a></a></span>
-<span id="cb42-5"><a></a><span class="fu">st_area</span>(larimer)</span>
-<span id="cb42-6"><a></a><span class="co">#&gt; 6813621254 [m^2]</span></span>
-<span id="cb42-7"><a></a></span>
-<span id="cb42-8"><a></a><span class="fu">st_distance</span>(larimer, mississippi)</span>
-<span id="cb42-9"><a></a><span class="co">#&gt; Units: [m]</span></span>
-<span id="cb42-10"><a></a><span class="co">#&gt;          [,1]    [,2]   [,3]    [,4]</span></span>
-<span id="cb42-11"><a></a><span class="co">#&gt; [1,] 116016.6 1009375 526454 1413983</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a><span class="fu">st_length</span>(mississippi)</span>
+<span id="cb53-2"><a></a><span class="co">#&gt; Units: [m]</span></span>
+<span id="cb53-3"><a></a><span class="co">#&gt; [1] 1912869 3147943 3331900 1785519</span></span>
+<span id="cb53-4"><a></a></span>
+<span id="cb53-5"><a></a><span class="fu">st_area</span>(larimer)</span>
+<span id="cb53-6"><a></a><span class="co">#&gt; 6813621254 [m^2]</span></span>
+<span id="cb53-7"><a></a></span>
+<span id="cb53-8"><a></a><span class="fu">st_distance</span>(larimer, mississippi)</span>
+<span id="cb53-9"><a></a><span class="co">#&gt; Units: [m]</span></span>
+<span id="cb53-10"><a></a><span class="co">#&gt;          [,1]    [,2]   [,3]    [,4]</span></span>
+<span id="cb53-11"><a></a><span class="co">#&gt; [1,] 116016.6 1009375 526454 1413983</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="predicates" class="slide level2">
-<h2>Predicates</h2>
+<h2>Predicates <img data-src="hexes/sf.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Spatial predicates are used to check relationships between geometries using the DE-9IM model.</li>
 <li>The <code>st_intersects()</code> function is used to check if geometries intersect.</li>
 <li>The <code>st_filter()</code> function is used to filter geometries based on a predicate.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a><span class="fu">st_intersects</span>(counties, mississippi)</span>
-<span id="cb43-2"><a></a><span class="co">#&gt; Sparse geometry binary predicate list of length 3108, where the</span></span>
-<span id="cb43-3"><a></a><span class="co">#&gt; predicate was `intersects'</span></span>
-<span id="cb43-4"><a></a><span class="co">#&gt; first 10 elements:</span></span>
-<span id="cb43-5"><a></a><span class="co">#&gt;  1: (empty)</span></span>
-<span id="cb43-6"><a></a><span class="co">#&gt;  2: (empty)</span></span>
-<span id="cb43-7"><a></a><span class="co">#&gt;  3: (empty)</span></span>
-<span id="cb43-8"><a></a><span class="co">#&gt;  4: (empty)</span></span>
-<span id="cb43-9"><a></a><span class="co">#&gt;  5: (empty)</span></span>
-<span id="cb43-10"><a></a><span class="co">#&gt;  6: (empty)</span></span>
-<span id="cb43-11"><a></a><span class="co">#&gt;  7: (empty)</span></span>
-<span id="cb43-12"><a></a><span class="co">#&gt;  8: (empty)</span></span>
-<span id="cb43-13"><a></a><span class="co">#&gt;  9: (empty)</span></span>
-<span id="cb43-14"><a></a><span class="co">#&gt;  10: (empty)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a><span class="fu">st_intersects</span>(counties, mississippi)</span>
+<span id="cb54-2"><a></a><span class="co">#&gt; Sparse geometry binary predicate list of length 3108, where the</span></span>
+<span id="cb54-3"><a></a><span class="co">#&gt; predicate was `intersects'</span></span>
+<span id="cb54-4"><a></a><span class="co">#&gt; first 10 elements:</span></span>
+<span id="cb54-5"><a></a><span class="co">#&gt;  1: (empty)</span></span>
+<span id="cb54-6"><a></a><span class="co">#&gt;  2: (empty)</span></span>
+<span id="cb54-7"><a></a><span class="co">#&gt;  3: (empty)</span></span>
+<span id="cb54-8"><a></a><span class="co">#&gt;  4: (empty)</span></span>
+<span id="cb54-9"><a></a><span class="co">#&gt;  5: (empty)</span></span>
+<span id="cb54-10"><a></a><span class="co">#&gt;  6: (empty)</span></span>
+<span id="cb54-11"><a></a><span class="co">#&gt;  7: (empty)</span></span>
+<span id="cb54-12"><a></a><span class="co">#&gt;  8: (empty)</span></span>
+<span id="cb54-13"><a></a><span class="co">#&gt;  9: (empty)</span></span>
+<span id="cb54-14"><a></a><span class="co">#&gt;  10: (empty)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>ints <span class="ot">&lt;-</span> <span class="fu">st_filter</span>(counties, mississippi, <span class="at">.predicate =</span> st_intersects)</span>
-<span id="cb44-2"><a></a></span>
-<span id="cb44-3"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb44-4"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ints) <span class="sc">+</span></span>
-<span id="cb44-5"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> mississippi, <span class="at">col =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
-<span id="cb44-6"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a></a>ints <span class="ot">&lt;-</span> <span class="fu">st_filter</span>(counties, mississippi, <span class="at">.predicate =</span> st_intersects)</span>
+<span id="cb55-2"><a></a></span>
+<span id="cb55-3"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb55-4"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> ints) <span class="sc">+</span></span>
+<span id="cb55-5"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> mississippi, <span class="at">col =</span> <span class="st">"blue"</span>) <span class="sc">+</span> </span>
+<span id="cb55-6"><a></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-56-1.png" width="960"></p>
+</figure>
 </div>
-<img data-src="week-1_files/figure-revealjs/unnamed-chunk-45-1.png" width="960" class="r-stretch"></section></section>
+</div>
+</div>
+</div></div>
+</section></section>
 <section>
-<section id="spatial-data-raster" class="title-slide slide level1 center">
-<h1>Spatial Data: Raster</h1>
+<section id="week-4-5-spatial-data-raster" class="title-slide slide level1 center">
+<h1>~ Week 4-5: Spatial Data (Raster) <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h1>
 
 </section>
 <section id="terra" class="slide level2">
@@ -1176,269 +1538,217 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <li>It provides functions for reading, writing, and manipulating raster data.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="fu">library</span>(terra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a></a><span class="fu">library</span>(terra)</span>
+<span id="cb56-2"><a></a><span class="fu">gdal</span>()</span>
+<span id="cb56-3"><a></a><span class="co">#&gt; [1] "3.10.1"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="io-1" class="slide level2">
-<h2>I/O</h2>
+<h2>I/O <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Any raster format that GDAL can read, can be read with <code>rast()</code>.</li>
+<li>The package loads the native GDAL src library (like <code>sf</code>)</li>
+<li><code>rast</code> reads data headers, not data itself, until needed.</li>
 <li>Example: Reading a GeoTIF of Colorado elevation.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a>(<span class="at">elev =</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">'data/colorado_elevation.tif'</span>))</span>
-<span id="cb46-2"><a></a><span class="co">#&gt; class       : SpatRaster </span></span>
-<span id="cb46-3"><a></a><span class="co">#&gt; dimensions  : 16893, 21395, 1  (nrow, ncol, nlyr)</span></span>
-<span id="cb46-4"><a></a><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
-<span id="cb46-5"><a></a><span class="co">#&gt; extent      : -1146465, -504615, 1566915, 2073705  (xmin, xmax, ymin, ymax)</span></span>
-<span id="cb46-6"><a></a><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span></span>
-<span id="cb46-7"><a></a><span class="co">#&gt; source      : colorado_elevation.tif </span></span>
-<span id="cb46-8"><a></a><span class="co">#&gt; name        : CONUS_dem </span></span>
-<span id="cb46-9"><a></a><span class="co">#&gt; min value   :     98679 </span></span>
-<span id="cb46-10"><a></a><span class="co">#&gt; max value   :    439481</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a>(<span class="at">elev =</span> terra<span class="sc">::</span><span class="fu">rast</span>(<span class="st">'data/colorado_elevation.tif'</span>))</span>
+<span id="cb57-2"><a></a><span class="co">#&gt; class       : SpatRaster </span></span>
+<span id="cb57-3"><a></a><span class="co">#&gt; dimensions  : 16893, 21395, 1  (nrow, ncol, nlyr)</span></span>
+<span id="cb57-4"><a></a><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
+<span id="cb57-5"><a></a><span class="co">#&gt; extent      : -1146465, -504615, 1566915, 2073705  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb57-6"><a></a><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span></span>
+<span id="cb57-7"><a></a><span class="co">#&gt; source      : colorado_elevation.tif </span></span>
+<span id="cb57-8"><a></a><span class="co">#&gt; name        : CONUS_dem </span></span>
+<span id="cb57-9"><a></a><span class="co">#&gt; min value   :     98679 </span></span>
+<span id="cb57-10"><a></a><span class="co">#&gt; max value   :    439481</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="raster-structure" class="slide level2">
+<h2>Raster Structure <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<p>Raster data is stored as an multi-dimensional array of values. - Remember this is atomic vector with diminisions - The same way we looked</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a></a>v <span class="ot">&lt;-</span> <span class="fu">values</span>(elev)</span>
+<span id="cb58-2"><a></a><span class="fu">head</span>(v)</span>
+<span id="cb58-3"><a></a><span class="co">#&gt;      CONUS_dem</span></span>
+<span id="cb58-4"><a></a><span class="co">#&gt; [1,]    242037</span></span>
+<span id="cb58-5"><a></a><span class="co">#&gt; [2,]    243793</span></span>
+<span id="cb58-6"><a></a><span class="co">#&gt; [3,]    244464</span></span>
+<span id="cb58-7"><a></a><span class="co">#&gt; [4,]    244302</span></span>
+<span id="cb58-8"><a></a><span class="co">#&gt; [5,]    244060</span></span>
+<span id="cb58-9"><a></a><span class="co">#&gt; [6,]    243888</span></span>
+<span id="cb58-10"><a></a><span class="fu">class</span>(v[,<span class="dv">1</span>])</span>
+<span id="cb58-11"><a></a><span class="co">#&gt; [1] "integer"</span></span>
+<span id="cb58-12"><a></a></span>
+<span id="cb58-13"><a></a><span class="fu">dim</span>(v)</span>
+<span id="cb58-14"><a></a><span class="co">#&gt; [1] 361425735         1</span></span>
+<span id="cb58-15"><a></a><span class="fu">dim</span>(elev)</span>
+<span id="cb58-16"><a></a><span class="co">#&gt; [1] 16893 21395     1</span></span>
+<span id="cb58-17"><a></a><span class="fu">nrow</span>(elev)</span>
+<span id="cb58-18"><a></a><span class="co">#&gt; [1] 16893</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="additonal-structure" class="slide level2">
+<h2>Additonal Structure</h2>
+<p>In addition to the values and diminsions, rasters have: - <strong>Extent</strong>: The spatial extent of the raster. - <strong>Resolution</strong>: The spatial resolution of the raster pixels. - <strong>CRS</strong>: The coordinate reference system of the raster.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a></a><span class="fu">crs</span>(elev)</span>
+<span id="cb59-2"><a></a><span class="co">#&gt; [1] "PROJCRS[\"unnamed\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101004,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"Albers Equal Area\",\n        METHOD[\"Albers Equal Area\",\n            ID[\"EPSG\",9822]],\n        PARAMETER[\"Latitude of false origin\",23,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8821]],\n        PARAMETER[\"Longitude of false origin\",-96,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8822]],\n        PARAMETER[\"Latitude of 1st standard parallel\",29.5,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Latitude of 2nd standard parallel\",45.5,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8824]],\n        PARAMETER[\"Easting at false origin\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8826]],\n        PARAMETER[\"Northing at false origin\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8827]]],\n    CS[Cartesian,2],\n        AXIS[\"easting\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]],\n        AXIS[\"northing\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1,\n                ID[\"EPSG\",9001]]]]"</span></span>
+<span id="cb59-3"><a></a><span class="fu">ext</span>(elev)</span>
+<span id="cb59-4"><a></a><span class="co">#&gt; SpatExtent : -1146465, -504615, 1566915, 2073705 (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb59-5"><a></a><span class="fu">res</span>(elev)</span>
+<span id="cb59-6"><a></a><span class="co">#&gt; [1] 30 30</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="cropmask" class="slide level2">
-<h2>Crop/Mask</h2>
+<h2>Crop/Mask <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>crop()</code> function is used to crop a raster to a specific extent.</li>
-<li>The <code>mask()</code> function is used to mask a raster using a vector or other extent</li>
+<li>It is useful when you want to work with a subset of the data.</li>
+<li>crop extracts data (whether from a remote or local source)</li>
+<li>The <code>mask()</code> function is used to mask a raster using a vector or other extent, keeping only the data within the mask.</li>
+<li>Input extents must match the CRS of the raster data</li>
+<li>Example: Cropping then masking the elevation raster to Larimer County.</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>larimer_terra <span class="ot">&lt;-</span> <span class="fu">project</span>(<span class="fu">vect</span>(larimer), <span class="st">"EPSG:5070"</span>)</span>
-<span id="cb47-2"><a></a>larimer_elev <span class="ot">=</span> <span class="fu">crop</span>(elev, larimer_terra)</span>
-<span id="cb47-3"><a></a><span class="fu">plot</span>(larimer_elev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a></a>larimer_5070 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(larimer, <span class="fu">crs</span>(elev))</span>
+<span id="cb60-2"><a></a></span>
+<span id="cb60-3"><a></a>larimer_elev <span class="ot">=</span> <span class="fu">crop</span>(elev, larimer_5070)</span>
+<span id="cb60-4"><a></a></span>
+<span id="cb60-5"><a></a><span class="fu">plot</span>(larimer_elev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-48-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a></span>
-<span id="cb48-2"><a></a>larimer_mask <span class="ot">=</span> <span class="fu">mask</span>(larimer_elev, larimer_terra)</span>
-<span id="cb48-3"><a></a><span class="fu">plot</span>(larimer_mask)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-48-2.png" width="960"></p>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-61-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a></a>larimer_mask <span class="ot">&lt;-</span> <span class="fu">mask</span>(larimer_elev, larimer_5070)</span>
+<span id="cb61-2"><a></a><span class="fu">plot</span>(larimer_mask)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-62-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="summary-algebra" class="slide level2">
-<h2>Summary / Algebra</h2>
+<h2>Summary / Algebra <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Rasters can be added, subtracted, multiplied, and divided</li>
 <li>Any form of map algebra can be done with rasters</li>
 <li>For example, multiplying the Larimer mask by 2</li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h4 id="raw">raw</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>elev2 <span class="ot">&lt;-</span>  <span class="dv">2</span> <span class="sc">*</span> larimer_mask</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a></a>larimer_mask</span>
+<span id="cb62-2"><a></a><span class="co">#&gt; class       : SpatRaster </span></span>
+<span id="cb62-3"><a></a><span class="co">#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)</span></span>
+<span id="cb62-4"><a></a><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
+<span id="cb62-5"><a></a><span class="co">#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb62-6"><a></a><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span></span>
+<span id="cb62-7"><a></a><span class="co">#&gt; source(s)   : memory</span></span>
+<span id="cb62-8"><a></a><span class="co">#&gt; varname     : colorado_elevation </span></span>
+<span id="cb62-9"><a></a><span class="co">#&gt; name        : CONUS_dem </span></span>
+<span id="cb62-10"><a></a><span class="co">#&gt; min value   :    145787 </span></span>
+<span id="cb62-11"><a></a><span class="co">#&gt; max value   :    412773</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><br></p>
+<h4 id="data-operation">Data Operation</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a></a>elev2 <span class="ot">&lt;-</span> larimer_mask<span class="sc">^</span><span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<h4 id="rast-modified-by-rast">rast modified by rast</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a></a>larimer_mask <span class="sc">/</span> elev2</span>
+<span id="cb64-2"><a></a><span class="co">#&gt; class       : SpatRaster </span></span>
+<span id="cb64-3"><a></a><span class="co">#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)</span></span>
+<span id="cb64-4"><a></a><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
+<span id="cb64-5"><a></a><span class="co">#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb64-6"><a></a><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span></span>
+<span id="cb64-7"><a></a><span class="co">#&gt; source(s)   : memory</span></span>
+<span id="cb64-8"><a></a><span class="co">#&gt; varname     : colorado_elevation </span></span>
+<span id="cb64-9"><a></a><span class="co">#&gt; name        :    CONUS_dem </span></span>
+<span id="cb64-10"><a></a><span class="co">#&gt; min value   : 2.422639e-06 </span></span>
+<span id="cb64-11"><a></a><span class="co">#&gt; max value   : 6.859322e-06</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<h4 id="statistical-methods">statistical methods</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a></a>(<span class="at">scaled =</span> <span class="fu">scale</span>(larimer_mask))</span>
+<span id="cb65-2"><a></a><span class="co">#&gt; class       : SpatRaster </span></span>
+<span id="cb65-3"><a></a><span class="co">#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)</span></span>
+<span id="cb65-4"><a></a><span class="co">#&gt; resolution  : 30, 30  (x, y)</span></span>
+<span id="cb65-5"><a></a><span class="co">#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)</span></span>
+<span id="cb65-6"><a></a><span class="co">#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs </span></span>
+<span id="cb65-7"><a></a><span class="co">#&gt; source(s)   : memory</span></span>
+<span id="cb65-8"><a></a><span class="co">#&gt; varname     : colorado_elevation </span></span>
+<span id="cb65-9"><a></a><span class="co">#&gt; name        : CONUS_dem </span></span>
+<span id="cb65-10"><a></a><span class="co">#&gt; min value   : -1.562331 </span></span>
+<span id="cb65-11"><a></a><span class="co">#&gt; max value   :  3.053412</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></div>
 </section>
-<section id="raster-data-store" class="slide level2">
-<h2>Raster data store</h2>
+<section id="value-supersetting" class="slide level2">
+<h2>Value Supersetting <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>Rasters are matrices or arrays of values, and can be manipulated as such</li>
 <li>For example, setting 35% of the raster to NA</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a>larimer_elev[<span class="fu">sample</span>(<span class="fu">ncell</span>(larimer_elev), .<span class="dv">35</span><span class="sc">*</span><span class="fu">ncell</span>(larimer_elev))] <span class="ot">&lt;-</span>  <span class="cn">NA</span></span>
-<span id="cb50-2"><a></a></span>
-<span id="cb50-3"><a></a><span class="fu">plot</span>(larimer_elev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a></a>larimer_elev[<span class="fu">sample</span>(<span class="fu">ncell</span>(larimer_elev), .<span class="dv">35</span><span class="sc">*</span><span class="fu">ncell</span>(larimer_elev))] <span class="ot">&lt;-</span>  <span class="cn">NA</span></span>
+<span id="cb66-2"><a></a></span>
+<span id="cb66-3"><a></a><span class="fu">plot</span>(larimer_elev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-67-1.png" width="960"></p>
+</figure>
 </div>
-<img data-src="week-1_files/figure-revealjs/unnamed-chunk-50-1.png" width="960" class="r-stretch"></section>
+</div>
+</div>
+</section>
 <section id="focal" class="slide level2">
-<h2>Focal</h2>
+<h2>Focal <img data-src="hexes/terra.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>focal()</code> function is used to calculate focal statistics.</li>
 <li>It is useful when you want to calculate statistics for each cell based on its neighbors.</li>
 <li>Example: Calculating the mean elevation within a 30-cell window to remove the NAs we just created</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>xx <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">focal</span>(larimer_elev, <span class="at">win =</span> <span class="dv">30</span>, <span class="at">fun  =</span> <span class="st">"mean"</span>, <span class="at">na.policy=</span><span class="st">"only"</span>)</span>
-<span id="cb51-2"><a></a><span class="fu">plot</span>(xx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a></a>xx <span class="ot">=</span> terra<span class="sc">::</span><span class="fu">focal</span>(larimer_elev, <span class="at">win =</span> <span class="dv">30</span>, <span class="at">fun  =</span> <span class="st">"mean"</span>, <span class="at">na.policy=</span><span class="st">"only"</span>)</span>
+<span id="cb67-2"><a></a><span class="fu">plot</span>(xx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-68-1.png" width="960"></p>
+</figure>
 </div>
-<img data-src="week-1_files/figure-revealjs/unnamed-chunk-51-1.png" width="960" class="r-stretch"></section></section>
-<section id="unit-2-modeling" class="title-slide slide level1 center">
-<h1>Unit 2: Modeling</h1>
-
-</section>
-
+</div>
+</div>
+</section></section>
 <section>
-<section id="lm" class="title-slide slide level1 center">
-<h1>lm</h1>
-<ul>
-<li>The <code>lm()</code> function is used to fit linear models.</li>
-<li>It is useful when you want to model the relationship between two variables.</li>
-<li>Example: Fitting a linear model to predict <code>body_mass_g</code> from <code>flipper_length_mm</code>.</li>
-</ul>
+<section id="week-6-7-machine-learning" class="title-slide slide level1 center">
+<h1>~ Week 6-7: Machine Learning <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a>clean_penguins <span class="ot">=</span> <span class="fu">drop_na</span>(penguins)</span>
-<span id="cb52-2"><a></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> clean_penguins)</span>
-<span id="cb52-3"><a></a><span class="fu">summary</span>(model)</span>
-<span id="cb52-4"><a></a><span class="co">#&gt; </span></span>
-<span id="cb52-5"><a></a><span class="co">#&gt; Call:</span></span>
-<span id="cb52-6"><a></a><span class="co">#&gt; lm(formula = body_mass_g ~ flipper_length_mm, data = clean_penguins)</span></span>
-<span id="cb52-7"><a></a><span class="co">#&gt; </span></span>
-<span id="cb52-8"><a></a><span class="co">#&gt; Residuals:</span></span>
-<span id="cb52-9"><a></a><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
-<span id="cb52-10"><a></a><span class="co">#&gt; -1057.33  -259.79   -12.24   242.97  1293.89 </span></span>
-<span id="cb52-11"><a></a><span class="co">#&gt; </span></span>
-<span id="cb52-12"><a></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb52-13"><a></a><span class="co">#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb52-14"><a></a><span class="co">#&gt; (Intercept)       -5872.09     310.29  -18.93   &lt;2e-16 ***</span></span>
-<span id="cb52-15"><a></a><span class="co">#&gt; flipper_length_mm    50.15       1.54   32.56   &lt;2e-16 ***</span></span>
-<span id="cb52-16"><a></a><span class="co">#&gt; ---</span></span>
-<span id="cb52-17"><a></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span id="cb52-18"><a></a><span class="co">#&gt; </span></span>
-<span id="cb52-19"><a></a><span class="co">#&gt; Residual standard error: 393.3 on 331 degrees of freedom</span></span>
-<span id="cb52-20"><a></a><span class="co">#&gt; Multiple R-squared:  0.7621, Adjusted R-squared:  0.7614 </span></span>
-<span id="cb52-21"><a></a><span class="co">#&gt; F-statistic:  1060 on 1 and 331 DF,  p-value: &lt; 2.2e-16</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="broom" class="slide level2">
-<h2>broom</h2>
-<ul>
-<li>The <code>broom</code> package is used to tidy model outputs.</li>
-<li>It provides functions to convert model outputs into tidy data frames.</li>
-<li>Example: Tidying the <code>model</code> output.</li>
-</ul>
-<h3 id="tidy">tidy</h3>
-<ul>
-<li>The <code>tidy()</code> function is used to tidy model coefficients.</li>
-<li>It is useful when you want to extract model coefficients.</li>
-<li>Example: Tidying the <code>model</code> output.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a><span class="fu">tidy</span>(model)</span>
-<span id="cb53-2"><a></a><span class="co">#&gt; # A tibble: 2 × 5</span></span>
-<span id="cb53-3"><a></a><span class="co">#&gt;   term              estimate std.error statistic   p.value</span></span>
-<span id="cb53-4"><a></a><span class="co">#&gt;   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb53-5"><a></a><span class="co">#&gt; 1 (Intercept)        -5872.     310.       -18.9 1.18e- 54</span></span>
-<span id="cb53-6"><a></a><span class="co">#&gt; 2 flipper_length_mm     50.2      1.54      32.6 3.13e-105</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<h3 id="glance">glance</h3>
-<ul>
-<li>The <code>glance()</code> function is used to provide a summary of model fit.</li>
-<li>It is useful when you want to assess model performance.</li>
-<li>Example: Glancing at the <code>model</code> output.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a><span class="fu">glance</span>(model)</span>
-<span id="cb54-2"><a></a><span class="co">#&gt; # A tibble: 1 × 12</span></span>
-<span id="cb54-3"><a></a><span class="co">#&gt;   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC</span></span>
-<span id="cb54-4"><a></a><span class="co">#&gt;       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span id="cb54-5"><a></a><span class="co">#&gt; 1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.</span></span>
-<span id="cb54-6"><a></a><span class="co">#&gt; # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<h3 id="augment">augment</h3>
-<ul>
-<li>The <code>augment()</code> function is used to add model predictions and residuals to the dataset.</li>
-<li>It is useful when you want to visualize model performance.</li>
-<li>Example: Augmenting the <code>model</code> output.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a></a>a <span class="ot">&lt;-</span> <span class="fu">augment</span>(model)</span>
-<span id="cb55-2"><a></a></span>
-<span id="cb55-3"><a></a><span class="fu">ggplot</span>(a, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> body_mass_g)) <span class="sc">+</span></span>
-<span id="cb55-4"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb55-5"><a></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-55-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a></a></span>
-<span id="cb56-2"><a></a><span class="fu">ggplot</span>(a, <span class="fu">aes</span>(<span class="at">x =</span> .resid)) <span class="sc">+</span></span>
-<span id="cb56-3"><a></a>  <span class="fu">geom_histogram</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-55-2.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="purr" class="slide level2">
-<h2>purr</h2>
-<ul>
-<li>The <code>purrr</code> package is used for functional programming.</li>
-<li>It provides functions for working with lists and vectors.</li>
-</ul>
-<h3 id="map">map</h3>
-<ul>
-<li>The <code>map()</code> function is used to apply a function to each element of a list.</li>
-<li>It is useful when you want to iterate over a list.</li>
-<li>Example: Fitting a linear model to each species in the <code>penguins</code> dataset.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb57-2"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
-<span id="cb57-3"><a></a>  <span class="fu">mutate</span>(<span class="at">lm =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)))</span>
-<span id="cb57-4"><a></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
-<span id="cb57-5"><a></a><span class="co">#&gt;   species   data               lm    </span></span>
-<span id="cb57-6"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt;</span></span>
-<span id="cb57-7"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;  </span></span>
-<span id="cb57-8"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;  </span></span>
-<span id="cb57-9"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<h4 id="map_">map_*</h4>
-<ul>
-<li>The <code>map_*()</code> functions are used to extract specific outputs from a list.</li>
-<li>They are useful when you want to extract specific outputs from a list.</li>
-<li>Example: Extracting the R-squared values (doubles) from the linear models.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb58-2"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
-<span id="cb58-3"><a></a>  <span class="fu">mutate</span>(<span class="at">lm =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)),</span>
-<span id="cb58-4"><a></a>         <span class="at">r2 =</span> <span class="fu">map_dbl</span>(lm, <span class="sc">~</span><span class="fu">summary</span>(.x)<span class="sc">$</span>r.squared))</span>
-<span id="cb58-5"><a></a><span class="co">#&gt; # A tibble: 3 × 4</span></span>
-<span id="cb58-6"><a></a><span class="co">#&gt;   species   data               lm        r2</span></span>
-<span id="cb58-7"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt;</span></span>
-<span id="cb58-8"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;   0.219</span></span>
-<span id="cb58-9"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;   0.494</span></span>
-<span id="cb58-10"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<h4 id="map2">map2</h4>
-<ul>
-<li>The <code>map2()</code> function is used to iterate over two lists in parallel.</li>
-<li>It is useful when you want to apply a function to two lists simultaneously.</li>
-<li>Example: Augmenting the linear models with the original data.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a></a>penguins <span class="sc">|&gt;</span> </span>
-<span id="cb59-2"><a></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb59-3"><a></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">-</span>species) <span class="sc">|&gt;</span> </span>
-<span id="cb59-4"><a></a>  <span class="fu">mutate</span>(<span class="at">lm_mod =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(body_mass_g <span class="sc">~</span> flipper_length_mm, <span class="at">data =</span> .x)),</span>
-<span id="cb59-5"><a></a>         <span class="at">r2 =</span> <span class="fu">map_dbl</span>(lm_mod, <span class="sc">~</span><span class="fu">summary</span>(.x)<span class="sc">$</span>r.squared),</span>
-<span id="cb59-6"><a></a>         <span class="at">a  =</span> <span class="fu">map2</span>(lm_mod, data, <span class="sc">~</span>broom<span class="sc">::</span><span class="fu">augment</span>(.x, .y))) </span>
-<span id="cb59-7"><a></a><span class="co">#&gt; # A tibble: 3 × 5</span></span>
-<span id="cb59-8"><a></a><span class="co">#&gt;   species   data               lm_mod    r2 a                  </span></span>
-<span id="cb59-9"><a></a><span class="co">#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt; &lt;list&gt;             </span></span>
-<span id="cb59-10"><a></a><span class="co">#&gt; 1 Adelie    &lt;tibble [146 × 7]&gt; &lt;lm&gt;   0.216 &lt;tibble [146 × 13]&gt;</span></span>
-<span id="cb59-11"><a></a><span class="co">#&gt; 2 Gentoo    &lt;tibble [119 × 7]&gt; &lt;lm&gt;   0.506 &lt;tibble [119 × 13]&gt;</span></span>
-<span id="cb59-12"><a></a><span class="co">#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412 &lt;tibble [68 × 13]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="unit-3-machine-learning" class="slide level2">
-<h2>Unit 3: Machine Learning</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb60-2"><a></a><span class="fu">tidymodels_packages</span>()</span>
-<span id="cb60-3"><a></a><span class="co">#&gt;  [1] "broom"        "cli"          "conflicted"   "dials"        "dplyr"       </span></span>
-<span id="cb60-4"><a></a><span class="co">#&gt;  [6] "ggplot2"      "hardhat"      "infer"        "modeldata"    "parsnip"     </span></span>
-<span id="cb60-5"><a></a><span class="co">#&gt; [11] "purrr"        "recipes"      "rlang"        "rsample"      "rstudioapi"  </span></span>
-<span id="cb60-6"><a></a><span class="co">#&gt; [16] "tibble"       "tidyr"        "tune"         "workflows"    "workflowsets"</span></span>
-<span id="cb60-7"><a></a><span class="co">#&gt; [21] "yardstick"    "tidymodels"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb68-2"><a></a><span class="fu">tidymodels_packages</span>()</span>
+<span id="cb68-3"><a></a><span class="co">#&gt;  [1] "broom"        "cli"          "conflicted"   "dials"        "dplyr"       </span></span>
+<span id="cb68-4"><a></a><span class="co">#&gt;  [6] "ggplot2"      "hardhat"      "infer"        "modeldata"    "parsnip"     </span></span>
+<span id="cb68-5"><a></a><span class="co">#&gt; [11] "purrr"        "recipes"      "rlang"        "rsample"      "rstudioapi"  </span></span>
+<span id="cb68-6"><a></a><span class="co">#&gt; [16] "tibble"       "tidyr"        "tune"         "workflows"    "workflowsets"</span></span>
+<span id="cb68-7"><a></a><span class="co">#&gt; [21] "yardstick"    "tidymodels"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="seeds-for-reproducability" class="slide level2">
@@ -1452,132 +1762,167 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <li>Example: Creating a 5-fold cross-validation object for the <code>penguins</code> dataset.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb61-2"><a></a>(penguins_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(penguins, <span class="at">prop =</span> <span class="fl">0.8</span>, <span class="at">strata =</span> species))</span>
-<span id="cb61-3"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
-<span id="cb61-4"><a></a><span class="co">#&gt; &lt;274/70/344&gt;</span></span>
-<span id="cb61-5"><a></a>penguins_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(penguins_split)</span>
-<span id="cb61-6"><a></a>penguins_test   <span class="ot">&lt;-</span> <span class="fu">testing</span>(penguins_split)</span>
-<span id="cb61-7"><a></a></span>
-<span id="cb61-8"><a></a>penguin_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(penguins_train, <span class="at">v =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb69-2"><a></a></span>
+<span id="cb69-3"><a></a>(penguins_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(<span class="fu">drop_na</span>(penguins), <span class="at">prop =</span> <span class="fl">0.8</span>, <span class="at">strata =</span> species))</span>
+<span id="cb69-4"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
+<span id="cb69-5"><a></a><span class="co">#&gt; &lt;265/68/333&gt;</span></span>
+<span id="cb69-6"><a></a>penguins_train  <span class="ot">&lt;-</span> <span class="fu">training</span>(penguins_split)</span>
+<span id="cb69-7"><a></a>penguins_test   <span class="ot">&lt;-</span> <span class="fu">testing</span>(penguins_split)</span>
+<span id="cb69-8"><a></a></span>
+<span id="cb69-9"><a></a>penguin_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(penguins_train, <span class="at">v =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="recipes-for-feature-engineering" class="slide level2">
-<h2><code>recipes</code> for feature engineering</h2>
+<h2><code>recipes</code> for feature engineering <img data-src="hexes/recipes.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>recipes</code> package is used for feature engineering.</li>
 <li>It provides functions for preprocessing data before modeling.</li>
 <li>Example: Defining a recipe for feature engineering the <code>penguins</code> dataset.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a></a><span class="co"># Define recipe for feature engineering</span></span>
-<span id="cb62-2"><a></a>penguin_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(species <span class="sc">~</span> ., <span class="at">data =</span> penguins_train) <span class="sc">|&gt;</span></span>
-<span id="cb62-3"><a></a>  <span class="fu">step_impute_knn</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span>  <span class="co"># Impute missing values</span></span>
-<span id="cb62-4"><a></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span>  <span class="co"># Normalize numeric features</span></span>
-<span id="cb62-5"><a></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>())  <span class="co"># One-hot encode categorical variables</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a></a><span class="co"># Define recipe for feature engineering</span></span>
+<span id="cb70-2"><a></a>penguin_recipe <span class="ot">&lt;-</span> <span class="fu">recipe</span>(species <span class="sc">~</span> ., <span class="at">data =</span> penguins_train) <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a></a>  <span class="fu">step_impute_knn</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span>         <span class="co"># Impute missing values</span></span>
+<span id="cb70-4"><a></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>())     <span class="co"># Normalize numeric features</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="parsnip-for-model-selection" class="slide level2">
-<h2>Parsnip for model selection</h2>
+<h2>Parsnip for model selection <img data-src="hexes/parsnip.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
-<li>The <code>parsnip</code> package is used for model selection.</li>
-<li>It provides functions for defining models and workflows.</li>
+<li>The <code>parsnip</code> package is used for model implementation</li>
+<li>It provides functions for defining models types, engines, and modes.</li>
 <li>Example: Defining models for logistic regression, random forest, and decision tree.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a></a><span class="co"># Define models</span></span>
-<span id="cb63-2"><a></a>log_reg_model <span class="ot">&lt;-</span> <span class="fu">multinom_reg</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb63-3"><a></a>  <span class="fu">set_engine</span>(<span class="st">"nnet"</span>)  <span class="sc">|&gt;</span> </span>
-<span id="cb63-4"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
-<span id="cb63-5"><a></a></span>
-<span id="cb63-6"><a></a>rf_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="dv">500</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb63-7"><a></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb63-8"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
-<span id="cb63-9"><a></a></span>
-<span id="cb63-10"><a></a>dt_model <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb63-11"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a></a><span class="co"># Define models</span></span>
+<span id="cb71-2"><a></a>log_reg_model <span class="ot">&lt;-</span> <span class="fu">multinom_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb71-3"><a></a>  <span class="fu">set_engine</span>(<span class="st">"nnet"</span>)  <span class="sc">|&gt;</span> </span>
+<span id="cb71-4"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb71-5"><a></a></span>
+<span id="cb71-6"><a></a>rf_model <span class="ot">&lt;-</span> <span class="fu">rand_forest</span>(<span class="at">trees =</span> <span class="dv">500</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb71-7"><a></a>  <span class="fu">set_engine</span>(<span class="st">"ranger"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb71-8"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb71-9"><a></a></span>
+<span id="cb71-10"><a></a>dt_model <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb71-11"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="workflows-for-model-execution" class="slide level2">
-<h2>Workflows for model execution</h2>
+<h2>Workflows for model execution <img data-src="hexes/workflows.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <ul>
 <li>The <code>workflows</code> package is used for model execution.</li>
 <li>It provides functions for defining and executing workflows.</li>
 <li>Example: Creating a workflow for logistic regression.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a></a><span class="co"># Create workflow</span></span>
-<span id="cb64-2"><a></a>log_reg_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
-<span id="cb64-3"><a></a>  <span class="fu">add_model</span>(log_reg_model) <span class="sc">|&gt;</span></span>
-<span id="cb64-4"><a></a>  <span class="fu">add_recipe</span>(penguin_recipe) <span class="sc">|&gt;</span> </span>
-<span id="cb64-5"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> penguin_folds, </span>
-<span id="cb64-6"><a></a>                <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a></a><span class="co"># Create workflow</span></span>
+<span id="cb72-2"><a></a>log_reg_workflow <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb72-3"><a></a>  <span class="fu">add_model</span>(log_reg_model) <span class="sc">|&gt;</span></span>
+<span id="cb72-4"><a></a>  <span class="fu">add_recipe</span>(penguin_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb72-5"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> penguin_folds, </span>
+<span id="cb72-6"><a></a>                <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="yardstick-for-model-evaluation" class="slide level2">
-<h2>yardstick for model evaluation</h2>
+<h2>yardstick for model evaluation <img data-src="hexes/yardstick.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a></a><span class="fu">collect_metrics</span>(log_reg_workflow)</span>
-<span id="cb65-2"><a></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
-<span id="cb65-3"><a></a><span class="co">#&gt;   .metric  .estimator  mean     n  std_err .config             </span></span>
-<span id="cb65-4"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;               </span></span>
-<span id="cb65-5"><a></a><span class="co">#&gt; 1 accuracy multiclass 0.989     5 0.00445  Preprocessor1_Model1</span></span>
-<span id="cb65-6"><a></a><span class="co">#&gt; 2 roc_auc  hand_till  1.00      5 0.000234 Preprocessor1_Model1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a></a><span class="fu">collect_metrics</span>(log_reg_workflow)</span>
+<span id="cb73-2"><a></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
+<span id="cb73-3"><a></a><span class="co">#&gt;   .metric  .estimator  mean     n std_err .config             </span></span>
+<span id="cb73-4"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
+<span id="cb73-5"><a></a><span class="co">#&gt; 1 accuracy multiclass     1     5       0 Preprocessor1_Model1</span></span>
+<span id="cb73-6"><a></a><span class="co">#&gt; 2 roc_auc  hand_till      1     5       0 Preprocessor1_Model1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="workflowsets-for-model-comparison" class="slide level2">
-<h2>Workflowsets for model comparison</h2>
+<h2><code>workflowsets</code> for model comparison <img data-src="hexes/workflows.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>workflowsets</code> package is used for model comparison.</li>
+<li>It provides functions for comparing multiple models usingthe purrr mapping paradigm</li>
+<li>Example: Comparing logistic regression, random forest, and decision tree models.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a></a>(workflowset <span class="ot">&lt;-</span> <span class="fu">workflow_set</span>(<span class="fu">list</span>(penguin_recipe), <span class="fu">list</span>(log_reg_model, rf_model, dt_model)) <span class="sc">|&gt;</span> </span>
-<span id="cb66-2"><a></a>  <span class="fu">workflow_map</span>(<span class="st">"fit_resamples"</span>, </span>
-<span id="cb66-3"><a></a>               <span class="at">resamples =</span> penguin_folds, </span>
-<span id="cb66-4"><a></a>               <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy)))</span>
-<span id="cb66-5"><a></a><span class="co">#&gt; # A workflow set/tibble: 3 × 4</span></span>
-<span id="cb66-6"><a></a><span class="co">#&gt;   wflow_id             info             option    result   </span></span>
-<span id="cb66-7"><a></a><span class="co">#&gt;   &lt;chr&gt;                &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   </span></span>
-<span id="cb66-8"><a></a><span class="co">#&gt; 1 recipe_multinom_reg  &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span>
-<span id="cb66-9"><a></a><span class="co">#&gt; 2 recipe_rand_forest   &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span>
-<span id="cb66-10"><a></a><span class="co">#&gt; 3 recipe_decision_tree &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span>
-<span id="cb66-11"><a></a></span>
-<span id="cb66-12"><a></a><span class="fu">autoplot</span>(workflowset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a></a><span class="fu">rank_results</span>(workflowset, <span class="at">rank_metric =</span> <span class="st">"roc_auc"</span>)</span>
-<span id="cb67-2"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
-<span id="cb67-3"><a></a><span class="co">#&gt;   wflow_id          .config .metric  mean std_err     n preprocessor model  rank</span></span>
-<span id="cb67-4"><a></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;</span></span>
-<span id="cb67-5"><a></a><span class="co">#&gt; 1 recipe_multinom_… Prepro… accura… 0.989 4.45e-3     5 recipe       mult…     1</span></span>
-<span id="cb67-6"><a></a><span class="co">#&gt; 2 recipe_multinom_… Prepro… roc_auc 1.00  2.34e-4     5 recipe       mult…     1</span></span>
-<span id="cb67-7"><a></a><span class="co">#&gt; 3 recipe_rand_fore… Prepro… accura… 0.989 4.45e-3     5 recipe       rand…     2</span></span>
-<span id="cb67-8"><a></a><span class="co">#&gt; 4 recipe_rand_fore… Prepro… roc_auc 0.999 6.86e-4     5 recipe       rand…     2</span></span>
-<span id="cb67-9"><a></a><span class="co">#&gt; 5 recipe_decision_… Prepro… accura… 0.924 2.02e-2     5 recipe       deci…     3</span></span>
-<span id="cb67-10"><a></a><span class="co">#&gt; 6 recipe_decision_… Prepro… roc_auc 0.950 1.40e-2     5 recipe       deci…     3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a></a>(workflowset <span class="ot">&lt;-</span> <span class="fu">workflow_set</span>(<span class="fu">list</span>(penguin_recipe), </span>
+<span id="cb74-2"><a></a>                             <span class="fu">list</span>(log_reg_model, rf_model, dt_model)) <span class="sc">|&gt;</span> </span>
+<span id="cb74-3"><a></a>  <span class="fu">workflow_map</span>(<span class="st">"fit_resamples"</span>, </span>
+<span id="cb74-4"><a></a>               <span class="at">resamples =</span> penguin_folds, </span>
+<span id="cb74-5"><a></a>               <span class="at">metrics =</span> <span class="fu">metric_set</span>(roc_auc, accuracy)))</span>
+<span id="cb74-6"><a></a><span class="co">#&gt; # A workflow set/tibble: 3 × 4</span></span>
+<span id="cb74-7"><a></a><span class="co">#&gt;   wflow_id             info             option    result   </span></span>
+<span id="cb74-8"><a></a><span class="co">#&gt;   &lt;chr&gt;                &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   </span></span>
+<span id="cb74-9"><a></a><span class="co">#&gt; 1 recipe_multinom_reg  &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span>
+<span id="cb74-10"><a></a><span class="co">#&gt; 2 recipe_rand_forest   &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span>
+<span id="cb74-11"><a></a><span class="co">#&gt; 3 recipe_decision_tree &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img data-src="week-1_files/figure-revealjs/unnamed-chunk-65-1.png" width="960" class="r-stretch"></section>
-<section id="model-validation" class="slide level2">
-<h2>Model Validation</h2>
+</section>
+<section id="autoplot-rank_results" class="slide level2">
+<h2>autoplot / rank_results <img data-src="hexes/yardstick.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/workflows.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>The <code>autoplot()</code> function is used to visualize model performance.</li>
+<li>The <code>rank_results()</code> function is used to rank models based on a metric.</li>
+<li>Example: Visualizing and ranking the model results based on the roc_auc (area under the curve) metric.</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a></a>final_model <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb68-2"><a></a>  <span class="fu">add_model</span>(log_reg_model) <span class="sc">|&gt;</span></span>
-<span id="cb68-3"><a></a>  <span class="fu">add_recipe</span>(penguin_recipe) <span class="sc">|&gt;</span></span>
-<span id="cb68-4"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> penguins_train)</span>
-<span id="cb68-5"><a></a></span>
-<span id="cb68-6"><a></a>validation <span class="ot">&lt;-</span> <span class="fu">fit</span>(final_model, <span class="at">data =</span> penguins_test)</span>
-<span id="cb68-7"><a></a></span>
-<span id="cb68-8"><a></a><span class="fu">augment</span>(validation, penguins_test) <span class="sc">|&gt;</span> </span>
-<span id="cb68-9"><a></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> species, <span class="at">estimate =</span> .pred_class)</span>
-<span id="cb68-10"><a></a><span class="co">#&gt;            Truth</span></span>
-<span id="cb68-11"><a></a><span class="co">#&gt; Prediction  Adelie Chinstrap Gentoo</span></span>
-<span id="cb68-12"><a></a><span class="co">#&gt;   Adelie        31         0      0</span></span>
-<span id="cb68-13"><a></a><span class="co">#&gt;   Chinstrap      0        14      0</span></span>
-<span id="cb68-14"><a></a><span class="co">#&gt;   Gentoo         0         0     25</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a></a><span class="fu">autoplot</span>(workflowset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-1_files/figure-revealjs/unnamed-chunk-76-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a></a><span class="fu">rank_results</span>(workflowset, <span class="at">rank_metric =</span> <span class="st">"roc_auc"</span>)</span>
+<span id="cb76-2"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
+<span id="cb76-3"><a></a><span class="co">#&gt;   wflow_id          .config .metric  mean std_err     n preprocessor model  rank</span></span>
+<span id="cb76-4"><a></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb76-5"><a></a><span class="co">#&gt; 1 recipe_multinom_… Prepro… accura… 1     0           5 recipe       mult…     1</span></span>
+<span id="cb76-6"><a></a><span class="co">#&gt; 2 recipe_multinom_… Prepro… roc_auc 1     0           5 recipe       mult…     1</span></span>
+<span id="cb76-7"><a></a><span class="co">#&gt; 3 recipe_rand_fore… Prepro… accura… 0.981 5.97e-3     5 recipe       rand…     2</span></span>
+<span id="cb76-8"><a></a><span class="co">#&gt; 4 recipe_rand_fore… Prepro… roc_auc 1.00  3.60e-4     5 recipe       rand…     2</span></span>
+<span id="cb76-9"><a></a><span class="co">#&gt; 5 recipe_decision_… Prepro… accura… 0.955 1.28e-2     5 recipe       deci…     3</span></span>
+<span id="cb76-10"><a></a><span class="co">#&gt; 6 recipe_decision_… Prepro… roc_auc 0.953 1.39e-2     5 recipe       deci…     3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></div>
+</section>
+<section id="model-validation" class="slide level2">
+<h2>Model Validation <img data-src="hexes/yardstick.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/broom.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
+<ul>
+<li>Finally, we can validate the model on the test set</li>
+<li>The <code>augment()</code> function is used to add model predictions and residuals to the dataset.</li>
+<li>The <code>conf_mat()</code> function is used to create a confusion matrix.</li>
+<li>Example: Validating the logistic regression model on the test set.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a></a><span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb77-2"><a></a>  <span class="co"># Add model and recipe</span></span>
+<span id="cb77-3"><a></a>  <span class="fu">add_model</span>(log_reg_model) <span class="sc">|&gt;</span></span>
+<span id="cb77-4"><a></a>  <span class="fu">add_recipe</span>(penguin_recipe) <span class="sc">|&gt;</span></span>
+<span id="cb77-5"><a></a>  <span class="co"># Train model</span></span>
+<span id="cb77-6"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> penguins_train) <span class="sc">|&gt;</span> </span>
+<span id="cb77-7"><a></a>  <span class="co"># Fit trained model to test set</span></span>
+<span id="cb77-8"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> penguins_test) <span class="sc">|&gt;</span>  </span>
+<span id="cb77-9"><a></a>  <span class="co"># Extract Predictions</span></span>
+<span id="cb77-10"><a></a>  <span class="fu">augment</span>(penguins_test) <span class="sc">|&gt;</span> </span>
+<span id="cb77-11"><a></a>  <span class="fu">conf_mat</span>(<span class="at">truth =</span> species, <span class="at">estimate =</span> .pred_class) </span>
+<span id="cb77-12"><a></a><span class="co">#&gt;            Truth</span></span>
+<span id="cb77-13"><a></a><span class="co">#&gt; Prediction  Adelie Chinstrap Gentoo</span></span>
+<span id="cb77-14"><a></a><span class="co">#&gt;   Adelie        30         0      0</span></span>
+<span id="cb77-15"><a></a><span class="co">#&gt;   Chinstrap      0        14      0</span></span>
+<span id="cb77-16"><a></a><span class="co">#&gt;   Gentoo         0         0     24</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section id="conclusion" class="title-slide slide level1 center">
 <h1>Conclusion</h1>
 <ul>
-<li>Today we reviewd/introduced the basics of R for environmental data science.</li>
-<li>We discussed data types, structures, and packages for data manipulation.</li>
-<li>We also explored modeling, spatial data, and raster data.</li>
+<li>Today we reviewed/introduced the foundations of R for environmental data science.</li>
+<li>We discussed data types, structures, and packages for data manipulation and modeling.</li>
+<li>We also explored vector and raster data, along with ML applications.</li>
 <li>We will continue to build on these concepts in future lectures.</li>
 <li>Please complete the survey to help us tailor the course to your needs.</li>
 </ul>
