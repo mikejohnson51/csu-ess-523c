@@ -60,6 +60,8 @@ splits_pal <- c(data_color, train_color, test_color)
 - Please open this survey and answer the questions as we work through this lecture.
 - Your responses will provide valuable insights into areas where additional explanations or hands-on exercises may be beneficial.
 
+[Google Survey](https://docs.google.com/forms/d/1jdH5VV1akekLsBWMRthRyHrEsA9BrfZgYF6HTleGAoA/)
+
 ```{r}
 #| echo: false
 #| fig.align: center
