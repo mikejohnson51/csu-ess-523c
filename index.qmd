@@ -37,11 +37,11 @@ In general ...
 
 ## Grades
 
-- 7 labs will be worth 150 points each. 
+- 6 labs will be worth 150 points each. 
 - They will be assigned on Wednesdays and due the following Wednesdays before class.
 - A final project will be optional and worth 150 extra credit points. It will build on your personal website built in ESS 523a.
 
-The total points possible is 1200, with the percentage being taken out of 1050 using the traditional 90/80/70/60 scales
+The total points possible is 1050, with the percentage being taken out of 900 using the traditional 90/80/70/60 scales
 
 ## Schedule 
 
@@ -75,12 +75,12 @@ The total points possible is 1200, with the percentage being taken out of 1050 u
 ### **Component 3**: _Machine Learning_
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: Feature Engineering & Model Workflows\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 08**: HTTR
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 08**: Model Options
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**:  CAMELS Data\
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Model Evaluation & Tuning\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Model Options
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: ...
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: Final Project (Optional)
 
 ## Reuse and licensing {.appendix}
 

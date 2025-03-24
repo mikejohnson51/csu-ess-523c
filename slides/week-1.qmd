@@ -211,6 +211,7 @@ tidyverse_packages()
 ```
 
 --- 
+
 While all `tidyverse` packages are valuable, the main ones we will focus on are: 
 
 - `readr`: Reading data
@@ -253,7 +254,13 @@ read_csv(path) |>
   head()
 ```
 
-### `%>%` / `|>` `r hexes('dplyr')`
+## dplyr `r hexes('dplyr')`
+
+- The `dplyr` package provides functions for data manipulation throuhg 'a grammar for data manipulation'.
+- It provides capabilities similar to SQL for data manipulation.
+- It includes functions for viewing, filtering, selecting, mutating, summarizing, and joining data.
+
+## `%>%` / `|>` `r hexes('dplyr')`
 
 - The pipe operator `%>%` is used to chain operations in R.
 - The pipe operator `|>` is a base R version of `%>%` introduced in R 4.1.
@@ -272,12 +279,7 @@ penguins |>
 glimpse(penguins)
 ```
 
-## dplyr `r hexes('dplyr')`
-
-- The `dplyr` package provides functions for data manipulation.
-- It includes functions for filtering, selecting, mutating, summarizing, and joining data.
-
-### select `r hexes('dplyr')`
+## select `r hexes('dplyr')`
 
 - The `select()` function is used to select columns from a dataset.
 - It is useful when you want to work with specific columns.
@@ -287,7 +289,7 @@ glimpse(penguins)
 select(penguins, species)
 ```
 
-### filter `r hexes('dplyr')`
+## filter `r hexes('dplyr')`
 
 - The `filter()` function is used to filter rows based on a condition.
 - It is useful when you want to work with specific rows.
@@ -297,19 +299,20 @@ select(penguins, species)
 filter(penguins, species == "Adelie")
 ```
 
-### mutate `r hexes('dplyr')`
+## mutate `r hexes('dplyr')`
 
 - The `mutate()` function is used to create new columns or modify existing ones.
 - It is useful when you want to add new information to your dataset.
 - Example: Creating a new column `bill_length_cm` from `bill_length_mm`.
 
 *Note the use of the tidy_select helper `starts_with`*
+
 ```{r}
 mutate(penguins, bill_length_cm = bill_length_mm / 100) |> 
   select(starts_with("bill"))
 ```
 
-### summarize `r hexes('dplyr')`
+## summarize `r hexes('dplyr')`
 
 - The `summarize()` function is used to aggregate data.
 - It is useful when you want to calculate summary statistics.
@@ -320,7 +323,7 @@ mutate(penguins, bill_length_cm = bill_length_mm / 100) |>
 summarize(penguins, bill_length_mm = mean(bill_length_mm, na.rm = TRUE))
 ```
 
-### group_by / ungroup `r hexes('dplyr')`
+## group_by / ungroup `r hexes('dplyr')`
 
 - The `group_by()` function is used to group data by one or more columns.
 - It is useful when you want to perform operations on groups.
@@ -334,7 +337,7 @@ dplyr::group_keys(groups)
 dplyr::group_indices(groups)[1:5]
 ```
 
-### Group operations`r hexes('dplyr')`
+## Group operations `r hexes('dplyr')`
 
 - Example: Grouping the `penguins` dataset by `species` and calculating the mean `bill_length_mm`.
 
@@ -345,13 +348,13 @@ penguins |>
   ungroup()
 ```
 
-### Joins `r hexes('dplyr')`
+## Joins `r hexes('dplyr')`
 
 - The `dplyr` package provides functions for joining datasets.
 - Common join functions include `inner_join()`, `left_join()`, `right_join()`, and `full_join()`.
 - Joins are used to combine datasets based on shared keys (primary and foreign).
 
-### Mutating joins `r hexes('dplyr')`
+## Mutating joins `r hexes('dplyr')`
 
 - Mutating joins add columns from one dataset to another based on a shared key.
 - Example: Adding `species` information to the `penguins` dataset based on the `species_id`.
@@ -393,7 +396,7 @@ select(penguins, species, contains('bill')) |>
   right_join(species, by = "species")
 ```
 
-### Filtering Joins `r hexes('dplyr')`
+## Filtering Joins `r hexes('dplyr')`
 
 - Filtering joins retain only rows that match between datasets.
 - Example: Filtering the `penguins` dataset to include only rows with matching `species_id`.
@@ -406,9 +409,10 @@ select(penguins, species, contains('bill')) |>
 ## ggplot2: Visualization `r hexes('ggplot2')`
 
 - The `ggplot2` package is used for data visualization.
-- It is based on the grammar of graphics, which allows for a high level of customization.
+- It is based on the "grammar of graphics", which allows for a high level of customization.
+- `ggplot2` is built on the concept of layers, where each layer adds a different element to the plot.
 
-### `ggplot` `r hexes('ggplot2')`
+## `ggplot` `r hexes('ggplot2')`
 
 - The `ggplot()` function initializes a plot.
 - It provides a blank canvas to which layers can be added.
@@ -417,30 +421,32 @@ select(penguins, species, contains('bill')) |>
 ggplot()
 ```
 
+## data / aesthetics  `r hexes('ggplot2')`
 - Data must be provided to `ggplot()` 
 - The `aes()` function is used to map variables to aesthetics (e.g., x and y axes).
 - aes arguments provided in `ggplot` are inherited by all layers.
 - Example: Creating a plot of `body_mass_g` vs. `bill_length_mm`.
 
-
 ```{r}
 ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm))
 ```
 
-### geom_* `r hexes('ggplot2')`
+## geom_* `r hexes('ggplot2')`
 
 - The `geom_*()` functions add geometric objects to the plot.
-- They describe how to render the mapping created in aes
+- They describe how to render the mapping created in `aes`
+- Example: Adding points to the plot.
 
 ```{r}
 ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
   geom_point()
 ```
 
-### facet_wrap / facet_grid `r hexes('ggplot2')`
+## facet_wrap / facet_grid `r hexes('ggplot2')`
 
 - The `facet_wrap()` function is used to create small multiples of a plot.
 - It is useful when you want to compare subsets of data.
+- The `facet_grid()` function is used to create a grid of plots.
 - Example: Faceting the plot by `species`.
 
 ```{r}
@@ -449,7 +455,7 @@ ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) +
   facet_wrap(~species)
 ```
 
-### theme_* `r hexes('ggplot2')`
+## theme_* `r hexes('ggplot2')`
 
 - The `theme_*()` functions are used to customize the appearance of the plot.
 - They allow you to modify the plot's background, gridlines, and text.
@@ -462,14 +468,23 @@ ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) +
   theme_linedraw()
 ```
 
+--- 
+
 - There are 1000s of themes available in the `ggplot2` ecosystem
-  - ggthemes
-  - ggpubr
-  - hrbrthemes
-  - ggsci
+  - `ggthemes`
+  - `ggpubr`
+  - `hrbrthemes`
+  - `ggsci`
   - ...
   
-### labs `r hexes('ggplot2')`
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
+  geom_point() + 
+  facet_wrap(~species) + 
+  ggthemes::theme_economist()
+```
+  
+## labs `r hexes('ggplot2')`
 
 - The `labs()` function is used to add titles, subtitles, and axis labels to the plot.
 - It is useful for providing context and making the plot more informative.
@@ -489,9 +504,9 @@ ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) +
 ## `tidyr` `r hexes('tidyr')`
 
 - The `tidyr` package provides functions for data reshaping.
-- It includes functions for pivotingand nesting data.
+- It includes functions for pivoting and nesting data.
 
-### pivot_longer `r hexes('tidyr')`
+## pivot_longer `r hexes('tidyr')`
 
 - The `pivot_longer()` function is used to convert wide data to long data.
 - It is useful when you want to work with data in a tidy format.
@@ -506,7 +521,7 @@ ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) +
                values_to = "value"))
 ```
 
-### pivot_wider `r hexes('tidyr')`
+## pivot_wider `r hexes('tidyr')`
 
 - The `pivot_wider()` function is used to convert long data to wide data.
 - It is useful when you want to work with data in a wide format.
@@ -518,16 +533,7 @@ data.long |>
               values_from = "value")
 ```
 
-## drop_na / na.omit `r hexes('tidyr')`
-
-- The `drop_na()` function is used to remove rows with missing values.
-
-```{r}
-penguins |> 
-  drop_na()
-```
-
-### nest / unnest
+## nest / unnest `r hexes('tidyr')`
 
 - The `nest()` function is used to nest data into a list-column.
 - It is useful when you want to group data together.
@@ -536,34 +542,161 @@ penguins |>
 ```{r}
 penguins |> 
   nest(data = -species)
+
+penguins |> 
+  nest(data = -species) |> 
+  unnest(data)
 ```
 
-# Spatial Data: Vector
+## linear modeling: lm
+
+- The `lm()` function is used to fit linear models.
+- It is useful when you want to model the relationship between two variables.
+- Example: Fitting a linear model to predict `body_mass_g` from `flipper_length_mm`.
+
+```{r}
+model <- lm(body_mass_g ~ flipper_length_mm, data = drop_na(penguins))
+
+summary(model)
+```
+
+## broom `r hexes('broom')`
+
+- The `broom` package is used to tidy model outputs.
+- It provides functions to convert model outputs into tidy data frames.
+- Example: Tidying the `model` output.
+
+## tidy `r hexes('broom')`
+
+- The `tidy()` function is used to tidy model coefficients.
+- It is useful when you want to extract model coefficients.
+- Example: Tidying the `model` output.
+
+```{r}
+tidy(model)
+```
+
+## glance `r hexes('broom')`
+
+- The `glance()` function is used to provide a summary of model fit.
+- It is useful when you want to assess model performance.
+- Example: Glancing at the `model` output.
+
+```{r}
+glance(model)
+```
+
+## augment `r hexes('broom')`
+
+- The `augment()` function is used to add model predictions and residuals to the dataset.
+- It is useful when you want to visualize model performance.
+- Example: Augmenting the `model` output.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+a <- augment(model)
+
+ggplot(a, aes(x = .fitted, y = body_mass_g)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+:::
+::: {.column width="50%"}
+```{r}
+ggplot(a, aes(x = .resid)) +
+  geom_histogram() 
+```
+:::
+:::
+
+## purrr `r hexes('purrr')`
+
+- The `purrr` package is used for functional programming.
+- It provides functions for working with lists and vectors.
+
+## map `r hexes('purrr')`
+
+- The `map()` function is used to apply a function to each element of a list.
+- It is useful when you want to iterate over a list.
+- Example: Fitting a linear model to each species in the `penguins` dataset.
+
+```{r}
+penguins |> 
+  nest(data = -species) |> 
+  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)))
+```
+
+## map_* `r hexes('purrr')`
+
+- The `map_*()` functions are used to extract specific outputs from a list.
+- They are useful when you want to extract specific outputs from a list.
+- Example: Extracting the R-squared values (doubles) from the linear models.
+
+```{r}
+penguins |> 
+  nest(data = -species) |> 
+  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
+         r2 = map_dbl(lm, ~summary(.x)$r.squared))
+```
+
+## map2 `r hexes('purrr')`
+
+- The `map2()` function is used to iterate over two lists in parallel.
+- It is useful when you want to apply a function to two lists simultaneously.
+- Example: Augmenting the linear models with the original data.
+
+```{r}
+penguins |> 
+  drop_na() |> 
+  nest(data = -species) |> 
+  mutate(lm_mod = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
+         r2 = map_dbl(lm_mod, ~summary(.x)$r.squared),
+         a  = map2(lm_mod, data, ~broom::augment(.x, .y))) 
+```
+
+# ~ Week 2-3: Spatial Data (Vector)
 
 # sf `r hexes('sf')`
 
 - The `sf` package is used for working with spatial data.
+- sf binds to common spatial libraries like GDAL, GEOS, and PROJ.
 - It provides functions for reading, writing, and manipulating spatial data.
 
 ```{r}
 library(sf)
+
+sf::sf_extSoftVersion()
 ```
 
 ## I/O `r hexes('sf')`
 
 - The `st_read()` function is used to read spatial data.
-- It is useful when you want to import spatial data into R.
+- It is useful when you want to import spatial data into R for local or remote files.
 - Example: Reading a Major Global Rivers.
 
+## From package `r hexes('sf')`
 ```{r}
 # via packages
-counties <- AOI::aoi_get(state = "conus", county = "all")
-
-# file
-rivers <- sf::read_sf('data/majorrivers_0_0/MajorRivers.shp')
+(counties <- AOI::aoi_get(state = "conus", county = "all"))
 ```
 
-## Geometries `r hexes('sf')`
+## From file `r hexes('sf')`
+```{r}
+(rivers <- sf::read_sf('data/majorrivers_0_0/MajorRivers.shp'))
+```
+
+## via url `r hexes('sf')`
+
+```{r}
+# via url
+(gage <- sf::read_sf("https://reference.geoconnex.us/collections/gages/items/1000001"))
+
+# write out data
+# write_sf(counties, "data/counties.shp")
+```
+
+## Geometry list columns `r hexes('sf')`
 
 - The `geometry` column contains the spatial information.
 - It is stored as a list-column of `sfc` objects.
@@ -571,6 +704,24 @@ rivers <- sf::read_sf('data/majorrivers_0_0/MajorRivers.shp')
 
 ```{r}
 rivers$geometry[1]
+```
+
+## Projections `r hexes('sf')`
+
+- CRS (Coordinate Reference System) is used to define the spatial reference.
+- The `st_crs()` function is used to get the CRS of a dataset.
+- The `st_transform()` function is used to transform the CRS of a dataset.
+- Example: Transforming the `rivers` dataset to EPSG:5070.
+
+```{r}
+st_crs(rivers) |> sf::st_is_longlat()
+st_crs(rivers)$units
+
+riv_5070  <- st_transform(rivers, 5070)
+
+st_crs(riv_5070) |> sf::st_is_longlat()
+
+st_crs(riv_5070)$units
 ```
 
 ## Data Manipulation `r hexes('sf')`
@@ -609,16 +760,19 @@ st_area(larimer)
 st_distance(larimer, mississippi)
 ```
 
-## Predicates
+## Predicates `r hexes('sf')`
 
 - Spatial predicates are used to check relationships between geometries using the DE-9IM model.
 - The `st_intersects()` function is used to check if geometries intersect.
 - The `st_filter()` function is used to filter geometries based on a predicate.
 
+::: columns
+::: {.column width="50%"}
 ```{r}
 st_intersects(counties, mississippi)
 ```
-
+:::
+::: {.column width="50%"}
 ```{r}
 ints <- st_filter(counties, mississippi, .predicate = st_intersects)
 
@@ -627,52 +781,123 @@ ggplot() +
   geom_sf(data = mississippi, col = "blue") + 
   theme_bw()
 ```
+:::
+:::
 
-# Spatial Data: Raster
+# ~ Week 4-5: Spatial Data (Raster) `r hexes('terra')`
 
 ## terra `r hexes('terra')`
 
 - The `terra` package is used for working with raster data.
 - It provides functions for reading, writing, and manipulating raster data.
 
-```{r}
+```{r, message = FALSE}
 library(terra)
+gdal()
 ```
 
-## I/O
+## I/O `r hexes('terra')`
 
 - Any raster format that GDAL can read, can be read with `rast()`.
+- The package loads the native GDAL src library (like `sf`)
+- `rast` reads data headers, not data itself, until needed.
 - Example: Reading a GeoTIF of Colorado elevation.
 
 ```{r}
 (elev = terra::rast('data/colorado_elevation.tif'))
 ```
 
-## Crop/Mask
+## Raster Structure `r hexes('terra')`
 
-- The `crop()` function is used to crop a raster to a specific extent.
-- The `mask()` function is used to mask a raster using a vector or other extent
-
+Raster data is stored as an multi-dimensional array of values.
+- Remember this is atomic vector with diminisions
+- The same way we looked 
 ```{r}
-larimer_terra <- project(vect(larimer), "EPSG:5070")
-larimer_elev = crop(elev, larimer_terra)
-plot(larimer_elev)
+v <- values(elev)
+head(v)
+class(v[,1])
 
-larimer_mask = mask(larimer_elev, larimer_terra)
-plot(larimer_mask)
+dim(v)
+dim(elev)
+nrow(elev)
 ```
 
-## Summary / Algebra
+## Additonal Structure
+
+In addition to the values and diminsions, rasters have:
+ - **Extent**: The spatial extent of the raster.
+ - **Resolution**: The spatial resolution of the raster pixels.
+ - **CRS**: The coordinate reference system of the raster.
+
+```{r}
+crs(elev)
+ext(elev)
+res(elev)
+```
+
+## Crop/Mask `r hexes('terra')`
+
+- The `crop()` function is used to crop a raster to a specific extent.
+- It is useful when you want to work with a subset of the data.
+- crop extracts data (whether from a remote or local source)
+- The `mask()` function is used to mask a raster using a vector or other extent, keeping only the data within the mask.
+- Input extents must match the CRS of the raster data
+- Example: Cropping then masking the elevation raster to Larimer County.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+larimer_5070 <- st_transform(larimer, crs(elev))
+
+larimer_elev = crop(elev, larimer_5070)
+
+plot(larimer_elev)
+```
+:::
+::: {.column width="50%"}
+```{r}
+larimer_mask <- mask(larimer_elev, larimer_5070)
+plot(larimer_mask)
+```
+:::
+:::
+
+## Summary / Algebra `r hexes('terra')`
 
 - Rasters can be added, subtracted, multiplied, and divided
 - Any form of map algebra can be done with rasters
 - For example, multiplying the Larimer mask by 2
 
+::: columns
+::: {.column width="50%"}
+#### raw
 ```{r}
-elev2 <-  2 * larimer_mask
+larimer_mask
 ```
 
-## Raster data store
+<br> 
+
+#### Data Operation
+```{r}
+elev2 <- larimer_mask^2
+```
+:::
+::: {.column width="50%"}
+#### rast modified by rast
+```{r}
+larimer_mask / elev2
+```
+
+<br> 
+
+#### statistical methods
+```{r}
+(scaled = scale(larimer_mask))
+```
+:::
+:::
+
+## Value Supersetting `r hexes('terra')`
 
 - Rasters are matrices or arrays of values, and can be manipulated as such
 - For example, setting 35% of the raster to NA
@@ -683,7 +908,7 @@ larimer_elev[sample(ncell(larimer_elev), .35*ncell(larimer_elev))] <-  NA
 plot(larimer_elev)
 ```
 
-## Focal
+## Focal `r hexes('terra')`
 
 - The `focal()` function is used to calculate focal statistics.
 - It is useful when you want to calculate statistics for each cell based on its neighbors.
@@ -694,109 +919,7 @@ xx = terra::focal(larimer_elev, win = 30, fun  = "mean", na.policy="only")
 plot(xx)
 ```
 
-# Unit 2: Modeling
-
-# lm
-
-- The `lm()` function is used to fit linear models.
-- It is useful when you want to model the relationship between two variables.
-- Example: Fitting a linear model to predict `body_mass_g` from `flipper_length_mm`.
-
-```{r}
-clean_penguins = drop_na(penguins)
-model <- lm(body_mass_g ~ flipper_length_mm, data = clean_penguins)
-summary(model)
-```
-
-## broom
-
-- The `broom` package is used to tidy model outputs.
-- It provides functions to convert model outputs into tidy data frames.
-- Example: Tidying the `model` output.
-
-### tidy
-
-- The `tidy()` function is used to tidy model coefficients.
-- It is useful when you want to extract model coefficients.
-- Example: Tidying the `model` output.
-
-```{r}
-tidy(model)
-```
-
-### glance
-
-- The `glance()` function is used to provide a summary of model fit.
-- It is useful when you want to assess model performance.
-- Example: Glancing at the `model` output.
-
-```{r}
-glance(model)
-```
-
-### augment
-
-- The `augment()` function is used to add model predictions and residuals to the dataset.
-- It is useful when you want to visualize model performance.
-- Example: Augmenting the `model` output.
-
-```{r}
-a <- augment(model)
-
-ggplot(a, aes(x = .fitted, y = body_mass_g)) +
-  geom_point() + 
-  geom_smooth(method = "lm")
-
-ggplot(a, aes(x = .resid)) +
-  geom_histogram() 
-```
-
-## purr
-
-- The `purrr` package is used for functional programming.
-- It provides functions for working with lists and vectors.
-
-### map
-
-- The `map()` function is used to apply a function to each element of a list.
-- It is useful when you want to iterate over a list.
-- Example: Fitting a linear model to each species in the `penguins` dataset.
-
-```{r}
-penguins |> 
-  nest(data = -species) |> 
-  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)))
-```
-
-#### map_*
-
-- The `map_*()` functions are used to extract specific outputs from a list.
-- They are useful when you want to extract specific outputs from a list.
-- Example: Extracting the R-squared values (doubles) from the linear models.
-
-```{r}
-penguins |> 
-  nest(data = -species) |> 
-  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
-         r2 = map_dbl(lm, ~summary(.x)$r.squared))
-```
-
-#### map2
-
-- The `map2()` function is used to iterate over two lists in parallel.
-- It is useful when you want to apply a function to two lists simultaneously.
-- Example: Augmenting the linear models with the original data.
-
-```{r}
-penguins |> 
-  drop_na() |> 
-  nest(data = -species) |> 
-  mutate(lm_mod = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
-         r2 = map_dbl(lm_mod, ~summary(.x)$r.squared),
-         a  = map2(lm_mod, data, ~broom::augment(.x, .y))) 
-```
-
-## Unit 3: Machine Learning
+# ~ Week 6-7: Machine Learning `r hexes('tidymodels')`
 
 ```{r}
 library(tidymodels)
@@ -813,14 +936,15 @@ tidymodels_packages()
 
 ```{r}
 set.seed(123)
-(penguins_split <- initial_split(penguins, prop = 0.8, strata = species))
+
+(penguins_split <- initial_split(drop_na(penguins), prop = 0.8, strata = species))
 penguins_train  <- training(penguins_split)
 penguins_test   <- testing(penguins_split)
 
 penguin_folds <- vfold_cv(penguins_train, v = 5)
 ```
 
-## `recipes` for feature engineering
+## `recipes` for feature engineering `r hexes('recipes')`
 
 - The `recipes` package is used for feature engineering.
 - It provides functions for preprocessing data before modeling.
@@ -829,15 +953,14 @@ penguin_folds <- vfold_cv(penguins_train, v = 5)
 ```{r}
 # Define recipe for feature engineering
 penguin_recipe <- recipe(species ~ ., data = penguins_train) |>
-  step_impute_knn(all_predictors()) |>  # Impute missing values
-  step_normalize(all_numeric_predictors()) |>  # Normalize numeric features
-  step_dummy(all_nominal_predictors())  # One-hot encode categorical variables
+  step_impute_knn(all_predictors()) |>         # Impute missing values
+  step_normalize(all_numeric_predictors())     # Normalize numeric features
 ```
 
-## Parsnip for model selection
+## Parsnip for model selection `r hexes('parsnip')`
 
-- The `parsnip` package is used for model selection.
-- It provides functions for defining models and workflows.
+- The `parsnip` package is used for model implementation
+- It provides functions for defining models types, engines, and modes.
 - Example: Defining models for logistic regression, random forest, and decision tree.
 
 ```{r}
@@ -854,7 +977,7 @@ dt_model <- decision_tree() |>
   set_mode("classification")
 ```
 
-## Workflows for model execution
+## Workflows for model execution `r hexes('workflows')`
 
 - The `workflows` package is used for model execution.
 - It provides functions for defining and executing workflows.
@@ -869,44 +992,72 @@ log_reg_workflow <- workflow() |>
                 metrics = metric_set(roc_auc, accuracy))
 ```
 
-## yardstick for model evaluation
+## yardstick for model evaluation `r hexes('yardstick')`
 
 ```{r}
 collect_metrics(log_reg_workflow)
 ```
 
-## Workflowsets for model comparison
+## `workflowsets` for model comparison `r hexes('workflows')`
+
+- The `workflowsets` package is used for model comparison.
+- It provides functions for comparing multiple models usingthe purrr mapping paradigm
+- Example: Comparing logistic regression, random forest, and decision tree models.
 
 ```{r}
-(workflowset <- workflow_set(list(penguin_recipe), list(log_reg_model, rf_model, dt_model)) |> 
+(workflowset <- workflow_set(list(penguin_recipe), 
+                             list(log_reg_model, rf_model, dt_model)) |> 
   workflow_map("fit_resamples", 
                resamples = penguin_folds, 
                metrics = metric_set(roc_auc, accuracy)))
+```
 
+## autoplot / rank_results `r hexes('yardstick', 'workflows')`
+
+- The `autoplot()` function is used to visualize model performance.
+- The `rank_results()` function is used to rank models based on a metric.
+- Example: Visualizing and ranking the model results based on the roc_auc (area under the curve) metric.
+
+::: columns
+::: {.column width="50%"}
+```{r}
 autoplot(workflowset)
+```
+:::
+::: {.column width="50%"}
+```{r}
 rank_results(workflowset, rank_metric = "roc_auc")
 ```
+:::
+:::
 
-## Model Validation
+## Model Validation `r hexes('yardstick', 'broom')`
+
+- Finally, we can validate the model on the test set
+- The `augment()` function is used to add model predictions and residuals to the dataset.
+- The `conf_mat()` function is used to create a confusion matrix.
+- Example: Validating the logistic regression model on the test set.
+
 
 ```{r}
-final_model = workflow() |> 
+workflow() |> 
+  # Add model and recipe
   add_model(log_reg_model) |>
   add_recipe(penguin_recipe) |>
-  fit(data = penguins_train)
-
-validation <- fit(final_model, data = penguins_test)
-
-augment(validation, penguins_test) |> 
-  conf_mat(truth = species, estimate = .pred_class)
+  # Train model
+  fit(data = penguins_train) |> 
+  # Fit trained model to test set
+  fit(data = penguins_test) |>  
+  # Extract Predictions
+  augment(penguins_test) |> 
+  conf_mat(truth = species, estimate = .pred_class) 
 ```
-
 
 # Conclusion
 
-- Today we reviewd/introduced the basics of R for environmental data science.
-- We discussed data types, structures, and packages for data manipulation.
-- We also explored modeling, spatial data, and raster data.
+- Today we reviewed/introduced the foundations of R for environmental data science.
+- We discussed data types, structures, and packages for data manipulation and modeling.
+- We also explored vector and raster data, along with ML applications.
 - We will continue to build on these concepts in future lectures.
 - Please complete the survey to help us tailor the course to your needs.
 
