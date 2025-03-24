@@ -1,0 +1,632 @@
+[
+  {
+    "objectID": "index.html#welcome",
+    "href": "index.html#welcome",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Welcome!",
+    "text": "Welcome!\nWelcome to Ecosystem Science and Sustainability 523c: Environmental Data Science Applications: Water Resources! This class is meant to build on the technical skills you learned in ESS 523a, with a focus on water resource examples. We will cover a range of topics, including data science tools, working with vector and raster data, and machine learning."
+  },
+  {
+    "objectID": "index.html#acknowledgments",
+    "href": "index.html#acknowledgments",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\n\nThis website, including all slides, are made with Quarto. Please submit an issue on the GitHub repo for this course if you find something that could be fixed or improved.\nWe borrow significant content from the amazing R community and do our best to curate and design course content for students."
+  },
+  {
+    "objectID": "index.html#reuse-and-licensing",
+    "href": "index.html#reuse-and-licensing",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Reuse and licensing",
+    "text": "Reuse and licensing\n\nUnless otherwise noted (i.e. not an original creation and reused from another source), these educational materials are licensed under Apache 2."
+  },
+  {
+    "objectID": "index.html#schedule",
+    "href": "index.html#schedule",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Schedule",
+    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Lab 01: COVID Trends\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Lab 02: Border summaries\n Week 03: Predicates & Tesselations\n Lab 03: Dams in the US\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\nLab 04: Remote Sensing\n\n Week 05: Terrain Modeling\n Lab 05: Terrain & Flood Modeling\n\n\n\nComponent 3: Machine Learning\n Week 06: Feature Engineering & Model Creation\n Lab 06: CAMELS Data\n\n Week 07: Model Evaluation & Tuning\n Lab 07: …"
+  },
+  {
+    "objectID": "index.html#component-1-data-science-tools",
+    "href": "index.html#component-1-data-science-tools",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Component 1: Data Science Tools",
+    "text": "Component 1: Data Science Tools\n Week 01: Level Setting  Lab 01: COVID Trends"
+  },
+  {
+    "objectID": "index.html#component-2-working-with-vector-data",
+    "href": "index.html#component-2-working-with-vector-data",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Component 2: Working with Vector Data",
+    "text": "Component 2: Working with Vector Data\n Week 02: Projections & Measures  Lab 02: 100 mile border zone\n Week 03: Predicates & Tesselations  Lab 03: Dams in the US"
+  },
+  {
+    "objectID": "index.html#component-3-working-with-raster-data",
+    "href": "index.html#component-3-working-with-raster-data",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Component 3: Working with Raster Data",
+    "text": "Component 3: Working with Raster Data\n Week 04: Raster’s in R  Lab 04: Remote Sensing\n Week 05: Terrain Mapping  Lab 05: Terrain & Flood Modeling"
+  },
+  {
+    "objectID": "index.html#component-3-machine-learning",
+    "href": "index.html#component-3-machine-learning",
+    "title": "Ecosystem Science and Sustainability 523c",
+    "section": "Component 3: Machine Learning",
+    "text": "Component 3: Machine Learning\nBuild confidence in wrangling, visualizing, and analyzing data. This section covers importing and cleaning data sets, working with joins, and creating effective visualizations. You’ll also delve into study design, hypothesis testing, and statistical analyses spanning uni-variate, bivariate, and multivariate techniques.\n Week 06: Feature Engineering & Model Setup  Lab 06: \n Week 07:   Lab 07:"
+  },
+  {
+    "objectID": "slides/week-1.html#getting-started-with-r-for-data-science",
+    "href": "slides/week-1.html#getting-started-with-r-for-data-science",
+    "title": "Week 1",
+    "section": "🚀 Getting Started with R for Data Science",
+    "text": "🚀 Getting Started with R for Data Science\n\nWelcome to 523C: Environmental Data Science Applications: Water Resources!\nThis first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.\nThroughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.\nThe survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics."
+  },
+  {
+    "objectID": "slides/week-1.html#google-survey",
+    "href": "slides/week-1.html#google-survey",
+    "title": "Week 1",
+    "section": "Google Survey",
+    "text": "Google Survey\n\nPlease open this survey and answer the questions as we work through this lecture.\nYour responses will provide valuable insights into areas where additional explanations or hands-on exercises may be beneficial."
+  },
+  {
+    "objectID": "slides/week-1.html#data-types",
+    "href": "slides/week-1.html#data-types",
+    "title": "Week 1",
+    "section": "Data Types",
+    "text": "Data Types\nR has five principal data types (excluding raw and complex):\n\nCharacter: A string of text, represented with quotes (e.g., “hello”).\n\nUsed to store words, phrases, and categorical data.\n\nInteger: A whole number, explicitly defined with an L suffix (e.g., 42L).\n\nStored more efficiently than numeric values when decimals are not needed.\n\nNumeric: A floating-point number, used for decimal values (e.g., 3.1415).\n\nThis is the default type for numbers in R.\n\nBoolean (Logical): A logical value that represents TRUE or FALSE.\n\nCommonly used in logical operations and conditional statements.\n\n\n\ncharacter &lt;- \"a\"\ninteger &lt;- 1L\nnumeric &lt;- 3.3\nboolean &lt;- TRUE"
+  },
+  {
+    "objectID": "slides/week-1.html#data-structures",
+    "href": "slides/week-1.html#data-structures",
+    "title": "Week 1",
+    "section": "Data Structures",
+    "text": "Data Structures\n\nWhen working with multiple values, we need data structures to store and manipulate data efficiently.\nR provides several types of data structures, each suited for different use cases.\n\nVector\n\nA vector is the most basic data structure in R and contains elements of the same type.\nVectors are created using the c() function.\n\n\nchar.vec &lt;- c(\"a\", \"b\", \"c\")\nboolean.vec &lt;- c(TRUE, FALSE, TRUE)\n\n\nLists allow for heterogeneous data types.\n\n\nlist &lt;- list(a = c(1,2,3),\n            b = c(TRUE, FALSE),\n            c = \"test\")"
+  },
+  {
+    "objectID": "slides/week-1.html#installing-packages",
+    "href": "slides/week-1.html#installing-packages",
+    "title": "Week 1",
+    "section": "📦 Installing Packages",
+    "text": "📦 Installing Packages\n\nR has a vast ecosystem of packages that extend its capabilities both on CRAN and github\nTo install a package from CRAN, use install.packages().\nTo install a package from Github, use remotes::install_github()`.\nWe’ll start by installing palmerpenguins, which contains a dataset on penguins.\n\n\ninstall.packages('palmerpenguins')"
+  },
+  {
+    "objectID": "slides/week-1.html#attachingloading-packages",
+    "href": "slides/week-1.html#attachingloading-packages",
+    "title": "Week 1",
+    "section": "Attaching/Loading Packages",
+    "text": "Attaching/Loading Packages\n\nTo use an installed package, you need to load it in your current working session using library().\nHere, we load palmerpenguins for dataset exploration and tidyverse for data science workflows.\n\n\nlibrary(palmerpenguins) # 🐧 Fun dataset about penguins!\nlibrary(tidyverse)      # 🛠 Essential for data science in R"
+  },
+  {
+    "objectID": "slides/week-1.html#help-documentation",
+    "href": "slides/week-1.html#help-documentation",
+    "title": "Week 1",
+    "section": "Help & Documentation",
+    "text": "Help & Documentation\n\nR has built-in documentation that provides information about functions and datasets.\nTo access documentation, use ?function_name.\nExample: Viewing the help page for the penguins dataset.\n\n\n?penguins\n\n\nYou can also use help.search(\"keyword\") to look up topics of interest.\nFor vignettes (detailed guides), use vignette(\"package_name\")."
+  },
+  {
+    "objectID": "slides/week-1.html#quarto-communication",
+    "href": "slides/week-1.html#quarto-communication",
+    "title": "Week 1",
+    "section": "Quarto: Communication",
+    "text": "Quarto: Communication\n\nIn this class we will use Quarto, a more modern, cross langauge version of Rmarkdown\nIf you are comfortable with Rmd, you’ll quickly be able to transition to Qmd\nIf you are new to Rmd, you’ll be able to learn the latest and greatest"
+  },
+  {
+    "objectID": "slides/week-1.html#tidyverse-a-swiss-army-knife-for-data-science-r",
+    "href": "slides/week-1.html#tidyverse-a-swiss-army-knife-for-data-science-r",
+    "title": "Week 1",
+    "section": "🌟 Tidyverse: A Swiss Army Knife for Data Science R ",
+    "text": "🌟 Tidyverse: A Swiss Army Knife for Data Science R \n\nThe tidyverse is a collection of packages designed for data science.\nWe can see what it includes using the tidyverse_packages function:\n\n\ntidyverse_packages()\n#&gt;  [1] \"broom\"         \"conflicted\"    \"cli\"           \"dbplyr\"       \n#&gt;  [5] \"dplyr\"         \"dtplyr\"        \"forcats\"       \"ggplot2\"      \n#&gt;  [9] \"googledrive\"   \"googlesheets4\" \"haven\"         \"hms\"          \n#&gt; [13] \"httr\"          \"jsonlite\"      \"lubridate\"     \"magrittr\"     \n#&gt; [17] \"modelr\"        \"pillar\"        \"purrr\"         \"ragg\"         \n#&gt; [21] \"readr\"         \"readxl\"        \"reprex\"        \"rlang\"        \n#&gt; [25] \"rstudioapi\"    \"rvest\"         \"stringr\"       \"tibble\"       \n#&gt; [29] \"tidyr\"         \"xml2\"          \"tidyverse\""
+  },
+  {
+    "objectID": "slides/week-1.html#glimpse",
+    "href": "slides/week-1.html#glimpse",
+    "title": "Week 1",
+    "section": "glimpse ",
+    "text": "glimpse \n\nThe glimpse() function provides a concise summary of a dataset.\n\n\nglimpse(penguins)\n#&gt; Rows: 344\n#&gt; Columns: 8\n#&gt; $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…\n#&gt; $ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…\n#&gt; $ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …\n#&gt; $ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …\n#&gt; $ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…\n#&gt; $ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …\n#&gt; $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…\n#&gt; $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…"
+  },
+  {
+    "objectID": "slides/week-1.html#readr",
+    "href": "slides/week-1.html#readr",
+    "title": "Week 1",
+    "section": "readr ",
+    "text": "readr \n\nThe readr package provides functions for reading data into R.\nThe read_csv() function reads comma-separated files.\nThe read_tsv() function reads tab-separated files.\nThe read_delim() function reads files with custom delimiters.\nIn all cases, more intellegent parsing is done than with base R equivalents.\n\nread_csv \n\npath = 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv'\n\n# base R\nread.csv(path) |&gt; \n  head()\n#&gt;    fips        LON      LAT\n#&gt; 1  1061  -85.83575 31.09404\n#&gt; 2  8125 -102.42587 40.00307\n#&gt; 3 17177  -89.66239 42.35138\n#&gt; 4 28153  -88.69577 31.64132\n#&gt; 5 34041  -74.99570 40.85940\n#&gt; 6 46051  -96.76981 45.17255\n\n# More inutitive readr\nread_csv(path) |&gt; \n  head()\n#&gt; # A tibble: 6 × 3\n#&gt;   fips     LON   LAT\n#&gt;   &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1 01061  -85.8  31.1\n#&gt; 2 08125 -102.   40.0\n#&gt; 3 17177  -89.7  42.4\n#&gt; 4 28153  -88.7  31.6\n#&gt; 5 34041  -75.0  40.9\n#&gt; 6 46051  -96.8  45.2"
+  },
+  {
+    "objectID": "slides/week-1.html#dplyr",
+    "href": "slides/week-1.html#dplyr",
+    "title": "Week 1",
+    "section": "dplyr ",
+    "text": "dplyr \n\nThe dplyr package provides functions for data manipulation throuhg ‘a grammar for data manipulation’.\nIt provides capabilities similar to SQL for data manipulation.\nIt includes functions for viewing, filtering, selecting, mutating, summarizing, and joining data."
+  },
+  {
+    "objectID": "slides/week-1.html#left_join",
+    "href": "slides/week-1.html#left_join",
+    "title": "Week 1",
+    "section": "left_join ",
+    "text": "left_join \n\nselect(penguins, species, contains('bill')) |&gt; \n  left_join(species, by = \"species\")\n#&gt; # A tibble: 344 × 4\n#&gt;    species bill_length_mm bill_depth_mm species_id\n#&gt;    &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;\n#&gt;  1 Adelie            39.1          18.7          1\n#&gt;  2 Adelie            39.5          17.4          1\n#&gt;  3 Adelie            40.3          18            1\n#&gt;  4 Adelie            NA            NA            1\n#&gt;  5 Adelie            36.7          19.3          1\n#&gt;  6 Adelie            39.3          20.6          1\n#&gt;  7 Adelie            38.9          17.8          1\n#&gt;  8 Adelie            39.2          19.6          1\n#&gt;  9 Adelie            34.1          18.1          1\n#&gt; 10 Adelie            42            20.2          1\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#right_join",
+    "href": "slides/week-1.html#right_join",
+    "title": "Week 1",
+    "section": "right_join ",
+    "text": "right_join \n\nselect(penguins, species, contains('bill')) |&gt; \n  right_join(species, by = \"species\")\n#&gt; # A tibble: 344 × 4\n#&gt;    species bill_length_mm bill_depth_mm species_id\n#&gt;    &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;\n#&gt;  1 Adelie            39.1          18.7          1\n#&gt;  2 Adelie            39.5          17.4          1\n#&gt;  3 Adelie            40.3          18            1\n#&gt;  4 Adelie            NA            NA            1\n#&gt;  5 Adelie            36.7          19.3          1\n#&gt;  6 Adelie            39.3          20.6          1\n#&gt;  7 Adelie            38.9          17.8          1\n#&gt;  8 Adelie            39.2          19.6          1\n#&gt;  9 Adelie            34.1          18.1          1\n#&gt; 10 Adelie            42            20.2          1\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#inner_join",
+    "href": "slides/week-1.html#inner_join",
+    "title": "Week 1",
+    "section": "inner_join ",
+    "text": "inner_join \n\nselect(penguins, species, contains('bill')) |&gt; \n  right_join(species, by = \"species\")\n#&gt; # A tibble: 344 × 4\n#&gt;    species bill_length_mm bill_depth_mm species_id\n#&gt;    &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;\n#&gt;  1 Adelie            39.1          18.7          1\n#&gt;  2 Adelie            39.5          17.4          1\n#&gt;  3 Adelie            40.3          18            1\n#&gt;  4 Adelie            NA            NA            1\n#&gt;  5 Adelie            36.7          19.3          1\n#&gt;  6 Adelie            39.3          20.6          1\n#&gt;  7 Adelie            38.9          17.8          1\n#&gt;  8 Adelie            39.2          19.6          1\n#&gt;  9 Adelie            34.1          18.1          1\n#&gt; 10 Adelie            42            20.2          1\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#full_join",
+    "href": "slides/week-1.html#full_join",
+    "title": "Week 1",
+    "section": "full_join ",
+    "text": "full_join \n\nselect(penguins, species, contains('bill')) |&gt; \n  right_join(species, by = \"species\")\n#&gt; # A tibble: 344 × 4\n#&gt;    species bill_length_mm bill_depth_mm species_id\n#&gt;    &lt;chr&gt;            &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;\n#&gt;  1 Adelie            39.1          18.7          1\n#&gt;  2 Adelie            39.5          17.4          1\n#&gt;  3 Adelie            40.3          18            1\n#&gt;  4 Adelie            NA            NA            1\n#&gt;  5 Adelie            36.7          19.3          1\n#&gt;  6 Adelie            39.3          20.6          1\n#&gt;  7 Adelie            38.9          17.8          1\n#&gt;  8 Adelie            39.2          19.6          1\n#&gt;  9 Adelie            34.1          18.1          1\n#&gt; 10 Adelie            42            20.2          1\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#ggplot2-visualization",
+    "href": "slides/week-1.html#ggplot2-visualization",
+    "title": "Week 1",
+    "section": "ggplot2: Visualization ",
+    "text": "ggplot2: Visualization \n\nThe ggplot2 package is used for data visualization.\nIt is based on the “grammar of graphics”, which allows for a high level of customization.\nggplot2 is built on the concept of layers, where each layer adds a different element to the plot."
+  },
+  {
+    "objectID": "slides/week-1.html#tidyr",
+    "href": "slides/week-1.html#tidyr",
+    "title": "Week 1",
+    "section": "tidyr ",
+    "text": "tidyr \n\nThe tidyr package provides functions for data reshaping.\nIt includes functions for pivoting and nesting data."
+  },
+  {
+    "objectID": "slides/week-1.html#drop_na",
+    "href": "slides/week-1.html#drop_na",
+    "title": "Week 1",
+    "section": "drop_na",
+    "text": "drop_na\n\nThe drop_na() function is used to remove rows with missing values.\n\n\npenguins |&gt; \n  drop_na()\n#&gt; # A tibble: 333 × 8\n#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g\n#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;\n#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750\n#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800\n#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250\n#&gt;  4 Adelie  Torgersen           36.7          19.3               193        3450\n#&gt;  5 Adelie  Torgersen           39.3          20.6               190        3650\n#&gt;  6 Adelie  Torgersen           38.9          17.8               181        3625\n#&gt;  7 Adelie  Torgersen           39.2          19.6               195        4675\n#&gt;  8 Adelie  Torgersen           41.1          17.6               182        3200\n#&gt;  9 Adelie  Torgersen           38.6          21.2               191        3800\n#&gt; 10 Adelie  Torgersen           34.6          21.1               198        4400\n#&gt; # ℹ 323 more rows\n#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;\n\nnest / unnest\n\nThe nest() function is used to nest data into a list-column.\nIt is useful when you want to group data together.\nExample: Nesting the penguins dataset by species.\n\n\npenguins |&gt; \n  nest(data = -species)\n#&gt; # A tibble: 3 × 2\n#&gt;   species   data              \n#&gt;   &lt;fct&gt;     &lt;list&gt;            \n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt;\n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt;\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#broom",
+    "href": "slides/week-1.html#broom",
+    "title": "Week 1",
+    "section": "broom ",
+    "text": "broom \n\nThe broom package is used to tidy model outputs.\nIt provides functions to convert model outputs into tidy data frames.\nExample: Tidying the model output."
+  },
+  {
+    "objectID": "slides/week-1.html#purr",
+    "href": "slides/week-1.html#purr",
+    "title": "Week 1",
+    "section": "purr",
+    "text": "purr\n\nThe purrr package is used for functional programming.\nIt provides functions for working with lists and vectors.\n\nmap\n\nThe map() function is used to apply a function to each element of a list.\nIt is useful when you want to iterate over a list.\nExample: Fitting a linear model to each species in the penguins dataset.\n\n\npenguins |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)))\n#&gt; # A tibble: 3 × 3\n#&gt;   species   data               lm    \n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt;\n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;  \n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;  \n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;\n\nmap_*\n\nThe map_*() functions are used to extract specific outputs from a list.\nThey are useful when you want to extract specific outputs from a list.\nExample: Extracting the R-squared values (doubles) from the linear models.\n\n\npenguins |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),\n         r2 = map_dbl(lm, ~summary(.x)$r.squared))\n#&gt; # A tibble: 3 × 4\n#&gt;   species   data               lm        r2\n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt;\n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;   0.219\n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;   0.494\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412\n\nmap2\n\nThe map2() function is used to iterate over two lists in parallel.\nIt is useful when you want to apply a function to two lists simultaneously.\nExample: Augmenting the linear models with the original data.\n\n\npenguins |&gt; \n  drop_na() |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm_mod = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),\n         r2 = map_dbl(lm_mod, ~summary(.x)$r.squared),\n         a  = map2(lm_mod, data, ~broom::augment(.x, .y))) \n#&gt; # A tibble: 3 × 5\n#&gt;   species   data               lm_mod    r2 a                  \n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt; &lt;list&gt;             \n#&gt; 1 Adelie    &lt;tibble [146 × 7]&gt; &lt;lm&gt;   0.216 &lt;tibble [146 × 13]&gt;\n#&gt; 2 Gentoo    &lt;tibble [119 × 7]&gt; &lt;lm&gt;   0.506 &lt;tibble [119 × 13]&gt;\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412 &lt;tibble [68 × 13]&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#unit-3-machine-learning",
+    "href": "slides/week-1.html#unit-3-machine-learning",
+    "title": "Week 1",
+    "section": "Unit 3: Machine Learning",
+    "text": "Unit 3: Machine Learning\n\nlibrary(tidymodels)\ntidymodels_packages()\n#&gt;  [1] \"broom\"        \"cli\"          \"conflicted\"   \"dials\"        \"dplyr\"       \n#&gt;  [6] \"ggplot2\"      \"hardhat\"      \"infer\"        \"modeldata\"    \"parsnip\"     \n#&gt; [11] \"purrr\"        \"recipes\"      \"rlang\"        \"rsample\"      \"rstudioapi\"  \n#&gt; [16] \"tibble\"       \"tidyr\"        \"tune\"         \"workflows\"    \"workflowsets\"\n#&gt; [21] \"yardstick\"    \"tidymodels\""
+  },
+  {
+    "objectID": "slides/week-1.html#seeds-for-reproducability",
+    "href": "slides/week-1.html#seeds-for-reproducability",
+    "title": "Week 1",
+    "section": "Seeds for reproducability",
+    "text": "Seeds for reproducability"
+  },
+  {
+    "objectID": "slides/week-1.html#rsamples-for-resampling-and-cross-validation",
+    "href": "slides/week-1.html#rsamples-for-resampling-and-cross-validation",
+    "title": "Week 1",
+    "section": "rsamples for resampling and cross-validation",
+    "text": "rsamples for resampling and cross-validation\n\nThe rsample package is used for resampling and cross-validation.\nIt provides functions for creating resamples and cross-validation folds.\nExample: Creating a 5-fold cross-validation object for the penguins dataset.\n\n\nset.seed(123)\n\n(penguins_split &lt;- initial_split(drop_na(penguins), prop = 0.8, strata = species))\n#&gt; &lt;Training/Testing/Total&gt;\n#&gt; &lt;265/68/333&gt;\npenguins_train  &lt;- training(penguins_split)\npenguins_test   &lt;- testing(penguins_split)\n\npenguin_folds &lt;- vfold_cv(penguins_train, v = 5)"
+  },
+  {
+    "objectID": "slides/week-1.html#recipes-for-feature-engineering",
+    "href": "slides/week-1.html#recipes-for-feature-engineering",
+    "title": "Week 1",
+    "section": "recipes for feature engineering ",
+    "text": "recipes for feature engineering \n\nThe recipes package is used for feature engineering.\nIt provides functions for preprocessing data before modeling.\nExample: Defining a recipe for feature engineering the penguins dataset.\n\n\n# Define recipe for feature engineering\npenguin_recipe &lt;- recipe(species ~ ., data = penguins_train) |&gt;\n  step_impute_knn(all_predictors()) |&gt;         # Impute missing values\n  step_normalize(all_numeric_predictors())     # Normalize numeric features"
+  },
+  {
+    "objectID": "slides/week-1.html#parsnip-for-model-selection",
+    "href": "slides/week-1.html#parsnip-for-model-selection",
+    "title": "Week 1",
+    "section": "Parsnip for model selection ",
+    "text": "Parsnip for model selection \n\nThe parsnip package is used for model implementation\nIt provides functions for defining models types, engines, and modes.\nExample: Defining models for logistic regression, random forest, and decision tree.\n\n\n# Define models\nlog_reg_model &lt;- multinom_reg() |&gt; \n  set_engine(\"nnet\")  |&gt; \n  set_mode(\"classification\")\n\nrf_model &lt;- rand_forest(trees = 500) |&gt; \n  set_engine(\"ranger\") |&gt; \n  set_mode(\"classification\")\n\ndt_model &lt;- decision_tree() |&gt; \n  set_mode(\"classification\")"
+  },
+  {
+    "objectID": "slides/week-1.html#workflows-for-model-execution",
+    "href": "slides/week-1.html#workflows-for-model-execution",
+    "title": "Week 1",
+    "section": "Workflows for model execution ",
+    "text": "Workflows for model execution \n\nThe workflows package is used for model execution.\nIt provides functions for defining and executing workflows.\nExample: Creating a workflow for logistic regression.\n\n\n# Create workflow\nlog_reg_workflow &lt;- workflow() |&gt;\n  add_model(log_reg_model) |&gt;\n  add_recipe(penguin_recipe) |&gt; \n  fit_resamples(resamples = penguin_folds, \n                metrics = metric_set(roc_auc, accuracy))"
+  },
+  {
+    "objectID": "slides/week-1.html#yardstick-for-model-evaluation",
+    "href": "slides/week-1.html#yardstick-for-model-evaluation",
+    "title": "Week 1",
+    "section": "yardstick for model evaluation ",
+    "text": "yardstick for model evaluation \n\ncollect_metrics(log_reg_workflow)\n#&gt; # A tibble: 2 × 6\n#&gt;   .metric  .estimator  mean     n std_err .config             \n#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy multiclass     1     5       0 Preprocessor1_Model1\n#&gt; 2 roc_auc  hand_till      1     5       0 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-1.html#workflowsets-for-model-comparison",
+    "href": "slides/week-1.html#workflowsets-for-model-comparison",
+    "title": "Week 1",
+    "section": "workflowsets for model comparison ",
+    "text": "workflowsets for model comparison \n\nThe workflowsets package is used for model comparison.\nIt provides functions for comparing multiple models usingthe purrr mapping paradigm\nExample: Comparing logistic regression, random forest, and decision tree models.\n\n\n(workflowset &lt;- workflow_set(list(penguin_recipe), \n                             list(log_reg_model, rf_model, dt_model)) |&gt; \n  workflow_map(\"fit_resamples\", \n               resamples = penguin_folds, \n               metrics = metric_set(roc_auc, accuracy)))\n#&gt; # A workflow set/tibble: 3 × 4\n#&gt;   wflow_id             info             option    result   \n#&gt;   &lt;chr&gt;                &lt;list&gt;           &lt;list&gt;    &lt;list&gt;   \n#&gt; 1 recipe_multinom_reg  &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;\n#&gt; 2 recipe_rand_forest   &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;\n#&gt; 3 recipe_decision_tree &lt;tibble [1 × 4]&gt; &lt;opts[2]&gt; &lt;rsmp[+]&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#model-validation",
+    "href": "slides/week-1.html#model-validation",
+    "title": "Week 1",
+    "section": "Model Validation  ",
+    "text": "Model Validation  \n\nFinally, we can validate the model on the test set\nThe augment() function is used to add model predictions and residuals to the dataset.\nThe conf_mat() function is used to create a confusion matrix.\nExample: Validating the logistic regression model on the test set.\n\n\nworkflow() |&gt; \n  # Add model and recipe\n  add_model(log_reg_model) |&gt;\n  add_recipe(penguin_recipe) |&gt;\n  # Train model\n  fit(data = penguins_train) |&gt; \n  # Fit trained model to test set\n  fit(data = penguins_test) |&gt;  \n  # Extract Predictions\n  augment(penguins_test) |&gt; \n  conf_mat(truth = species, estimate = .pred_class) \n#&gt;            Truth\n#&gt; Prediction  Adelie Chinstrap Gentoo\n#&gt;   Adelie        30         0      0\n#&gt;   Chinstrap      0        14      0\n#&gt;   Gentoo         0         0     24"
+  },
+  {
+    "objectID": "slides/week-1.html#io",
+    "href": "slides/week-1.html#io",
+    "title": "Week 1",
+    "section": "I/O ",
+    "text": "I/O \n\nThe st_read() function is used to read spatial data.\nIt is useful when you want to import spatial data into R for local or remote files.\nExample: Reading a Major Global Rivers."
+  },
+  {
+    "objectID": "slides/week-1.html#geometries",
+    "href": "slides/week-1.html#geometries",
+    "title": "Week 1",
+    "section": "Geometries ",
+    "text": "Geometries \n\nThe geometry column contains the spatial information.\nIt is stored as a list-column of sfc objects.\nExample: Accessing the first geometry in the rivers dataset.\n\n\nrivers$geometry[1]\n#&gt; Geometry set for 1 feature \n#&gt; Geometry type: MULTILINESTRING\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: 144.8258 ymin: 61.40833 xmax: 160.7636 ymax: 68.8008\n#&gt; Geodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "slides/week-1.html#data-manipulation",
+    "href": "slides/week-1.html#data-manipulation",
+    "title": "Week 1",
+    "section": "Data Manipulation ",
+    "text": "Data Manipulation \n\nAll dplyr verbs work with sf objects.\nExample: Filtering the rivers dataset to include only the Mississippi River.\n\n\nmississippi &lt;- filter(rivers, SYSTEM == \"Mississippi\")\nlarimer     &lt;- filter(counties, name == \"Larimer\")"
+  },
+  {
+    "objectID": "slides/week-1.html#measures",
+    "href": "slides/week-1.html#measures",
+    "title": "Week 1",
+    "section": "Measures ",
+    "text": "Measures \n\nThe st_length() function is used to calculate the length of a geometry.\nThe st_area() function is used to calculate the area of a geometry.\nThe st_distance() function is used to calculate the distance between two geometries.\nExample: Calculating the length of the Mississippi River and the area of Larimer County.\n\n\nst_length(mississippi)\n#&gt; Units: [m]\n#&gt; [1] 1912869 3147943 3331900 1785519\n\nst_area(larimer)\n#&gt; 6813621254 [m^2]\n\nst_distance(larimer, mississippi)\n#&gt; Units: [m]\n#&gt;          [,1]    [,2]   [,3]    [,4]\n#&gt; [1,] 116016.6 1009375 526454 1413983"
+  },
+  {
+    "objectID": "slides/week-1.html#predicates",
+    "href": "slides/week-1.html#predicates",
+    "title": "Week 1",
+    "section": "Predicates ",
+    "text": "Predicates \n\nSpatial predicates are used to check relationships between geometries using the DE-9IM model.\nThe st_intersects() function is used to check if geometries intersect.\nThe st_filter() function is used to filter geometries based on a predicate.\n\n\n\n\nst_intersects(counties, mississippi)\n#&gt; Sparse geometry binary predicate list of length 3108, where the\n#&gt; predicate was `intersects'\n#&gt; first 10 elements:\n#&gt;  1: (empty)\n#&gt;  2: (empty)\n#&gt;  3: (empty)\n#&gt;  4: (empty)\n#&gt;  5: (empty)\n#&gt;  6: (empty)\n#&gt;  7: (empty)\n#&gt;  8: (empty)\n#&gt;  9: (empty)\n#&gt;  10: (empty)\n\n\n\nints &lt;- st_filter(counties, mississippi, .predicate = st_intersects)\n\nggplot() + \n  geom_sf(data = ints) +\n  geom_sf(data = mississippi, col = \"blue\") + \n  theme_bw()"
+  },
+  {
+    "objectID": "slides/week-1.html#io-1",
+    "href": "slides/week-1.html#io-1",
+    "title": "Week 1",
+    "section": "I/O ",
+    "text": "I/O \n\nAny raster format that GDAL can read, can be read with rast().\nThe package loads the native GDAL src library (like sf)\nrast reads data headers, not data itself, until needed.\nExample: Reading a GeoTIF of Colorado elevation.\n\n\n(elev = terra::rast('data/colorado_elevation.tif'))\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 16893, 21395, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -1146465, -504615, 1566915, 2073705  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source      : colorado_elevation.tif \n#&gt; name        : CONUS_dem \n#&gt; min value   :     98679 \n#&gt; max value   :    439481"
+  },
+  {
+    "objectID": "slides/week-1.html#cropmask",
+    "href": "slides/week-1.html#cropmask",
+    "title": "Week 1",
+    "section": "Crop/Mask ",
+    "text": "Crop/Mask \n\nThe crop() function is used to crop a raster to a specific extent.\nIt is useful when you want to work with a subset of the data.\ncrop extracts data (whether from a remote or local source)\nThe mask() function is used to mask a raster using a vector or other extent, keeping only the data within the mask.\nInput extents must match the CRS of the raster data\nExample: Cropping then masking the elevation raster to Larimer County.\n\n\n\n\nlarimer_5070 &lt;- st_transform(larimer, crs(elev))\n\nlarimer_elev = crop(elev, larimer_5070)\n\nplot(larimer_elev)\n\n\n\n\n\n\n\n\n\n\nlarimer_mask &lt;- mask(larimer_elev, larimer_5070)\nplot(larimer_mask)"
+  },
+  {
+    "objectID": "slides/week-1.html#summary-algebra",
+    "href": "slides/week-1.html#summary-algebra",
+    "title": "Week 1",
+    "section": "Summary / Algebra ",
+    "text": "Summary / Algebra \n\nRasters can be added, subtracted, multiplied, and divided\nAny form of map algebra can be done with rasters\nFor example, multiplying the Larimer mask by 2\n\n\n\nraw\n\nlarimer_mask\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   :    145787 \n#&gt; max value   :    412773\n\n\nData Operation\n\nelev2 &lt;- larimer_mask^2\n\n\nrast modified by rast\n\nlarimer_mask / elev2\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        :    CONUS_dem \n#&gt; min value   : 2.422639e-06 \n#&gt; max value   : 6.859322e-06\n\n\nstatistical methods\n\n(scaled = scale(larimer_mask))\n#&gt; class       : SpatRaster \n#&gt; dimensions  : 3054, 3469, 1  (nrow, ncol, nlyr)\n#&gt; resolution  : 30, 30  (x, y)\n#&gt; extent      : -849255, -745185, 1952655, 2044275  (xmin, xmax, ymin, ymax)\n#&gt; coord. ref. : +proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs \n#&gt; source(s)   : memory\n#&gt; varname     : colorado_elevation \n#&gt; name        : CONUS_dem \n#&gt; min value   : -1.562331 \n#&gt; max value   :  3.053412"
+  },
+  {
+    "objectID": "slides/week-1.html#raster-data-store",
+    "href": "slides/week-1.html#raster-data-store",
+    "title": "Week 1",
+    "section": "Raster data store",
+    "text": "Raster data store\n\nRasters are matrices or arrays of values, and can be manipulated as such\nFor example, setting 35% of the raster to NA\n\n\nlarimer_elev[sample(ncell(larimer_elev), .35*ncell(larimer_elev))] &lt;-  NA\n\nplot(larimer_elev)"
+  },
+  {
+    "objectID": "slides/week-1.html#focal",
+    "href": "slides/week-1.html#focal",
+    "title": "Week 1",
+    "section": "Focal ",
+    "text": "Focal \n\nThe focal() function is used to calculate focal statistics.\nIt is useful when you want to calculate statistics for each cell based on its neighbors.\nExample: Calculating the mean elevation within a 30-cell window to remove the NAs we just created\n\n\nxx = terra::focal(larimer_elev, win = 30, fun  = \"mean\", na.policy=\"only\")\nplot(xx)"
+  },
+  {
+    "objectID": "slides/week-1.html#drop_na-na.omit",
+    "href": "slides/week-1.html#drop_na-na.omit",
+    "title": "Week 1",
+    "section": "drop_na / na.omit ",
+    "text": "drop_na / na.omit \n\nThe drop_na() function is used to remove rows with missing values.\n\n\npenguins |&gt; \n  drop_na()\n#&gt; # A tibble: 333 × 8\n#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g\n#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;\n#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750\n#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800\n#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250\n#&gt;  4 Adelie  Torgersen           36.7          19.3               193        3450\n#&gt;  5 Adelie  Torgersen           39.3          20.6               190        3650\n#&gt;  6 Adelie  Torgersen           38.9          17.8               181        3625\n#&gt;  7 Adelie  Torgersen           39.2          19.6               195        4675\n#&gt;  8 Adelie  Torgersen           41.1          17.6               182        3200\n#&gt;  9 Adelie  Torgersen           38.6          21.2               191        3800\n#&gt; 10 Adelie  Torgersen           34.6          21.1               198        4400\n#&gt; # ℹ 323 more rows\n#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;\n\nnest / unnest \n\nThe nest() function is used to nest data into a list-column.\nIt is useful when you want to group data together.\nExample: Nesting the penguins dataset by species.\n\n\npenguins |&gt; \n  nest(data = -species)\n#&gt; # A tibble: 3 × 2\n#&gt;   species   data              \n#&gt;   &lt;fct&gt;     &lt;list&gt;            \n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt;\n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt;\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#unions-combines",
+    "href": "slides/week-1.html#unions-combines",
+    "title": "Week 1",
+    "section": "Unions / Combines ",
+    "text": "Unions / Combines \n\nThe st_union() function is used to combine geometries.\nIt is useful when you want to merge geometries.\n\n\nmississippi\n#&gt; Simple feature collection with 4 features and 4 fields\n#&gt; Geometry type: MULTILINESTRING\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158\n#&gt; Geodetic CRS:  WGS 84\n#&gt; # A tibble: 4 × 5\n#&gt;   NAME        SYSTEM      MILES KILOMETERS                              geometry\n#&gt; * &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;                 &lt;MULTILINESTRING [°]&gt;\n#&gt; 1 Arkansas    Mississippi 1446.      2327. ((-106.3789 39.36165, -106.3295 39.3…\n#&gt; 2 Mississippi Mississippi 2385.      3838. ((-95.02364 47.15609, -94.98973 47.3…\n#&gt; 3 Missouri    Mississippi 2739.      4408. ((-110.5545 44.76081, -110.6122 44.7…\n#&gt; 4 Ohio        Mississippi 1368.      2202. ((-89.12166 36.97756, -89.17502 37.0…\n\nst_union(mississippi)\n#&gt; Geometry set for 1 feature \n#&gt; Geometry type: MULTILINESTRING\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -112 ymin: 28.92983 xmax: -77.86168 ymax: 48.16158\n#&gt; Geodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "slides/week-1.html#terra",
+    "href": "slides/week-1.html#terra",
+    "title": "Week 1",
+    "section": "terra ",
+    "text": "terra \n\nThe terra package is used for working with raster data.\nIt provides functions for reading, writing, and manipulating raster data.\n\n\nlibrary(terra)\ngdal()\n#&gt; [1] \"3.10.1\""
+  },
+  {
+    "objectID": "slides/week-1.html#dplyr-1",
+    "href": "slides/week-1.html#dplyr-1",
+    "title": "Week 1",
+    "section": "dplyr ",
+    "text": "dplyr \n\nThe dplyr package provides functions for data manipulation.\nIt includes functions for filtering, selecting, mutating, summarizing, and joining data.\n\nselect \n\nThe select() function is used to select columns from a dataset.\nIt is useful when you want to work with specific columns.\nExample: Selecting the species column from the penguins dataset.\n\n\nselect(penguins, species)\n#&gt; # A tibble: 344 × 1\n#&gt;    species\n#&gt;    &lt;fct&gt;  \n#&gt;  1 Adelie \n#&gt;  2 Adelie \n#&gt;  3 Adelie \n#&gt;  4 Adelie \n#&gt;  5 Adelie \n#&gt;  6 Adelie \n#&gt;  7 Adelie \n#&gt;  8 Adelie \n#&gt;  9 Adelie \n#&gt; 10 Adelie \n#&gt; # ℹ 334 more rows\n\nfilter \n\nThe filter() function is used to filter rows based on a condition.\nIt is useful when you want to work with specific rows.\nExample: Filtering the penguins dataset to include only Adelie penguins.\n\n\nfilter(penguins, species == \"Adelie\")\n#&gt; # A tibble: 152 × 8\n#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g\n#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;\n#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750\n#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800\n#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250\n#&gt;  4 Adelie  Torgersen           NA            NA                  NA          NA\n#&gt;  5 Adelie  Torgersen           36.7          19.3               193        3450\n#&gt;  6 Adelie  Torgersen           39.3          20.6               190        3650\n#&gt;  7 Adelie  Torgersen           38.9          17.8               181        3625\n#&gt;  8 Adelie  Torgersen           39.2          19.6               195        4675\n#&gt;  9 Adelie  Torgersen           34.1          18.1               193        3475\n#&gt; 10 Adelie  Torgersen           42            20.2               190        4250\n#&gt; # ℹ 142 more rows\n#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;\n\nmutate \n\nThe mutate() function is used to create new columns or modify existing ones.\nIt is useful when you want to add new information to your dataset.\nExample: Creating a new column bill_length_cm from bill_length_mm.\n\nNote the use of the tidy_select helper starts_with\n\nmutate(penguins, bill_length_cm = bill_length_mm / 100) |&gt; \n  select(starts_with(\"bill\"))\n#&gt; # A tibble: 344 × 3\n#&gt;    bill_length_mm bill_depth_mm bill_length_cm\n#&gt;             &lt;dbl&gt;         &lt;dbl&gt;          &lt;dbl&gt;\n#&gt;  1           39.1          18.7          0.391\n#&gt;  2           39.5          17.4          0.395\n#&gt;  3           40.3          18            0.403\n#&gt;  4           NA            NA           NA    \n#&gt;  5           36.7          19.3          0.367\n#&gt;  6           39.3          20.6          0.393\n#&gt;  7           38.9          17.8          0.389\n#&gt;  8           39.2          19.6          0.392\n#&gt;  9           34.1          18.1          0.341\n#&gt; 10           42            20.2          0.42 \n#&gt; # ℹ 334 more rows\n\nsummarize \n\nThe summarize() function is used to aggregate data.\nIt is useful when you want to calculate summary statistics.\nIt always produces a one-row output.\nExample: Calculating the mean bill_length_mm for all penguins\n\n\nsummarize(penguins, bill_length_mm = mean(bill_length_mm, na.rm = TRUE))\n#&gt; # A tibble: 1 × 1\n#&gt;   bill_length_mm\n#&gt;            &lt;dbl&gt;\n#&gt; 1           43.9\n\ngroup_by / ungroup \n\nThe group_by() function is used to group data by one or more columns.\nIt is useful when you want to perform operations on groups.\nIt does this by adding a grouped_df class to the dataset.\nThe ungroup() function removes grouping from a dataset.\n\n\ngroups &lt;- group_by(penguins, species)\n\ndplyr::group_keys(groups)\n#&gt; # A tibble: 3 × 1\n#&gt;   species  \n#&gt;   &lt;fct&gt;    \n#&gt; 1 Adelie   \n#&gt; 2 Chinstrap\n#&gt; 3 Gentoo\ndplyr::group_indices(groups)[1:5]\n#&gt; [1] 1 1 1 1 1\n\nGroup operations\n\nExample: Grouping the penguins dataset by species and calculating the mean bill_length_mm.\n\n\npenguins |&gt; \n  group_by(species) |&gt; \n  summarize(bill_length_mm = mean(bill_length_mm, na.rm = TRUE)) |&gt; \n  ungroup()\n#&gt; # A tibble: 3 × 2\n#&gt;   species   bill_length_mm\n#&gt;   &lt;fct&gt;              &lt;dbl&gt;\n#&gt; 1 Adelie              38.8\n#&gt; 2 Chinstrap           48.8\n#&gt; 3 Gentoo              47.5\n\nJoins \n\nThe dplyr package provides functions for joining datasets.\nCommon join functions include inner_join(), left_join(), right_join(), and full_join().\nJoins are used to combine datasets based on shared keys (primary and foreign).\n\nMutating joins \n\nMutating joins add columns from one dataset to another based on a shared key.\nExample: Adding species information to the penguins dataset based on the species_id.\n\n\nspecies &lt;- tribble(\n  ~species_id, ~species,\n  1, \"Adelie\",\n  2, \"Chinstrap\",\n  3, \"Gentoo\"\n)"
+  },
+  {
+    "objectID": "slides/week-1.html#section",
+    "href": "slides/week-1.html#section",
+    "title": "Week 1",
+    "section": "%>% / |> ",
+    "text": "%&gt;% / |&gt; \n\nThe pipe operator %&gt;% is used to chain operations in R.\nThe pipe operator |&gt; is a base R version of %&gt;% introduced in R 4.1.\nThe pipe passes what on the “left hand” side to the function on the “right hand” side as the first argument.\n\n\npenguins |&gt; \n  glimpse()\n#&gt; Rows: 344\n#&gt; Columns: 8\n#&gt; $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…\n#&gt; $ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…\n#&gt; $ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …\n#&gt; $ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …\n#&gt; $ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…\n#&gt; $ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …\n#&gt; $ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…\n#&gt; $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…"
+  },
+  {
+    "objectID": "slides/week-1.html#select",
+    "href": "slides/week-1.html#select",
+    "title": "Week 1",
+    "section": "select ",
+    "text": "select \n\nThe select() function is used to select columns from a dataset.\nIt is useful when you want to work with specific columns.\nExample: Selecting the species column from the penguins dataset.\n\n\nselect(penguins, species)\n#&gt; # A tibble: 344 × 1\n#&gt;    species\n#&gt;    &lt;fct&gt;  \n#&gt;  1 Adelie \n#&gt;  2 Adelie \n#&gt;  3 Adelie \n#&gt;  4 Adelie \n#&gt;  5 Adelie \n#&gt;  6 Adelie \n#&gt;  7 Adelie \n#&gt;  8 Adelie \n#&gt;  9 Adelie \n#&gt; 10 Adelie \n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#filter",
+    "href": "slides/week-1.html#filter",
+    "title": "Week 1",
+    "section": "filter ",
+    "text": "filter \n\nThe filter() function is used to filter rows based on a condition.\nIt is useful when you want to work with specific rows.\nExample: Filtering the penguins dataset to include only Adelie penguins.\n\n\nfilter(penguins, species == \"Adelie\")\n#&gt; # A tibble: 152 × 8\n#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g\n#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;\n#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750\n#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800\n#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250\n#&gt;  4 Adelie  Torgersen           NA            NA                  NA          NA\n#&gt;  5 Adelie  Torgersen           36.7          19.3               193        3450\n#&gt;  6 Adelie  Torgersen           39.3          20.6               190        3650\n#&gt;  7 Adelie  Torgersen           38.9          17.8               181        3625\n#&gt;  8 Adelie  Torgersen           39.2          19.6               195        4675\n#&gt;  9 Adelie  Torgersen           34.1          18.1               193        3475\n#&gt; 10 Adelie  Torgersen           42            20.2               190        4250\n#&gt; # ℹ 142 more rows\n#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#mutate",
+    "href": "slides/week-1.html#mutate",
+    "title": "Week 1",
+    "section": "mutate ",
+    "text": "mutate \n\nThe mutate() function is used to create new columns or modify existing ones.\nIt is useful when you want to add new information to your dataset.\nExample: Creating a new column bill_length_cm from bill_length_mm.\n\nNote the use of the tidy_select helper starts_with\n\nmutate(penguins, bill_length_cm = bill_length_mm / 100) |&gt; \n  select(starts_with(\"bill\"))\n#&gt; # A tibble: 344 × 3\n#&gt;    bill_length_mm bill_depth_mm bill_length_cm\n#&gt;             &lt;dbl&gt;         &lt;dbl&gt;          &lt;dbl&gt;\n#&gt;  1           39.1          18.7          0.391\n#&gt;  2           39.5          17.4          0.395\n#&gt;  3           40.3          18            0.403\n#&gt;  4           NA            NA           NA    \n#&gt;  5           36.7          19.3          0.367\n#&gt;  6           39.3          20.6          0.393\n#&gt;  7           38.9          17.8          0.389\n#&gt;  8           39.2          19.6          0.392\n#&gt;  9           34.1          18.1          0.341\n#&gt; 10           42            20.2          0.42 \n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#summarize",
+    "href": "slides/week-1.html#summarize",
+    "title": "Week 1",
+    "section": "summarize ",
+    "text": "summarize \n\nThe summarize() function is used to aggregate data.\nIt is useful when you want to calculate summary statistics.\nIt always produces a one-row output.\nExample: Calculating the mean bill_length_mm for all penguins\n\n\nsummarize(penguins, bill_length_mm = mean(bill_length_mm, na.rm = TRUE))\n#&gt; # A tibble: 1 × 1\n#&gt;   bill_length_mm\n#&gt;            &lt;dbl&gt;\n#&gt; 1           43.9"
+  },
+  {
+    "objectID": "slides/week-1.html#group_by-ungroup",
+    "href": "slides/week-1.html#group_by-ungroup",
+    "title": "Week 1",
+    "section": "group_by / ungroup ",
+    "text": "group_by / ungroup \n\nThe group_by() function is used to group data by one or more columns.\nIt is useful when you want to perform operations on groups.\nIt does this by adding a grouped_df class to the dataset.\nThe ungroup() function removes grouping from a dataset.\n\n\ngroups &lt;- group_by(penguins, species)\n\ndplyr::group_keys(groups)\n#&gt; # A tibble: 3 × 1\n#&gt;   species  \n#&gt;   &lt;fct&gt;    \n#&gt; 1 Adelie   \n#&gt; 2 Chinstrap\n#&gt; 3 Gentoo\ndplyr::group_indices(groups)[1:5]\n#&gt; [1] 1 1 1 1 1"
+  },
+  {
+    "objectID": "slides/week-1.html#group-operations",
+    "href": "slides/week-1.html#group-operations",
+    "title": "Week 1",
+    "section": "Group operations ",
+    "text": "Group operations \n\nExample: Grouping the penguins dataset by species and calculating the mean bill_length_mm.\n\n\npenguins |&gt; \n  group_by(species) |&gt; \n  summarize(bill_length_mm = mean(bill_length_mm, na.rm = TRUE)) |&gt; \n  ungroup()\n#&gt; # A tibble: 3 × 2\n#&gt;   species   bill_length_mm\n#&gt;   &lt;fct&gt;              &lt;dbl&gt;\n#&gt; 1 Adelie              38.8\n#&gt; 2 Chinstrap           48.8\n#&gt; 3 Gentoo              47.5"
+  },
+  {
+    "objectID": "slides/week-1.html#joins",
+    "href": "slides/week-1.html#joins",
+    "title": "Week 1",
+    "section": "Joins ",
+    "text": "Joins \n\nThe dplyr package provides functions for joining datasets.\nCommon join functions include inner_join(), left_join(), right_join(), and full_join().\nJoins are used to combine datasets based on shared keys (primary and foreign)."
+  },
+  {
+    "objectID": "slides/week-1.html#mutating-joins",
+    "href": "slides/week-1.html#mutating-joins",
+    "title": "Week 1",
+    "section": "Mutating joins ",
+    "text": "Mutating joins \n\nMutating joins add columns from one dataset to another based on a shared key.\nExample: Adding species information to the penguins dataset based on the species_id.\n\n\nspecies &lt;- tribble(\n  ~species_id, ~species,\n  1, \"Adelie\",\n  2, \"Chinstrap\",\n  3, \"Gentoo\"\n)"
+  },
+  {
+    "objectID": "slides/week-1.html#filtering-joins",
+    "href": "slides/week-1.html#filtering-joins",
+    "title": "Week 1",
+    "section": "Filtering Joins ",
+    "text": "Filtering Joins \n\nFiltering joins retain only rows that match between datasets.\nExample: Filtering the penguins dataset to include only rows with matching species_id.\n\n\nselect(penguins, species, contains('bill')) |&gt; \n  semi_join(species, by = \"species\")\n#&gt; # A tibble: 344 × 3\n#&gt;    species bill_length_mm bill_depth_mm\n#&gt;    &lt;fct&gt;            &lt;dbl&gt;         &lt;dbl&gt;\n#&gt;  1 Adelie            39.1          18.7\n#&gt;  2 Adelie            39.5          17.4\n#&gt;  3 Adelie            40.3          18  \n#&gt;  4 Adelie            NA            NA  \n#&gt;  5 Adelie            36.7          19.3\n#&gt;  6 Adelie            39.3          20.6\n#&gt;  7 Adelie            38.9          17.8\n#&gt;  8 Adelie            39.2          19.6\n#&gt;  9 Adelie            34.1          18.1\n#&gt; 10 Adelie            42            20.2\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#ggplot",
+    "href": "slides/week-1.html#ggplot",
+    "title": "Week 1",
+    "section": "ggplot ",
+    "text": "ggplot \n\nThe ggplot() function initializes a plot.\nIt provides a blank canvas to which layers can be added.\n\n\nggplot()"
+  },
+  {
+    "objectID": "slides/week-1.html#geom_",
+    "href": "slides/week-1.html#geom_",
+    "title": "Week 1",
+    "section": "geom_* ",
+    "text": "geom_* \n\nThe geom_*() functions add geometric objects to the plot.\nThey describe how to render the mapping created in aes\nExample: Adding points to the plot.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point()"
+  },
+  {
+    "objectID": "slides/week-1.html#labs",
+    "href": "slides/week-1.html#labs",
+    "title": "Week 1",
+    "section": "labs ",
+    "text": "labs \n\nThe labs() function is used to add titles, subtitles, and axis labels to the plot.\nIt is useful for providing context and making the plot more informative.\nExample: Adding titles and axis labels to the plot.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species) + \n  theme_linedraw() + \n  labs(title = \"Penguins Weight by Bill Size\", \n       x = \"Body Mass\",\n       y = \"Bill Length\", \n       subtitle = \"Made for 523c\")"
+  },
+  {
+    "objectID": "slides/week-1.html#raster-structure",
+    "href": "slides/week-1.html#raster-structure",
+    "title": "Week 1",
+    "section": "Raster Structure ",
+    "text": "Raster Structure \nRaster data is stored as an multi-dimensional array of values. - Remember this is atomic vector with diminisions - The same way we looked\n\nv &lt;- values(elev)\nhead(v)\n#&gt;      CONUS_dem\n#&gt; [1,]    242037\n#&gt; [2,]    243793\n#&gt; [3,]    244464\n#&gt; [4,]    244302\n#&gt; [5,]    244060\n#&gt; [6,]    243888\nclass(v[,1])\n#&gt; [1] \"integer\"\n\ndim(v)\n#&gt; [1] 361425735         1\ndim(elev)\n#&gt; [1] 16893 21395     1\nnrow(elev)\n#&gt; [1] 16893"
+  },
+  {
+    "objectID": "slides/week-1.html#purrr",
+    "href": "slides/week-1.html#purrr",
+    "title": "Week 1",
+    "section": "purrr ",
+    "text": "purrr \n\nThe purrr package is used for functional programming.\nIt provides functions for working with lists and vectors."
+  },
+  {
+    "objectID": "slides/week-1.html#machine-learning",
+    "href": "slides/week-1.html#machine-learning",
+    "title": "Week 1",
+    "section": "Machine Learning ",
+    "text": "Machine Learning \n\nlibrary(tidymodels)\ntidymodels_packages()\n#&gt;  [1] \"broom\"        \"cli\"          \"conflicted\"   \"dials\"        \"dplyr\"       \n#&gt;  [6] \"ggplot2\"      \"hardhat\"      \"infer\"        \"modeldata\"    \"parsnip\"     \n#&gt; [11] \"purrr\"        \"recipes\"      \"rlang\"        \"rsample\"      \"rstudioapi\"  \n#&gt; [16] \"tibble\"       \"tidyr\"        \"tune\"         \"workflows\"    \"workflowsets\"\n#&gt; [21] \"yardstick\"    \"tidymodels\""
+  },
+  {
+    "objectID": "slides/week-1.html#linear-modeling-lm",
+    "href": "slides/week-1.html#linear-modeling-lm",
+    "title": "Week 1",
+    "section": "linear modeling: lm",
+    "text": "linear modeling: lm\n\nThe lm() function is used to fit linear models.\nIt is useful when you want to model the relationship between two variables.\nExample: Fitting a linear model to predict body_mass_g from flipper_length_mm.\n\n\nmodel &lt;- lm(body_mass_g ~ flipper_length_mm, data = drop_na(penguins))\n\nsummary(model)\n#&gt; \n#&gt; Call:\n#&gt; lm(formula = body_mass_g ~ flipper_length_mm, data = drop_na(penguins))\n#&gt; \n#&gt; Residuals:\n#&gt;      Min       1Q   Median       3Q      Max \n#&gt; -1057.33  -259.79   -12.24   242.97  1293.89 \n#&gt; \n#&gt; Coefficients:\n#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)    \n#&gt; (Intercept)       -5872.09     310.29  -18.93   &lt;2e-16 ***\n#&gt; flipper_length_mm    50.15       1.54   32.56   &lt;2e-16 ***\n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n#&gt; \n#&gt; Residual standard error: 393.3 on 331 degrees of freedom\n#&gt; Multiple R-squared:  0.7621, Adjusted R-squared:  0.7614 \n#&gt; F-statistic:  1060 on 1 and 331 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "slides/week-1.html#tidy",
+    "href": "slides/week-1.html#tidy",
+    "title": "Week 1",
+    "section": "tidy ",
+    "text": "tidy \n\nThe tidy() function is used to tidy model coefficients.\nIt is useful when you want to extract model coefficients.\nExample: Tidying the model output.\n\n\ntidy(model)\n#&gt; # A tibble: 2 × 5\n#&gt;   term              estimate std.error statistic   p.value\n#&gt;   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;\n#&gt; 1 (Intercept)        -5872.     310.       -18.9 1.18e- 54\n#&gt; 2 flipper_length_mm     50.2      1.54      32.6 3.13e-105"
+  },
+  {
+    "objectID": "slides/week-1.html#glance",
+    "href": "slides/week-1.html#glance",
+    "title": "Week 1",
+    "section": "glance ",
+    "text": "glance \n\nThe glance() function is used to provide a summary of model fit.\nIt is useful when you want to assess model performance.\nExample: Glancing at the model output.\n\n\nglance(model)\n#&gt; # A tibble: 1 × 12\n#&gt;   r.squared adj.r.squared sigma statistic   p.value    df logLik   AIC   BIC\n#&gt;       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1     0.762         0.761  393.     1060. 3.13e-105     1 -2461. 4928. 4940.\n#&gt; # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#augment",
+    "href": "slides/week-1.html#augment",
+    "title": "Week 1",
+    "section": "augment ",
+    "text": "augment \n\nThe augment() function is used to add model predictions and residuals to the dataset.\nIt is useful when you want to visualize model performance.\nExample: Augmenting the model output.\n\n\n\n\na &lt;- augment(model)\n\nggplot(a, aes(x = .fitted, y = body_mass_g)) +\n  geom_point() + \n  geom_smooth(method = \"lm\")\n\n\n\n\n\n\n\n\n\n\nggplot(a, aes(x = .resid)) +\n  geom_histogram()"
+  },
+  {
+    "objectID": "slides/week-1.html#map",
+    "href": "slides/week-1.html#map",
+    "title": "Week 1",
+    "section": "map ",
+    "text": "map \n\nThe map() function is used to apply a function to each element of a list.\nIt is useful when you want to iterate over a list.\nExample: Fitting a linear model to each species in the penguins dataset.\n\n\npenguins |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)))\n#&gt; # A tibble: 3 × 3\n#&gt;   species   data               lm    \n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt;\n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;  \n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;  \n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#map_",
+    "href": "slides/week-1.html#map_",
+    "title": "Week 1",
+    "section": "map_* ",
+    "text": "map_* \n\nThe map_*() functions are used to extract specific outputs from a list.\nThey are useful when you want to extract specific outputs from a list.\nExample: Extracting the R-squared values (doubles) from the linear models.\n\n\npenguins |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),\n         r2 = map_dbl(lm, ~summary(.x)$r.squared))\n#&gt; # A tibble: 3 × 4\n#&gt;   species   data               lm        r2\n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt;\n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt; &lt;lm&gt;   0.219\n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt; &lt;lm&gt;   0.494\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412"
+  },
+  {
+    "objectID": "slides/week-1.html#map2",
+    "href": "slides/week-1.html#map2",
+    "title": "Week 1",
+    "section": "map2 ",
+    "text": "map2 \n\nThe map2() function is used to iterate over two lists in parallel.\nIt is useful when you want to apply a function to two lists simultaneously.\nExample: Augmenting the linear models with the original data.\n\n\npenguins |&gt; \n  drop_na() |&gt; \n  nest(data = -species) |&gt; \n  mutate(lm_mod = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),\n         r2 = map_dbl(lm_mod, ~summary(.x)$r.squared),\n         a  = map2(lm_mod, data, ~broom::augment(.x, .y))) \n#&gt; # A tibble: 3 × 5\n#&gt;   species   data               lm_mod    r2 a                  \n#&gt;   &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;dbl&gt; &lt;list&gt;             \n#&gt; 1 Adelie    &lt;tibble [146 × 7]&gt; &lt;lm&gt;   0.216 &lt;tibble [146 × 13]&gt;\n#&gt; 2 Gentoo    &lt;tibble [119 × 7]&gt; &lt;lm&gt;   0.506 &lt;tibble [119 × 13]&gt;\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;  &lt;lm&gt;   0.412 &lt;tibble [68 × 13]&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#geometry-list-columns",
+    "href": "slides/week-1.html#geometry-list-columns",
+    "title": "Week 1",
+    "section": "Geometry list columns ",
+    "text": "Geometry list columns \n\nThe geometry column contains the spatial information.\nIt is stored as a list-column of sfc objects.\nExample: Accessing the first geometry in the rivers dataset.\n\n\nrivers$geometry[1]\n#&gt; Geometry set for 1 feature \n#&gt; Geometry type: MULTILINESTRING\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: 144.8258 ymin: 61.40833 xmax: 160.7636 ymax: 68.8008\n#&gt; Geodetic CRS:  WGS 84"
+  },
+  {
+    "objectID": "slides/week-1.html#projections",
+    "href": "slides/week-1.html#projections",
+    "title": "Week 1",
+    "section": "Projections ",
+    "text": "Projections \n\nCRS (Coordinate Reference System) is used to define the spatial reference.\nThe st_crs() function is used to get the CRS of a dataset.\nThe st_transform() function is used to transform the CRS of a dataset.\nExample: Transforming the rivers dataset to EPSG:5070.\n\n\nst_crs(rivers) |&gt; sf::st_is_longlat()\n#&gt; [1] TRUE\nst_crs(rivers)$units\n#&gt; NULL\n\nriv_5070  &lt;- st_transform(rivers, 5070)\n\nst_crs(riv_5070) |&gt; sf::st_is_longlat()\n#&gt; [1] FALSE\n\nst_crs(riv_5070)$units\n#&gt; [1] \"m\""
+  },
+  {
+    "objectID": "slides/week-1.html#data-aesthetics",
+    "href": "slides/week-1.html#data-aesthetics",
+    "title": "Week 1",
+    "section": "data / aesthetics ",
+    "text": "data / aesthetics \n\nData must be provided to ggplot()\nThe aes() function is used to map variables to aesthetics (e.g., x and y axes).\naes arguments provided in ggplot are inherited by all layers.\nExample: Creating a plot of body_mass_g vs. bill_length_mm.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm))"
+  },
+  {
+    "objectID": "slides/week-1.html#facet_wrap-facet_grid",
+    "href": "slides/week-1.html#facet_wrap-facet_grid",
+    "title": "Week 1",
+    "section": "facet_wrap / facet_grid ",
+    "text": "facet_wrap / facet_grid \n\nThe facet_wrap() function is used to create small multiples of a plot.\nIt is useful when you want to compare subsets of data.\nThe facet_grid() function is used to create a grid of plots.\nExample: Faceting the plot by species.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species)"
+  },
+  {
+    "objectID": "slides/week-1.html#theme_",
+    "href": "slides/week-1.html#theme_",
+    "title": "Week 1",
+    "section": "theme_* ",
+    "text": "theme_* \n\nThe theme_*() functions are used to customize the appearance of the plot.\nThey allow you to modify the plot’s background, gridlines, and text.\nExample: Applying the theme_linedraw() theme to the plot.\n\n\nggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + \n  geom_point() + \n  facet_wrap(~species) + \n  theme_linedraw()"
+  },
+  {
+    "objectID": "slides/week-1.html#pivot_longer",
+    "href": "slides/week-1.html#pivot_longer",
+    "title": "Week 1",
+    "section": "pivot_longer ",
+    "text": "pivot_longer \n\nThe pivot_longer() function is used to convert wide data to long data.\nIt is useful when you want to work with data in a tidy format.\nExample: Converting the penguins dataset from wide to long format.\n\n\n(data.long = penguins |&gt; \n  select(species, bill_length_mm, body_mass_g) |&gt; \n  mutate(penguin_id = 1:n()) |&gt; \n  pivot_longer(-c(penguin_id, species), \n               names_to = \"Measure\", \n               values_to = \"value\"))\n#&gt; # A tibble: 688 × 4\n#&gt;    species penguin_id Measure         value\n#&gt;    &lt;fct&gt;        &lt;int&gt; &lt;chr&gt;           &lt;dbl&gt;\n#&gt;  1 Adelie           1 bill_length_mm   39.1\n#&gt;  2 Adelie           1 body_mass_g    3750  \n#&gt;  3 Adelie           2 bill_length_mm   39.5\n#&gt;  4 Adelie           2 body_mass_g    3800  \n#&gt;  5 Adelie           3 bill_length_mm   40.3\n#&gt;  6 Adelie           3 body_mass_g    3250  \n#&gt;  7 Adelie           4 bill_length_mm   NA  \n#&gt;  8 Adelie           4 body_mass_g      NA  \n#&gt;  9 Adelie           5 bill_length_mm   36.7\n#&gt; 10 Adelie           5 body_mass_g    3450  \n#&gt; # ℹ 678 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#pivot_wider",
+    "href": "slides/week-1.html#pivot_wider",
+    "title": "Week 1",
+    "section": "pivot_wider ",
+    "text": "pivot_wider \n\nThe pivot_wider() function is used to convert long data to wide data.\nIt is useful when you want to work with data in a wide format.\nExample: Converting the data.long dataset from long to wide format.\n\n\ndata.long |&gt; \n  pivot_wider(names_from = \"Measure\", \n              values_from = \"value\")\n#&gt; # A tibble: 344 × 4\n#&gt;    species penguin_id bill_length_mm body_mass_g\n#&gt;    &lt;fct&gt;        &lt;int&gt;          &lt;dbl&gt;       &lt;dbl&gt;\n#&gt;  1 Adelie           1           39.1        3750\n#&gt;  2 Adelie           2           39.5        3800\n#&gt;  3 Adelie           3           40.3        3250\n#&gt;  4 Adelie           4           NA            NA\n#&gt;  5 Adelie           5           36.7        3450\n#&gt;  6 Adelie           6           39.3        3650\n#&gt;  7 Adelie           7           38.9        3625\n#&gt;  8 Adelie           8           39.2        4675\n#&gt;  9 Adelie           9           34.1        3475\n#&gt; 10 Adelie          10           42          4250\n#&gt; # ℹ 334 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#nest-unnest",
+    "href": "slides/week-1.html#nest-unnest",
+    "title": "Week 1",
+    "section": "nest / unnest ",
+    "text": "nest / unnest \n\nThe nest() function is used to nest data into a list-column.\nIt is useful when you want to group data together.\nExample: Nesting the penguins dataset by species.\n\n\npenguins |&gt; \n  nest(data = -species)\n#&gt; # A tibble: 3 × 2\n#&gt;   species   data              \n#&gt;   &lt;fct&gt;     &lt;list&gt;            \n#&gt; 1 Adelie    &lt;tibble [152 × 7]&gt;\n#&gt; 2 Gentoo    &lt;tibble [124 × 7]&gt;\n#&gt; 3 Chinstrap &lt;tibble [68 × 7]&gt;\n\npenguins |&gt; \n  nest(data = -species) |&gt; \n  unnest(data)\n#&gt; # A tibble: 344 × 8\n#&gt;    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g\n#&gt;    &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;\n#&gt;  1 Adelie  Torgersen           39.1          18.7               181        3750\n#&gt;  2 Adelie  Torgersen           39.5          17.4               186        3800\n#&gt;  3 Adelie  Torgersen           40.3          18                 195        3250\n#&gt;  4 Adelie  Torgersen           NA            NA                  NA          NA\n#&gt;  5 Adelie  Torgersen           36.7          19.3               193        3450\n#&gt;  6 Adelie  Torgersen           39.3          20.6               190        3650\n#&gt;  7 Adelie  Torgersen           38.9          17.8               181        3625\n#&gt;  8 Adelie  Torgersen           39.2          19.6               195        4675\n#&gt;  9 Adelie  Torgersen           34.1          18.1               193        3475\n#&gt; 10 Adelie  Torgersen           42            20.2               190        4250\n#&gt; # ℹ 334 more rows\n#&gt; # ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;"
+  },
+  {
+    "objectID": "slides/week-1.html#from-package",
+    "href": "slides/week-1.html#from-package",
+    "title": "Week 1",
+    "section": "From package ",
+    "text": "From package \n\n# via packages\n(counties &lt;- AOI::aoi_get(state = \"conus\", county = \"all\"))\n#&gt; Simple feature collection with 3108 features and 14 fields\n#&gt; Geometry type: MULTIPOLYGON\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448\n#&gt; Geodetic CRS:  WGS 84\n#&gt; First 10 features:\n#&gt;    state_region state_division feature_code state_name state_abbr     name\n#&gt; 1             3              6      0161526    Alabama         AL  Autauga\n#&gt; 2             3              6      0161527    Alabama         AL  Baldwin\n#&gt; 3             3              6      0161528    Alabama         AL  Barbour\n#&gt; 4             3              6      0161529    Alabama         AL     Bibb\n#&gt; 5             3              6      0161530    Alabama         AL   Blount\n#&gt; 6             3              6      0161531    Alabama         AL  Bullock\n#&gt; 7             3              6      0161532    Alabama         AL   Butler\n#&gt; 8             3              6      0161533    Alabama         AL  Calhoun\n#&gt; 9             3              6      0161534    Alabama         AL Chambers\n#&gt; 10            3              6      0161535    Alabama         AL Cherokee\n#&gt;    fip_class tiger_class combined_area_code metropolitan_area_code\n#&gt; 1         H1       G4020                388                   &lt;NA&gt;\n#&gt; 2         H1       G4020                380                   &lt;NA&gt;\n#&gt; 3         H1       G4020                 NA                   &lt;NA&gt;\n#&gt; 4         H1       G4020                142                   &lt;NA&gt;\n#&gt; 5         H1       G4020                142                   &lt;NA&gt;\n#&gt; 6         H1       G4020                 NA                   &lt;NA&gt;\n#&gt; 7         H1       G4020                 NA                   &lt;NA&gt;\n#&gt; 8         H1       G4020                 NA                   &lt;NA&gt;\n#&gt; 9         H1       G4020                122                   &lt;NA&gt;\n#&gt; 10        H1       G4020                 NA                   &lt;NA&gt;\n#&gt;    functional_status  land_area water_area fip_code\n#&gt; 1                  A 1539634184   25674812    01001\n#&gt; 2                  A 4117656514 1132955729    01003\n#&gt; 3                  A 2292160149   50523213    01005\n#&gt; 4                  A 1612188717    9572303    01007\n#&gt; 5                  A 1670259090   14860281    01009\n#&gt; 6                  A 1613083467    6030667    01011\n#&gt; 7                  A 2012002546    2701199    01013\n#&gt; 8                  A 1569246126   16536293    01015\n#&gt; 9                  A 1545085601   16971700    01017\n#&gt; 10                 A 1433620850  120310807    01019\n#&gt;                          geometry\n#&gt; 1  MULTIPOLYGON (((-86.81491 3...\n#&gt; 2  MULTIPOLYGON (((-87.59883 3...\n#&gt; 3  MULTIPOLYGON (((-85.41644 3...\n#&gt; 4  MULTIPOLYGON (((-87.01916 3...\n#&gt; 5  MULTIPOLYGON (((-86.5778 33...\n#&gt; 6  MULTIPOLYGON (((-85.65767 3...\n#&gt; 7  MULTIPOLYGON (((-86.4482 31...\n#&gt; 8  MULTIPOLYGON (((-85.79605 3...\n#&gt; 9  MULTIPOLYGON (((-85.59315 3...\n#&gt; 10 MULTIPOLYGON (((-85.51361 3..."
+  },
+  {
+    "objectID": "slides/week-1.html#from-file",
+    "href": "slides/week-1.html#from-file",
+    "title": "Week 1",
+    "section": "From file ",
+    "text": "From file \n\n(rivers &lt;- sf::read_sf('data/majorrivers_0_0/MajorRivers.shp'))\n#&gt; Simple feature collection with 98 features and 4 fields\n#&gt; Geometry type: MULTILINESTRING\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -164.8874 ymin: -36.96945 xmax: 160.7636 ymax: 71.39249\n#&gt; Geodetic CRS:  WGS 84\n#&gt; # A tibble: 98 × 5\n#&gt;    NAME          SYSTEM MILES KILOMETERS                                geometry\n#&gt;    &lt;chr&gt;         &lt;chr&gt;  &lt;dbl&gt;      &lt;dbl&gt;                   &lt;MULTILINESTRING [°]&gt;\n#&gt;  1 Kolyma        &lt;NA&gt;   2552.      4106. ((144.8419 61.75915, 144.8258 61.8036,…\n#&gt;  2 Parana        Parana 1616.      2601. ((-51.0064 -20.07941, -51.02972 -20.22…\n#&gt;  3 San Francisco &lt;NA&gt;   1494.      2404. ((-46.43639 -20.25807, -46.49835 -20.2…\n#&gt;  4 Japura        Amazon 1223.      1968. ((-76.71056 1.624166, -76.70029 1.6883…\n#&gt;  5 Putumayo      Amazon  890.      1432. ((-76.86806 1.300553, -76.86695 1.295,…\n#&gt;  6 Rio Maranon   Amazon  889.      1431. ((-73.5079 -4.459834, -73.79197 -4.621…\n#&gt;  7 Ucayali       Amazon 1298.      2089. ((-73.5079 -4.459834, -73.51585 -4.506…\n#&gt;  8 Guapore       Amazon  394.       634. ((-65.39585 -10.39333, -65.39578 -10.3…\n#&gt;  9 Madre de Dios Amazon  568.       914. ((-65.39585 -10.39333, -65.45279 -10.4…\n#&gt; 10 Amazon        Amazon 1890.      3042. ((-73.5079 -4.459834, -73.45141 -4.427…\n#&gt; # ℹ 88 more rows"
+  },
+  {
+    "objectID": "slides/week-1.html#via-url",
+    "href": "slides/week-1.html#via-url",
+    "title": "Week 1",
+    "section": "via url ",
+    "text": "via url \n\n# via url\n(gage &lt;- sf::read_sf(\"https://reference.geoconnex.us/collections/gages/items/1000001\"))\n#&gt; Simple feature collection with 1 feature and 17 fields\n#&gt; Geometry type: POINT\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -107.2826 ymin: 35.94568 xmax: -107.2826 ymax: 35.94568\n#&gt; Geodetic CRS:  WGS 84\n#&gt; # A tibble: 1 × 18\n#&gt;   nhdpv2_reachcode mainstem_uri           fid nhdpv2_reach_measure cluster uri  \n#&gt;   &lt;chr&gt;            &lt;chr&gt;                &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;\n#&gt; 1 13020205000216   https://geoconnex.u…     1                 80.3 https:… http…\n#&gt; # ℹ 12 more variables: nhdpv2_comid &lt;dbl&gt;, name &lt;chr&gt;, nhdpv2_totdasqkm &lt;dbl&gt;,\n#&gt; #   description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;, subjectof &lt;chr&gt;,\n#&gt; #   nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;, gage_totdasqkm &lt;dbl&gt;,\n#&gt; #   provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;, geometry &lt;POINT [°]&gt;\n\n# write out data\n# write_sf(counties, \"data/counties.shp\")"
+  },
+  {
+    "objectID": "slides/week-1.html#additonal-structure",
+    "href": "slides/week-1.html#additonal-structure",
+    "title": "Week 1",
+    "section": "Additonal Structure",
+    "text": "Additonal Structure\nIn addition to the values and diminsions, rasters have: - Extent: The spatial extent of the raster. - Resolution: The spatial resolution of the raster pixels. - CRS: The coordinate reference system of the raster.\n\ncrs(elev)\n#&gt; [1] \"PROJCRS[\\\"unnamed\\\",\\n    BASEGEOGCRS[\\\"NAD83\\\",\\n        DATUM[\\\"North American Datum 1983\\\",\\n            ELLIPSOID[\\\"GRS 1980\\\",6378137,298.257222101004,\\n                LENGTHUNIT[\\\"metre\\\",1]]],\\n        PRIMEM[\\\"Greenwich\\\",0,\\n            ANGLEUNIT[\\\"degree\\\",0.0174532925199433]],\\n        ID[\\\"EPSG\\\",4269]],\\n    CONVERSION[\\\"Albers Equal Area\\\",\\n        METHOD[\\\"Albers Equal Area\\\",\\n            ID[\\\"EPSG\\\",9822]],\\n        PARAMETER[\\\"Latitude of false origin\\\",23,\\n            ANGLEUNIT[\\\"degree\\\",0.0174532925199433],\\n            ID[\\\"EPSG\\\",8821]],\\n        PARAMETER[\\\"Longitude of false origin\\\",-96,\\n            ANGLEUNIT[\\\"degree\\\",0.0174532925199433],\\n            ID[\\\"EPSG\\\",8822]],\\n        PARAMETER[\\\"Latitude of 1st standard parallel\\\",29.5,\\n            ANGLEUNIT[\\\"degree\\\",0.0174532925199433],\\n            ID[\\\"EPSG\\\",8823]],\\n        PARAMETER[\\\"Latitude of 2nd standard parallel\\\",45.5,\\n            ANGLEUNIT[\\\"degree\\\",0.0174532925199433],\\n            ID[\\\"EPSG\\\",8824]],\\n        PARAMETER[\\\"Easting at false origin\\\",0,\\n            LENGTHUNIT[\\\"metre\\\",1],\\n            ID[\\\"EPSG\\\",8826]],\\n        PARAMETER[\\\"Northing at false origin\\\",0,\\n            LENGTHUNIT[\\\"metre\\\",1],\\n            ID[\\\"EPSG\\\",8827]]],\\n    CS[Cartesian,2],\\n        AXIS[\\\"easting\\\",east,\\n            ORDER[1],\\n            LENGTHUNIT[\\\"metre\\\",1,\\n                ID[\\\"EPSG\\\",9001]]],\\n        AXIS[\\\"northing\\\",north,\\n            ORDER[2],\\n            LENGTHUNIT[\\\"metre\\\",1,\\n                ID[\\\"EPSG\\\",9001]]]]\"\next(elev)\n#&gt; SpatExtent : -1146465, -504615, 1566915, 2073705 (xmin, xmax, ymin, ymax)\nres(elev)\n#&gt; [1] 30 30"
+  },
+  {
+    "objectID": "slides/week-1.html#raster-structure-1",
+    "href": "slides/week-1.html#raster-structure-1",
+    "title": "Week 1",
+    "section": "Raster Structure ",
+    "text": "Raster Structure \n\nRasters are matrices or arrays of values, and can be manipulated as such\nFor example, setting 35% of the raster to NA\n\n\nlarimer_elev[sample(ncell(larimer_elev), .35*ncell(larimer_elev))] &lt;-  NA\n\nplot(larimer_elev)"
+  },
+  {
+    "objectID": "slides/week-1.html#value-supersetting",
+    "href": "slides/week-1.html#value-supersetting",
+    "title": "Week 1",
+    "section": "Value Supersetting ",
+    "text": "Value Supersetting \n\nRasters are matrices or arrays of values, and can be manipulated as such\nFor example, setting 35% of the raster to NA\n\n\nlarimer_elev[sample(ncell(larimer_elev), .35*ncell(larimer_elev))] &lt;-  NA\n\nplot(larimer_elev)"
+  },
+  {
+    "objectID": "slides/week-1.html#autoplot-rank_results",
+    "href": "slides/week-1.html#autoplot-rank_results",
+    "title": "Week 1",
+    "section": "autoplot / rank_results  ",
+    "text": "autoplot / rank_results  \n\nThe autoplot() function is used to visualize model performance.\nThe rank_results() function is used to rank models based on a metric.\nExample: Visualizing and ranking the model results based on the roc_auc (area under the curve) metric.\n\n\n\n\nautoplot(workflowset)\n\n\n\n\n\n\n\n\n\n\nrank_results(workflowset, rank_metric = \"roc_auc\")\n#&gt; # A tibble: 6 × 9\n#&gt;   wflow_id          .config .metric  mean std_err     n preprocessor model  rank\n#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;\n#&gt; 1 recipe_multinom_… Prepro… accura… 1     0           5 recipe       mult…     1\n#&gt; 2 recipe_multinom_… Prepro… roc_auc 1     0           5 recipe       mult…     1\n#&gt; 3 recipe_rand_fore… Prepro… accura… 0.981 5.97e-3     5 recipe       rand…     2\n#&gt; 4 recipe_rand_fore… Prepro… roc_auc 1.00  3.60e-4     5 recipe       rand…     2\n#&gt; 5 recipe_decision_… Prepro… accura… 0.955 1.28e-2     5 recipe       deci…     3\n#&gt; 6 recipe_decision_… Prepro… roc_auc 0.953 1.39e-2     5 recipe       deci…     3"
+  }
+]

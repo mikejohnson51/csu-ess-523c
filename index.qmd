@@ -1,0 +1,87 @@
+---
+title: "Ecosystem Science and Sustainability 523c"
+author:
+  - name: Mike Johnson
+    email: mike.johnson@colostate.edu
+    degrees: PhD
+    affiliations:
+      - name: Chief Data Scientist, Lynker
+format:
+  html:
+    include-before-body: slides/header.html
+    toc: false
+subtitle: 'Environmental Data Science Applications: Water Resources'
+---
+
+<center>
+<img src="csu-rams-logo.png" alt="logo" style="margin-bottom: 10px" width="200&quot;"/>
+</center>
+
+## Welcome!
+
+Welcome to **Ecosystem Science and Sustainability 523c: Environmental Data Science Applications: Water Resources**! This class is meant to build on the technical skills you learned in ESS 523a, with a focus on water resource examples. We will cover a range of topics, including data science tools, working with vector and raster data, and machine learning.
+
+## Acknowledgments {.appendix}
+
+This website, including all slides, are made with [Quarto](https://quarto.org/). Please [submit an issue](https://github.com/mikejohnson51/csu-ess-330/issues) on the GitHub repo for this course if you find something that could be fixed or improved.
+
+We borrow significant content from the amazing R community and do our best to curate and design course content for students.
+
+## Structure
+
+In general ...
+
+- Mondays will be a lecture,with a mix of slides and discussion. 
+- Wednesdays will be a lab with a introductory ~30 min technical demo, followed by a hands-on lab due the following week.
+- Group work is encouraged, but all assignments should be submitted individually.
+
+## Grades
+
+- 7 labs will be worth 150 points each. 
+- They will be assigned on Wednesdays and due the following Wednesdays before class.
+- A final project will be optional and worth 150 extra credit points. It will build on your personal website built in ESS 523a.
+
+The total points possible is 1200, with the percentage being taken out of 1050 using the traditional 90/80/70/60 scales
+
+## Schedule 
+
+### **Component 1**: _Data Science Tools_
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 01**: [Level Setting](slides/week-1.qmd)\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 01**: Quarto/Flextable
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 01**: [Public Health & Time: COVID Trends](labs/lab-1.qmd) 
+
+
+### **Component 2**: _Working with Vector Data_
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 02**: Projections & Measures\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 02**: R as a GIS
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 02**: Border summaries
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 03**: Predicates & Tesselations\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 03**: Interactive Mapping
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 03**: Dams in the US
+
+### **Component 3**: _Working with Raster Data_
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 04**: Raster's in R\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 04**: STAC
+<i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: Remote Sensing \
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 05**: Terrain Modeling\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 01**:OSM  HAND
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 05**: Terrain & Flood Modeling \
+
+### **Component 3**: _Machine Learning_
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: Feature Engineering & Model Workflows\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 08**: HTTR
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**:  CAMELS Data\
+
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Model Evaluation & Tuning\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Model Options
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: ...
+
+## Reuse and licensing {.appendix}
+
+Unless otherwise noted (i.e. not an original creation and reused from another source), these educational materials are licensed under Apache 2.
