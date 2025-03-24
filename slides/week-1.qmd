@@ -1,0 +1,914 @@
+---
+title: "Week 1"
+subtitle: "Expectations / Level Setting"
+format:
+  revealjs: 
+    smaller: true 
+    logo: ../csu-rams-logo.png
+    slide-number: c/t
+    footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
+    include-before-body: header.html
+    include-after-body: footer-annotations.html
+    theme: [default, csu-css.scss]
+    highlightStyle: github
+    highlightLines: true
+    width: 1280
+    height: 720
+    countIncrementalSlides: false
+    incremental: false
+    title-slide-attributes:
+      data-background-color: "#1E4D2B"
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{r setup}
+#| echo: false
+hexes <- function(..., size = 64) {
+  x <- c(...)
+  x <- sort(unique(x), decreasing = TRUE)
+  right <- (seq_along(x) - 1) * size
+
+  res <- glue::glue(
+    '![](hexes/<x>.png){.absolute top=-20 right=<right> width="<size>" height="<size * 1.16>"}',
+    .open = "<", .close = ">"
+  )
+
+  paste0(res, collapse = " ")
+}
+
+library(broom)
+train_color <- '#1E4D2B'
+test_color  <- '#C8C372'
+data_color  <- "#767381"
+assess_color <- "#84cae1"
+splits_pal <- c(data_color, train_color, test_color)
+```
+
+## 🚀 Getting Started with R for Data Science
+
+- Welcome to 523C: **Environmental Data Science Applications: Water Resources**! 
+- This first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.
+- Throughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.
+- The survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics.
+
+## Google Survey
+
+- Please open this survey and answer the questions as we work through this lecture.
+- Your responses will provide valuable insights into areas where additional explanations or hands-on exercises may be beneficial.
+
+```{r}
+#| echo: false
+#| fig.align: center
+knitr::include_graphics('images/qr-code-week-1.png')
+```
+
+# ~ Week 1: Data Science Basics
+
+## Data Types
+
+R has five principal data types (excluding raw and complex):
+
+- **Character**: A string of text, represented with quotes (e.g., "hello").
+  - Used to store words, phrases, and categorical data.
+- **Integer**: A whole number, explicitly defined with an `L` suffix (e.g., `42L`).
+  - Stored more efficiently than numeric values when decimals are not needed.
+- **Numeric**: A floating-point number, used for decimal values (e.g., `3.1415`).
+  - This is the default type for numbers in R.
+- **Boolean (Logical)**: A logical value that represents `TRUE` or `FALSE`.
+  - Commonly used in logical operations and conditional statements.
+
+```{r}
+character <- "a"
+integer <- 1L
+numeric <- 3.3
+boolean <- TRUE
+```
+
+## Data Structures
+
+- When working with multiple values, we need data structures to store and manipulate data efficiently.
+- R provides several types of data structures, each suited for different use cases.
+
+### Vector
+
+- A **vector** is the most basic data structure in R and contains elements of the same type.
+- Vectors are created using the `c()` function.
+
+```{r}
+char.vec <- c("a", "b", "c")
+boolean.vec <- c(TRUE, FALSE, TRUE)
+```
+
+- Lists allow for heterogeneous data types.
+
+```{r}
+list <- list(a = c(1,2,3),
+            b = c(TRUE, FALSE),
+            c = "test")
+```
+
+--- 
+
+### Matrix
+
+```{r}
+# Creating a sequence of numbers:
+(vec <- 1:9)
+```
+
+- A **matrix** is a two-dimensional data structure where a diminision (dim) is added to an atomic vector
+- Matrices are created using the `matrix()` function.
+
+```{r}
+# Default column-wise filling
+matrix(vec, nrow = 3)
+
+# Row-wise filling
+matrix(vec, nrow = 3, byrow = TRUE)
+```
+
+--- 
+
+### Array
+
+- An **array** extends matrices to higher dimensions.
+- It is useful when working with multi-dimensional data.
+
+```{r}
+# Creating a 2x2x2 array
+array(vec, dim = c(2,2,2))
+```
+
+--- 
+
+### Data Frame / Tibble
+
+- **Data Frames**: A table-like (rectangular) structure where each column is a vector of equal length.
+  - Used for storing datasets where different columns can have different data types.
+- **Tibble**: A modern version of a data frame that supports list-columns and better printing.
+  - Offers improved performance and formatting for large datasets.
+
+```{r}
+(df  <- data.frame(char.vec, boolean.vec))
+
+(tib <- tibble::tibble(char.vec, list))
+```
+
+## 📦 Installing Packages
+
+- R has a vast ecosystem of packages that extend its capabilities both on CRAN and github
+- To install a package from CRAN, use `install.packages()`.
+- To install a package from Github, use `remotes`::install_github()`.
+- We'll start by installing `palmerpenguins`, which contains a dataset on penguins.
+
+```{r}
+#| eval: false
+install.packages('palmerpenguins')
+```
+
+## Attaching/Loading Packages 
+
+- To use an installed package, you need to load it in your current working session using `library()`.
+- Here, we load `palmerpenguins` for dataset exploration and `tidyverse` for data science workflows.
+
+```{r}
+library(palmerpenguins) # 🐧 Fun dataset about penguins!
+library(tidyverse)      # 🛠 Essential for data science in R
+```
+
+## Help & Documentation
+
+- R has built-in documentation that provides information about functions and datasets.
+- To access documentation, use `?function_name`.
+- Example: Viewing the help page for the `penguins` dataset.
+
+```{r}
+#| eval: false
+?penguins
+```
+
+- You can also use `help.search("keyword")` to look up topics of interest.
+- For vignettes (detailed guides), use `vignette("package_name")`.
+
+## Quarto: Communication
+
+- In this class we will use Quarto, a more modern, cross langauge version of Rmarkdown
+- If you are comfortable with Rmd, you'll quickly be able to transition to Qmd
+- If you are new to Rmd, you'll be able to learn the latest and greatest
+
+## 🌟 Tidyverse: A Swiss Army Knife for Data Science R `r hexes('tidyverse')`
+
+- The `tidyverse` is a collection of packages designed for data science. 
+
+- We can see what it includes using the `tidyverse_packages` function:
+
+```{r}
+tidyverse_packages()
+```
+
+--- 
+While all `tidyverse` packages are valuable, the main ones we will focus on are: 
+
+- `readr`: Reading data
+- `tibble`: Enhanced data frames
+- `dplyr`: Data manipulation
+- `tidyr`: Data reshaping
+- `purrr`: Functional programming
+- `ggplot2`: Visualization
+
+Combined, this provides us a complete "data science" toolset:
+
+::: {#fig-workflows layout-ncol=2}
+
+![](images/data-science-eda.png){#fig-general}
+
+![](images/tidyverse-implementation.png){#fig-tidyverse}
+
+Data Science: Process and Implementation
+:::
+
+## readr `r hexes('readr')`
+
+- The `readr` package provides functions for reading data into R.
+- The `read_csv()` function reads comma-separated files.
+- The `read_tsv()` function reads tab-separated files.
+- The `read_delim()` function reads files with custom delimiters.
+- In all cases, more intellegent parsing is done than with base R equivalents.
+
+### read_csv `r hexes('readr')`
+
+```{r}
+path = 'https://raw.githubusercontent.com/mikejohnson51/csu-ess-330/refs/heads/main/resources/county-centroids.csv'
+
+# base R
+read.csv(path) |> 
+  head()
+
+# More inutitive readr
+read_csv(path) |> 
+  head()
+```
+
+### `%>%` / `|>` `r hexes('dplyr')`
+
+- The pipe operator `%>%` is used to chain operations in R.
+- The pipe operator `|>` is a base R version of `%>%` introduced in R 4.1.
+- The pipe passes what on the "left hand" side to the function on the "right hand" side as the first argument. 
+
+```{r}
+penguins |> 
+  glimpse()
+```
+
+## glimpse `r hexes('dplyr')`
+
+- The `glimpse()` function provides a concise summary of a dataset.
+
+```{r}
+glimpse(penguins)
+```
+
+## dplyr `r hexes('dplyr')`
+
+- The `dplyr` package provides functions for data manipulation.
+- It includes functions for filtering, selecting, mutating, summarizing, and joining data.
+
+### select `r hexes('dplyr')`
+
+- The `select()` function is used to select columns from a dataset.
+- It is useful when you want to work with specific columns.
+- Example: Selecting the `species` column from the `penguins` dataset.
+
+```{r}
+select(penguins, species)
+```
+
+### filter `r hexes('dplyr')`
+
+- The `filter()` function is used to filter rows based on a condition.
+- It is useful when you want to work with specific rows.
+- Example: Filtering the `penguins` dataset to include only Adelie penguins.
+
+```{r}
+filter(penguins, species == "Adelie")
+```
+
+### mutate `r hexes('dplyr')`
+
+- The `mutate()` function is used to create new columns or modify existing ones.
+- It is useful when you want to add new information to your dataset.
+- Example: Creating a new column `bill_length_cm` from `bill_length_mm`.
+
+*Note the use of the tidy_select helper `starts_with`*
+```{r}
+mutate(penguins, bill_length_cm = bill_length_mm / 100) |> 
+  select(starts_with("bill"))
+```
+
+### summarize `r hexes('dplyr')`
+
+- The `summarize()` function is used to aggregate data.
+- It is useful when you want to calculate summary statistics.
+- It always produces a one-row output.
+- Example: Calculating the mean `bill_length_mm` for all penguins
+
+```{r}
+summarize(penguins, bill_length_mm = mean(bill_length_mm, na.rm = TRUE))
+```
+
+### group_by / ungroup `r hexes('dplyr')`
+
+- The `group_by()` function is used to group data by one or more columns.
+- It is useful when you want to perform operations on groups.
+- It does this by adding a `grouped_df` class to the dataset.
+- The `ungroup()` function removes grouping from a dataset.
+
+```{r}
+groups <- group_by(penguins, species)
+
+dplyr::group_keys(groups)
+dplyr::group_indices(groups)[1:5]
+```
+
+### Group operations`r hexes('dplyr')`
+
+- Example: Grouping the `penguins` dataset by `species` and calculating the mean `bill_length_mm`.
+
+```{r}
+penguins |> 
+  group_by(species) |> 
+  summarize(bill_length_mm = mean(bill_length_mm, na.rm = TRUE)) |> 
+  ungroup()
+```
+
+### Joins `r hexes('dplyr')`
+
+- The `dplyr` package provides functions for joining datasets.
+- Common join functions include `inner_join()`, `left_join()`, `right_join()`, and `full_join()`.
+- Joins are used to combine datasets based on shared keys (primary and foreign).
+
+### Mutating joins `r hexes('dplyr')`
+
+- Mutating joins add columns from one dataset to another based on a shared key.
+- Example: Adding `species` information to the `penguins` dataset based on the `species_id`.
+
+```{r}
+species <- tribble(
+  ~species_id, ~species,
+  1, "Adelie",
+  2, "Chinstrap",
+  3, "Gentoo"
+)
+```
+
+## left_join `r hexes('dplyr')`
+
+```{r}
+select(penguins, species, contains('bill')) |> 
+  left_join(species, by = "species")
+```
+
+## right_join `r hexes('dplyr')`
+
+```{r}
+select(penguins, species, contains('bill')) |> 
+  right_join(species, by = "species")
+```
+
+## inner_join `r hexes('dplyr')`
+
+```{r}
+select(penguins, species, contains('bill')) |> 
+  right_join(species, by = "species")
+```
+
+## full_join `r hexes('dplyr')`
+
+```{r}
+select(penguins, species, contains('bill')) |> 
+  right_join(species, by = "species")
+```
+
+### Filtering Joins `r hexes('dplyr')`
+
+- Filtering joins retain only rows that match between datasets.
+- Example: Filtering the `penguins` dataset to include only rows with matching `species_id`.
+
+```{r}
+select(penguins, species, contains('bill')) |> 
+  semi_join(species, by = "species")
+```
+
+## ggplot2: Visualization `r hexes('ggplot2')`
+
+- The `ggplot2` package is used for data visualization.
+- It is based on the grammar of graphics, which allows for a high level of customization.
+
+### `ggplot` `r hexes('ggplot2')`
+
+- The `ggplot()` function initializes a plot.
+- It provides a blank canvas to which layers can be added.
+
+```{r}
+ggplot()
+```
+
+- Data must be provided to `ggplot()` 
+- The `aes()` function is used to map variables to aesthetics (e.g., x and y axes).
+- aes arguments provided in `ggplot` are inherited by all layers.
+- Example: Creating a plot of `body_mass_g` vs. `bill_length_mm`.
+
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm))
+```
+
+### geom_* `r hexes('ggplot2')`
+
+- The `geom_*()` functions add geometric objects to the plot.
+- They describe how to render the mapping created in aes
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
+  geom_point()
+```
+
+### facet_wrap / facet_grid `r hexes('ggplot2')`
+
+- The `facet_wrap()` function is used to create small multiples of a plot.
+- It is useful when you want to compare subsets of data.
+- Example: Faceting the plot by `species`.
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
+  geom_point() + 
+  facet_wrap(~species)
+```
+
+### theme_* `r hexes('ggplot2')`
+
+- The `theme_*()` functions are used to customize the appearance of the plot.
+- They allow you to modify the plot's background, gridlines, and text.
+- Example: Applying the `theme_linedraw()` theme to the plot.
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
+  geom_point() + 
+  facet_wrap(~species) + 
+  theme_linedraw()
+```
+
+- There are 1000s of themes available in the `ggplot2` ecosystem
+  - ggthemes
+  - ggpubr
+  - hrbrthemes
+  - ggsci
+  - ...
+  
+### labs `r hexes('ggplot2')`
+
+- The `labs()` function is used to add titles, subtitles, and axis labels to the plot.
+- It is useful for providing context and making the plot more informative.
+- Example: Adding titles and axis labels to the plot.
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_length_mm)) + 
+  geom_point() + 
+  facet_wrap(~species) + 
+  theme_linedraw() + 
+  labs(title = "Penguins Weight by Bill Size", 
+       x = "Body Mass",
+       y = "Bill Length", 
+       subtitle = "Made for 523c")
+```
+
+## `tidyr` `r hexes('tidyr')`
+
+- The `tidyr` package provides functions for data reshaping.
+- It includes functions for pivotingand nesting data.
+
+### pivot_longer `r hexes('tidyr')`
+
+- The `pivot_longer()` function is used to convert wide data to long data.
+- It is useful when you want to work with data in a tidy format.
+- Example: Converting the `penguins` dataset from wide to long format.
+
+```{r}
+(data.long = penguins |> 
+  select(species, bill_length_mm, body_mass_g) |> 
+  mutate(penguin_id = 1:n()) |> 
+  pivot_longer(-c(penguin_id, species), 
+               names_to = "Measure", 
+               values_to = "value"))
+```
+
+### pivot_wider `r hexes('tidyr')`
+
+- The `pivot_wider()` function is used to convert long data to wide data.
+- It is useful when you want to work with data in a wide format.
+- Example: Converting the `data.long` dataset from long to wide format.
+
+```{r}
+data.long |> 
+  pivot_wider(names_from = "Measure", 
+              values_from = "value")
+```
+
+## drop_na / na.omit `r hexes('tidyr')`
+
+- The `drop_na()` function is used to remove rows with missing values.
+
+```{r}
+penguins |> 
+  drop_na()
+```
+
+### nest / unnest
+
+- The `nest()` function is used to nest data into a list-column.
+- It is useful when you want to group data together.
+- Example: Nesting the `penguins` dataset by `species`.
+
+```{r}
+penguins |> 
+  nest(data = -species)
+```
+
+# Spatial Data: Vector
+
+# sf `r hexes('sf')`
+
+- The `sf` package is used for working with spatial data.
+- It provides functions for reading, writing, and manipulating spatial data.
+
+```{r}
+library(sf)
+```
+
+## I/O `r hexes('sf')`
+
+- The `st_read()` function is used to read spatial data.
+- It is useful when you want to import spatial data into R.
+- Example: Reading a Major Global Rivers.
+
+```{r}
+# via packages
+counties <- AOI::aoi_get(state = "conus", county = "all")
+
+# file
+rivers <- sf::read_sf('data/majorrivers_0_0/MajorRivers.shp')
+```
+
+## Geometries `r hexes('sf')`
+
+- The `geometry` column contains the spatial information.
+- It is stored as a list-column of `sfc` objects.
+- Example: Accessing the first geometry in the `rivers` dataset.
+
+```{r}
+rivers$geometry[1]
+```
+
+## Data Manipulation `r hexes('sf')`
+
+- All dplyr verbs work with `sf` objects.
+- Example: Filtering the `rivers` dataset to include only the Mississippi River.
+
+```{r}
+mississippi <- filter(rivers, SYSTEM == "Mississippi")
+larimer     <- filter(counties, name == "Larimer")
+```
+
+## Unions / Combines `r hexes('sf')`
+
+- The `st_union()` function is used to combine geometries.
+- It is useful when you want to merge geometries.
+
+```{r}
+mississippi
+
+st_union(mississippi)
+```
+
+## Measures `r hexes('sf')`
+
+- The `st_length()` function is used to calculate the length of a geometry.
+- The `st_area()` function is used to calculate the area of a geometry.
+- The `st_distance()` function is used to calculate the distance between two geometries.
+- Example: Calculating the length of the Mississippi River and the area of Larimer County.
+
+```{r}
+st_length(mississippi)
+
+st_area(larimer)
+
+st_distance(larimer, mississippi)
+```
+
+## Predicates
+
+- Spatial predicates are used to check relationships between geometries using the DE-9IM model.
+- The `st_intersects()` function is used to check if geometries intersect.
+- The `st_filter()` function is used to filter geometries based on a predicate.
+
+```{r}
+st_intersects(counties, mississippi)
+```
+
+```{r}
+ints <- st_filter(counties, mississippi, .predicate = st_intersects)
+
+ggplot() + 
+  geom_sf(data = ints) +
+  geom_sf(data = mississippi, col = "blue") + 
+  theme_bw()
+```
+
+# Spatial Data: Raster
+
+## terra `r hexes('terra')`
+
+- The `terra` package is used for working with raster data.
+- It provides functions for reading, writing, and manipulating raster data.
+
+```{r}
+library(terra)
+```
+
+## I/O
+
+- Any raster format that GDAL can read, can be read with `rast()`.
+- Example: Reading a GeoTIF of Colorado elevation.
+
+```{r}
+(elev = terra::rast('data/colorado_elevation.tif'))
+```
+
+## Crop/Mask
+
+- The `crop()` function is used to crop a raster to a specific extent.
+- The `mask()` function is used to mask a raster using a vector or other extent
+
+```{r}
+larimer_terra <- project(vect(larimer), "EPSG:5070")
+larimer_elev = crop(elev, larimer_terra)
+plot(larimer_elev)
+
+larimer_mask = mask(larimer_elev, larimer_terra)
+plot(larimer_mask)
+```
+
+## Summary / Algebra
+
+- Rasters can be added, subtracted, multiplied, and divided
+- Any form of map algebra can be done with rasters
+- For example, multiplying the Larimer mask by 2
+
+```{r}
+elev2 <-  2 * larimer_mask
+```
+
+## Raster data store
+
+- Rasters are matrices or arrays of values, and can be manipulated as such
+- For example, setting 35% of the raster to NA
+
+```{r}
+larimer_elev[sample(ncell(larimer_elev), .35*ncell(larimer_elev))] <-  NA
+
+plot(larimer_elev)
+```
+
+## Focal
+
+- The `focal()` function is used to calculate focal statistics.
+- It is useful when you want to calculate statistics for each cell based on its neighbors.
+- Example: Calculating the mean elevation within a 30-cell window to remove the NAs we just created
+
+```{r}
+xx = terra::focal(larimer_elev, win = 30, fun  = "mean", na.policy="only")
+plot(xx)
+```
+
+# Unit 2: Modeling
+
+# lm
+
+- The `lm()` function is used to fit linear models.
+- It is useful when you want to model the relationship between two variables.
+- Example: Fitting a linear model to predict `body_mass_g` from `flipper_length_mm`.
+
+```{r}
+clean_penguins = drop_na(penguins)
+model <- lm(body_mass_g ~ flipper_length_mm, data = clean_penguins)
+summary(model)
+```
+
+## broom
+
+- The `broom` package is used to tidy model outputs.
+- It provides functions to convert model outputs into tidy data frames.
+- Example: Tidying the `model` output.
+
+### tidy
+
+- The `tidy()` function is used to tidy model coefficients.
+- It is useful when you want to extract model coefficients.
+- Example: Tidying the `model` output.
+
+```{r}
+tidy(model)
+```
+
+### glance
+
+- The `glance()` function is used to provide a summary of model fit.
+- It is useful when you want to assess model performance.
+- Example: Glancing at the `model` output.
+
+```{r}
+glance(model)
+```
+
+### augment
+
+- The `augment()` function is used to add model predictions and residuals to the dataset.
+- It is useful when you want to visualize model performance.
+- Example: Augmenting the `model` output.
+
+```{r}
+a <- augment(model)
+
+ggplot(a, aes(x = .fitted, y = body_mass_g)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+
+ggplot(a, aes(x = .resid)) +
+  geom_histogram() 
+```
+
+## purr
+
+- The `purrr` package is used for functional programming.
+- It provides functions for working with lists and vectors.
+
+### map
+
+- The `map()` function is used to apply a function to each element of a list.
+- It is useful when you want to iterate over a list.
+- Example: Fitting a linear model to each species in the `penguins` dataset.
+
+```{r}
+penguins |> 
+  nest(data = -species) |> 
+  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)))
+```
+
+#### map_*
+
+- The `map_*()` functions are used to extract specific outputs from a list.
+- They are useful when you want to extract specific outputs from a list.
+- Example: Extracting the R-squared values (doubles) from the linear models.
+
+```{r}
+penguins |> 
+  nest(data = -species) |> 
+  mutate(lm = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
+         r2 = map_dbl(lm, ~summary(.x)$r.squared))
+```
+
+#### map2
+
+- The `map2()` function is used to iterate over two lists in parallel.
+- It is useful when you want to apply a function to two lists simultaneously.
+- Example: Augmenting the linear models with the original data.
+
+```{r}
+penguins |> 
+  drop_na() |> 
+  nest(data = -species) |> 
+  mutate(lm_mod = map(data, ~lm(body_mass_g ~ flipper_length_mm, data = .x)),
+         r2 = map_dbl(lm_mod, ~summary(.x)$r.squared),
+         a  = map2(lm_mod, data, ~broom::augment(.x, .y))) 
+```
+
+## Unit 3: Machine Learning
+
+```{r}
+library(tidymodels)
+tidymodels_packages()
+```      
+
+## Seeds for reproducability
+
+## `rsamples` for resampling and cross-validation
+
+- The `rsample` package is used for resampling and cross-validation.
+- It provides functions for creating resamples and cross-validation folds.
+- Example: Creating a 5-fold cross-validation object for the `penguins` dataset.
+
+```{r}
+set.seed(123)
+(penguins_split <- initial_split(penguins, prop = 0.8, strata = species))
+penguins_train  <- training(penguins_split)
+penguins_test   <- testing(penguins_split)
+
+penguin_folds <- vfold_cv(penguins_train, v = 5)
+```
+
+## `recipes` for feature engineering
+
+- The `recipes` package is used for feature engineering.
+- It provides functions for preprocessing data before modeling.
+- Example: Defining a recipe for feature engineering the `penguins` dataset.
+
+```{r}
+# Define recipe for feature engineering
+penguin_recipe <- recipe(species ~ ., data = penguins_train) |>
+  step_impute_knn(all_predictors()) |>  # Impute missing values
+  step_normalize(all_numeric_predictors()) |>  # Normalize numeric features
+  step_dummy(all_nominal_predictors())  # One-hot encode categorical variables
+```
+
+## Parsnip for model selection
+
+- The `parsnip` package is used for model selection.
+- It provides functions for defining models and workflows.
+- Example: Defining models for logistic regression, random forest, and decision tree.
+
+```{r}
+# Define models
+log_reg_model <- multinom_reg() |> 
+  set_engine("nnet")  |> 
+  set_mode("classification")
+
+rf_model <- rand_forest(trees = 500) |> 
+  set_engine("ranger") |> 
+  set_mode("classification")
+
+dt_model <- decision_tree() |> 
+  set_mode("classification")
+```
+
+## Workflows for model execution
+
+- The `workflows` package is used for model execution.
+- It provides functions for defining and executing workflows.
+- Example: Creating a workflow for logistic regression.
+
+```{r}
+# Create workflow
+log_reg_workflow <- workflow() |>
+  add_model(log_reg_model) |>
+  add_recipe(penguin_recipe) |> 
+  fit_resamples(resamples = penguin_folds, 
+                metrics = metric_set(roc_auc, accuracy))
+```
+
+## yardstick for model evaluation
+
+```{r}
+collect_metrics(log_reg_workflow)
+```
+
+## Workflowsets for model comparison
+
+```{r}
+(workflowset <- workflow_set(list(penguin_recipe), list(log_reg_model, rf_model, dt_model)) |> 
+  workflow_map("fit_resamples", 
+               resamples = penguin_folds, 
+               metrics = metric_set(roc_auc, accuracy)))
+
+autoplot(workflowset)
+rank_results(workflowset, rank_metric = "roc_auc")
+```
+
+## Model Validation
+
+```{r}
+final_model = workflow() |> 
+  add_model(log_reg_model) |>
+  add_recipe(penguin_recipe) |>
+  fit(data = penguins_train)
+
+validation <- fit(final_model, data = penguins_test)
+
+augment(validation, penguins_test) |> 
+  conf_mat(truth = species, estimate = .pred_class)
+```
+
+
+# Conclusion
+
+- Today we reviewd/introduced the basics of R for environmental data science.
+- We discussed data types, structures, and packages for data manipulation.
+- We also explored modeling, spatial data, and raster data.
+- We will continue to build on these concepts in future lectures.
+- Please complete the survey to help us tailor the course to your needs.
+
+
+
