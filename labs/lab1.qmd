@@ -31,13 +31,13 @@ In this lab you will practice data wrangling and visualization skills using COVI
 
 1. Create a `csu-523c` repository
 2. Instatiate it with a git archive (`usethis::use_git()`) and Github repo (`usethis::use_github()`)
-4. Create a new Quarto (.qmd) file called `lab-01.qmd`
-5. Populate its YML with a title, author, subtitle, output type and theme. For example:
+3. Create a new Quarto (.qmd) file called `lab-01.qmd`
+4. Populate its YML with a title, author, subtitle, output type and theme. For example:
 
 ```{r, eval = FALSE}
 ---
-title: "Lab 3: COVID-19"
-subtitle: 'Ecosystem Science and Sustainability 330'
+title: "Lab 1: COVID-19"
+subtitle: 'Ecosystem Science and Sustainability 523c'
 author:
   - name: ...
     email: ...

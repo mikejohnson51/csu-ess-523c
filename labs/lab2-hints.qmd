@@ -1,0 +1,240 @@
+---
+title: 'Lab 2: Distances and Projections'
+subtitle: 'Hints and Tricks'
+format:
+  html:
+    code-fold: true
+    toc: true
+    include-before-body: ../slides/header.html
+    include-after-body:  ../slides/footer-annotations.html
+---
+
+```{r, echo = FALSE}
+col_dist <- RColorBrewer::brewer.pal(11, "RdGy")
+```
+
+
+```{r, eval = TRUE, message = F, warning = F, echo  = FALSE}
+# SPDS
+library(tidyverse)
+library(sf)
+library(units)
+
+# Data
+library(USAboundaries)
+library(rnaturalearth)
+
+# Visualization
+library(gghighlight)
+library(ggrepel)
+library(knitr)
+```
+
+****
+
+```{r, echo = FALSE, message = FALSE, warning=FALSE}
+cities <- read_csv("data/uscities.csv") |> 
+  st_as_sf(coords = c("lng", "lat"), crs = 4326) |> 
+  st_transform(5070) |> 
+  filter(!state_name %in% c("Alaska", "Hawaii", "Puerto Rico"))
+```
+
+# Question 1:
+
+### Making Spatial Objects & Coordinate Transformation
+
+Spatial objects (sf) can be built from a vector of X and Y values in addition to a coordinate reference system (CRS). For example:
+
+```{r}
+df <- data.frame(name = state.name, 
+                X = state.center$x, 
+                Y = state.center$y)
+head(df)
+
+# Geographic Coordinate System (GCS)
+(df_sf_gcs <- st_as_sf(df, 
+                      coords = c("X", "Y"), 
+                      crs = 4269))
+
+ggplot() + 
+  geom_sf(data = df_sf_gcs) + 
+  coord_sf(datum = st_crs(df_sf_gcs)) +
+  theme_linedraw()
+
+# Projected Coordinate System (PCS)
+# st_transforms converts from one reference system to another
+(df_sf_pcs = st_transform(df_sf_gcs, 5070))
+
+ggplot() + 
+  geom_sf(data = df_sf_pcs) + 
+  coord_sf(datum = st_crs(df_sf_pcs)) +
+  theme_linedraw()
+```
+
+# Question 2: 
+
+### `st_distance` review
+
+```{r}
+# Three most populous cities in the USA
+(big3 = cities |> 
+   select(city, population) |> 
+   slice_max(population, n = 3))
+
+# Fort Collins
+(fc = filter(cities, city == "Fort Collins") |> 
+    select(city, population))
+
+# Distance from FC to population centers
+st_distance(big3, fc)
+```
+
+There are two notable things about this result:
+
+1. It has `units`
+2. It is returned as a matrix, even though Fort Collins only had one row
+
+This second point highlights a useful feature of `st_distance`, namley, its ability to return distance matrices between all combinations of features in `x` and `y`.
+
+### `units` review
+
+While units are useful, they are not always the preferred units. By default, the units measurement is defined by the projection. For example:
+
+```{r, error = FALSE}
+st_crs(big3)$units
+```
+
+Units can be converted using `units::set_units`. For example, 'm' can be converted to 'km':
+
+```{r}
+big3 = mutate(big3, 
+              dist_to_fc = st_distance(big3, fc),
+              dist_to_fc = set_units(dist_to_fc, "km")) 
+
+(big3$dist_to_fc)
+```
+
+You might have noticed  the data `type` of the `st_distance` objects are an S3 class of `units`. Sometimes, this class can cause problems when trying to using it with other classes or methods:
+
+```{r, error = TRUE}
+big3$dist_to_fc + 4
+
+ggplot(data = big3) + 
+  geom_col(aes(x = city, y = dist_to_fc))
+```
+
+In these cases, the units class can be dropped with `units::drop_units`
+
+```{r}
+big3 <- mutate(big3, 
+              dist_to_fc = st_distance(big3, fc),
+              dist_to_fc = set_units(dist_to_fc, "km"),
+              dist_to_fc = drop_units(dist_to_fc))
+
+big3$dist_to_fc + 4
+
+ggplot(data = big3) + 
+  geom_col(aes(x = reorder(city, -dist_to_fc), y = dist_to_fc)) + 
+    labs(title = "Distance to Fort Collins (km)") + 
+  ggthemes::theme_fivethirtyeight() + 
+  theme( axis.text.x = element_text(face = "bold", size = 14))
+```
+
+
+As with all functions, these steps can be nested:
+
+```{r}
+big3 = mutate(big3, 
+              dist_to_fc = drop_units(set_units(st_distance(big3, fc), "km")))
+```
+
+******
+
+### `Geometry` review
+
+There are a few ways to manipulate existing geometries, here we discuss `st_union()`, `st_combine()` and `st_cast()`
+
+- `st_combine()` returns a single, combined geometry, with **no** resolved boundaries.
+
+- `st_union()` returns a single geometry with resolved boundaries
+
+- `st_cast()` casts one geometry type to another
+
+```{r}
+(rockies = USAboundaries::us_states() |> 
+  filter(name %in% c('Montana', 'Wyoming', 'Colorado', "New Mexico")) |> 
+  select(name, geometry))
+
+plot(rockies['name'], key.pos = 1)
+
+
+# Combine Geometries
+(combined_rk = st_combine(rockies))
+plot(combined_rk, col = "red")
+
+# Unioned Geometries
+(unioned_rk = st_union(rockies))
+plot(unioned_rk, col = "red")
+
+# Combine Geometries
+line_rk = st_cast(unioned_rk, "MULTILINESTRING")
+plot(line_rk, col = "red")
+```
+
+# Question 3:
+
+In this section you will extend your growing `ggplot` skills to handle spatial data using `ggrepl` to label significant features; `gghighlight` to emphasize important criteria; and scaled color/fill to create chloropleth represnetations of variables. Below is some example code to provide an example of these tools in action:
+
+### Get some data (review)
+
+```{r}
+# Define a state/region classifier and select the southern states
+state.of.interest = data.frame(state = state.name, region = state.region) |> 
+  filter(region == "South") |> 
+  pull(state)
+
+# Get USA states in the southern region and transform to EPSG:5070
+state = USAboundaries::us_states() |> 
+  filter(name %in% state.of.interest) |> 
+  st_transform(5070)
+
+# Get USA congressional districts in the southern region and transform to EPSG:5070
+districts =  USAboundaries::us_congressional() |> 
+  filter(state_name %in% state.of.interest) |> 
+  st_transform(5070)
+
+# Get the 10 most populous cities in the southern region and transform to EPSG:5070
+sub_cities = cities |> 
+  filter(state_name %in% state.of.interest) |> 
+  slice_max(population, n = 10) |> 
+  st_transform(5070)
+```
+
+
+### Map
+
+```{r}
+ggplot() + 
+  # Add districts with a dashed line (lty = 3), 
+  # a color gradient from blue to red based on aland, 
+  # and a fill aplha of 0.5
+  geom_sf(data = districts, aes(fill = aland), lty = 3, alpha = .5) + 
+  scale_fill_gradient(low = 'blue', high = "red") +
+  # Highlight (keep blue) only those districts witn a land area > 5e10
+  gghighlight(aland > 5e10) +
+  # Add the state borders with a thicker line and no fill
+  geom_sf(data = state, size = 1, fill = "NA") +
+  # Add the cities
+  geom_sf(data = sub_cities, size= 2, color = "red") +
+  # Add labels to the cities
+  ggrepel::geom_label_repel(
+    data = sub_cities,
+    aes(label = city, geometry = geometry),
+    stat = "sf_coordinates",
+    size = 3) +
+  labs(caption = "Disticts with > 5e10 Area Land are highlighted",
+       fill = "Area Land") + 
+  ggthemes::theme_map() 
+```
+
+

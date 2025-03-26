@@ -1,0 +1,1322 @@
+---
+title: "Week 2-2"
+subtitle: "Features, Projections, Measures"
+format:
+  revealjs: 
+    smaller: true 
+    logo: ../csu-rams-logo.png
+    slide-number: c/t
+    footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
+    include-before-body: header.html
+    include-after-body: footer-annotations.html
+    theme: [default, csu-css.scss]
+    highlightStyle: github
+    highlightLines: true
+    width: 1600
+    height: 720
+    countIncrementalSlides: false
+    incremental: false
+    title-slide-attributes:
+      data-background-color: "#1E4D2B"
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
+---
+
+```{css, eval = TRUE, echo = FALSE}
+.remark-code{line-height: 2; font-size: 80%}
+```
+
+```{r, include = F}
+knitr::opts_chunk$set(message = TRUE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
+library(tidyverse)
+library(sf)
+```
+
+# Picking up again ...
+
+Yesterday, we discussed the *simple feature* standard
+
+--
+
+ 1.  Geometries (type, dimension, and structure)
+ 
+--
+ 
+    - Empty, Valid, Simple
+    
+--
+
+ 2.  Encoding (WKT & WKB)
+ 
+--
+
+ 3.  A set of operations
+ 
+--
+
+And the implementation of the **simple features** standard in R
+
+--
+  - _sfg_: a _single_ feature geometry
+
+--
+
+  - _sfc_: a _set_ of geometries (`sfg`) stored as a list
+
+--
+
+  - _sf_: a `sfc` list joined with a `data.frame` (attributes)
+
+--
+
+****
+
+This R implementation is ideal/special because it achieves the simple feature abstract goal of:
+
+> "_A simple feature is defined by the OpenGIS Abstract specification to have both **spatial** and **non-spatial** attributes..._"  - [standard](http://www.opengeospatial.org/standards/sfa).
+
+--
+
+The shapefile/GIS traditional GIS view does not do this and seperates geometry (shp), from projection (prj), from data (dbf) and relates them through an shx file
+  
+---
+
+# Integration with `tidyverse`
+
+- We saw how the `dplyr` verbs still work on an `sf` object since `sf` extends the data.frame class
+
+--
+
+- How `geom_sf` support mapping ("spatial plotting") in `ggplot`
+
+--
+
+- How to read spatial data into R via GDAL drivers:
+  - spatial files (`read_sf`) 
+  - flat files via `st_as_sf`
+  
+--
+
+- Integration with a few `GEOS` geometry operations like:
+  - st_combine()
+  - st_union()
+
+---
+
+# Yesterday ...
+
+::: columns
+::: {.column width="50%"}
+```{r}
+conus = USAboundaries::us_states() |>
+  filter(!state_name %in% c("Puerto Rico", 
+                            "Alaska", 
+                            "Hawaii"))
+
+length(st_geometry(conus))
+```
+:::
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+ggplot() + 
+  geom_sf(data = conus, aes(fill = state_name)) + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(conus)), "feature(s)") ) + 
+  scale_fill_viridis_d()
+```
+:::
+
+---
+
+## 1 feature: resoloved and combined:
+
+::: columns
+::: {.column width="50%"}
+- st_cast / st_union work on `sfg`, `sfc`, and `sf` objects:
+
+```{r}
+us_c_ml = st_combine(conus) |>
+  st_cast("MULTILINESTRING")
+   
+us_u_ml = st_union(conus) |>
+  st_cast("MULTILINESTRING")
+```
+
+:::
+::: {.column width="50%"}
+
+```{r echo=FALSE}
+g1 = ggplot() + 
+  geom_sf(data = us_c_ml, color = "red") + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(us_c_ml)), "feature(s)") ) 
+
+g2 = ggplot() + 
+  geom_sf(data = us_u_ml, color = "red") + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(us_u_ml)), "feature(s)") ) 
+
+gridExtra::grid.arrange(g1, g2, nrow = 1)
+
+```
+:::
+:::
+
+---
+
+# So what?
+
+Lets imagine we want to know the distance from Denver to the nearest state border:
+
+--
+
+To do this, we need to:
+
+--
+
+  1: define Denver as a geometry in a CRS
+
+--
+
+  2: determine the correct geometry types / representation
+
+--
+
+  3: calculate the distance between (1) and (2)
+
+--
+
+### 1. Make "Denver" in the CRS of our states
+
+```{r}
+denver = data.frame(y = 39.7392, x = -104.9903, name = "Denver")
+(denver_sf = st_as_sf(denver, coords = c("x", "y"), crs = 4326))
+```
+
+---
+
+`r flipbookr::chunq_reveal("q14", title = "### 2. Determine the 3 closest states:", widths = c(40,60,0))`
+
+```{r q14, include = FALSE}
+conus |> 
+  select(state_name) %>%
+  mutate(dist = st_distance(., denver_sf)) |> 
+  slice_min(dist, n = 3) -> 
+  near3
+```
+
+---
+
+```{r, echo = F}
+near3
+```
+
+
+- That's close, but the distance to Colorado is 0, that's not a state border.
+
+---
+
+##  Geometry Selection
+
+- `Polygon` (therefore MULTIPOLGYGONS) describe areas! 
+
+--
+
+- The distance to a `point` **in** a `polygon` to that polygon is 0.
+
+---
+
+`r flipbookr::chunq_reveal("q15", title = "To determine distance to border we need a linear represnetation:", widths = c(40,60,0))`
+
+```{r q15, include = FALSE}
+conus |> 
+  select(state_name) |> 
+  st_cast("MULTILINESTRING") %>%
+  mutate(dist = st_distance(., denver_sf)) |> 
+  slice_min(dist, n = 3) ->
+  near3
+```
+
+---
+
+```{r, echo = FALSE}
+near3
+```
+
+
+- Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!
+
+--
+
+- While this is not to complex for 1 <-> 49 features imagine we had 28,000+ (like) your lab!
+
+--
+
+- That would result in 1,344,000 more calculations then needed ...
+
+---
+
+# Revisting the idea of the feature level:
+
+A "feature" can "be part of the whole" or the whole
+
+--
+
+  - A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)
+
+--
+
+  - A city (POINT), or a set of cities meeting a condition (MULTIPOINT)
+
+--
+
+  - A road (LINESTRING), or a route (MULTILINESTRING)
+  
+--
+****
+
+- Since we want the distance to the nearest border, _regardless_ of the state. Our **feature** is the _set of borders with preserved boundaries_.
+
+--
+
+- In other words, a 1 feature `MULTILINESTRING`
+
+--
+
+```{r}
+st_distance(denver_sf, st_cast(st_combine(conus), "MULTILINESTRING"))
+```
+
+
+--
+****
+
+The same principle would apply if the question was "_distance to national border_"
+
+---
+
+# The stickness of sfc column
+
+- A simple features object (sf) is the connection of a `sfc` list-column and `data.frame` of attributes
+
+```{r, echo = FALSE, fig.align='center'}
+knitr::include_graphics("images/11-sticky-geom.png")
+```
+
+(https://mhweber.github.io/AWRA_2020_R_Spatial/vector-data-with-sf.html)
+
+--
+
+- This binding is unique compared to other column bindings built with things like
+    - `dplyr::bind_cols()`
+    - `cbind()`
+    - `do.call(cbind, list())`
+---
+
+# The stickness of `sfc` column
+
+- Geometry columns are "sticky" meaning they persist through data manipulation:
+
+```{r}
+USAboundaries::us_states() |> 
+  select(name) |> 
+  slice(1:2)
+```
+
+---
+
+Dropping the geometry column requires dropping the geometry via `sf`:
+
+```{r}
+USAboundaries::us_states() |> 
+  st_drop_geometry() |> #<<
+  select(name) |> 
+  slice(1:2)
+```
+
+--
+
+Or cohersing the `sf` object to a `data.frame`:
+
+```{r}
+USAboundaries::us_states() |> 
+  as.data.frame() |> #<<
+  select(name) |> 
+  slice(1:2)
+```
+
+---
+
+# Coordinate Systems
+
+- What makes a feature geometry _spatial_ is the reference system...
+
+```{r, echo = FALSE, fig.align='center', out.width="75%"}
+knitr::include_graphics("images/09-sf-model.png")
+```
+---
+
+## Coordinate Systems
+
+- Coordinate Reference Systems (CRS) defines how spatial features relate to the surface of the Earth. 
+
+--
+
+- CRSs are either geographic or projected...
+
+--
+
+- CRSs are measurement units for coordinates: 
+
+---
+
+# `sf` tools
+
+In `sf` we have _three_ tools for exploring, define, and changing CRS systems:
+
+--
+
+  -  *st_crs* : Retrieve coordinate reference system from sf or sfc object
+
+--
+
+  -  *st_set_crs* : Set or replace coordinate reference system from object
+
+--
+
+  -  *st_transform* : Transform or convert coordinates of simple feature
+
+--
+
+****
+
+- Again, "st" (like PostGIS) denotes it is an operation that can work on a " _s_ patial _t_ ype "  
+  
+---
+
+## Geographic Coordinate Systms (GCS)
+
+A GCS identifies locations on the _curved_ surface of the earth. 
+
+--
+
+Locations are measured in **angular** units from the center of the earth relative to the plane defined by the equator and the plane defined by the prime meridian. 
+
+--
+
+The vertical angle describes the _latitude_ and the horizontal angle the _longitude_
+
+--
+
+In most coordinate systems, the North-South and East-West directions are encoded as +/-.
+
+North and East are positive (`+`) and South and West are negative (`-`) sign.
+
+--
+
+A GCS is defined by 3 components:
+
+  - an **ellipsoid** 
+  
+  - a **geoid** 
+
+  - a **datum**
+  
+---
+
+## Sphere and Ellipsoid
+
+- Assuming that the earth is a perfect sphere simplifies calculations and works for small-scale maps (maps that show a *large* area of the earth). 
+
+--
+
+- But ... the earth is not a sphere do to its rotation inducing a centripetal force along the equator. 
+
+--
+
+- This results in an equatorial axis that is roughly 21 km longer than the polar axis.
+
+--
+
+- To account for this, the earth is  modeled as an ellipsoid (slighty squished sphere) defined by two radii: 
+
+  - the **semi-major** axis (along the equatorial radius) 
+  - the **semi-minor** axis (along the polar radius)
+  
+--
+
+```{r echo=FALSE, fig.align='center'}
+knitr::include_graphics("images/11-semi-axis.svg")
+```
+
+---
+
+- Thanks to satellite and computational capabilities our estimates of these radii are be quite precise 
+
+--
+
+  - The semi-major axis is 6,378,137 m
+  
+--
+
+  - The semi-minor axis is 6,356,752 m
+
+--
+
+- Differences in distance along the surfaces of an ellipsoid vs. a perfect sphere are small but measurable (the difference can be as high as 20 km)
+
+```{r echo=FALSE}
+knitr::include_graphics("images/11-sphere.svg")
+
+knitr::include_graphics("images/11-ellipsoid.svg")
+```
+
+---
+
+### Geoid
+
+- The _ellipsoid_ gives us the earths form as a perfectly smooth object
+
+--
+
+- But ... the earth is not perfectly smooth
+
+--
+
+- Deviations from the perfect sphere are measurable and can influence measurements. 
+
+--
+
+- A *geoid* is a mathematical model fore representing these deviations
+
+--
+
+  - We are _not_ talking about mountains and ocean trenches but the earth's gravitational potential which is tied to the flow of the earth's hot and fluid core.
+  
+--
+
+  - Therefore the geoid is constantly changing, albeit at a large temporal scale. 
+
+--
+
+
+- The measurement and representation of the earth's shape is at the heart of `geodesy`
+
+
+```{r echo=FALSE, fig.align='center', out.width="25%"}
+knitr::include_graphics("images/11-nasa-geoids.jpg")
+```
+---
+
+## Datum
+
+- So how are we to reconcile our need to work with a (simple) mathematical model of the earth's shape with the undulating nature of the geoid?
+
+--
+
+- We align the geoid with the ellipsoid to map the the earths departures from the smooth assumption
+
+--
+
+- The alignment can be **local** where the ellipsoid surface is closely fit to the geoid at a particular location on the earth's surface 
+
+or 
+
+- **geocentric** where the ellipsoid is aligned with the center of the earth. 
+
+--
+
+- The alignment of the smooth ellipsoid to the geoid model defines a **datum**. 
+
+---
+
+## Local Datums
+
+
+- There are many local datums to choose from
+
+--
+
+- The choice of datum is largely driven by the location
+
+--
+
+- When working in the USA, a the North American Datum of 1927 (or NAD27 for short) is standard
+  - NAD27 is not well suited for other parts of the world.
+
+--
+
+Examples of common local datums are shown in the following table:
+
+****
+
+Local datum	       | Acronym | Best for|	Comment
+-------------------|---------|--------|-------------------------------
+North American Datum of 1927 |	NAD27	| Continental US	| This is an old datum but still prevalent because of the wide use of older maps.
+European Datum of 1950	| ED50	| Western Europe |	Developed after World War II and still quite popular today. Not used in the UK.
+World Geodetic System 1972	| WGS72 |	Global |	Developed by the Department of Defense.
+
+****
+
+---
+
+# Geocentric Datum
+
+- Many modern datums use a geocentric alignment 
+
+--
+
+  - World Geodetic Survey for 1984 (WGS84) 
+
+--
+
+  - North American Datums of 1983 (NAD83) 
+
+--
+
+- Most popular geocentric datums use the WGS84 _ellipsoid_ or the GRS80 _ellipsoid_  which share nearly identical semi-major and semi-minor axes
+
+--
+
+***
+
+Geocentric datum	       | Acronym | Best for|	Comment
+-------------------|---------|--------|-------------------------------
+North American Datum of 1983 |	NAD83	 | Continental US	| This is one of the most popular modern datums for the contiguous US.
+European Terrestrial Reference System 1989 | ETRS89 |	Western Europe | This is the most popular modern datum for much of Europe.
+World Geodetic System 1984 | WGS84 | Global | Developed by the Department of Defense.
+
+***
+
+**Note**: NAD 27 is based on Clarke Ellipsoid of 1866 which is calculated by manual surveying. NAD83 is based on the Geodetic Reference System (GRS) of 1980. 
+
+---
+
+### Building a GCS
+
+- So, a GCS is defined by the ellipsoid model and its alignment to the geoid defining the datum. 
+
+--
+
+- Smooth Sphere - Mathmatical Geoid (in angular units)
+
+---
+
+## Projected Coordinate Systems
+
+- The surface of the earth is curved but maps (and to data GIS) is flat. 
+
+--
+
+- A projected coordinate system (PCS) is a reference system for identifying locations and measuring features on a flat (2D) surfaces. I
+
+--
+
+- Projected coordinate systems have an origin, an *x* axis, a *y* axis, and a linear unit of measure. 
+
+--
+
+- Going from a GCS to a PCS requires mathematical transformations. 
+
+--
+
+There are three main groups of projection types:
+  - conic
+  - cylindrical
+  - planar
+  
+---
+# Projection Types:
+
+```{r, echo = FALSE, out.width="50%", fig.align='center'}
+knitr::include_graphics("images/11-projected-crs.png")
+```
+
+- In all cases, distortion is _minimized_ at the line/point of **tangency** (denoted by black line/point)
+
+- Distortions are _minimized_ along the tangency lines and increase with the distance from those lines. 
+
+
+## Plannar
+
+- A planar projection projects data onto a flat surface touching the globe at a _point_ or along 1 line of _tangency._ 
+
+- Typically used to map polar regions.
+
+```{r, echo = FALSE, out.width="50%", fig.align='center'}
+knitr::include_graphics("images/11-projected-crs.png")
+```
+
+## Cylindrical 
+
+- A cylindrical projection maps the surface onto a cylinder. 
+
+- This projection could also be created by touching the Earth’s surface along 1 or 2 lines of _tangency_ 
+
+- Most often when mapping the entire world. 
+
+```{r, echo = FALSE, out.width="50%", fig.align='center'}
+knitr::include_graphics("images/11-projected-crs.png")
+```
+
+## Conic 
+
+In a conic projection, the Earth’s surface is projected onto a cone along 1 or 2 lines of _tangency_ 
+
+Therefore, it is the best suited for maps of mid-latitude areas. 
+
+```{r, echo = FALSE, out.width="50%", fig.align='center'}
+knitr::include_graphics("images/11-projected-crs.png")
+```
+
+## Spatial Properties
+
+- All projections _distort_ real-world geographic features.
+
+--
+
+- Think about trying to unpeel an orange while preserving the skin
+
+--
+
+The four spatial properties that are subject to distortion are: **shape**, **area**, **distance** and **direction**
+
+--
+
+  - A map that preserves shape is called `conformal`; 
+  
+--
+
+  - one that preserves area is called `equal-area`; 
+
+--
+
+  - one that preserves distance is called `equidistant`
+  
+--
+
+  - one that preserves direction is called `azimuthal`
+
+--
+
+***
+
+
+  - Each map projection can preserve only one or two of the four spatial properties. 
+
+--
+
+  - Often, projections are named after the spatial properties they preserve.
+
+--
+
+- When working with small-scale (large area) maps and when multiple spatial properties are needed, it is best to break the analyses across projections to minimize errors associated with spatial distortion.
+
+---
+
+# Setting CRSs/PCSs
+
+ - We saw that `sfc` objects have two attributes to store a CRS: `epsg` and `proj4string`
+
+--
+
+```{r}
+st_geometry(conus)
+```
+
+--
+
+ - This implies that all geometries in a geometry list-column (sfc) must have the same CRS. 
+ 
+---
+
+- `proj4string` is a generic, string-based description of a CRS, understood by [PROJ](https://proj4.org/) 
+
+--
+
+- It defines projection types and parameter values for particular projections,
+
+--
+
+- As a result it can cover an infinite amount of different projections.  
+
+--
+
+- `epsg` is the _integer ID_ for a known CRS that can be resolved into a `proj4string`. 
+  - This is somewhat equivalent to the idea that a 6-digit FIP code can be resolved to a state/county pair
+
+--
+
+- Some `proj4string` values can resolved back into their corresponding `epsg` ID, but this does not always work.
+
+--
+
+- The importance of having `epsg` values stored with data besides `proj4string` values is that the `epsg` refers to particular, well-known CRS, whose parameters may change (improve) over time
+
+--
+
+- fixing only the `proj4string` may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets (but may help reproducibility)
+
+---
+
+# `PROJ4` coordinate syntax
+
+The `PROJ4` syntax contains  a list of parameters, each prefixed with the `+` character. 
+
+A list of some `PROJ4` parameters follows and the full list can be found [here](https://proj.org/usage/projections.html):
+
+
+| Parameter      	| Description                             	|
+|---------	|---------------------------------------------------------------------	|
+| +a      	| Semi-major radius of the ellipsoid axis                              	|
+| +b      	| Semi-minor radius of the ellipsoid axis                              	|
+| +datum  	| Datum name                                                          	|
+| +ellps  	| Ellipsoid name                                                      	|
+| +lat_0  	| Latitude of origin                                                  	|
+| +lat_1  	| Latitude of first standard parallel                                 	|
+| +lat_2  	| Latitude of second standard parallel                                	|
+| +lat_ts 	| Latitude of true scale                                              	|
+| +lon_0  	| Central meridian                                                    	|
+| +over   	| Allow longitude output outside -180 to 180 range, disables wrapping 	|
+| +proj   	| Projection name                                                     	|
+| +south  	| Denotes southern hemisphere UTM zone                                	|
+| +units  	| meters, US survey feet, etc.                                        	|
+| +x_0    	| False easting                                                       	|
+| +y_0    	| False northing                                                      	|
+| +zone   	| UTM zone                                                            	|
+
+---
+
+**WGS84**  
+_EPSG_: 4326  
+_PROJ4_: `+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs`  
+  - projection name: longlat
+  - Latitude of origin: WGS84
+  - Longitude of origin: WGS84
+
+***
+
+**WGS84**
+_EPSG_: 5070
+`"+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"`
+  - projection name: `aea` (Albers Equal Area)
+  - Latitude of origin: 23
+  - Longitude of origin: -96
+  - Latitude of first standard parallel: 29.5
+  - Latitude of second standard parallel: 45.5
+  - False Easting: 0
+  - False Northing: 0
+  - Datum: NAD83
+  - Units: m
+  
+---
+
+## Transform and retrive
+
+.pull-left[
+```{r}
+st_crs(conus)$epsg
+st_crs(conus)$proj4string
+st_crs(conus)$datum
+```
+]
+
+.pull-right[
+```{r}
+conus5070 = st_transform(conus, 5070)
+
+st_crs(conus5070)$epsg
+st_crs(conus5070)$proj4string
+st_crs(conus5070)$datum
+```
+]
+
+---
+  
+```{r, echo = FALSE, out.width = "90%", fig.align='center'}
+g1 = ggplot(data = conus) + 
+  geom_sf() + 
+  theme_linedraw()+ 
+  coord_sf(datum = 4326) + 
+  labs(title = "Unprojected CONUS",
+       subtitle = "EPSG:4326")
+
+g2 = ggplot(data =st_transform(conus, 5070)) + 
+  geom_sf() +
+  theme_linedraw()+ 
+  coord_sf(datum = 5070) + 
+  labs(title = "Projected CONUS",
+       subtitle = "AEA") 
+
+g3 = ggplot(data =st_transform(conus, '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs')) + 
+  geom_sf() +
+  theme_linedraw()+ 
+  coord_sf(datum = '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs') + 
+  labs(title = "Projected CONUS",
+       subtitle = "EQDC") 
+
+gridExtra::grid.arrange(g1, g2, g3, nrow =1) 
+```
+
+---
+
+# Revisit Denver
+
+```{bash}
+echo -104.9903 39.7392 | proj +proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs
+```
+
+- red = false origin : blue = Denver
+
+::: columns
+::: {.column width="50%"}
+
+```{r, echo = FALSE, out.width="75%", message = FALSE, warning = FALSE}
+p = 5070
+x = -762409.05	
+y = 1893843.60 
+ggplot(data =st_transform(conus, p)) + 
+  geom_sf() +
+  geom_segment(aes(x =0,  y= 0, xend = x, yend = y), lty = 2) +
+  geom_segment(aes(x =x,  y= 0, xend = x, yend = y), lty = 2, col = "gray") +
+  geom_segment(aes(x =0,  y= y, xend = x, yend = y), lty = 2, col = "gray") +
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) +
+  geom_point(aes(x = 0, y = 0 ), col = "red") +
+  geom_point(aes(x = x, y = y), col = "blue")+
+  theme_linedraw()+ 
+  coord_sf(datum = p) + 
+  labs(title = "Denver",
+       subtitle = "AEA")  +
+  ylim(c(-2000, 3.1e6)) 
+```
+:::
+::: {.column width="50%"}
+
+
+```{r, echo = FALSE, out.width="75%", message = FALSE, warning = FALSE}
+p = '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
+x = -723281.88		
+y = 6827.29   
+  
+ggplot(data =st_transform(conus, p)) + 
+  geom_sf() +
+  geom_segment(aes(x =0,  y= 0, xend = x, yend = y), lty = 2) +
+  geom_segment(aes(x =x,  y= 0, xend = x, yend = y), lty = 2, col = "gray") +
+  geom_segment(aes(x =0,  y= y, xend = x, yend = y), lty = 2, col = "gray") +
+  geom_vline(xintercept = 0) + 
+  geom_hline(yintercept = 0) +
+  geom_point(aes(x = 0, y = 0 ), col = "red") +
+  geom_point(aes(x = x, y = y), col = "blue")+
+  theme_linedraw()+ 
+  coord_sf(datum = p) + 
+  labs(title = "Denver",
+       subtitle = "EQDC")  
+```
+
+:::
+:::
+---
+
+## Geodesic geometries
+
+- PCSs introduce errors in their geometric measurements because the distance between two points on an ellipsoid is difficult to replicate on a projected coordinate system unless these points are close to one another.
+
+--
+
+- In most cases, such errors other sources of error in the feature representation outweigh measurement errors made in a PCS making them tolorable.
+
+--
+
+However, if the domain of analysis is large (i.e. the North American continent), then the measurement errors associated with a projected coordinate system may no longer be acceptable. 
+
+--
+
+A way to circumvent projected coordinate system limitations is to adopt a _geodesic_ solution.
+
+---
+
+## Geodesic Measurments
+
+- A **geodesic distance** is the shortest distance between two points on an ellipsoid
+
+--
+
+- A **geodesic area** measurement is one that is measured on an ellipsoid. 
+
+--
+
+- Such measurements are _independent_ of the underlying projected coordinate system. 
+
+--
+
+- Why does this matter? 
+
+--
+
+- compare the distances measured between Santa Barbara and Amsterdam. The blue line represents the shortest distance between the two points on a *planar* coordinate system. The red line as measured on a *ellipsoid*.
+
+```{r fig.height=3, fig.width=5, echo=FALSE, message=FALSE, fig.align='center'}
+library(tmap)
+library(geosphere)
+library(sp)
+library(maps)
+library(sf)
+# Define a few CS'
+w.from.s <- "+proj=ortho +lat_0=60 +lon_0=-28 +x_0=0 +y_0=0 +a=6370997 +b=6370997 +units=m +no_defs"
+latlon   <- "+proj=longlat +datum=WGS84"
+# Define extent for first map
+ext <- tmaptools::bb(matrix(c(-130, 10, 90,90)), projection="+proj=longlat +datum=WGS84")
+# Define point locations
+sb <- c(-119.6982, 34.4208)
+ams <- c(4.8945, 52.3667)
+pt <- st_as_sf(data.frame(rbind(sb, ams)), coords=c("X1", "X2"), crs = 4326)
+# Compute great circle line segment
+gc <- gcIntermediate(sb, ams)
+# Create sf object from gci matrix
+gc_sf <- as_tibble(gc) |> 
+  mutate(id =1) |> 
+  st_as_sf(coords = c("lon","lat"), crs = 4326) |> 
+  group_by(id) |> 
+  summarise(do_union=TRUE) |> 
+  st_cast("LINESTRING")
+# Create planar line segment for comparison
+pl_sf <- data.frame(rbind(sb, ams)) |>   
+             mutate(id =1) |> 
+             st_as_sf(coords = c("X1","X2"), crs = 4326) |> 
+             group_by(id) |> 
+             summarise(do_union=TRUE) |> 
+             st_cast("LINESTRING") |> 
+             as('Spatial') |>   # Convert to sp object
+             spsample(n=100, type="regular") |>  # densify by creating points
+             st_as_sf() |> # Convert back to sf
+             mutate(id=1) |> 
+             group_by(id) |> 
+             summarise(do_union=TRUE) |> 
+             st_cast("LINESTRING")
+# Create a rasterized world layer
+
+sf::sf_use_s2(FALSE)
+World <- st_transform(st_as_sf((rnaturalearth::countries110)), crs="+proj=longlat +datum=WGS84") |> 
+  st_union() |> 
+  st_as_sf()
+r     <- raster::raster(ncol=1500, nrow=800)
+wrld  <- fasterize::fasterize(World,r)
+# Reproject data
+wrld2 <- raster::projectRaster(wrld, crs=w.from.s)
+# Plot on a planar environment
+tm_shape(wrld, bbox=ext) + 
+  tm_raster(legend.show = FALSE, palette= c("grey80")) +
+  tm_graticules(col="grey90", labels.col="white")+
+  tm_shape(gc_sf) +
+  tm_lines(col="red", lwd=2) +
+  tm_shape(pl_sf) + 
+  tm_lines(col="blue", lwd=2, lty=2) +
+  tm_shape(pt) +
+  tm_dots(size=0.5) 
+```
+
+
+---
+
+- the geodesic distance looks weird given its curved appearance on the projected map. 
+
+- this curvature is a byproduct of the current reference system’s increasing distance distortion as one moves towards the pole! 
+- We can display the geodesic and planar distance on a 3D globe (or a projection that mimics the view of the 3D earth).
+
+
+```{r  fig.width=6,echo=FALSE, fig.align='center'}
+# Plot on an "earth from space" environment
+tm_shape(wrld2) +
+  tm_raster(legend.show = FALSE, palette= c("grey80")) +
+  tm_graticules(col="grey90", labels.col="white")+
+  tm_shape(gc_sf) +tm_lines(col="red", lwd=2) +
+  tm_shape(pl_sf) + tm_lines(col="blue", lwd=2, lty=2) +
+  tm_shape(pt) +tm_dots(size=0.5) 
+```
+
+
+---
+
+- So if a geodesic measurement is more precise than a planar measurement, why not perform all spatial operations using geodesic geometry? 
+
+--
+
+- The downside is in its computational requirements. 
+
+--
+
+- It's far more efficient to compute area/distance on a plane than it is on a spheroid. 
+
+--
+
+- This is because geodesic calculations have no simple algebraic solutions and involve approximations that may require iteration! (think optimization or nonlinear solutions) 
+
+--
+
+- So this may be a computationally taxing approach if processing 1,000(s) or 1,000,000(s) of line segments. 
+
+---
+
+# Gedesic Area and Length Measurements
+
+- Not all algorthimns are equal (in terms of speed or accuracy)
+
+--
+
+- Some more efficient algorithms that minimize computation time may reduce precision in the process. 
+
+--
+
+- Some of ArcMap’s functions offer the option to compute geodesic distances and areas however ArcMap does not clearly indicate _how_ its geodesic calculations are implemented ([cite](https://mgimond.github.io/Spatial/coordinate-systems.html#geodesic-geometries) 
+
+--
+
+- R is well documented, and is efficient!
+
+---
+
+# Distances
+
+`?st_distance`
+
+```{r, fig.align='center', out.width="75%", echo = FALSE}
+knitr::include_graphics("images/11-sf-geos-measures.png")
+```
+---
+
+- native `sf` binds to the libwgeom libray()
+
+.pull-left[
+```{r, fig.align='center', out.width="75%", echo = FALSE}
+knitr::include_graphics("images/11-lwgeom.png")
+```
+]
+
+.pull-right[
+```{r, fig.align='center', out.width="75%", echo = FALSE}
+knitr::include_graphics("images/09-sf-depends.png")
+```
+]
+
+---
+
+`r flipbookr::chunq_reveal("dist1", title = "###Distance Example", widths = c(40,60,0))`
+
+```{r dist1, include = FALSE}
+(pts = data.frame(y = c(40.7128, 34.4208), x = c(-74.0060, -119.6982 ), name = c("NYC","SB")))
+(pts = st_as_sf(pts, coords = c("x", "y"), crs = 4326))
+
+eqds = '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
+
+# Greeat Circle Distance
+st_distance(pts)
+
+# Euclidean Distance
+st_distance(pts, which = "Euclidean")
+
+# Equal Area PCS
+st_distance(st_transform(pts, 5070))
+
+# Equal Distance
+st_distance(st_transform(pts, eqds))
+
+```
+
+
+`r flipbookr::chunq_reveal("conus", title = "Area Example: CONUS", widths = c(40,60,0))`
+
+```{r conus, include = FALSE}
+us_u_mp = st_cast(us_u_ml, "MULTIPOLYGON")
+
+df = data.frame(name = c("WGS84", "AEA", "EPDS"),
+           area = c(sum(st_area(conus)), 
+            sum(st_area(st_transform(conus, 5070))),
+            sum(st_area(st_transform(conus, eqds)))))
+
+ggplot(df) +
+  geom_col(aes(x = name, y = as.numeric(area) )) + 
+  theme_linedraw() + 
+  labs(x = "SRS", y = "m2")
+```
+
+
+## Units in `sf`
+
+- The CRS in `sf` encodes the units of measurement relating to spatial features
+
+--
+
+- Where possible geometric operations such as `st_distance()`, `st_length()` and `st_area()` report results with a units attribute appropriate for the CRS:
+
+--
+
+- This can be both handy and very confusing for those new to it. Consider the following:
+
+```{r}
+(l = sum(st_length(conus)))
+(a = sum(st_area(conus)))
+```
+
+---
+
+We can set units if we do manipulations as well using the units package
+```{r}
+units::set_units(l, "km")
+units::set_units(l, "mile")
+
+units::set_units(a, "ha")
+units::set_units(a, "km2")
+units::set_units(a, "in2")
+```
+
+
+## Units are a class 
+
+- units are an S3 data object with attribute information and "rules of engagement"
+
+```{r, error = TRUE}
+class(st_length(conus)) 
+attributes(st_length(conus)) |> unlist()
+
+st_length(conus) + 100
+
+conus |> 
+  mutate(area = st_area(.)) |> 
+  ggplot(aes(x = name, y = area)) + 
+  geom_col()
+```
+
+## Unit values can be stripped of their attributes if need be:
+
+```{r}
+# Via drop_units
+(units::drop_units(sum(st_length(conus))))
+
+# Via casting
+(as.numeric(sum(st_length(conus))))
+```
+
+# Lightning Re-cap
+
+## Geographic Coordinate Systems
+
+- Geographic coordinate systems identify a location on the Earth’s surface using longitude and latitude. 
+
+--
+
+  - Longitude is the angular distance East or West of the Prime Meridian plane. 
+
+--
+
+  - Latitude is angular distance North or South of the equatorial plane. 
+
+--
+
+- Distances in GRSs are therefore **not** measured in meters
+
+--
+
+- The surface of the Earth in GCS is represented by ellipsoidal surface.
+
+--
+
+- Spherical models assume the Earth is a perfect sphere of a given radius. 
+
+--
+
+- Spherical models are rarely used because the Earth is **not** a sphere! 
+
+--
+
+- Ellipsoidal models are defined by two parameters: the semi major and semi minor axis 
+
+--
+
+- These are suitable because the Earth is compressed: the equatorial radius is around 11.5 km longer than the polar radius
+
+---
+
+- Ellipsoids are part of a wider component of CRSs: **the datum** 
+
+--
+
+- Datums describe the irrigeularities in a earths surface (geoid) compared to a smooth ellipsoid
+
+--
+
+In a local datums such as NAD27 the ellipsoidal surface is shifted to align with the surface at a particular location.
+
+In a geocentric datum such as `WGS84` the center is the Earth’s center of gravity 
+
+---
+
+# Projected coordinate reference systems
+
+- PCSs are based on Cartesian (XY) coordinates on an implicitly flat surface. 
+
+--
+
+- They have an origin, axes, and a unit of measurement (e.g. meters). 
+
+--
+
+- **All** PCSs are based on a GCSs and rely on projections to convert the 3D surface in XY values related to a false origin
+
+--
+
+This transition cannot be done without adding **distortion** 
+
+--
+
+A projected coordinate system can preserve only one or two spatial properties. 
+
+Projections are often named based on a property they preserve: 
+ - equal-area preserves *area* 
+ - azimuthal preserve *direction*
+ - equidistant preserve *distance* 
+ - conformal preserve *local shape*
+ 
+---
+
+# Gedesic Area and Length Measurements are often superior
+
+- Calcuated distance and area on the ellipsoid
+
+--
+
+- Not all algorthimns are equal (in terms of speed or accuracy)
+
+--
+
+- Some reduce precision to speed up calculations
+
+--
+
+- Some of ArcMap’s functions offer the option to compute geodesic distances and areas however ArcMap does not clearly indicate _how_ its geodesic calculations are implemented ([cite](https://mgimond.github.io/Spatial/coordinate-systems.html#geodesic-geometries) 
+
+--
+
+- R is well documented, and is efficient! (still less so then PCS ... for now)
+
+--
+
+- base `sf` implements "Greater Circle" distances as `st_distance`
+
+- `sf` binds to the libwgeom library for geoid calculations (geoid vs ellipoid)
+
+---
+
+
+
+
+
+
+

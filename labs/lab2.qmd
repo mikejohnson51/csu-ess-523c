@@ -1,0 +1,241 @@
+---
+title: 'Lab 2: Distances and Projections'
+subtitle: 'Populations across space'
+format:
+  html:
+    code-fold: true
+    toc: true
+    include-before-body: ../slides/header.html
+    include-after-body:  ../slides/footer-annotations.html
+---
+
+```{r, echo = FALSE}
+knitr::include_graphics('images/03-aclu.jpg')
+```
+
+In this lab we will explore the properties of `sf`, `sfc`, and `sfg` features & objects; how they are stored; and issues related to distance calculation and coordinate transformation. 
+
+We will continue to build on our data wrangling and data visualization skills; as well as document preparation via Quarto and GitHub.
+
+****
+
+# Set-up
+
+1. Navigage to your `csu-523c` repository
+2. Create a new Quarto (.qmd) file called `lab-02.qmd`
+5. Populate its YML with a title, author, subtitle, output type and theme. For example:
+
+```{r, eval = FALSE}
+---
+title: "Lab 02: Distances and the Border Zone"
+subtitle: 'Ecosystem Science and Sustainability 523c'
+author:
+  - name: ...
+    email: ...
+format: html
+---
+```
+
+**** 
+
+# Libraries
+
+```{r, eval = TRUE, message = F, warning = F, collapse= FALSE}
+# spatial data science
+library(tidyverse)
+library(sf)
+library(units)
+
+# Data
+library(USAboundaries)
+library(rnaturalearth)
+
+# Visualization
+library(gghighlight)
+library(ggrepel)
+library(knitr)
+```
+
+****
+
+# Background
+
+In this lab, 4 main skills are covered: 
+
+1. **Ingesting / building** `sf` objects from R packages and CSVs. (Q1)
+2. **Manipulating** geometries and coordinate systems (Q2)
+3. **Calculating** distances (Q2)
+4. **Building** maps using ggplot (Q3)
+
+Hints and Tricks for this lab are available [here](lab-02-hints.qmd)
+
+******
+
+# Question 1: 
+
+For this lab we need three (3) datasets. 
+
+  1. Spatial boundaries of continental USA states (1.1) 
+  2. Boundaries of Canada, Mexico and the United States (1.2)
+  3. All USA cites (1.3)
+  
+  
+### _1.1_ Define a Projection
+
+For this lab we want to calculate distances between features, therefore we need a projection that preserves distance at the scale of CONUS. For this, we will use the North America Equidistant Conic:
+
+```{r, eval = FALSE}
+eqdc <- '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
+```
+
+Unfortunately, this projection does not have a EPSG code to reference so we must use the PROJ4 string above. Take a moment and describe this proection based on the parameters:
+
+
+### _1.2_ - Get USA state boundaries 
+
+In R, USA boundaries are stored in the `USAboundaries` package.
+In case this package and data are **not** installed: 
+
+```{r, eval = FALSE}
+remotes::install_github("ropensci/USAboundaries")
+remotes::install_github("ropensci/USAboundariesData")
+```
+
+Once installed: 
+
+- USA state boundaries can be accessed with `USAboundaries::us_states(resolution = "low")`. Given the precision needed for this analysis we are ok with the low resolution. 
+- Make sure you only have the states in the continental United States (CONUS) (**Hint** use `filter`)
+- Make sure the data is in a projected coordinate system suitable for distance measurements at the national scale (`eqdc`). 
+
+*****
+
+### _1.3_ - Get country boundaries for Mexico, the United States of America, and Canada
+
+In R, country boundaries are stored in the `rnaturalearth` package.
+In case this package is not installed: 
+
+```{r, eval = FALSE}
+remotes::install_github("ropenscilabs/rnaturalearthdata")
+```
+
+Once installed: 
+
+- World boundaries can be accessed with `rnaturalearth::countries110`. 
+- Make sure the data is in simple features (`sf`) format (**Hint** use the `st_as_sf` variable).
+- Make sure you only have the countries you want (**Hint** `filter` on the `admin` variable)
+- Make sure the data is in a projected coordinate system suitable for distance measurements at the national scale (`eqdc`). 
+
+*****
+
+### _1.4_ - Get city locations from the CSV file 
+
+The process of finding, downloading and accessing data is the first step of every analysis. Here we will go through these steps (minus finding the data).
+
+First go to this [site](https://simplemaps.com/data/us-cities) and download the appropriate (free) dataset into the data directory of this project.
+
+Once downloaded, read it into your working session using `readr::read_csv()` and explore the dataset until you are comfortable with the information it contains.
+
+While this data has everything we want, it is not yet spatial. Convert the `data.frame` to a spatial object using `st_as_sf` and prescribing the coordinate variables and CRS (**Hint** what projection are the raw coordinates in?)
+
+Finally, remove cities in states not wanted and make sure the data is in a projected coordinate system suitable for distance measurements at the national scale:
+
+Congratulations! You now have three real-world, large datasets ready for analysis.
+
+# Question 2: 
+
+Here we will focus on calculating the distance of each USA city to (1) the national border (2) the nearest state border (3) the Mexican border and (4) the Canadian border. You will need to manipulate you existing spatial geometries to do this using either `st_union` or `st_combine` depending on the situation. In all cases, since we are after distances to borders, we will need to cast (`st_cast`) our `MULTIPPOLYGON` geometries to `MULTILINESTRING` geometries. To perform these distance calculations we will use `st_distance`(). 
+
+### _2.1_ -  Distance to USA Border (coastline or national) (km)
+
+For **2.2** we are interested in calculating the distance of each USA city to the USA border (coastline or national border). To do this we need all states to act as single unit. Convert the USA state boundaries to a `MULTILINESTRING` geometry in which the state boundaries are **resolved**. Please do this starting with the states object and _NOT_ with a filtered country object.  In addition to storing this distance data as part of the cities `data.frame`, produce a table (`flextable`) documenting the five cities farthest from a state border. Include only the city name, state, and distance. 
+
+### _2.2_ -  Distance to States (km)
+
+For **2.1** we are interested in calculating the distance of each city to the nearest state boundary. To do this we need all states to act as single unit. Convert the USA state boundaries to a `MULTILINESTRING` geometry in which the state boundaries are **preserved** (not resolved). In addition to storing this distance data as part of the cities `data.frame`, produce a table (`flextable`) documenting the five cities farthest from a state border. Include only the city name, state, and distance.
+
+### _2.3_ -  Distance to Mexico (km)
+
+For **2.3** we are interested in calculating the distance of each city to the Mexican border. To do this we need to isolate Mexico from the country objects. In addition to storing this data as part of the cities data.frame, produce a table (`flextable`) documenting the five cities farthest from a state border. Include only the city name, state, and distance.
+
+### _2.4_ -  Distance to Canada (km)
+
+For **2.4** we are interested in calculating the distance of each city to the Canadian border. To do this we need to isolate Canada from the country objects. In addition to storing this data as part of the cities data.frame, produce a table (`flextable`) documenting the five cities farthest from a state border. Include only the city name, state, and distance.
+
+# Question 3:
+
+In this section we will focus on visualizing the distance data you calculated above. You will be using `ggplot` to make your maps, `ggrepl` to label significant features, and `gghighlight` to emphasize important criteria.
+
+### _3.1_ Data
+
+Show the 3 continents, CONUS outline, state boundaries, and 10 largest USA cities (by population) on a single map
+
+ - Use `geom_sf` to plot your layers
+ - Use `lty` to change the line type and size to change line width
+ - Use `ggrepel::geom_label_repel` to label your cities
+ 
+### _3.2_  City Distance from the Border
+
+Create a map that colors USA cities by their distance from the national border. In addition, re-draw and label the 5 cities that are farthest from the border.
+
+### _3.3_  City Distance from Nearest State
+
+Create a map that colors USA cities by their distance from the nearest state border. In addition, re-draw and label the 5 cities that are farthest from any border.
+
+### _3.4_  Equidistance boundary from Mexico and Canada
+
+Here we provide a little more challenge. Use `gghighlight` to identify the cities that are equal distance from the Canadian **AND** Mexican border $\pm$ 100 km.
+
+In addition, label the five (5) most populous cites in this zone.
+
+**Hint**: (create a new variable that finds the absolute difference between the distance to Mexico and the distance to Canada)
+
+# Question 4: 
+
+### Real World Application
+
+Recently, Federal Agencies have claimed basic constitutional rights protected by the Fourth Amendment (protecting Americans from random and arbitrary stops and searches) do not apply fully at our borders (see Portland). For example, federal authorities do not need a warrant or suspicion of wrongdoing to justify conducting what courts have called a "routine search," such as searching luggage or a vehicle. Specifically, federal regulations give U.S. Customs and Border Protection (CBP) authority to operate within _100 miles of any U.S. "external boundary"_.  Further information can be found at this [ACLU article](https://www.aclu.org/other/constitution-100-mile-border-zone).
+
+### _4.1_ Quantifing Border Zone
+
+- How many cities are in this 100 mile zone? (100 miles ~ 160 kilometers)
+- How many people live in a city within 100 miles of the border?
+- What percentage of the total population is in this zone?
+- Does it match the ACLU estimate in the link above?
+
+Report this information as a table.
+
+### _4.2_  Mapping Border Zone
+
+- Make a map highlighting the cites within the 100 mile zone using `gghighlight.` 
+- Use a color gradient from 'orange' to 'darkred'. 
+- Label the 10 most populous cities in the Danger Zone
+
+**Extra Credit (10)**: Instead of labeling the 10 most populous cites, label the most populous city in each state within the Danger Zone.
+
+****
+
+# Rubric
+
+- [ ] **Question 1** (10)
+- [ ] **Question 2** (35)
+- [ ] **Question 3** (25)
+- [ ] **Question 4** (20)
+- [ ] **Extra Credit** (10)
+- [ ] **Well Structured and appealing Rmd deployed as web page** (10)
+
+**Total:** 100 points (110 points total)
+
+# Submission
+
+For this lab you will submit a URL to a webpage deployed with GitHub pages.
+
+To do this:
+
+ - Knit your lab document
+ - Stage/commit/push your files
+ - If you followed the naming conventions in the "Set Up", your lab 3 link will be available at: 
+ 
+`https://USERNAME.github.io/csu-523c/lab-02.html``
+
+Submit this URL in the appropriate Gauchospace dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be your final!
+
