@@ -599,7 +599,7 @@
     "href": "slides/week-1.html#via-url",
     "title": "Week 1",
     "section": "via url ",
-    "text": "via url \n\n# via url\n(gage &lt;- sf::read_sf(\"https://reference.geoconnex.us/collections/gages/items/1000001\"))\n#&gt; Simple feature collection with 1 feature and 17 fields\n#&gt; Geometry type: POINT\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -107.2826 ymin: 35.94568 xmax: -107.2826 ymax: 35.94568\n#&gt; Geodetic CRS:  WGS 84\n#&gt; # A tibble: 1 × 18\n#&gt;   nhdpv2_reachcode mainstem_uri           fid nhdpv2_reach_measure cluster uri  \n#&gt;   &lt;chr&gt;            &lt;chr&gt;                &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;\n#&gt; 1 13020205000216   https://geoconnex.u…     1                 80.3 https:… http…\n#&gt; # ℹ 12 more variables: nhdpv2_comid &lt;dbl&gt;, name &lt;chr&gt;, nhdpv2_totdasqkm &lt;dbl&gt;,\n#&gt; #   description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;, subjectof &lt;chr&gt;,\n#&gt; #   nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;, gage_totdasqkm &lt;dbl&gt;,\n#&gt; #   provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;, geometry &lt;POINT [°]&gt;\n\n# write out data\n# write_sf(counties, \"data/counties.shp\")"
+    "text": "via url \n\n# via url\n(gage &lt;- sf::read_sf(\"https://reference.geoconnex.us/collections/gages/items/1000001\"))\n#&gt; Simple feature collection with 1 feature and 17 fields\n#&gt; Geometry type: POINT\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -107.2826 ymin: 35.94568 xmax: -107.2826 ymax: 35.94568\n#&gt; Geodetic CRS:  WGS 84\n#&gt; # A tibble: 1 × 18\n#&gt;     fid nhdpv2_reach_measure cluster   uri   nhdpv2_comid name  nhdpv2_totdasqkm\n#&gt;   &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;\n#&gt; 1     1                 80.3 https://… http…     17789327 PENI…             57.4\n#&gt; # ℹ 11 more variables: description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;,\n#&gt; #   subjectof &lt;chr&gt;, nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;,\n#&gt; #   gage_totdasqkm &lt;dbl&gt;, provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;,\n#&gt; #   nhdpv2_reachcode &lt;chr&gt;, mainstem_uri &lt;chr&gt;, geometry &lt;POINT [°]&gt;\n\n# write out data\n# write_sf(counties, \"data/counties.shp\")"
   },
   {
     "objectID": "slides/week-1.html#additonal-structure",
@@ -705,5 +705,369 @@
     "title": "Week 1",
     "section": "",
     "text": "Welcome to 523C: Environmental Data Science Applications: Water Resources!\nThis first lecture will introduce essential, high-level topics to help you build a strong foundation in R for environmental data science.\nThroughout the lecture, you will be asked to assess your comfort level with various topics via a Google survey.\nThe survey results will help tailor the course focus, ensuring that we reinforce challenging concepts while avoiding unnecessary review of familiar topics."
+  },
+  {
+    "objectID": "labs/lab2.html",
+    "href": "labs/lab2.html",
+    "title": "Lab 2: Distances and Projections",
+    "section": "",
+    "text": "In this lab we will explore the properties of sf, sfc, and sfg features & objects; how they are stored; and issues related to distance calculation and coordinate transformation.\nWe will continue to build on our data wrangling and data visualization skills; as well as document preparation via Quarto and GitHub.\n\n\nSet-up\n\nNavigage to your csu-523c repository\nCreate a new Quarto (.qmd) file called lab-02.qmd\nPopulate its YML with a title, author, subtitle, output type and theme. For example:\n\n\n\nCode\n---\ntitle: \"Lab 02: Distances and the Border Zone\"\nsubtitle: 'Ecosystem Science and Sustainability 523c'\nauthor:\n  - name: ...\n    email: ...\nformat: html\n---\n\n\n\n\n\nLibraries\n\n\nCode\n# spatial data science\nlibrary(tidyverse)\nlibrary(sf)\nlibrary(units)\n\n# Data\nlibrary(USAboundaries)\nlibrary(rnaturalearth)\n\n# Visualization\nlibrary(gghighlight)\nlibrary(ggrepel)\nlibrary(knitr)\n\n\n\n\n\nBackground\nIn this lab, 4 main skills are covered:\n\nIngesting / building sf objects from R packages and CSVs. (Q1)\nManipulating geometries and coordinate systems (Q2)\nCalculating distances (Q2)\nBuilding maps using ggplot (Q3)\n\nHints and Tricks for this lab are available here\n\n\n\nQuestion 1:\nFor this lab we need three (3) datasets.\n\nSpatial boundaries of continental USA states (1.1)\nBoundaries of Canada, Mexico and the United States (1.2)\nAll USA cites (1.3)\n\n\n1.1 Define a Projection\nFor this lab we want to calculate distances between features, therefore we need a projection that preserves distance at the scale of CONUS. For this, we will use the North America Equidistant Conic:\n\n\nCode\neqdc &lt;- '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'\n\n\nUnfortunately, this projection does not have a EPSG code to reference so we must use the PROJ4 string above. Take a moment and describe this proection based on the parameters:\n\n\n1.2 - Get USA state boundaries\nIn R, USA boundaries are stored in the USAboundaries package. In case this package and data are not installed:\n\n\nCode\nremotes::install_github(\"ropensci/USAboundaries\")\nremotes::install_github(\"ropensci/USAboundariesData\")\n\n\nOnce installed:\n\nUSA state boundaries can be accessed with USAboundaries::us_states(resolution = \"low\"). Given the precision needed for this analysis we are ok with the low resolution.\nMake sure you only have the states in the continental United States (CONUS) (Hint use filter)\nMake sure the data is in a projected coordinate system suitable for distance measurements at the national scale (eqdc).\n\n\n\n\n1.3 - Get country boundaries for Mexico, the United States of America, and Canada\nIn R, country boundaries are stored in the rnaturalearth package. In case this package is not installed:\n\n\nCode\nremotes::install_github(\"ropenscilabs/rnaturalearthdata\")\n\n\nOnce installed:\n\nWorld boundaries can be accessed with rnaturalearth::countries110.\nMake sure the data is in simple features (sf) format (Hint use the st_as_sf variable).\nMake sure you only have the countries you want (Hint filter on the admin variable)\nMake sure the data is in a projected coordinate system suitable for distance measurements at the national scale (eqdc).\n\n\n\n\n1.4 - Get city locations from the CSV file\nThe process of finding, downloading and accessing data is the first step of every analysis. Here we will go through these steps (minus finding the data).\nFirst go to this site and download the appropriate (free) dataset into the data directory of this project.\nOnce downloaded, read it into your working session using readr::read_csv() and explore the dataset until you are comfortable with the information it contains.\nWhile this data has everything we want, it is not yet spatial. Convert the data.frame to a spatial object using st_as_sf and prescribing the coordinate variables and CRS (Hint what projection are the raw coordinates in?)\nFinally, remove cities in states not wanted and make sure the data is in a projected coordinate system suitable for distance measurements at the national scale:\nCongratulations! You now have three real-world, large datasets ready for analysis.\n\n\n\nQuestion 2:\nHere we will focus on calculating the distance of each USA city to (1) the national border (2) the nearest state border (3) the Mexican border and (4) the Canadian border. You will need to manipulate you existing spatial geometries to do this using either st_union or st_combine depending on the situation. In all cases, since we are after distances to borders, we will need to cast (st_cast) our MULTIPPOLYGON geometries to MULTILINESTRING geometries. To perform these distance calculations we will use st_distance().\n\n2.1 - Distance to USA Border (coastline or national) (km)\nFor 2.2 we are interested in calculating the distance of each USA city to the USA border (coastline or national border). To do this we need all states to act as single unit. Convert the USA state boundaries to a MULTILINESTRING geometry in which the state boundaries are resolved. Please do this starting with the states object and NOT with a filtered country object. In addition to storing this distance data as part of the cities data.frame, produce a table (flextable) documenting the five cities farthest from a state border. Include only the city name, state, and distance.\n\n\n2.2 - Distance to States (km)\nFor 2.1 we are interested in calculating the distance of each city to the nearest state boundary. To do this we need all states to act as single unit. Convert the USA state boundaries to a MULTILINESTRING geometry in which the state boundaries are preserved (not resolved). In addition to storing this distance data as part of the cities data.frame, produce a table (flextable) documenting the five cities farthest from a state border. Include only the city name, state, and distance.\n\n\n2.3 - Distance to Mexico (km)\nFor 2.3 we are interested in calculating the distance of each city to the Mexican border. To do this we need to isolate Mexico from the country objects. In addition to storing this data as part of the cities data.frame, produce a table (flextable) documenting the five cities farthest from a state border. Include only the city name, state, and distance.\n\n\n2.4 - Distance to Canada (km)\nFor 2.4 we are interested in calculating the distance of each city to the Canadian border. To do this we need to isolate Canada from the country objects. In addition to storing this data as part of the cities data.frame, produce a table (flextable) documenting the five cities farthest from a state border. Include only the city name, state, and distance.\n\n\n\nQuestion 3:\nIn this section we will focus on visualizing the distance data you calculated above. You will be using ggplot to make your maps, ggrepl to label significant features, and gghighlight to emphasize important criteria.\n\n3.1 Data\nShow the 3 continents, CONUS outline, state boundaries, and 10 largest USA cities (by population) on a single map\n\nUse geom_sf to plot your layers\nUse lty to change the line type and size to change line width\nUse ggrepel::geom_label_repel to label your cities\n\n\n\n3.2 City Distance from the Border\nCreate a map that colors USA cities by their distance from the national border. In addition, re-draw and label the 5 cities that are farthest from the border.\n\n\n3.3 City Distance from Nearest State\nCreate a map that colors USA cities by their distance from the nearest state border. In addition, re-draw and label the 5 cities that are farthest from any border.\n\n\n3.4 Equidistance boundary from Mexico and Canada\nHere we provide a little more challenge. Use gghighlight to identify the cities that are equal distance from the Canadian AND Mexican border \\(\\pm\\) 100 km.\nIn addition, label the five (5) most populous cites in this zone.\nHint: (create a new variable that finds the absolute difference between the distance to Mexico and the distance to Canada)\n\n\n\nQuestion 4:\n\nReal World Application\nRecently, Federal Agencies have claimed basic constitutional rights protected by the Fourth Amendment (protecting Americans from random and arbitrary stops and searches) do not apply fully at our borders (see Portland). For example, federal authorities do not need a warrant or suspicion of wrongdoing to justify conducting what courts have called a “routine search,” such as searching luggage or a vehicle. Specifically, federal regulations give U.S. Customs and Border Protection (CBP) authority to operate within 100 miles of any U.S. “external boundary”. Further information can be found at this ACLU article.\n\n\n4.1 Quantifing Border Zone\n\nHow many cities are in this 100 mile zone? (100 miles ~ 160 kilometers)\nHow many people live in a city within 100 miles of the border?\nWhat percentage of the total population is in this zone?\nDoes it match the ACLU estimate in the link above?\n\nReport this information as a table.\n\n\n4.2 Mapping Border Zone\n\nMake a map highlighting the cites within the 100 mile zone using gghighlight.\nUse a color gradient from ‘orange’ to ‘darkred’.\nLabel the 10 most populous cities in the Danger Zone\n\nExtra Credit (10): Instead of labeling the 10 most populous cites, label the most populous city in each state within the Danger Zone.\n\n\n\n\nRubric\n\nQuestion 1 (10)\nQuestion 2 (35)\nQuestion 3 (25)\nQuestion 4 (20)\nExtra Credit (10)\nWell Structured and appealing Rmd deployed as web page (10)\n\nTotal: 100 points (110 points total)\n\n\nSubmission\nFor this lab you will submit a URL to a webpage deployed with GitHub pages.\nTo do this:\n\nKnit your lab document\nStage/commit/push your files\nIf you followed the naming conventions in the “Set Up”, your lab 3 link will be available at:\n\n`https://USERNAME.github.io/csu-523c/lab-02.html``\nSubmit this URL in the appropriate Gauchospace dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be your final!"
+  },
+  {
+    "objectID": "slides/week-2.html",
+    "href": "slides/week-2.html",
+    "title": "week-2",
+    "section": "",
+    "text": "Projections & Measures\nLecture 10, Lecture 11, Lecture 13 (centroids/buffers forward)\n\n\nPredicates & Tesselations\nLecture 12, 15"
+  },
+  {
+    "objectID": "labs/lab2-hints.html",
+    "href": "labs/lab2-hints.html",
+    "title": "Lab 2: Distances and Projections",
+    "section": "",
+    "text": "Question 1:\n\nMaking Spatial Objects & Coordinate Transformation\nSpatial objects (sf) can be built from a vector of X and Y values in addition to a coordinate reference system (CRS). For example:\n\n\nCode\ndf &lt;- data.frame(name = state.name, \n                X = state.center$x, \n                Y = state.center$y)\nhead(df)\n\n\n        name         X       Y\n1    Alabama  -86.7509 32.5901\n2     Alaska -127.2500 49.2500\n3    Arizona -111.6250 34.2192\n4   Arkansas  -92.2992 34.7336\n5 California -119.7730 36.5341\n6   Colorado -105.5130 38.6777\n\n\nCode\n# Geographic Coordinate System (GCS)\n(df_sf_gcs &lt;- st_as_sf(df, \n                      coords = c(\"X\", \"Y\"), \n                      crs = 4269))\n\n\nSimple feature collection with 50 features and 1 field\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -127.25 ymin: 27.8744 xmax: -68.9801 ymax: 49.25\nGeodetic CRS:  NAD83\nFirst 10 features:\n          name                 geometry\n1      Alabama POINT (-86.7509 32.5901)\n2       Alaska    POINT (-127.25 49.25)\n3      Arizona POINT (-111.625 34.2192)\n4     Arkansas POINT (-92.2992 34.7336)\n5   California POINT (-119.773 36.5341)\n6     Colorado POINT (-105.513 38.6777)\n7  Connecticut POINT (-72.3573 41.5928)\n8     Delaware POINT (-74.9841 38.6777)\n9      Florida  POINT (-81.685 27.8744)\n10     Georgia POINT (-83.3736 32.3329)\n\n\nCode\nggplot() + \n  geom_sf(data = df_sf_gcs) + \n  coord_sf(datum = st_crs(df_sf_gcs)) +\n  theme_linedraw()\n\n\n\n\n\n\n\n\n\nCode\n# Projected Coordinate System (PCS)\n# st_transforms converts from one reference system to another\n(df_sf_pcs = st_transform(df_sf_gcs, 5070))\n\n\nSimple feature collection with 50 features and 1 field\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -2805703 ymin: 640477 xmax: 2079664 ymax: 3291437\nProjected CRS: NAD83 / Conus Albers\nFirst 10 features:\n          name                  geometry\n1      Alabama  POINT (862043.5 1099545)\n2       Alaska  POINT (-2264853 3291437)\n3      Arizona  POINT (-1422260 1356663)\n4     Arkansas  POINT (336061.5 1303543)\n5   California  POINT (-2086972 1760961)\n6     Colorado POINT (-818480.9 1779785)\n7  Connecticut   POINT (1936213 2307450)\n8     Delaware   POINT (1796466 1938236)\n9      Florida    POINT (1409814 640477)\n10     Georgia   POINT (1179012 1107322)\n\n\nCode\nggplot() + \n  geom_sf(data = df_sf_pcs) + \n  coord_sf(datum = st_crs(df_sf_pcs)) +\n  theme_linedraw()\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion 2:\n\nst_distance review\n\n\nCode\n# Three most populous cities in the USA\n(big3 = cities |&gt; \n   select(city, population) |&gt; \n   slice_max(population, n = 3))\n\n\nSimple feature collection with 3 features and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -2032604 ymin: 1468468 xmax: 1833394 ymax: 2178657\nProjected CRS: NAD83 / Conus Albers\n# A tibble: 3 × 3\n  city        population           geometry\n  &lt;chr&gt;            &lt;dbl&gt;        &lt;POINT [m]&gt;\n1 New York      18832416  (1833394 2178657)\n2 Los Angeles   11885717 (-2032604 1468468)\n3 Chicago        8489066 (684628.5 2122697)\n\n\nCode\n# Fort Collins\n(fc = filter(cities, city == \"Fort Collins\") |&gt; \n    select(city, population))\n\n\nSimple feature collection with 1 feature and 2 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -760147.5 ymin: 1984621 xmax: -760147.5 ymax: 1984621\nProjected CRS: NAD83 / Conus Albers\n# A tibble: 1 × 3\n  city         population            geometry\n  &lt;chr&gt;             &lt;dbl&gt;         &lt;POINT [m]&gt;\n1 Fort Collins     339256 (-760147.5 1984621)\n\n\nCode\n# Distance from FC to population centers\nst_distance(big3, fc)\n\n\nUnits: [m]\n        [,1]\n[1,] 2600790\n[2,] 1373156\n[3,] 1451359\n\n\nThere are two notable things about this result:\n\nIt has units\nIt is returned as a matrix, even though SB only had one row\n\nThis second point highlights a useful feature of st_distance, namley, its ability to return distance matrices between all combinations of features in x and y.\n\n\nunits review\nWhile units are useful, they are not always the preferred units. By default, the units measurement is defined by the projection. For example:\n\n\nCode\nst_crs(big3)$units\n\n\n[1] \"m\"\n\n\nUnits can be converted using units::set_units. For example, ‘m’ can be converted to ‘km’:\n\n\nCode\nbig3 = mutate(big3, \n              dist_to_fc = st_distance(big3, fc),\n              dist_to_fc = set_units(dist_to_fc, \"km\")) \n\n(big3$dist_to_fc)\n\n\nUnits: [km]\n         [,1]\n[1,] 2600.790\n[2,] 1373.156\n[3,] 1451.359\n\n\nYou might have noticed the data type of the st_distance objects are an S3 class of units. Sometimes, this class can cause problems when trying to using it with other classes or methods:\n\n\nCode\nbig3$dist_to_fc + 4\n\n\nError in Ops.units(big3$dist_to_fc, 4): both operands of the expression should be \"units\" objects\n\n\nCode\nggplot(data = big3) + \n  geom_col(aes(x = city, y = dist_to_fc))\n\n\nWarning: The `scale_name` argument of `continuous_scale()` is deprecated as of ggplot2\n3.5.0.\n\n\n\n\n\n\n\n\n\nIn these cases, the units class can be dropped with units::drop_units\n\n\nCode\nbig3 &lt;- mutate(big3, \n              dist_to_fc = st_distance(big3, fc),\n              dist_to_fc = set_units(dist_to_fc, \"km\"),\n              dist_to_fc = drop_units(dist_to_fc))\n\nbig3$dist_to_fc + 4\n\n\n         [,1]\n[1,] 2604.790\n[2,] 1377.156\n[3,] 1455.359\n\n\nCode\nggplot(data = big3) + \n  geom_col(aes(x = reorder(city, -dist_to_fc), y = dist_to_fc)) + \n    labs(title = \"Distance to Santa Barbara (km)\") + \n  ggthemes::theme_fivethirtyeight() + \n  theme( axis.text.x = element_text(face = \"bold\", size = 14))\n\n\n\n\n\n\n\n\n\nAs with all functions, these steps can be nested:\n\n\nCode\nbig3 = mutate(big3, \n              dist_to_fc = drop_units(set_units(st_distance(big3, fc), \"km\")))\n\n\n\n\n\nGeometry review\nThere are a few ways to manipulate existing geometries, here we discuss st_union(), st_combine() and st_cast()\n\nst_combine() returns a single, combined geometry, with no resolved boundaries.\nst_union() returns a single geometry with resolved boundaries\nst_cast() casts one geometry type to another\n\n\n\nCode\n(rockies = USAboundaries::us_states() |&gt; \n  filter(name %in% c('Montana', 'Wyoming', 'Colorado', \"New Mexico\")) |&gt; \n  select(name, geometry))\n\n\nSimple feature collection with 4 features and 1 field\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -116.0492 ymin: 31.33232 xmax: -102.0419 ymax: 49.00139\nGeodetic CRS:  WGS 84\n        name                       geometry\n1    Montana MULTIPOLYGON (((-116.0492 4...\n2   Colorado MULTIPOLYGON (((-109.06 38....\n3    Wyoming MULTIPOLYGON (((-111.0569 4...\n4 New Mexico MULTIPOLYGON (((-109.0492 3...\n\n\nCode\nplot(rockies['name'], key.pos = 1)\n\n\n\n\n\n\n\n\n\nCode\n# Combine Geometries\n(combined_rk = st_combine(rockies))\n\n\nGeometry set for 1 feature \nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -116.0492 ymin: 31.33232 xmax: -102.0419 ymax: 49.00139\nGeodetic CRS:  WGS 84\n\n\nMULTIPOLYGON (((-116.0492 49.00091, -115.501 49...\n\n\nCode\nplot(combined_rk, col = \"red\")\n\n\n\n\n\n\n\n\n\nCode\n# Unioned Geometries\n(unioned_rk = st_union(rockies))\n\n\nGeometry set for 1 feature \nGeometry type: POLYGON\nDimension:     XY\nBounding box:  xmin: -116.0492 ymin: 31.33232 xmax: -102.0419 ymax: 49.00139\nGeodetic CRS:  WGS 84\n\n\nPOLYGON ((-109.0601 38.27549, -109.0418 38.1646...\n\n\nCode\nplot(unioned_rk, col = \"red\")\n\n\n\n\n\n\n\n\n\nCode\n# Combine Geometries\nline_rk = st_cast(unioned_rk, \"MULTILINESTRING\")\nplot(line_rk, col = \"red\")\n\n\n\n\n\n\n\n\n\n\n\n\nQuestion 3:\nIn this section you will extend your growing ggplot skills to handle spatial data using ggrepl to label significant features; gghighlight to emphasize important criteria; and scaled color/fill to create chloropleth represnetations of variables. Below is some example code to provide an example of these tools in action:\n\nGet some data (review)\n\n\nCode\n# Define a state/region classifier and select the southern states\nstate.of.interest = data.frame(state = state.name, region = state.region) |&gt; \n  filter(region == \"South\") |&gt; \n  pull(state)\n\n# Get USA states in the southern region and transform to EPSG:5070\nstate = USAboundaries::us_states() |&gt; \n  filter(name %in% state.of.interest) |&gt; \n  st_transform(5070)\n\n# Get USA congressional districts in the southern region and transform to EPSG:5070\ndistricts =  USAboundaries::us_congressional() |&gt; \n  filter(state_name %in% state.of.interest) |&gt; \n  st_transform(5070)\n\n# Get the 10 most populous cities in the southern region and transform to EPSG:5070\nsub_cities = cities |&gt; \n  filter(state_name %in% state.of.interest) |&gt; \n  slice_max(population, n = 10) |&gt; \n  st_transform(5070)\n\n\n\n\nMap\n\n\nCode\nggplot() + \n  # Add districts with a dashed line (lty = 3), \n  # a color gradient from blue to red based on aland, \n  # and a fill aplha of 0.5\n  geom_sf(data = districts, aes(fill = aland), lty = 3, alpha = .5) + \n  scale_fill_gradient(low = 'blue', high = \"red\") +\n  # Highlight (keep blue) only those districts witn a land area &gt; 5e10\n  gghighlight(aland &gt; 5e10) +\n  # Add the state borders with a thicker line and no fill\n  geom_sf(data = state, size = 1, fill = \"NA\") +\n  # Add the cities\n  geom_sf(data = sub_cities, size= 2, color = \"red\") +\n  # Add labels to the cities\n  ggrepel::geom_label_repel(\n    data = sub_cities,\n    aes(label = city, geometry = geometry),\n    stat = \"sf_coordinates\",\n    size = 3) +\n  labs(caption = \"Disticts with &gt; 5e10 Area Land are highlighted\",\n       fill = \"Area Land\") + \n  ggthemes::theme_map()"
+  },
+  {
+    "objectID": "slides/week-2.html#simple-features",
+    "href": "slides/week-2.html#simple-features",
+    "title": "Week 2",
+    "section": "Simple Features",
+    "text": "Simple Features"
+  },
+  {
+    "objectID": "slides/week-2.html#todays-data",
+    "href": "slides/week-2.html#todays-data",
+    "title": "Week 2",
+    "section": "Todays Data:",
+    "text": "Todays Data:\n\nSimple feature collection with 64 features and 4 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342\nGeodetic CRS:  WGS 84\nFirst 10 features:\n   geoid       name      aland state_nm                       geometry\n1  08001      Adams 3021840487 Colorado MULTIPOLYGON (((-105.0532 3...\n2  08003    Alamosa 1871643028 Colorado MULTIPOLYGON (((-105.4855 3...\n3  08005   Arapahoe 2066438714 Colorado MULTIPOLYGON (((-103.7065 3...\n4  08007  Archuleta 3496712164 Colorado MULTIPOLYGON (((-107.1287 3...\n5  08009       Baca 6617400567 Colorado MULTIPOLYGON (((-102.0416 3...\n6  08011       Bent 3918255148 Colorado MULTIPOLYGON (((-102.7476 3...\n7  08013    Boulder 1881325109 Colorado MULTIPOLYGON (((-105.3978 3...\n8  08014 Broomfield   85386685 Colorado MULTIPOLYGON (((-105.1092 3...\n9  08015    Chaffee 2624715692 Colorado MULTIPOLYGON (((-105.9698 3...\n10 08017   Cheyenne 4605713960 Colorado MULTIPOLYGON (((-103.1729 3..."
+  },
+  {
+    "objectID": "slides/week-2.html#simple-features-1",
+    "href": "slides/week-2.html#simple-features-1",
+    "title": "Week 2",
+    "section": "Simple Features",
+    "text": "Simple Features\n\nSimple feature geometries describe the geometries of features.\nThe main application of simple feature geometries is to describe 2D geometries as points, lines, or polygons.\n“simple” refers to the fact that line or polygon geometries are represented by set of points connected with straight lines.\nSimple features access is a standard (Herring 2011, Herring (2010), ISO (2004)) for describing simple feature geometries via:\n\na class hierarchy\na set of operations\nbinary and text encodings"
+  },
+  {
+    "objectID": "slides/week-2.html#simple-features-access",
+    "href": "slides/week-2.html#simple-features-access",
+    "title": "Week 2",
+    "section": "Simple Features Access",
+    "text": "Simple Features Access\n\nSimple features or simple feature access refers to the formal standard (ISO 19125-1:2004) describing how objects in the real world can be represented in computers, with emphasis on the spatial geometry of these objects.\nIt also describes how objects can be stored in and retrieved from databases, and which geometrical operations should/can be defined for them.\nThe standard is widely implemented in spatial databases (such as PostGIS), commercial GIS (e.g., ESRI ArcGIS) and forms the vector data basis for libraries such as GDAL.\nA subset of simple features (e.g. the big 7) forms the GeoJSON specification.\nR has well-supported classes for storing spatial data (sp) and interfacing to the above mentioned environments (rgdal, rgeos), but has so far lacked a complete implementation of simple features, making conversions at times convoluted, inefficient or incomplete.\nsf is seeking to fill this gap and has/will succeed sp"
+  },
+  {
+    "objectID": "slides/week-2.html#so-what-is-a-feature",
+    "href": "slides/week-2.html#so-what-is-a-feature",
+    "title": "Week 2",
+    "section": "So what is a feature?",
+    "text": "So what is a feature?\n\nA feature is a thing (object) in the real world, such as a building or a river\nThey often consist of other objects.\n\nA river system can be a feature, a river can be a feature, a river outlet can be a feature.\nA image pixel can be a feature, and the image can be a feature…"
+  },
+  {
+    "objectID": "slides/week-2.html#spatial-features",
+    "href": "slides/week-2.html#spatial-features",
+    "title": "Week 2",
+    "section": "Spatial Features",
+    "text": "Spatial Features\n\nThe standard says: “A simple feature is defined by the OpenGIS Abstract specification to have both spatial and non-spatial attributes. Spatial attributes are geometry valued, and simple features are based on 2D geometry with linear interpolation between vertices.” - standard.\nSpatial Features have a geometry describing where the feature is located and how it is represented.\n\n\nstr(co$geometry)\nsfc_MULTIPOLYGON of length 64; first list element: List of 1\n $ :List of 1\n  ..$ : num [1:132, 1:2] -105 -105 -105 -105 -105 ...\n - attr(*, \"class\")= chr [1:3] \"XY\" \"MULTIPOLYGON\" \"sfg\"\n\n\nThe geometry of a river can be its watershed, of its mainstem, or the point it drains to (see the OGC HY_Feature standard)\nFeatures can have attributes describing other properties of the feature\nOther properties may include its length, slope, stream order or average flowrate"
+  },
+  {
+    "objectID": "slides/week-2.html#geometry-types",
+    "href": "slides/week-2.html#geometry-types",
+    "title": "Week 2",
+    "section": "Geometry types",
+    "text": "Geometry types\nThe following 7 simple feature types are the most common, and are the only ones used for GeoJSON:"
+  },
+  {
+    "objectID": "slides/week-2.html#dimensions",
+    "href": "slides/week-2.html#dimensions",
+    "title": "Week 2",
+    "section": "Dimensions",
+    "text": "Dimensions\nAll geometries are composed of points\n\nPoints are defined by coordinates in a 2-, 3- or 4-D space.\nIn addition to XY coordinates, there are two optional dimensions:\na Z coordinate, denoting altitude\nan M coordinate (rarely used), denoting some measure\nThe M describes a property of the vertex that is independent of the feature.\nIt sounds attractive to encode a time as M, however these quickly become invalid once the path self-intersects.\nBoth Z and M are found relatively rarely, and software support to do something useful with them is rarer still."
+  },
+  {
+    "objectID": "slides/week-2.html#valid-geometries",
+    "href": "slides/week-2.html#valid-geometries",
+    "title": "Week 2",
+    "section": "Valid geometries",
+    "text": "Valid geometries\nValid geometries obey the following properties:\n\nLINESTRINGS shall not self-intersect\nPOLYGON rings shall be closed (last point = first point)\nPOLYGON holes (inner rings) shall be inside their exterior ring\nPOLYGON inner rings shall maximally touch the exterior ring in single points, not over a line\nPOLYGON rings shall not repeat their own path\n\nIf any of the above is not the case, the geometry is not valid."
+  },
+  {
+    "objectID": "slides/week-2.html#non-simple-and-non-valid-geometries",
+    "href": "slides/week-2.html#non-simple-and-non-valid-geometries",
+    "title": "Week 2",
+    "section": "Non-simple and non-valid geometries",
+    "text": "Non-simple and non-valid geometries\nst_is_simple and st_is_valid provide methods to help detect non-simple and non-valid geometries:\n\nAn example of a non-simple geometries is a self-intersecting lines;\n\n\n(x1 &lt;- st_linestring(cbind(c(0,1,0,1),c(0,1,1,0))))\nLINESTRING (0 0, 1 1, 0 1, 1 0)\nst_is_simple(x1)\n[1] FALSE\n\n\n\n\n\n\n\n\n\n\n\nAn example of a non-valid geometry are would be a polygon with slivers or self-intersections.\n\n\n(x2 &lt;- st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0)))))\nPOLYGON ((0 0, 1 0, 1 1, 1 0.6, 0 1, 0 0))\n(x3 &lt;- st_polygon(list(cbind(c(0,1,0,1,0),c(0,1,1,0,0)))))\nPOLYGON ((0 0, 1 1, 0 1, 1 0, 0 0))\n\nst_is_valid(c(x2,x3))\n[1] FALSE"
+  },
+  {
+    "objectID": "slides/week-2.html#empty-geometries",
+    "href": "slides/week-2.html#empty-geometries",
+    "title": "Week 2",
+    "section": "Empty Geometries",
+    "text": "Empty Geometries\n\nAn important concept in the feature geometry framework is the empty geometry.\nempty geometries serve similar purposes as NA values in vectors (placeholder)\nEmpty geometries arise naturally from geometrical operations, for instance:\n\n\n(e = st_intersection(st_point(c(0,0)), st_point(c(1,1))))\nGEOMETRYCOLLECTION EMPTY\n\n\nIt is not entirely clear what the benefit is of having typed empty geometries, but according to the simple feature standard they are type so the sf package abides by that.\nEmpty geometries can be detected by:\n\n\nst_is_empty(e)\n[1] TRUE"
+  },
+  {
+    "objectID": "slides/week-2.html#so",
+    "href": "slides/week-2.html#so",
+    "title": "Week 2",
+    "section": "So:",
+    "text": "So:\n\nThere are 17 typed geometries supported by the simple feature standard\nAll geometries are made up of points\npoints can exist in 2,3,4 Dinimsonal space\nLINESTRING and POLYGON geometries have rules that define validity\nGeometries can be empty (but are still typed)"
+  },
+  {
+    "objectID": "slides/week-2.html#wkt-and-wkb",
+    "href": "slides/week-2.html#wkt-and-wkb",
+    "title": "Week 2",
+    "section": "WKT and WKB",
+    "text": "WKT and WKB\nThe simple feature standard includes two encodings:\nWell-known text (WKT) & well-known binary (WKB)\nWell Known Text is human-readable:\n\nx &lt;- st_linestring(matrix(10:1,5))\nst_as_text(x)\n[1] \"LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)\"\n\nIn this example,\nThe word LINESTRING provides the geometry type which is followed by a parentheses, inside the parentheses are the points that make up the geometry.\nSeparate points are separated by a “comma”, while the point coordinates are separated by a “space.”\nCoordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise.\nFor that reason, we use well-known binary (WKB) encoding\n\nx\nLINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)\nst_as_binary(x)\n [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 24 40 00 00 00 00 00 00 14 40\n[26] 00 00 00 00 00 00 22 40 00 00 00 00 00 00 10 40 00 00 00 00 00 00 20 40 00\n[51] 00 00 00 00 00 08 40 00 00 00 00 00 00 1c 40 00 00 00 00 00 00 00 40 00 00\n[76] 00 00 00 00 18 40 00 00 00 00 00 00 f0 3f\n\n\nBinary conversion is used to communicate geometries to external libraries (GDAL, GEOS, liblwgeom) and spatial databases because it is fast and lossless.\nWKT and WKB can both be transformed back into R native objects by\n\n\nst_as_sfc(\"LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)\")[[1]]\nLINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)\nst_as_sfc(structure(list(st_as_binary(x)), class = \"WKB\"))[[1]]\nLINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)\n\nConversion between R native objects and WKB is done by package sf in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R."
+  },
+  {
+    "objectID": "slides/week-2.html#how-simple-features-are-organized-in-r",
+    "href": "slides/week-2.html#how-simple-features-are-organized-in-r",
+    "title": "Week 2",
+    "section": "How simple features are organized in R?",
+    "text": "How simple features are organized in R?\n\nSimple Features is a standard that is implemented in R (not limited to R)\nSo far we have discusses simple features the standard, rather then simple features the implementation\nIn R, simple features are implemented using standard data structures (S3 classes, lists, matrix, vector).\nAttributes are stored in data.frames (or tbl_df)\nFeature geometries are stored in a data.frame column.\nSince geometries are not single-valued, they are put in a list-column\nThis means each observation (element) is a list itself!\n\nRemember our nested lists?\n\nlist(list(c(1:5)))\n[[1]]\n[[1]][[1]]\n[1] 1 2 3 4 5"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-sfc-sfg",
+    "href": "slides/week-2.html#sf-sfc-sfg",
+    "title": "Week 2",
+    "section": "sf, sfc, sfg",
+    "text": "sf, sfc, sfg\nThe three classes are used to represent simple feature obejcts are:\n\nsf: data.frame with feature attributes and geometries\n\nwhich is composed of\n\nsfc: the list-column with the geometries for each feature\n\nwhich is composed of\n\nsfg, individual simple feature geometries"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-sfc-sfg-1",
+    "href": "slides/week-2.html#sf-sfc-sfg-1",
+    "title": "Week 2",
+    "section": "sf, sfc, sfg",
+    "text": "sf, sfc, sfg\n\nIn the output we see:\n\nin green a simple feature: a single record (row, consisting of attributes and geometry\nin blue a single simple feature geometry (an object of class sfg)\nin red a simple feature list-column (an object of class sfc, which is a column in the data.frame)\n\nEven though geometries are native R objects, they are printed as well-known text"
+  },
+  {
+    "objectID": "slides/week-2.html#sfg-simple-feature-geometry-blue",
+    "href": "slides/week-2.html#sfg-simple-feature-geometry-blue",
+    "title": "Week 2",
+    "section": "sfg: simple feature geometry (blue)",
+    "text": "sfg: simple feature geometry (blue)\n\n\nSimple feature geometry (sfg) objects carry the geometry for a single feature\nSimple feature geometries are implemented as R native data, using the following rules\n\na single POINT is a numeric vector\na set of points (e.g. in a LINESTRING or ring of a POLYGON) is a matrix, each row containing a point\nany other set is a list\n\n\nlist of numeric matrices for MULTILINESTRING and POLYGON\nlist of lists of numeric matrices for MULTIPOLYGON\nlist of (typed) geometries for GEOMETRYCOLLECTION"
+  },
+  {
+    "objectID": "slides/week-2.html#sfg-simple-feature-geometry",
+    "href": "slides/week-2.html#sfg-simple-feature-geometry",
+    "title": "Week 2",
+    "section": "sfg: simple feature geometry",
+    "text": "sfg: simple feature geometry\nCreator functions are rarely used in practice, since we typically read existing spatial data. But, they are useful for illustration:\n\n(x &lt;- st_point(c(1,2)))\nPOINT (1 2)\nstr(x)\n 'XY' num [1:2] 1 2\n(x &lt;- st_linestring(matrix(c(1,2,3,4), ncol=2)))\nLINESTRING (1 3, 2 4)\nstr(x)\n 'XY' num [1:2, 1:2] 1 2 3 4"
+  },
+  {
+    "objectID": "slides/week-2.html#sfg-simple-feature-geometry-1",
+    "href": "slides/week-2.html#sfg-simple-feature-geometry-1",
+    "title": "Week 2",
+    "section": "sfg: simple feature geometry",
+    "text": "sfg: simple feature geometry\nAll geometry objects have a S3 class indicating their (1) dimension, (2) type, and (3) superclass\n\n(pt = st_point(c(0,1)))\nPOINT (0 1)\nattributes(pt)\n$class\n[1] \"XY\"    \"POINT\" \"sfg\"  \n\n(pt2 = st_point(c(0,1,4)))\nPOINT Z (0 1 4)\nattributes(pt2)\n$class\n[1] \"XYZ\"   \"POINT\" \"sfg\""
+  },
+  {
+    "objectID": "slides/week-2.html#sfg-simple-feature-geometry-2",
+    "href": "slides/week-2.html#sfg-simple-feature-geometry-2",
+    "title": "Week 2",
+    "section": "sfg: simple feature geometry",
+    "text": "sfg: simple feature geometry\n\n\n\n(m1 = rbind(c(8, 1), c(2, 5), c(3, 2)))\n     [,1] [,2]\n[1,]    8    1\n[2,]    2    5\n[3,]    3    2\n\n(mp = st_multipoint(m1))\nMULTIPOINT ((8 1), (2 5), (3 2))\nattributes(mp)\n$dim\n[1] 3 2\n\n$class\n[1] \"XY\"         \"MULTIPOINT\" \"sfg\"       \n\n\n\n(ls = st_linestring(m1))\nLINESTRING (8 1, 2 5, 3 2)\nattributes(ls)\n$dim\n[1] 3 2\n\n$class\n[1] \"XY\"         \"LINESTRING\" \"sfg\""
+  },
+  {
+    "objectID": "slides/week-2.html#sfg-simple-feature-geometry-3",
+    "href": "slides/week-2.html#sfg-simple-feature-geometry-3",
+    "title": "Week 2",
+    "section": "sfg: simple feature geometry",
+    "text": "sfg: simple feature geometry\nAlthough these geometries contain the same points (m1), they have entirely different meaning: the point set is a zero-dimensional, the line a one-dimensional geometry:\nHere, dimensions is no the XY vs XYZ, but rather whether the geometry has length (1D) or area (2D) or greater…\n\nst_dimension(mp)\n[1] 0\nst_length(mp)\n[1] 0\nst_dimension(ls)\n[1] 1\nst_length(ls)\n[1] 10.37338"
+  },
+  {
+    "objectID": "slides/week-2.html#geometrycollection",
+    "href": "slides/week-2.html#geometrycollection",
+    "title": "Week 2",
+    "section": "GEOMETRYCOLLECTION",
+    "text": "GEOMETRYCOLLECTION\n\nSingle features can have a geometry that consists of several geometries of different types.\nSuch cases arise rather naturally when looking for intersections. For instance, the intersection of two LINESTRING geometries may be the combination of a LINESTRING and a POINT.\nPutting this intersection into a single feature geometry needs a GEOMETRYCOLLECTION\n\n\npt &lt;- st_point(c(1, 0))\nls &lt;- st_linestring(matrix(c(4, 3, 0, 0), ncol = 2))\npoly1 &lt;- st_polygon(list(matrix(c(5.5, 7, 7, 6, 5.5, 0, 0, -0.5, -0.5, 0), ncol = 2)))\npoly2 &lt;- st_polygon(list(matrix(c(6.6, 8, 8, 7, 6.6, 1, 1, 1.5, 1.5, 1), ncol = 2)))\nmultipoly &lt;- st_multipolygon(list(poly1, poly2))\n\n(j &lt;- st_geometrycollection(list(pt, ls, poly1, poly2, multipoly)))\nGEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)), POLYGON ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)), MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)), ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1))))\n\n\nIn case we end up with GEOMETRYCOLLECTION objects, the next question is often what to do with them. One thing we can do is extract elements from them:\n\n\nst_collection_extract(j, \"POLYGON\")\nGeometry set for 3 features \nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5\nCRS:           NA\nMULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...\nMULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))\nMULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...\n\nst_collection_extract(j, \"POINT\")\nPOINT (1 0)\n\nst_collection_extract(j, \"LINESTRING\")\nLINESTRING (4 0, 3 0)"
+  },
+  {
+    "objectID": "slides/week-2.html#sfc-sets-of-geometries",
+    "href": "slides/week-2.html#sfc-sets-of-geometries",
+    "title": "Week 2",
+    "section": "sfc: sets of geometries",
+    "text": "sfc: sets of geometries\n\nsf provides a dedicated class for handeling geometry sets, called sfc (simple feature geometry list column).\nWe can create such a list column with constructor function st_sfc:\n\n\n(sfc = st_sfc(st_point(c(0,1)), st_point(c(-3,2))))\nGeometry set for 2 features \nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -3 ymin: 1 xmax: 0 ymax: 2\nCRS:           NA\nPOINT (0 1)\nPOINT (-3 2)\n\nThe default report from the print method for sfc gives\n\nthe number of features geometries\nthe feature geometry type (here: POINT)\nthe feature geometry dimension (here: XY)\nthe bounding box for the set\nthe coordinate reference system for the set (epsg and proj4string)\nthe first few geometries, as (abbreviated) WKT\n\nThe class of the geometry list-column is a combination of a specific class, and a superclass.\n\nclass(sfc)\n[1] \"sfc_POINT\" \"sfc\"      \n\nIn addition to a class, the sfc object has further attributes (remember S3 class!)\n\nattributes(sfc) |&gt; names()\n[1] \"class\"     \"precision\" \"bbox\"      \"crs\"       \"n_empty\"  \n\nwhich are used to record for the whole set:\n\na precision value\nthe bounding box enclosing all geometries (for x and y)\na coordinate reference system\nthe number of empty geometries contained in the set\n\nThis means that all these properties are defined for the set (sfc), and not for geometries (sfg) individually.\nsfc objects are lists with each entry being an sfg object:\n\np[[2]]\nPOINT (1 1)\n\nand we will use these lists as list columns in data.frame or tibble objects to represent simple features with geometries in a list column."
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1))\n\n\n\n     [,1] [,2]\n[1,]    0    0\n[2,]    1    1\n[3,]    1    0\n[4,]    0    1"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-1",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-1",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring()\n\n\n\nLINESTRING (0 0, 1 1, 1 0, 0 1)"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-2",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-2",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc()\n\n\n\nGeometry set for 1 feature \nGeometry type: LINESTRING\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nLINESTRING (0 0, 1 1, 1 0, 0 1)"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-3",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-3",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc() |&gt;\n   st_cast(\"POINT\")\n\n\n\nGeometry set for 4 features \nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nPOINT (0 0)\nPOINT (1 1)\nPOINT (1 0)\nPOINT (0 1)"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-4",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-4",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc() |&gt;\n   st_cast(\"POINT\") -&gt;\n  p"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-5",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-5",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc() |&gt;\n   st_cast(\"POINT\") -&gt;\n  p\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1))\n\n\n\n     [,1] [,2]\n[1,]    0    0\n[2,]    1    1\n[3,]    1    0\n[4,]    0    1"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-6",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-6",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc() |&gt;\n   st_cast(\"POINT\") -&gt;\n  p\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring()\n\n\n\nLINESTRING (0 0, 1 1, 1 0, 0 1)"
+  },
+  {
+    "objectID": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-7",
+    "href": "slides/week-2.html#sets-of-geometries-arise-when-we-separate-compound-geometries-7",
+    "title": "Week 2",
+    "section": "Sets of geometries arise when we separate compound geometries:",
+    "text": "Sets of geometries arise when we separate compound geometries:\n\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_sfc() |&gt;\n   st_cast(\"POINT\") -&gt;\n  p\n\n\nrbind(c(0,0), c(1,1), c(1,0), c(0,1)) |&gt;\n   st_linestring() |&gt;\n   st_cast(\"POINT\")\n\n\n\nPOINT (0 0)\n\n\n\nOn the last slide, st_sfc creates a set of one LINESTRING (p), with a size of 4.\nGoing the other way around (from set to feature), we need to combine geometries:\n\n\n\n\np\nGeometry set for 4 features \nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nPOINT (0 0)\nPOINT (1 1)\nPOINT (1 0)\nPOINT (0 1)\n\n\n\nst_combine(p)\nGeometry set for 1 feature \nGeometry type: MULTIPOINT\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nMULTIPOINT ((0 0), (1 1), (1 0), (0 1))"
+  },
+  {
+    "objectID": "slides/week-2.html#casting-must-be-done-the-level-of-the-feature",
+    "href": "slides/week-2.html#casting-must-be-done-the-level-of-the-feature",
+    "title": "Week 2",
+    "section": "Casting must be done the level of the feature",
+    "text": "Casting must be done the level of the feature\nIf we want to go from the 4 feature (p) object to a 1 feature LINESTRING, we must combine before casting …\n\nst_combine(p) |&gt; \n  st_cast(\"LINESTRING\")\nGeometry set for 1 feature \nGeometry type: LINESTRING\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nLINESTRING (0 0, 1 1, 1 0, 0 1)"
+  },
+  {
+    "objectID": "slides/week-2.html#mixed-geometries",
+    "href": "slides/week-2.html#mixed-geometries",
+    "title": "Week 2",
+    "section": "Mixed geometries",
+    "text": "Mixed geometries\nSets of simple features also consist of features with heterogeneous geometries. In this case, the geometry type of the set is GEOMETRY:\n.pull-left[\n\n(g = st_sfc(st_point(c(0,0)), \n            st_linestring(rbind(c(0,0), c(1,1)))))\nGeometry set for 2 features \nGeometry type: GEOMETRY\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\nPOINT (0 0)\nLINESTRING (0 0, 1 1)\n\n]\n.pull-right[ These set can be filtered by using st_is\n\ng |&gt; st_is(\"LINESTRING\")\n[1] FALSE  TRUE\n\nor, when working with sf objects,\n\n# Note need of %&gt;%\nst_sf(g) %&gt;%\n  filter(st_is(., \"LINESTRING\"))\nSimple feature collection with 1 feature and 0 fields\nGeometry type: LINESTRING\nDimension:     XY\nBounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1\nCRS:           NA\n                      g\n1 LINESTRING (0 0, 1 1)\n\n]"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-objects-with-simple-features",
+    "href": "slides/week-2.html#sf-objects-with-simple-features",
+    "title": "Week 2",
+    "section": "sf: objects with simple features",
+    "text": "sf: objects with simple features\nSimple features geometries and feature attributes are put together in sf (simple feature) objects.\n\nco\nSimple feature collection with 64 features and 4 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342\nGeodetic CRS:  WGS 84\nFirst 10 features:\n   geoid       name      aland state_nm                       geometry\n1  08001      Adams 3021840487 Colorado MULTIPOLYGON (((-105.0532 3...\n2  08003    Alamosa 1871643028 Colorado MULTIPOLYGON (((-105.4855 3...\n3  08005   Arapahoe 2066438714 Colorado MULTIPOLYGON (((-103.7065 3...\n4  08007  Archuleta 3496712164 Colorado MULTIPOLYGON (((-107.1287 3...\n5  08009       Baca 6617400567 Colorado MULTIPOLYGON (((-102.0416 3...\n6  08011       Bent 3918255148 Colorado MULTIPOLYGON (((-102.7476 3...\n7  08013    Boulder 1881325109 Colorado MULTIPOLYGON (((-105.3978 3...\n8  08014 Broomfield   85386685 Colorado MULTIPOLYGON (((-105.1092 3...\n9  08015    Chaffee 2624715692 Colorado MULTIPOLYGON (((-105.9698 3...\n10 08017   Cheyenne 4605713960 Colorado MULTIPOLYGON (((-103.1729 3...\n\nThis sf object is of class\n\nclass(co)\n[1] \"sf\"         \"data.frame\"\n\nmeaning it extends data.frame, but with a single list-column with geometries, which is held in the column named:\n\nattr(co, \"sf_column\")\n[1] \"geometry\""
+  },
+  {
+    "objectID": "slides/week-2.html#sfc-simple-feature-geometry-list-column",
+    "href": "slides/week-2.html#sfc-simple-feature-geometry-list-column",
+    "title": "Week 2",
+    "section": "sfc: simple feature geometry list-column",
+    "text": "sfc: simple feature geometry list-column\nThe column in the sf data.frame that contains the geometries is a list, of class sfc.\nWe can retrieve the geometry list-column as we would any data.frame column (e.g. ca$geometry), or more generally with st_geometry:\n\n(co_geom &lt;- st_geometry(co))\nGeometry set for 64 features \nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342\nGeodetic CRS:  WGS 84\nFirst 5 geometries:\nMULTIPOLYGON (((-105.0532 39.79106, -104.976 39...\nMULTIPOLYGON (((-105.4855 37.5779, -105.4859 37...\nMULTIPOLYGON (((-103.7065 39.73989, -103.7239 3...\nMULTIPOLYGON (((-107.1287 37.42294, -107.2803 3...\nMULTIPOLYGON (((-102.0416 37.64428, -102.0558 3...\n\nGeometries are printed in abbreviated form, but we can view a complete geometry by selecting it:\n\nco_geom[[1]]\nMULTIPOLYGON (((-105.0532 39.79106, -104.976 39.79104, -104.9731 39.79242, -104.9716 39.79829, -104.9687 39.7984, -104.9689 39.79104, -104.9602 39.79102, -104.9554 39.79463, -104.9405 39.7946, -104.9405 39.791, -104.927 39.79105, -104.927 39.78378, -104.9034 39.78381, -104.9036 39.79839, -104.8845 39.79832, -104.8844 39.81282, -104.8661 39.81285, -104.866 39.79839, -104.8291 39.79806, -104.7909 39.79825, -104.7909 39.8418, -104.7623 39.84179, -104.7623 39.84539, -104.731 39.84519, -104.7304 39.89613, -104.7033 39.89595, -104.7032 39.90693, -104.6921 39.90685, -104.6921 39.91418, -104.6796 39.91402, -104.6797 39.90701, -104.6309 39.90664, -104.6309 39.89929, -104.5996 39.89904, -104.5998 39.88131, -104.6052 39.88135, -104.6053 39.87311, -104.6192 39.87322, -104.6198 39.82242, -104.6554 39.82261, -104.6554 39.813, -104.6662 39.81307, -104.6661 39.82279, -104.7625 39.82344, -104.7626 39.79843, -104.7344 39.79844, -104.7346 39.76918, -104.7646 39.76919, -104.7646 39.77157, -104.7722 39.7715, -104.7722 39.77641, -104.7816 39.77648, -104.7816 39.7728, -104.8282 39.77278, -104.8282 39.76916, -104.833 39.76918, -104.8376 39.76717, -104.8564 39.76858, -104.8563 39.75813, -104.8482 39.75642, -104.8469 39.75469, -104.8799 39.75473, -104.88 39.74744, -104.8847 39.74747, -104.8846 39.74016, -104.8217 39.74029, -104.7256 39.74027, -104.6783 39.74, -104.6603 39.74048, -104.6528 39.73978, -104.6304 39.7395, -104.6246 39.74008, -104.5589 39.73933, -104.5074 39.73825, -104.3919 39.73804, -104.3401 39.73825, -104.265 39.73888, -104.2095 39.73902, -104.1151 39.73977, -104.0407 39.73998, -103.9776 39.74027, -103.9655 39.74052, -103.9075 39.74065, -103.8661 39.74024, -103.8002 39.7402, -103.794 39.74005, -103.7239 39.73978, -103.7065 39.73989, -103.7066 39.76555, -103.7063 39.82855, -103.7063 39.889, -103.7061 39.90854, -103.7062 39.95888, -103.7057 39.98511, -103.7057 40.00137, -103.8677 40.0012, -103.9546 40.00113, -104.0371 40.00113, -104.1503 40.00086, -104.1693 40.00078, -104.2674 40.00092, -104.3015 40.00077, -104.4523 40.00062, -104.6019 40.00053, -104.6406 40.00057, -104.7885 40.00041, -104.9048 40.00032, -104.9614 40.00034, -104.9809 40.00032, -104.9877 39.98648, -104.9878 39.97575, -104.9944 39.9758, -104.9971 39.97215, -104.9881 39.97218, -104.9881 39.96847, -104.9972 39.96853, -104.9974 39.98121, -105.0158 39.98119, -105.0156 39.95519, -105.0171 39.95281, -105.0122 39.95045, -105.0063 39.95044, -105.0063 39.9468, -104.9972 39.94677, -104.9971 39.94324, -105.0157 39.94313, -105.0155 39.9214, -105.0344 39.9213, -105.0343 39.91418, -105.0529 39.91422, -105.0532 39.86362, -105.0532 39.79106)))"
+  },
+  {
+    "objectID": "slides/week-2.html#reading-and-writing",
+    "href": "slides/week-2.html#reading-and-writing",
+    "title": "Week 2",
+    "section": "Reading and writing",
+    "text": "Reading and writing\nAs we’ve seen above, reading spatial data from an external file can be done via sf - reading data requires the “parser function” and the file path\n\nco &lt;- st_read(\"data/co.shp\")\n\nwe can suppress the output by adding argument quiet=TRUE or by using the otherwise nearly identical but more quiet\n\nca &lt;- read_sf(\"data/co.shp\")\n\nWriting takes place in the same fashion, using st_write:\n\nst_write(co, \"data/co.shp\")\n\nor its quiet alternative that silently overwrites existing files by default,\n\nwrite_sf(co, \"co.shp\") # silently overwrites"
+  },
+  {
+    "objectID": "slides/week-2.html#from-tables-e.g.-csv",
+    "href": "slides/week-2.html#from-tables-e.g.-csv",
+    "title": "Week 2",
+    "section": "From Tables (e.g. CSV)",
+    "text": "From Tables (e.g. CSV)\nSpatial data can also be created from CSV and other flat files once it is in R:\n\n(cities = readr::read_csv(\"../labs/data/uscities.csv\") |&gt; \n  select(city, state_name, county_name, population, lat, lng) )\n# A tibble: 31,254 × 6\n   city         state_name           county_name         population   lat    lng\n   &lt;chr&gt;        &lt;chr&gt;                &lt;chr&gt;                    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;\n 1 New York     New York             Queens                18832416  40.7  -73.9\n 2 Los Angeles  California           Los Angeles           11885717  34.1 -118. \n 3 Chicago      Illinois             Cook                   8489066  41.8  -87.7\n 4 Miami        Florida              Miami-Dade             6113982  25.8  -80.2\n 5 Houston      Texas                Harris                 6046392  29.8  -95.4\n 6 Dallas       Texas                Dallas                 5843632  32.8  -96.8\n 7 Philadelphia Pennsylvania         Philadelphia           5696588  40.0  -75.1\n 8 Atlanta      Georgia              Fulton                 5211164  33.8  -84.4\n 9 Washington   District of Columbia District of Columb…    5146120  38.9  -77.0\n10 Boston       Massachusetts        Suffolk                4355184  42.3  -71.1\n# ℹ 31,244 more rows"
+  },
+  {
+    "objectID": "slides/week-2.html#data-manipulation",
+    "href": "slides/week-2.html#data-manipulation",
+    "title": "Week 2",
+    "section": "Data Manipulation",
+    "text": "Data Manipulation\nSince sf objects are data.frames, our dplyr verbs work!\nLets find the most populous city in each California county…"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-and-dplyr",
+    "href": "slides/week-2.html#sf-and-dplyr",
+    "title": "Week 2",
+    "section": "##sf and dplyr",
+    "text": "##sf and dplyr\n\n\n\ncities_sf\n\n\n\nSimple feature collection with 31254 features and 4 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -176.6295 ymin: 17.9559 xmax: 174.111 ymax: 71.2727\nGeodetic CRS:  WGS 84\n# A tibble: 31,254 × 5\n   city         state_name      county_name population            geometry\n * &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;\n 1 New York     New York        Queens        18832416  (-73.9249 40.6943)\n 2 Los Angeles  California      Los Angeles   11885717 (-118.4068 34.1141)\n 3 Chicago      Illinois        Cook           8489066  (-87.6866 41.8375)\n 4 Miami        Florida         Miami-Dade     6113982   (-80.2101 25.784)\n 5 Houston      Texas           Harris         6046392   (-95.3885 29.786)\n 6 Dallas       Texas           Dallas         5843632  (-96.7667 32.7935)\n 7 Philadelphia Pennsylvania    Philadelph…    5696588  (-75.1339 40.0077)\n 8 Atlanta      Georgia         Fulton         5211164   (-84.422 33.7628)\n 9 Washington   District of Co… District o…    5146120  (-77.0163 38.9047)\n10 Boston       Massachusetts   Suffolk        4355184  (-71.0852 42.3188)\n# ℹ 31,244 more rows"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-and-dplyr-1",
+    "href": "slides/week-2.html#sf-and-dplyr-1",
+    "title": "Week 2",
+    "section": "##sf and dplyr",
+    "text": "##sf and dplyr\n\n\n\ncities_sf |&gt;\n  filter(state_name == \"Colorado\")\n\n\n\nSimple feature collection with 477 features and 4 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -109.0066 ymin: 37.0155 xmax: -102.0804 ymax: 40.9849\nGeodetic CRS:  WGS 84\n# A tibble: 477 × 5\n   city             state_name county_name population            geometry\n * &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;\n 1 Denver           Colorado   Denver         2691349  (-104.8758 39.762)\n 2 Colorado Springs Colorado   El Paso         638421 (-104.7605 38.8674)\n 3 Aurora           Colorado   Arapahoe        390201 (-104.7237 39.7083)\n 4 Fort Collins     Colorado   Larimer         339256 (-105.0656 40.5477)\n 5 Lakewood         Colorado   Jefferson       156309 (-105.1172 39.6977)\n 6 Greeley          Colorado   Weld            143554 (-104.7706 40.4152)\n 7 Thornton         Colorado   Adams           142878 (-104.9438 39.9197)\n 8 Grand Junction   Colorado   Mesa            141008 (-108.5673 39.0877)\n 9 Arvada           Colorado   Jefferson       122835   (-105.151 39.832)\n10 Boulder          Colorado   Boulder         120121 (-105.2524 40.0248)\n# ℹ 467 more rows"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-and-dplyr-2",
+    "href": "slides/week-2.html#sf-and-dplyr-2",
+    "title": "Week 2",
+    "section": "##sf and dplyr",
+    "text": "##sf and dplyr\n\n\n\ncities_sf |&gt;\n  filter(state_name == \"Colorado\") |&gt;\n  group_by(county_name)\n\n\n\nSimple feature collection with 477 features and 4 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -109.0066 ymin: 37.0155 xmax: -102.0804 ymax: 40.9849\nGeodetic CRS:  WGS 84\n# A tibble: 477 × 5\n# Groups:   county_name [64]\n   city             state_name county_name population            geometry\n   &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;\n 1 Denver           Colorado   Denver         2691349  (-104.8758 39.762)\n 2 Colorado Springs Colorado   El Paso         638421 (-104.7605 38.8674)\n 3 Aurora           Colorado   Arapahoe        390201 (-104.7237 39.7083)\n 4 Fort Collins     Colorado   Larimer         339256 (-105.0656 40.5477)\n 5 Lakewood         Colorado   Jefferson       156309 (-105.1172 39.6977)\n 6 Greeley          Colorado   Weld            143554 (-104.7706 40.4152)\n 7 Thornton         Colorado   Adams           142878 (-104.9438 39.9197)\n 8 Grand Junction   Colorado   Mesa            141008 (-108.5673 39.0877)\n 9 Arvada           Colorado   Jefferson       122835   (-105.151 39.832)\n10 Boulder          Colorado   Boulder         120121 (-105.2524 40.0248)\n# ℹ 467 more rows"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-and-dplyr-3",
+    "href": "slides/week-2.html#sf-and-dplyr-3",
+    "title": "Week 2",
+    "section": "##sf and dplyr",
+    "text": "##sf and dplyr\n\n\n\ncities_sf |&gt;\n  filter(state_name == \"Colorado\") |&gt;\n  group_by(county_name) |&gt;\n  slice_max(population, n = 1)\n\n\n\nSimple feature collection with 64 features and 4 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: -108.9071 ymin: 37.1751 xmax: -102.2627 ymax: 40.9849\nGeodetic CRS:  WGS 84\n# A tibble: 64 × 5\n# Groups:   county_name [64]\n   city           state_name county_name population            geometry\n   &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;\n 1 Thornton       Colorado   Adams           142878 (-104.9438 39.9197)\n 2 Alamosa        Colorado   Alamosa           9847  (-105.877 37.4752)\n 3 Aurora         Colorado   Arapahoe        390201 (-104.7237 39.7083)\n 4 Pagosa Springs Colorado   Archuleta         1718 (-107.0307 37.2675)\n 5 Springfield    Colorado   Baca              1482  (-102.6189 37.405)\n 6 Las Animas     Colorado   Bent              2480 (-103.2236 38.0695)\n 7 Boulder        Colorado   Boulder         120121 (-105.2524 40.0248)\n 8 Broomfield     Colorado   Broomfield       75110 (-105.0526 39.9542)\n 9 Salida         Colorado   Chaffee           5786 (-105.9979 38.5298)\n10 Cheyenne Wells Colorado   Cheyenne           949 (-102.3521 38.8192)\n# ℹ 54 more rows"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-and-dplyr-4",
+    "href": "slides/week-2.html#sf-and-dplyr-4",
+    "title": "Week 2",
+    "section": "##sf and dplyr",
+    "text": "##sf and dplyr\n\n\n\ncities_sf |&gt;\n  filter(state_name == \"Colorado\") |&gt;\n  group_by(county_name) |&gt;\n  slice_max(population, n = 1) -&gt;\n  co_cities"
+  },
+  {
+    "objectID": "slides/week-2.html#plotting",
+    "href": "slides/week-2.html#plotting",
+    "title": "Week 2",
+    "section": "Plotting",
+    "text": "Plotting\nWe’ve already seen that ggplot() is a powerful visualization tool:\n–\nThe 5 steps we described for building a ggplot are: 1. canvas 2. layers (geoms) 3. labels 4. facets 5. themes\n–\nspatial work in R is becoming so common that ggplot() comes with a sf geom (geom_sf)"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-an-ggplot",
+    "href": "slides/week-2.html#sf-an-ggplot",
+    "title": "Week 2",
+    "section": "##sf an ggplot",
+    "text": "##sf an ggplot\n\n\n\nggplot()"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-an-ggplot-1",
+    "href": "slides/week-2.html#sf-an-ggplot-1",
+    "title": "Week 2",
+    "section": "##sf an ggplot",
+    "text": "##sf an ggplot\n\n\n\nggplot() +\n  geom_sf(data = co, aes(fill = aland/1e10))"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-an-ggplot-2",
+    "href": "slides/week-2.html#sf-an-ggplot-2",
+    "title": "Week 2",
+    "section": "##sf an ggplot",
+    "text": "##sf an ggplot\n\n\n\nggplot() +\n  geom_sf(data = co, aes(fill = aland/1e10)) +\n  geom_sf(data = co_cities, aes(size = population/1e5), col = \"red\")"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-an-ggplot-3",
+    "href": "slides/week-2.html#sf-an-ggplot-3",
+    "title": "Week 2",
+    "section": "##sf an ggplot",
+    "text": "##sf an ggplot\n\n\n\nggplot() +\n  geom_sf(data = co, aes(fill = aland/1e10)) +\n  geom_sf(data = co_cities, aes(size = population/1e5), col = \"red\") +\n  theme_linedraw()"
+  },
+  {
+    "objectID": "slides/week-2.html#sf-an-ggplot-4",
+    "href": "slides/week-2.html#sf-an-ggplot-4",
+    "title": "Week 2",
+    "section": "##sf an ggplot",
+    "text": "##sf an ggplot\n\n\n\nggplot() +\n  geom_sf(data = co, aes(fill = aland/1e10)) +\n  geom_sf(data = co_cities, aes(size = population/1e5), col = \"red\") +\n  theme_linedraw() +\n  labs(title = \"California Counties: Land Area\",\n       size = \"Population \\n(100,000)\",\n       fill = \"Acres \\n(billions)\")"
   }
 ]
