@@ -360,7 +360,7 @@ Projected CRS: NAD83 / Conus Albers
 <p>There are two notable things about this result:</p>
 <ol type="1">
 <li>It has <code>units</code></li>
-<li>It is returned as a matrix, even though SB only had one row</li>
+<li>It is returned as a matrix, even though Fort Collins only had one row</li>
 </ol>
 <p>This second point highlights a useful feature of <code>st_distance</code>, namley, its ability to return distance matrices between all combinations of features in <code>x</code> and <code>y</code>.</p>
 </section>
@@ -441,7 +441,7 @@ Projected CRS: NAD83 / Conus Albers
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> big3) <span class="sc">+</span> </span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(city, <span class="sc">-</span>dist_to_fc), <span class="at">y =</span> dist_to_fc)) <span class="sc">+</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Santa Barbara (km)"</span>) <span class="sc">+</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Fort Collins (km)"</span>) <span class="sc">+</span> </span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_fivethirtyeight</span>() <span class="sc">+</span> </span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>

@@ -56,12 +56,13 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 
 ### **Component 2**: _Working with Vector Data_
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 02**: Projections & Measures\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 02**: R as a GIS\
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 02**: Lab 2: Border summaries\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 02**: [Projections & Measures](slides/week-2.qmd)\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 02**: [Interactive Mapping](slides/leaflet-examples.qmd)\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 02**: [Lab 2: Border summaries](labs/lab2.qmd)\
+<i class="fa fa-question" aria-hidden="true"></i> **Lab 02**: [Lab 2: Hints & Tricks](labs/lab2-hints.qmd)\
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 03**: Predicates & Tesselations\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 03**: Interactive Mapping\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 03**: Functions\
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 03**: Lab 3: Dams in the US\
 
 ### **Component 3**: _Working with Raster Data_

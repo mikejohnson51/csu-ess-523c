@@ -1371,13 +1371,13 @@ Figure&nbsp;1: Data Science: Process and Implementation
 <span id="cb48-6"><a></a><span class="co">#&gt; Bounding box:  xmin: -107.2826 ymin: 35.94568 xmax: -107.2826 ymax: 35.94568</span></span>
 <span id="cb48-7"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
 <span id="cb48-8"><a></a><span class="co">#&gt; # A tibble: 1 × 18</span></span>
-<span id="cb48-9"><a></a><span class="co">#&gt;     fid nhdpv2_reach_measure cluster   uri   nhdpv2_comid name  nhdpv2_totdasqkm</span></span>
-<span id="cb48-10"><a></a><span class="co">#&gt;   &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;</span></span>
-<span id="cb48-11"><a></a><span class="co">#&gt; 1     1                 80.3 https://… http…     17789327 PENI…             57.4</span></span>
-<span id="cb48-12"><a></a><span class="co">#&gt; # ℹ 11 more variables: description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;,</span></span>
-<span id="cb48-13"><a></a><span class="co">#&gt; #   subjectof &lt;chr&gt;, nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;,</span></span>
-<span id="cb48-14"><a></a><span class="co">#&gt; #   gage_totdasqkm &lt;dbl&gt;, provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;,</span></span>
-<span id="cb48-15"><a></a><span class="co">#&gt; #   nhdpv2_reachcode &lt;chr&gt;, mainstem_uri &lt;chr&gt;, geometry &lt;POINT [°]&gt;</span></span>
+<span id="cb48-9"><a></a><span class="co">#&gt;   nhdpv2_reachcode mainstem_uri           fid nhdpv2_reach_measure cluster uri  </span></span>
+<span id="cb48-10"><a></a><span class="co">#&gt;   &lt;chr&gt;            &lt;chr&gt;                &lt;int&gt;                &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;</span></span>
+<span id="cb48-11"><a></a><span class="co">#&gt; 1 13020205000216   https://geoconnex.u…     1                 80.3 https:… http…</span></span>
+<span id="cb48-12"><a></a><span class="co">#&gt; # ℹ 12 more variables: nhdpv2_comid &lt;dbl&gt;, name &lt;chr&gt;, nhdpv2_totdasqkm &lt;dbl&gt;,</span></span>
+<span id="cb48-13"><a></a><span class="co">#&gt; #   description &lt;chr&gt;, nhdpv2_link_source &lt;chr&gt;, subjectof &lt;chr&gt;,</span></span>
+<span id="cb48-14"><a></a><span class="co">#&gt; #   nhdpv2_offset_m &lt;dbl&gt;, provider &lt;chr&gt;, gage_totdasqkm &lt;dbl&gt;,</span></span>
+<span id="cb48-15"><a></a><span class="co">#&gt; #   provider_id &lt;chr&gt;, dasqkm_diff &lt;dbl&gt;, geometry &lt;POINT [°]&gt;</span></span>
 <span id="cb48-16"><a></a></span>
 <span id="cb48-17"><a></a><span class="co"># write out data</span></span>
 <span id="cb48-18"><a></a><span class="co"># write_sf(counties, "data/counties.shp")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

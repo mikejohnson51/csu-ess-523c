@@ -1,0 +1,23 @@
+---
+title: "week3"
+format: html
+---
+
+predicates: 12, 13
+tesselations: 15
+
+lab: 14
+
+
+Week 4
+
+17, 18
+
+Week 5
+
+19,21
+
+Week 6
+
+Tidymodels 1-2
+lab: 

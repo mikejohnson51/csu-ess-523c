@@ -194,7 +194,7 @@
 
 <section id="title-slide" data-background-color="#1E4D2B" class="quarto-title-block center">
   <h1 class="title">Week 2</h1>
-  <p class="subtitle">…</p>
+  <p class="subtitle">Features, Projections &amp; Measures</p>
 
 <div class="quarto-title-authors">
 </div>
@@ -284,9 +284,6 @@ First 10 features:
 <section id="geometry-types" class="slide level2">
 <h2>Geometry types</h2>
 <p>The following 7 simple feature types are the most common, and are the only ones used for <a href="https://tools.ietf.org/html/rfc7946">GeoJSON</a>:</p>
-</section>
-<section class="slide level2">
-
 <table class="caption-top">
 <colgroup>
 <col style="width: 7%">
@@ -313,9 +310,6 @@ First 10 features:
 </tr>
 </tbody>
 </table>
-</section>
-<section class="slide level2">
-
 <table class="caption-top">
 <colgroup>
 <col style="width: 7%">
@@ -342,9 +336,6 @@ First 10 features:
 </tr>
 </tbody>
 </table>
-</section>
-<section class="slide level2">
-
 <table class="caption-top">
 <colgroup>
 <col style="width: 7%">
@@ -363,16 +354,13 @@ First 10 features:
 </tr>
 </tbody>
 </table>
-</section>
-<section class="slide level2">
-
 <ul>
 <li>The descriptions above were copied from the <a href="http://postgis.net/docs/using_postgis_dbmanagement.html">PostGIS manual</a>.</li>
 </ul>
-<p>The remaining geometries 10 are rarer, but increasingly find implementations:</p>
 </section>
-<section class="slide level2">
-
+<section id="section" class="slide level2">
+<h2></h2>
+<p>The remaining geometries 10 are rarer, but increasingly find implementations:</p>
 <table class="caption-top">
 <colgroup>
 <col style="width: 7%">
@@ -1138,7 +1126,8 @@ POINT (0 1)</code></pre>
 <section id="mixed-geometries" class="slide level2">
 <h2>Mixed geometries</h2>
 <p>Sets of simple features also consist of features with heterogeneous geometries. In this case, the geometry type of the set is <code>GEOMETRY</code>:</p>
-<p>.pull-left[</p>
+<div class="columns">
+<div class="column" style="width:50%;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>(<span class="at">g =</span> <span class="fu">st_sfc</span>(<span class="fu">st_point</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)), </span>
 <span id="cb49-2"><a></a>            <span class="fu">st_linestring</span>(<span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))))</span>
@@ -1150,8 +1139,8 @@ POINT (0 1)</code></pre>
 <span id="cb49-8"><a></a><span class="fu">POINT</span> (<span class="dv">0</span> <span class="dv">0</span>)</span>
 <span id="cb49-9"><a></a><span class="fu">LINESTRING</span> (<span class="dv">0</span> <span class="dv">0</span>, <span class="dv">1</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>]</p>
-<p>.pull-right[ These set can be filtered by using <code>st_is</code></p>
+</div><div class="column" style="width:50%;">
+<p>These set can be filtered by using <code>st_is</code></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a>g <span class="sc">|&gt;</span> <span class="fu">st_is</span>(<span class="st">"LINESTRING"</span>)</span>
 <span id="cb50-2"><a></a>[<span class="dv">1</span>] <span class="cn">FALSE</span>  <span class="cn">TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1169,7 +1158,7 @@ POINT (0 1)</code></pre>
 <span id="cb51-9"><a></a>                      g</span>
 <span id="cb51-10"><a></a><span class="dv">1</span> <span class="fu">LINESTRING</span> (<span class="dv">0</span> <span class="dv">0</span>, <span class="dv">1</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>]</p>
+</div></div>
 </section>
 <section id="sf-objects-with-simple-features" class="slide level2">
 <h2><code>sf</code>: objects with simple features</h2>
@@ -1305,7 +1294,7 @@ POINT (0 1)</code></pre>
 <p>Lets find the most populous city in each California county…</p>
 </section>
 <section id="sf-and-dplyr" class="slide level2">
-<h2>##sf and dplyr</h2>
+<h2>sf and dplyr</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -1336,7 +1325,7 @@ Geodetic CRS:  WGS 84
 </div></div>
 </section>
 <section id="sf-and-dplyr-1" class="slide level2">
-<h2>##sf and dplyr</h2>
+<h2>sf and dplyr</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -1368,7 +1357,7 @@ Geodetic CRS:  WGS 84
 </div></div>
 </section>
 <section id="sf-and-dplyr-2" class="slide level2">
-<h2>##sf and dplyr</h2>
+<h2>sf and dplyr</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -1402,7 +1391,7 @@ Geodetic CRS:  WGS 84
 </div></div>
 </section>
 <section id="sf-and-dplyr-3" class="slide level2">
-<h2>##sf and dplyr</h2>
+<h2>sf and dplyr</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -1437,7 +1426,7 @@ Geodetic CRS:  WGS 84
 </div></div>
 </section>
 <section id="sf-and-dplyr-4" class="slide level2">
-<h2>##sf and dplyr</h2>
+<h2>sf and dplyr</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -1565,6 +1554,1638 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 </div></div>
+</section>
+<section id="so-far" class="slide level2">
+<h2>So far …</h2>
+<p>We’ve discussed the <em>simple feature</em> standard</p>
+<ol type="1">
+<li>Geometries (type, dimension, and structure)</li>
+</ol>
+<pre><code>- Empty, Valid, Simple</code></pre>
+<ol start="2" type="1">
+<li><p>Encoding (WKT &amp; WKB)</p></li>
+<li><p>A set of operations</p></li>
+</ol>
+<p>And the implementation of the <strong>simple features</strong> standard in R</p>
+<ul>
+<li><p><em>sfg</em>: a <em>single</em> feature geometry</p></li>
+<li><p><em>sfc</em>: a <em>set</em> of geometries (<code>sfg</code>) stored as a list</p></li>
+<li><p><em>sf</em>: a <code>sfc</code> list joined with a <code>data.frame</code> (attributes)</p></li>
+</ul>
+<p>This R implementation is ideal/special because it achieves the simple feature abstract goal of:</p>
+<blockquote>
+<p>“<em>A simple feature is defined by the OpenGIS Abstract specification to have both <strong>spatial</strong> and <strong>non-spatial</strong> attributes…</em>” - <a href="http://www.opengeospatial.org/standards/sfa">standard</a>.</p>
+</blockquote>
+<p>The shapefile/GIS traditional GIS view does not do this and seperates geometry (shp), from projection (prj), from data (dbf) and relates them through an shx file</p>
+</section>
+<section id="integration-with-tidyverse" class="slide level2">
+<h2>Integration with <code>tidyverse</code></h2>
+<ul>
+<li><p>We saw how the <code>dplyr</code> verbs still work on an <code>sf</code> object since <code>sf</code> extends the data.frame class</p></li>
+<li><p>How <code>geom_sf</code> support mapping (“spatial plotting”) in <code>ggplot</code></p></li>
+<li><p>How to read spatial data into R via GDAL drivers:</p>
+<ul>
+<li>spatial files (<code>read_sf</code>)</li>
+<li>flat files via <code>st_as_sf</code></li>
+</ul></li>
+<li><p>Integration with a few <code>GEOS</code> geometry operations like:</p>
+<ul>
+<li>st_combine()</li>
+<li>st_union()</li>
+</ul></li>
+</ul>
+</section>
+<section id="taki" class="slide level2">
+<h2>Taki …</h2>
+<div class="{columns}">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a></a>conus <span class="ot">&lt;-</span>  USAboundaries<span class="sc">::</span><span class="fu">us_states</span>() <span class="sc">|&gt;</span></span>
+<span id="cb78-2"><a></a>  <span class="fu">filter</span>(<span class="sc">!</span>state_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Puerto Rico"</span>, </span>
+<span id="cb78-3"><a></a>                            <span class="st">"Alaska"</span>, </span>
+<span id="cb78-4"><a></a>                            <span class="st">"Hawaii"</span>))</span>
+<span id="cb78-5"><a></a></span>
+<span id="cb78-6"><a></a><span class="fu">length</span>(<span class="fu">st_geometry</span>(conus))</span>
+<span id="cb78-7"><a></a>[<span class="dv">1</span>] <span class="dv">49</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-57-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="feature-resoloved-and-combined" class="slide level2">
+<h2>1 feature: resoloved and combined:</h2>
+<div class="{columns}">
+<div class="column" style="width:50%;">
+<ul>
+<li>st_cast / st_union work on <code>sfg</code>, <code>sfc</code>, and <code>sf</code> objects:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a></a>us_c_ml <span class="ot">=</span> <span class="fu">st_combine</span>(conus) <span class="sc">|&gt;</span></span>
+<span id="cb79-2"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span>
+<span id="cb79-3"><a></a>   </span>
+<span id="cb79-4"><a></a>us_u_ml <span class="ot">=</span> <span class="fu">st_union</span>(conus) <span class="sc">|&gt;</span></span>
+<span id="cb79-5"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-59-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="so-what" class="slide level2">
+<h2>So what?</h2>
+<p>Lets imagine we want to know the distance from Denver to the nearest state border:</p>
+<p>To do this, we need to:<br>
+</p>
+<p>1: define Denver as a geometry in a CRS<br>
+2: determine the correct geometry types / representation<br>
+3: calculate the distance between (1) and (2)<br>
+</p>
+</section>
+<section id="make-denver-in-the-crs-of-our-states" class="slide level2">
+<h2>1. Make “Denver” in the CRS of our states</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a></a>denver <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fl">39.7392</span>, <span class="at">x =</span> <span class="sc">-</span><span class="fl">104.9903</span>, <span class="at">name =</span> <span class="st">"Denver"</span>)</span>
+<span id="cb80-2"><a></a>(<span class="at">denver_sf =</span> <span class="fu">st_as_sf</span>(denver, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb80-3"><a></a>Simple feature collection with <span class="dv">1</span> feature and <span class="dv">1</span> field</span>
+<span id="cb80-4"><a></a>Geometry type<span class="sc">:</span> POINT</span>
+<span id="cb80-5"><a></a>Dimension<span class="sc">:</span>     XY</span>
+<span id="cb80-6"><a></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">104.9903</span> ymin<span class="sc">:</span> <span class="fl">39.7392</span> xmax<span class="sc">:</span> <span class="sc">-</span><span class="fl">104.9903</span> ymax<span class="sc">:</span> <span class="fl">39.7392</span></span>
+<span id="cb80-7"><a></a>Geodetic CRS<span class="sc">:</span>  WGS <span class="dv">84</span></span>
+<span id="cb80-8"><a></a>    name                  geometry</span>
+<span id="cb80-9"><a></a><span class="dv">1</span> Denver <span class="fu">POINT</span> (<span class="sc">-</span><span class="fl">104.9903</span> <span class="fl">39.7392</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="determine-the-3-closest-states" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   statefp  statens    affgeoid geoid stusps       name lsad        aland
+1       06 01779778 0400000US06    06     CA California   00 403671196038
+2       55 01779806 0400000US55    55     WI  Wisconsin   00 140292246684
+3       16 01779783 0400000US16    16     ID      Idaho   00 214049923496
+4       27 00662849 0400000US27    27     MN  Minnesota   00 206232157570
+5       19 01779785 0400000US19    19     IA       Iowa   00 144659688848
+6       29 01779791 0400000US29    29     MO   Missouri   00 178052563675
+7       24 01714934 0400000US24    24     MD   Maryland   00  25151895765
+8       41 01155107 0400000US41    41     OR     Oregon   00 248628426864
+9       26 01779789 0400000US26    26     MI   Michigan   00 146614604273
+10      30 00767982 0400000US30    30     MT    Montana   00 376973673895
+         awater state_name state_abbr jurisdiction_type
+1   20294133830 California         CA             state
+2   29343721650  Wisconsin         WI             state
+3    2391577745      Idaho         ID             state
+4   18949864226  Minnesota         MN             state
+5    1085996889       Iowa         IA             state
+6    2487215790   Missouri         MO             state
+7    6979171386   Maryland         MD             state
+8    6170953359     Oregon         OR             state
+9  103872203398   Michigan         MI             state
+10   3866689601    Montana         MT             state
+                         geometry
+1  MULTIPOLYGON (((-118.594 33...
+2  MULTIPOLYGON (((-86.93428 4...
+3  MULTIPOLYGON (((-117.243 44...
+4  MULTIPOLYGON (((-97.22904 4...
+5  MULTIPOLYGON (((-96.62187 4...
+6  MULTIPOLYGON (((-95.76564 4...
+7  MULTIPOLYGON (((-76.04621 3...
+8  MULTIPOLYGON (((-124.5524 4...
+9  MULTIPOLYGON (((-84.61622 4...
+10 MULTIPOLYGON (((-116.0492 4...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-1" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb83-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 1 field
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   state_name                       geometry
+1  California MULTIPOLYGON (((-118.594 33...
+2   Wisconsin MULTIPOLYGON (((-86.93428 4...
+3       Idaho MULTIPOLYGON (((-117.243 44...
+4   Minnesota MULTIPOLYGON (((-97.22904 4...
+5        Iowa MULTIPOLYGON (((-96.62187 4...
+6    Missouri MULTIPOLYGON (((-95.76564 4...
+7    Maryland MULTIPOLYGON (((-76.04621 3...
+8      Oregon MULTIPOLYGON (((-124.5524 4...
+9    Michigan MULTIPOLYGON (((-84.61622 4...
+10    Montana MULTIPOLYGON (((-116.0492 4...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-2" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb85-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb85-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   state_name                       geometry          dist
+1  California MULTIPOLYGON (((-118.594 33... 1000950.5 [m]
+2   Wisconsin MULTIPOLYGON (((-86.93428 4... 1146522.6 [m]
+3       Idaho MULTIPOLYGON (((-117.243 44...  567809.5 [m]
+4   Minnesota MULTIPOLYGON (((-97.22904 4...  823100.9 [m]
+5        Iowa MULTIPOLYGON (((-96.62187 4...  773889.8 [m]
+6    Missouri MULTIPOLYGON (((-95.76564 4...  789142.1 [m]
+7    Maryland MULTIPOLYGON (((-76.04621 3... 2174383.4 [m]
+8      Oregon MULTIPOLYGON (((-124.5524 4... 1041819.1 [m]
+9    Michigan MULTIPOLYGON (((-84.61622 4... 1401455.7 [m]
+10    Montana MULTIPOLYGON (((-116.0492 4...  585011.2 [m]</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-3" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb87-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb87-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 3 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -111.0569 ymin: 36.99243 xmax: -95.30829 ymax: 45.0059
+Geodetic CRS:  WGS 84
+  state_name         dist                       geometry
+1   Colorado      0.0 [m] MULTIPOLYGON (((-109.06 38....
+2    Wyoming 139988.4 [m] MULTIPOLYGON (((-111.0569 4...
+3   Nebraska 161243.2 [m] MULTIPOLYGON (((-104.0531 4...</code></pre>
+</div>
+</div></div>
+<ul>
+<li>That’s close, but the distance to Colorado is 0, that’s not a state border.</li>
+</ul>
+</section>
+<section id="geometry-selection" class="slide level2">
+<h2>Geometry Selection</h2>
+<ul>
+<li><code>Polygon</code> (therefore MULTIPOLGYGONS) describe areas!</li>
+<li>The distance to a <code>point</code> <strong>in</strong> a <code>polygon</code> to that polygon is 0.</li>
+</ul>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 12 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   statefp  statens    affgeoid geoid stusps       name lsad        aland
+1       06 01779778 0400000US06    06     CA California   00 403671196038
+2       55 01779806 0400000US55    55     WI  Wisconsin   00 140292246684
+3       16 01779783 0400000US16    16     ID      Idaho   00 214049923496
+4       27 00662849 0400000US27    27     MN  Minnesota   00 206232157570
+5       19 01779785 0400000US19    19     IA       Iowa   00 144659688848
+6       29 01779791 0400000US29    29     MO   Missouri   00 178052563675
+7       24 01714934 0400000US24    24     MD   Maryland   00  25151895765
+8       41 01155107 0400000US41    41     OR     Oregon   00 248628426864
+9       26 01779789 0400000US26    26     MI   Michigan   00 146614604273
+10      30 00767982 0400000US30    30     MT    Montana   00 376973673895
+         awater state_name state_abbr jurisdiction_type
+1   20294133830 California         CA             state
+2   29343721650  Wisconsin         WI             state
+3    2391577745      Idaho         ID             state
+4   18949864226  Minnesota         MN             state
+5    1085996889       Iowa         IA             state
+6    2487215790   Missouri         MO             state
+7    6979171386   Maryland         MD             state
+8    6170953359     Oregon         OR             state
+9  103872203398   Michigan         MI             state
+10   3866689601    Montana         MT             state
+                         geometry
+1  MULTIPOLYGON (((-118.594 33...
+2  MULTIPOLYGON (((-86.93428 4...
+3  MULTIPOLYGON (((-117.243 44...
+4  MULTIPOLYGON (((-97.22904 4...
+5  MULTIPOLYGON (((-96.62187 4...
+6  MULTIPOLYGON (((-95.76564 4...
+7  MULTIPOLYGON (((-76.04621 3...
+8  MULTIPOLYGON (((-124.5524 4...
+9  MULTIPOLYGON (((-84.61622 4...
+10 MULTIPOLYGON (((-116.0492 4...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-1" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb91-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 1 field
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   state_name                       geometry
+1  California MULTIPOLYGON (((-118.594 33...
+2   Wisconsin MULTIPOLYGON (((-86.93428 4...
+3       Idaho MULTIPOLYGON (((-117.243 44...
+4   Minnesota MULTIPOLYGON (((-97.22904 4...
+5        Iowa MULTIPOLYGON (((-96.62187 4...
+6    Missouri MULTIPOLYGON (((-95.76564 4...
+7    Maryland MULTIPOLYGON (((-76.04621 3...
+8      Oregon MULTIPOLYGON (((-124.5524 4...
+9    Michigan MULTIPOLYGON (((-84.61622 4...
+10    Montana MULTIPOLYGON (((-116.0492 4...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-2" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb93-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb93-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 1 field
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   state_name                       geometry
+1  California MULTILINESTRING ((-118.594 ...
+2   Wisconsin MULTILINESTRING ((-86.93428...
+3       Idaho MULTILINESTRING ((-117.243 ...
+4   Minnesota MULTILINESTRING ((-97.22904...
+5        Iowa MULTILINESTRING ((-96.62187...
+6    Missouri MULTILINESTRING ((-95.76564...
+7    Maryland MULTILINESTRING ((-76.04621...
+8      Oregon MULTILINESTRING ((-124.5524...
+9    Michigan MULTILINESTRING ((-84.61622...
+10    Montana MULTILINESTRING ((-116.0492...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-3" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb95-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb95-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb95-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 49 features and 2 fields
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
+Geodetic CRS:  WGS 84
+First 10 features:
+   state_name                       geometry          dist
+1  California MULTILINESTRING ((-118.594 ... 1000950.5 [m]
+2   Wisconsin MULTILINESTRING ((-86.93428... 1146522.6 [m]
+3       Idaho MULTILINESTRING ((-117.243 ...  567809.5 [m]
+4   Minnesota MULTILINESTRING ((-97.22904...  823100.9 [m]
+5        Iowa MULTILINESTRING ((-96.62187...  773889.8 [m]
+6    Missouri MULTILINESTRING ((-95.76564...  789142.1 [m]
+7    Maryland MULTILINESTRING ((-76.04621... 2174383.4 [m]
+8      Oregon MULTILINESTRING ((-124.5524... 1041819.1 [m]
+9    Michigan MULTILINESTRING ((-84.61622... 1401455.7 [m]
+10    Montana MULTILINESTRING ((-116.0492...  585011.2 [m]</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-4" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb97-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb97-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb97-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
+<span id="cb97-5"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>Simple feature collection with 3 features and 2 fields
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -111.0569 ymin: 36.99243 xmax: -95.30829 ymax: 45.0059
+Geodetic CRS:  WGS 84
+  state_name         dist                       geometry
+1   Colorado 139988.4 [m] MULTILINESTRING ((-109.06 3...
+2    Wyoming 139988.4 [m] MULTILINESTRING ((-111.0569...
+3   Nebraska 161243.2 [m] MULTILINESTRING ((-104.0531...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-5" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb99-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb99-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb99-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
+<span id="cb99-5"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>) <span class="ot">-&gt;</span></span>
+<span id="cb99-6"><a></a>  near3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+
+</div></div>
+<div class="cell">
+<pre><code>Simple feature collection with 3 features and 2 fields
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -111.0569 ymin: 36.99243 xmax: -95.30829 ymax: 45.0059
+Geodetic CRS:  WGS 84
+  state_name         dist                       geometry
+1   Colorado 139988.4 [m] MULTILINESTRING ((-109.06 3...
+2    Wyoming 139988.4 [m] MULTILINESTRING ((-111.0569...
+3   Nebraska 161243.2 [m] MULTILINESTRING ((-104.0531...</code></pre>
+</div>
+<ul>
+<li><p>Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!</p></li>
+<li><p>While this is not to complex for 1 &lt;-&gt; 49 features imagine we had 28,000+ (like) your lab!</p></li>
+<li><p>That would result in 1,344,000 more calculations then needed …</p></li>
+</ul>
+</section>
+<section id="revisting-the-idea-of-the-feature-level" class="slide level2">
+<h2>Revisting the idea of the feature level:</h2>
+<p>A “feature” can “be part of the whole” or the whole</p>
+<ul>
+<li><p>A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)</p></li>
+<li><p>A city (POINT), or a set of cities meeting a condition (MULTIPOINT)</p></li>
+<li><p>A road (LINESTRING), or a route (MULTILINESTRING)</p></li>
+<li><p>Since we want the distance to the nearest border, <em>regardless</em> of the state. Our <strong>feature</strong> is the <em>set of borders with preserved boundaries</em>.</p></li>
+<li><p>In other words, a 1 feature <code>MULTILINESTRING</code></p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a></a><span class="fu">st_distance</span>(denver_sf, <span class="fu">st_cast</span>(<span class="fu">st_combine</span>(conus), <span class="st">"MULTILINESTRING"</span>))</span>
+<span id="cb101-2"><a></a>Units<span class="sc">:</span> [m]</span>
+<span id="cb101-3"><a></a>         [,<span class="dv">1</span>]</span>
+<span id="cb101-4"><a></a>[<span class="dv">1</span>,] <span class="fl">139988.4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The same principle would apply if the question was “<em>distance to national border</em>”</p>
+</section>
+<section id="the-stickness-of-sfc-column" class="slide level2">
+<h2>The stickness of <code>sfc</code> column</h2>
+<ul>
+<li>A simple features object (sf) is the connection of a <code>sfc</code> list-column and <code>data.frame</code> of attributes</li>
+</ul>
+
+<img data-src="images/11-sticky-geom.png" class="quarto-figure quarto-figure-center r-stretch" width="353"><ul>
+<li>This binding is unique compared to other column bindings built with things like
+<ul>
+<li><code>dplyr::bind_cols()</code></li>
+<li><code>cbind()</code></li>
+<li><code>do.call(cbind, list())</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="the-stickness-of-sfc-column-1" class="slide level2">
+<h2>The stickness of <code>sfc</code> column</h2>
+<ul>
+<li>Geometry columns are “sticky” meaning they persist through data manipulation:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a></a>USAboundaries<span class="sc">::</span><span class="fu">us_states</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb102-2"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb102-3"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb102-4"><a></a>Simple feature collection with <span class="dv">2</span> features and <span class="dv">1</span> field</span>
+<span id="cb102-5"><a></a>Geometry type<span class="sc">:</span> MULTIPOLYGON</span>
+<span id="cb102-6"><a></a>Dimension<span class="sc">:</span>     XY</span>
+<span id="cb102-7"><a></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">124.4096</span> ymin<span class="sc">:</span> <span class="fl">32.53416</span> xmax<span class="sc">:</span> <span class="sc">-</span><span class="fl">86.80587</span> ymax<span class="sc">:</span> <span class="fl">47.05468</span></span>
+<span id="cb102-8"><a></a>Geodetic CRS<span class="sc">:</span>  WGS <span class="dv">84</span></span>
+<span id="cb102-9"><a></a>        name                       geometry</span>
+<span id="cb102-10"><a></a><span class="dv">1</span> California <span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">118.594</span> <span class="dv">33</span>...</span>
+<span id="cb102-11"><a></a><span class="dv">2</span>  Wisconsin <span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">86.93428</span> <span class="dv">4</span>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dropping the geometry column requires dropping the geometry via <code>sf</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a></a>USAboundaries<span class="sc">::</span><span class="fu">us_states</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb103-2"><a></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb103-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb103-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb103-5"><a></a>        name</span>
+<span id="cb103-6"><a></a><span class="dv">1</span> California</span>
+<span id="cb103-7"><a></a><span class="dv">2</span>  Wisconsin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or cohersing the <code>sf</code> object to a <code>data.frame</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a></a>USAboundaries<span class="sc">::</span><span class="fu">us_states</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb104-2"><a></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb104-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb104-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb104-5"><a></a>        name</span>
+<span id="cb104-6"><a></a><span class="dv">1</span> California</span>
+<span id="cb104-7"><a></a><span class="dv">2</span>  Wisconsin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="coordinate-systems" class="slide level2">
+<h2>Coordinate Systems</h2>
+<ul>
+<li>What makes a feature geometry <em>spatial</em> is the reference system…</li>
+</ul>
+
+<img data-src="images/09-sf-model.png" class="quarto-figure quarto-figure-center r-stretch" width="233"></section>
+<section id="coordinate-systems-1" class="slide level2">
+<h2>Coordinate Systems</h2>
+<ul>
+<li><p>Coordinate Reference Systems (CRS) defines how spatial features relate to the surface of the Earth.</p></li>
+<li><p>CRSs are either geographic or projected…</p></li>
+<li><p>CRSs are measurement units for coordinates:</p></li>
+</ul>
+</section>
+<section id="sf-tools" class="slide level2">
+<h2><code>sf</code> tools</h2>
+<p>In <code>sf</code> we have <em>three</em> tools for exploring, define, and changing CRS systems:</p>
+<ul>
+<li><p><em>st_crs</em> : Retrieve coordinate reference system from sf or sfc object</p></li>
+<li><p><em>st_set_crs</em> : Set or replace coordinate reference system from object</p></li>
+<li><p><em>st_transform</em> : Transform or convert coordinates of simple feature</p></li>
+<li><p>Again, “st” (like PostGIS) denotes it is an operation that can work on a ” <em>s</em> patial <em>t</em> ype ”</p></li>
+</ul>
+</section>
+<section id="geographic-coordinate-systms-gcs" class="slide level2">
+<h2>Geographic Coordinate Systms (GCS)</h2>
+<p>A GCS identifies locations on the <em>curved</em> surface of the earth.</p>
+<p>Locations are measured in <strong>angular</strong> units from the center of the earth relative to the plane defined by the equator and the plane defined by the prime meridian.</p>
+<p>The vertical angle describes the <em>latitude</em> and the horizontal angle the <em>longitude</em></p>
+<p>In most coordinate systems, the North-South and East-West directions are encoded as +/-.</p>
+<p>North and East are positive (<code>+</code>) and South and West are negative (<code>-</code>) sign.</p>
+<p>A GCS is defined by 3 components:</p>
+<ul>
+<li><p>an <strong>ellipsoid</strong></p></li>
+<li><p>a <strong>geoid</strong></p></li>
+<li><p>a <strong>datum</strong></p></li>
+</ul>
+</section>
+<section id="sphere-and-ellipsoid" class="slide level2">
+<h2>Sphere and Ellipsoid</h2>
+<ul>
+<li><p>Assuming that the earth is a perfect sphere simplifies calculations and works for small-scale maps (maps that show a <em>large</em> area of the earth).</p></li>
+<li><p>But … the earth is not a sphere do to its rotation inducing a centripetal force along the equator.</p></li>
+<li><p>This results in an equatorial axis that is roughly 21 km longer than the polar axis.</p></li>
+<li><p>To account for this, the earth is modeled as an ellipsoid (slighty squished sphere) defined by two radii:</p>
+<ul>
+<li>the <strong>semi-major</strong> axis (along the equatorial radius)</li>
+<li>the <strong>semi-minor</strong> axis (along the polar radius)</li>
+</ul></li>
+</ul>
+
+<img data-src="images/11-semi-axis.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>Thanks to satellite and computational capabilities our estimates of these radii are be quite precise</p>
+<ul>
+<li><p>The semi-major axis is 6,378,137 m</p></li>
+<li><p>The semi-minor axis is 6,356,752 m</p></li>
+</ul></li>
+<li><p>Differences in distance along the surfaces of an ellipsoid vs.&nbsp;a perfect sphere are small but measurable (the difference can be as high as 20 km)</p></li>
+</ul>
+<div class="{columns}">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/11-sphere.svg" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/11-ellipsoid.svg" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="geoid" class="slide level2">
+<h2>Geoid</h2>
+<ul>
+<li><p>The <em>ellipsoid</em> gives us the earths form as a perfectly smooth object</p></li>
+<li><p>But … the earth is not perfectly smooth</p></li>
+<li><p>Deviations from the perfect sphere are measurable and can influence measurements.</p></li>
+<li><p>A <em>geoid</em> is a mathematical model fore representing these deviations</p>
+<ul>
+<li><p>We are <em>not</em> talking about mountains and ocean trenches but the earth’s gravitational potential which is tied to the flow of the earth’s hot and fluid core.</p></li>
+<li><p>Therefore the geoid is constantly changing, albeit a large temporal scale.</p></li>
+</ul></li>
+<li><p>The measurement and representation of the earth’s shape is at the heart of <code>geodesy</code></p></li>
+</ul>
+
+<img data-src="images/11-nasa-geoids.jpg" width="117" class="r-stretch quarto-figure-center"><p class="caption">NASA’s geoid models</p></section>
+<section id="datum" class="slide level2">
+<h2>Datum</h2>
+<ul>
+<li><p>So how are we to reconcile our need to work with a (simple) mathematical model of the earth’s shape with the undulating nature of the geoid?</p></li>
+<li><p>We align the geoid with the ellipsoid to map the the earths departures from the smooth assumption</p></li>
+<li><p>The alignment can be <strong>local</strong> where the ellipsoid surface is closely fit to the geoid at a particular location on the earth’s surface</p></li>
+</ul>
+<p>or</p>
+<ul>
+<li><p><strong>geocentric</strong> where the ellipsoid is aligned with the center of the earth.</p></li>
+<li><p>The alignment of the smooth ellipsoid to the geoid model defines a <strong>datum</strong>.</p></li>
+</ul>
+</section>
+<section id="local-datums" class="slide level2">
+<h2>Local Datums</h2>
+<ul>
+<li><p>There are many local datums to choose from</p></li>
+<li><p>The choice of datum is largely driven by the location</p></li>
+<li><p>When working in the USA, a the North American Datum of 1927 (or NAD27 for short) is standard</p>
+<ul>
+<li>NAD27 is not well suited for other parts of the world.</li>
+</ul></li>
+</ul>
+<p>Examples of common local datums are shown in the following table:</p>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Local datum</th>
+<th>Acronym</th>
+<th>Best for</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>North American Datum of 1927</td>
+<td>NAD27</td>
+<td>Continental US</td>
+<td>This is an old datum but still prevalent</td>
+</tr>
+<tr class="even">
+<td>European Datum of 1950</td>
+<td>ED50</td>
+<td>Western Europe</td>
+<td>Developed after World War II and still quite popular</td>
+</tr>
+<tr class="odd">
+<td>World Geodetic System 1972</td>
+<td>WGS72</td>
+<td>Global</td>
+<td>Developed by the Department of Defense.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="geocentric-datum" class="slide level2">
+<h2>Geocentric Datum</h2>
+<ul>
+<li><p>Many modern datums use a geocentric alignment</p>
+<ul>
+<li><p>World Geodetic Survey for 1984 (WGS84)</p></li>
+<li><p>North American Datums of 1983 (NAD83)</p></li>
+</ul></li>
+<li><p>Most popular geocentric datums use the WGS84 <em>ellipsoid</em> or the GRS80 <em>ellipsoid</em> which share nearly identical semi-major and semi-minor axes</p></li>
+</ul>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Geocentric datum</th>
+<th>Acronym</th>
+<th>Best for</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>North American Datum of 1983</td>
+<td>NAD83</td>
+<td>Continental US</td>
+<td>This is one of the most popular modern datums for the contiguous US.</td>
+</tr>
+<tr class="even">
+<td>European Terrestrial Reference System 1989</td>
+<td>ETRS89</td>
+<td>Western Europe</td>
+<td>This is the most popular modern datum for much of Europe.</td>
+</tr>
+<tr class="odd">
+<td>World Geodetic System 1984</td>
+<td>WGS84</td>
+<td>Global</td>
+<td>Developed by the Department of Defense.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>NAD 27 is based on Clarke Ellipsoid of 1866 which is calculated by manual surveying. NAD83 is based on the Geodetic Reference System (GRS) of 1980.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="building-a-gcs" class="slide level2">
+<h2>Building a GCS</h2>
+<ul>
+<li><p>So, a GCS is defined by the ellipsoid model and its alignment to the geoid defining the datum.</p></li>
+<li><p>Smooth Sphere - Mathmatical Geoid (in angular units)</p></li>
+</ul>
+</section>
+<section id="projected-coordinate-systems" class="slide level2">
+<h2>Projected Coordinate Systems</h2>
+<ul>
+<li><p>The surface of the earth is curved but maps (and to data GIS) is flat.</p></li>
+<li><p>A projected coordinate system (PCS) is a reference system for identifying locations and measuring features on a flat (2D) surfaces. I</p></li>
+<li><p>Projected coordinate systems have an origin, an <em>x</em> axis, a <em>y</em> axis, and a linear unit of measure.</p></li>
+<li><p>Going from a GCS to a PCS requires mathematical transformations.</p></li>
+<li><p>There are three main groups of projection types:</p>
+<ul>
+<li>conic</li>
+<li>cylindrical</li>
+<li>planar</li>
+</ul></li>
+</ul>
+</section>
+<section id="projection-types" class="slide level2">
+<h2>Projection Types:</h2>
+
+<img data-src="images/11-projected-crs.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"><ul>
+<li><p>In all cases, distortion is <em>minimized</em> at the line/point of <strong>tangency</strong> (denoted by black line/point)</p></li>
+<li><p>Distortions are <em>minimized</em> along the tangency lines and increase with the distance from those lines.</p></li>
+</ul>
+</section>
+<section id="plannar" class="slide level2">
+<h2>Plannar</h2>
+<ul>
+<li><p>A planar projection projects data onto a flat surface touching the globe at a <em>point</em> or along 1 line of <em>tangency.</em></p></li>
+<li><p>Typically used to map polar regions.</p></li>
+</ul>
+
+<img data-src="images/11-projected-crs.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
+<section id="cylindrical" class="slide level2">
+<h2>Cylindrical</h2>
+<ul>
+<li><p>A cylindrical projection maps the surface onto a cylinder.</p></li>
+<li><p>This projection could also be created by touching the Earth’s surface along 1 or 2 lines of <em>tangency</em></p></li>
+<li><p>Most often when mapping the entire world.</p></li>
+</ul>
+
+<img data-src="images/11-projected-crs.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
+<section id="conic" class="slide level2">
+<h2>Conic</h2>
+<p>In a conic projection, the Earth’s surface is projected onto a cone along 1 or 2 lines of <em>tangency</em></p>
+<p>Therefore, it is the best suited for maps of mid-latitude areas.</p>
+
+<img data-src="images/11-projected-crs.png" class="quarto-figure quarto-figure-center r-stretch" style="width:50.0%"></section>
+<section id="spatial-properties" class="slide level2">
+<h2>Spatial Properties</h2>
+<ul>
+<li><p>All projections <em>distort</em> real-world geographic features.</p></li>
+<li><p>Think about trying to unpeel an orange while preserving the skin</p></li>
+</ul>
+<p>The four spatial properties that are subject to distortion are: <strong>shape</strong>, <strong>area</strong>, <strong>distance</strong> and <strong>direction</strong></p>
+<ul>
+<li><p>A map that preserves shape is called <code>conformal</code>;</p></li>
+<li><p>one that preserves area is called <code>equal-area</code>;</p></li>
+<li><p>one that preserves distance is called <code>equidistant</code></p></li>
+<li><p>one that preserves direction is called <code>azimuthal</code></p></li>
+<li><p>Each map projection can preserve only one or two of the four spatial properties.</p></li>
+<li><p>Often, projections are named after the spatial properties they preserve.</p></li>
+<li><p>When working with small-scale (large area) maps and when multiple spatial properties are needed, it is best to break the analyses across projections to minimize errors associated with spatial distortion.</p></li>
+</ul>
+</section>
+<section id="setting-crsspcss" class="slide level2">
+<h2>Setting CRSs/PCSs</h2>
+<ul>
+<li>We saw that <code>sfc</code> objects have two attributes to store a CRS: <code>epsg</code> and <code>proj4string</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a></a><span class="fu">st_geometry</span>(conus)</span>
+<span id="cb105-2"><a></a>Geometry set <span class="cf">for</span> <span class="dv">49</span> features </span>
+<span id="cb105-3"><a></a>Geometry type<span class="sc">:</span> MULTIPOLYGON</span>
+<span id="cb105-4"><a></a>Dimension<span class="sc">:</span>     XY</span>
+<span id="cb105-5"><a></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">124.7258</span> ymin<span class="sc">:</span> <span class="fl">24.49813</span> xmax<span class="sc">:</span> <span class="sc">-</span><span class="fl">66.9499</span> ymax<span class="sc">:</span> <span class="fl">49.38436</span></span>
+<span id="cb105-6"><a></a>Geodetic CRS<span class="sc">:</span>  WGS <span class="dv">84</span></span>
+<span id="cb105-7"><a></a>First <span class="dv">5</span> geometries<span class="sc">:</span></span>
+<span id="cb105-8"><a></a><span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">118.594</span> <span class="fl">33.4672</span>, <span class="sc">-</span><span class="fl">118.4848</span> <span class="dv">33</span>....</span>
+<span id="cb105-9"><a></a><span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">86.93428</span> <span class="fl">45.42115</span>, <span class="sc">-</span><span class="fl">86.83575</span> <span class="dv">4</span>...</span>
+<span id="cb105-10"><a></a><span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">117.243</span> <span class="fl">44.39097</span>, <span class="sc">-</span><span class="fl">117.2151</span> <span class="dv">44</span>...</span>
+<span id="cb105-11"><a></a><span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">97.22904</span> <span class="fl">49.00069</span>, <span class="sc">-</span><span class="fl">96.93096</span> <span class="dv">4</span>...</span>
+<span id="cb105-12"><a></a><span class="fu">MULTIPOLYGON</span> (((<span class="sc">-</span><span class="fl">96.62187</span> <span class="fl">42.77925</span>, <span class="sc">-</span><span class="fl">96.57794</span> <span class="dv">4</span>...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>This implies that all geometries in a geometry list-column (sfc) must have the same CRS.</p></li>
+<li><p><code>proj4string</code> is a generic, string-based description of a CRS, understood by <a href="https://proj4.org/">PROJ</a></p></li>
+<li><p>It defines projection types and parameter values for particular projections,</p></li>
+<li><p>As a result it can cover an infinite amount of different projections.</p></li>
+<li><p><code>epsg</code> is the <em>integer ID</em> for a known CRS that can be resolved into a <code>proj4string</code>.</p>
+<ul>
+<li>This is somewhat equivalent to the idea that a 6-digit FIP code can be resolved to a state/county pair</li>
+</ul></li>
+<li><p>Some <code>proj4string</code> values can resolved back into their corresponding <code>epsg</code> ID, but this does not always work.</p></li>
+<li><p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time</p></li>
+<li><p>fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets (but may help reproducibility)</p></li>
+</ul>
+</section>
+<section id="proj4-coordinate-syntax" class="slide level2">
+<h2><code>PROJ4</code> coordinate syntax</h2>
+<p>The <code>PROJ4</code> syntax contains a list of parameters, each prefixed with the <code>+</code> character.</p>
+<p>A list of some <code>PROJ4</code> parameters follows and the full list can be found <a href="https://proj.org/usage/projections.html">here</a>:</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>+a</td>
+<td>Semi-major radius of the ellipsoid axis</td>
+</tr>
+<tr class="even">
+<td>+b</td>
+<td>Semi-minor radius of the ellipsoid axis</td>
+</tr>
+<tr class="odd">
+<td>+datum</td>
+<td>Datum name</td>
+</tr>
+<tr class="even">
+<td>+ellps</td>
+<td>Ellipsoid name</td>
+</tr>
+<tr class="odd">
+<td>+lat_0</td>
+<td>Latitude of origin</td>
+</tr>
+<tr class="even">
+<td>+lat_1</td>
+<td>Latitude of first standard parallel</td>
+</tr>
+<tr class="odd">
+<td>+lat_2</td>
+<td>Latitude of second standard parallel</td>
+</tr>
+<tr class="even">
+<td>+lat_ts</td>
+<td>Latitude of true scale</td>
+</tr>
+<tr class="odd">
+<td>+lon_0</td>
+<td>Central meridian</td>
+</tr>
+<tr class="even">
+<td>+over</td>
+<td>Allow longitude output outside -180 to 180 range, disables wrapping</td>
+</tr>
+<tr class="odd">
+<td>+proj</td>
+<td>Projection name</td>
+</tr>
+<tr class="even">
+<td>+south</td>
+<td>Denotes southern hemisphere UTM zone</td>
+</tr>
+<tr class="odd">
+<td>+units</td>
+<td>meters, US survey feet, etc.</td>
+</tr>
+<tr class="even">
+<td>+x_0</td>
+<td>False easting</td>
+</tr>
+<tr class="odd">
+<td>+y_0</td>
+<td>False northing</td>
+</tr>
+<tr class="even">
+<td>+zone</td>
+<td>UTM zone</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="section-4" class="slide level2">
+<h2></h2>
+<p><strong>WGS84</strong><br>
+<em>EPSG</em>: 4326<br>
+<em>PROJ4</em>: <code>+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs</code><br>
+- projection name: longlat<br>
+- Latitude of origin: WGS84<br>
+- Longitude of origin: WGS84<br>
+</p>
+<p><strong>WGS84</strong><br>
+<em>EPSG</em>: 5070<br>
+<code>"+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"</code><br>
+- projection name: <code>aea</code> (Albers Equal Area)<br>
+- Latitude of origin: 23<br>
+- Longitude of origin: -96<br>
+- Latitude of first standard parallel: 29.5<br>
+- Latitude of second standard parallel: 45.5<br>
+- False Easting: 0<br>
+- False Northing: 0<br>
+- Datum: NAD83<br>
+- Units: m<br>
+</p>
+</section>
+<section id="transform-and-retrive" class="slide level2">
+<h2>Transform and retrive</h2>
+<div class="{columns}">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>epsg</span>
+<span id="cb106-2"><a></a>[<span class="dv">1</span>] <span class="dv">4326</span></span>
+<span id="cb106-3"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>proj4string</span>
+<span id="cb106-4"><a></a>[<span class="dv">1</span>] <span class="st">"+proj=longlat +datum=WGS84 +no_defs"</span></span>
+<span id="cb106-5"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>datum</span>
+<span id="cb106-6"><a></a>[<span class="dv">1</span>] <span class="st">"WGS84"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a></a>conus5070 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(conus, <span class="dv">5070</span>)</span>
+<span id="cb107-2"><a></a></span>
+<span id="cb107-3"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>epsg</span>
+<span id="cb107-4"><a></a>[<span class="dv">1</span>] <span class="dv">5070</span></span>
+<span id="cb107-5"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>proj4string</span>
+<span id="cb107-6"><a></a>[<span class="dv">1</span>] <span class="st">"+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"</span></span>
+<span id="cb107-7"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>datum</span>
+<span id="cb107-8"><a></a>[<span class="dv">1</span>] <span class="st">"NAD83"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></div>
+
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-79-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:90.0%"></section>
+<section id="revisit-denver" class="slide level2">
+<h2>Revisit Denver</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb108-1"><a></a><span class="bu">echo</span> <span class="at">-104.9903</span> 39.7392 <span class="kw">|</span> <span class="ex">proj</span> +proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span>
+<span id="cb108-2"><a></a><span class="ex">-723281.88</span>  6827.29</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>red = false origin : blue = Denver</li>
+</ul>
+<div>
+
+</div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-81-1.png"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-81-2.png"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="geodesic-geometries" class="slide level2">
+<h2>Geodesic geometries</h2>
+<ul>
+<li><p>PCSs introduce errors in their geometric measurements because the distance between two points on an ellipsoid is difficult to replicate on a projected coordinate system unless these points are close to one another.</p></li>
+<li><p>In most cases, such errors other sources of error in the feature representation outweigh measurement errors made in a PCS making them tolorable.</p></li>
+</ul>
+<p>However, if the domain of analysis is large (i.e.&nbsp;the North American continent), then the measurement errors associated with a projected coordinate system may no longer be acceptable.</p>
+<p>A way to circumvent projected coordinate system limitations is to adopt a <em>geodesic</em> solution.</p>
+</section>
+<section id="geodesic-measurments" class="slide level2">
+<h2>Geodesic Measurments</h2>
+<ul>
+<li><p>A <strong>geodesic distance</strong> is the shortest distance between two points on an ellipsoid</p></li>
+<li><p>A <strong>geodesic area</strong> measurement is one that is measured on an ellipsoid.</p></li>
+<li><p>Such measurements are <em>independent</em> of the underlying projected coordinate system.</p></li>
+<li><p>Why does this matter?</p></li>
+<li><p>Compare the distances measured between Santa Barbara and Amsterdam. The blue line represents the shortest distance between the two points on a <em>planar</em> coordinate system. The red line as measured on a <em>ellipsoid</em>.</p></li>
+</ul>
+<div class="cell">
+<pre><code>Breaking News: tmap 3.x is retiring. Please test v4, e.g. with
+remotes::install_github('r-tmap/tmap')
+
+Attaching package: 'maps'
+The following object is masked from 'package:purrr':
+
+    map
+Spherical geometry (s2) switched off
+although coordinates are longitude/latitude, st_union assumes that they are
+planar
+stars object downsampled to 1369 by 730 cells. See tm_shape manual (argument raster.downsample)</code></pre>
+
+</div>
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-82-1.png" width="2304" class="r-stretch"></section>
+<section id="section-5" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>the geodesic distance looks weird given its curved appearance on the projected map.</p></li>
+<li><p>this curvature is a byproduct of the current reference system’s increasing distance distortion as one moves towards the pole!</p></li>
+<li><p>We can display the geodesic and planar distance on a 3D globe (or a projection that mimics the view of the 3D earth).</p></li>
+</ul>
+
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-83-1.png" class="quarto-figure quarto-figure-center r-stretch" width="864"></section>
+<section id="section-6" class="slide level2">
+<h2></h2>
+<ul>
+<li><p>So if a geodesic measurement is more precise than a planar measurement, why not perform all spatial operations using geodesic geometry?</p></li>
+<li><p>The downside is in its computational requirements.</p></li>
+<li><p>It’s far more efficient to compute area/distance on a plane than it is on a spheroid.</p></li>
+<li><p>This is because geodesic calculations have no simple algebraic solutions and involve approximations that may require iteration! (think optimization or nonlinear solutions)</p></li>
+<li><p>So this may be a computationally taxing approach if processing 1,000(s) or 1,000,000(s) of line segments.</p></li>
+</ul>
+</section>
+<section id="gedesic-area-and-length-measurements" class="slide level2">
+<h2>Gedesic Area and Length Measurements</h2>
+<ul>
+<li><p>Not all algorthimns are equal (in terms of speed or accuracy)</p></li>
+<li><p>Some more efficient algorithms that minimize computation time may reduce precision in the process.</p></li>
+<li><p>Some of ArcMap’s functions offer the option to compute geodesic distances and areas however ArcMap does not clearly indicate <em>how</em> its geodesic calculations are implemented (<a href="https://mgimond.github.io/Spatial/coordinate-systems.html#geodesic-geometries">cite</a></p></li>
+<li><p>R is well documented, and is efficient!</p></li>
+</ul>
+</section>
+<section id="distances" class="slide level2">
+<h2>Distances</h2>
+<p><code>?st_distance</code></p>
+
+<img data-src="images/11-sf-geos-measures.png" class="quarto-figure quarto-figure-center r-stretch" style="width:75.0%"></section>
+<section id="native-sf-binds-to-libwgeom" class="slide level2">
+<h2>native <code>sf</code> binds to <code>libwgeom</code></h2>
+<div class="{columns}">
+<div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/11-lwgeom.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/09-sf-depends.png" class="quarto-figure quarto-figure-center" style="width:75.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="distance-example" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb110-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb110-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-1" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb112-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb112-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb112-4"><a></a></span>
+<span id="cb112-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-2" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb114-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb114-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb114-4"><a></a></span>
+<span id="cb114-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb114-6"><a></a></span>
+<span id="cb114-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-3" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb116-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb116-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb116-4"><a></a></span>
+<span id="cb116-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb116-6"><a></a></span>
+<span id="cb116-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb116-8"><a></a></span>
+<span id="cb116-9"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb116-10"><a></a><span class="fu">st_distance</span>(pts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)
+Units: [m]
+        [,1]    [,2]
+[1,]       0 4050406
+[2,] 4050406       0</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-4" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb118-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb118-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb118-4"><a></a></span>
+<span id="cb118-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb118-6"><a></a></span>
+<span id="cb118-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb118-8"><a></a></span>
+<span id="cb118-9"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb118-10"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb118-11"><a></a></span>
+<span id="cb118-12"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb118-13"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)
+Units: [m]
+        [,1]    [,2]
+[1,]       0 4050406
+[2,] 4050406       0
+Units: [°]
+         1        2
+1  0.00000 46.12338
+2 46.12338  0.00000</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-5" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb120-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb120-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb120-4"><a></a></span>
+<span id="cb120-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb120-6"><a></a></span>
+<span id="cb120-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb120-8"><a></a></span>
+<span id="cb120-9"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb120-10"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb120-11"><a></a></span>
+<span id="cb120-12"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb120-13"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb120-14"><a></a></span>
+<span id="cb120-15"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb120-16"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)
+Units: [m]
+        [,1]    [,2]
+[1,]       0 4050406
+[2,] 4050406       0
+Units: [°]
+         1        2
+1  0.00000 46.12338
+2 46.12338  0.00000
+Units: [m]
+        1       2
+1       0 4017987
+2 4017987       0</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-6" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb122-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb122-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb122-4"><a></a></span>
+<span id="cb122-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb122-6"><a></a></span>
+<span id="cb122-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb122-8"><a></a></span>
+<span id="cb122-9"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb122-10"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb122-11"><a></a></span>
+<span id="cb122-12"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb122-13"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb122-14"><a></a></span>
+<span id="cb122-15"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb122-16"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
+<span id="cb122-17"><a></a></span>
+<span id="cb122-18"><a></a><span class="co"># Equal Distance</span></span>
+<span id="cb122-19"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)
+Units: [m]
+        [,1]    [,2]
+[1,]       0 4050406
+[2,] 4050406       0
+Units: [°]
+         1        2
+1  0.00000 46.12338
+2 46.12338  0.00000
+Units: [m]
+        1       2
+1       0 4017987
+2 4017987       0
+Units: [m]
+        1       2
+1       0 3823549
+2 3823549       0</code></pre>
+</div>
+</div></div>
+</section>
+<section id="distance-example-7" class="slide level2">
+<h2>Distance Example</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb124-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb124-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb124-4"><a></a></span>
+<span id="cb124-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb124-6"><a></a></span>
+<span id="cb124-7"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb124-8"><a></a></span>
+<span id="cb124-9"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb124-10"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb124-11"><a></a></span>
+<span id="cb124-12"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb124-13"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb124-14"><a></a></span>
+<span id="cb124-15"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb124-16"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
+<span id="cb124-17"><a></a></span>
+<span id="cb124-18"><a></a><span class="co"># Equal Distance</span></span>
+<span id="cb124-19"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>        y         x name
+1 40.7128  -74.0060  NYC
+2 34.4208 -119.6982   SB
+Simple feature collection with 2 features and 1 field
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: -119.6982 ymin: 34.4208 xmax: -74.006 ymax: 40.7128
+Geodetic CRS:  WGS 84
+  name                  geometry
+1  NYC   POINT (-74.006 40.7128)
+2   SB POINT (-119.6982 34.4208)
+Units: [m]
+        [,1]    [,2]
+[1,]       0 4050406
+[2,] 4050406       0
+Units: [°]
+         1        2
+1  0.00000 46.12338
+2 46.12338  0.00000
+Units: [m]
+        1       2
+1       0 4017987
+2 4017987       0
+Units: [m]
+        1       2
+1       0 3823549
+2 3823549       0</code></pre>
+</div>
+</div></div>
+</section>
+<section id="area-example-conus" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+
+</div></div>
+</section>
+<section id="area-example-conus-1" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb127-2"><a></a></span>
+<span id="cb127-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb127-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb127-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb127-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+
+</div></div>
+</section>
+<section id="area-example-conus-2" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb128-2"><a></a></span>
+<span id="cb128-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb128-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb128-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb128-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb128-7"><a></a></span>
+<span id="cb128-8"><a></a><span class="fu">ggplot</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/conus_auto_03_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="area-example-conus-3" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb129-2"><a></a></span>
+<span id="cb129-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb129-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb129-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb129-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb129-7"><a></a></span>
+<span id="cb129-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb129-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/conus_auto_04_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="area-example-conus-4" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb130-2"><a></a></span>
+<span id="cb130-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb130-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb130-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb130-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb130-7"><a></a></span>
+<span id="cb130-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb130-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
+<span id="cb130-10"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/conus_auto_05_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="area-example-conus-5" class="slide level2">
+<h2>Area Example: CONUS</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb131-2"><a></a></span>
+<span id="cb131-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb131-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb131-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb131-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb131-7"><a></a></span>
+<span id="cb131-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb131-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
+<span id="cb131-10"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span></span>
+<span id="cb131-11"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"SRS"</span>, <span class="at">y =</span> <span class="st">"m2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="week-2_files/figure-revealjs/conus_auto_06_output-1.png" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="units-in-sf" class="slide level2">
+<h2>Units in <code>sf</code></h2>
+<ul>
+<li><p>The CRS in <code>sf</code> encodes the units of measurement relating to spatial features</p></li>
+<li><p>Where possible geometric operations such as <code>st_distance()</code>, <code>st_length()</code> and <code>st_area()</code> report results with a units attribute appropriate for the CRS:</p></li>
+<li><p>This can be both handy and very confusing for those new to it. Consider the following:</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a></a>(<span class="at">l =</span> <span class="fu">sum</span>(<span class="fu">st_length</span>(conus)))</span>
+<span id="cb132-2"><a></a><span class="dv">94980149</span> [m]</span>
+<span id="cb132-3"><a></a>(<span class="at">a =</span> <span class="fu">sum</span>(<span class="fu">st_area</span>(conus)))</span>
+<span id="cb132-4"><a></a><span class="fl">7.83761e+12</span> [m<span class="sc">^</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="section-7" class="slide level2">
+<h2></h2>
+<p>We can set units if we do manipulations as well using the units package</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"km"</span>)</span>
+<span id="cb133-2"><a></a><span class="fl">94980.15</span> [km]</span>
+<span id="cb133-3"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"mile"</span>)</span>
+<span id="cb133-4"><a></a><span class="fl">59017.93</span> [mile]</span>
+<span id="cb133-5"><a></a></span>
+<span id="cb133-6"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"ha"</span>)</span>
+<span id="cb133-7"><a></a><span class="dv">783760974</span> [ha]</span>
+<span id="cb133-8"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"km2"</span>)</span>
+<span id="cb133-9"><a></a><span class="dv">7837610</span> [km<span class="sc">^</span><span class="dv">2</span>]</span>
+<span id="cb133-10"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"in2"</span>)</span>
+<span id="cb133-11"><a></a><span class="fl">1.214832e+16</span> [<span class="cf">in</span><span class="sc">^</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="units-are-a-class" class="slide level2">
+<h2>Units are a class</h2>
+<ul>
+<li>units are an S3 data object with attribute information and “rules of engagement”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a></a><span class="fu">class</span>(<span class="fu">st_length</span>(conus)) </span>
+<span id="cb134-2"><a></a>[<span class="dv">1</span>] <span class="st">"units"</span></span>
+<span id="cb134-3"><a></a><span class="fu">attributes</span>(<span class="fu">st_length</span>(conus)) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
+<span id="cb134-4"><a></a>units.numerator           class </span>
+<span id="cb134-5"><a></a>            <span class="st">"m"</span>         <span class="st">"units"</span> </span>
+<span id="cb134-6"><a></a></span>
+<span id="cb134-7"><a></a><span class="fu">st_length</span>(conus) <span class="sc">+</span> <span class="dv">100</span></span>
+<span id="cb134-8"><a></a>Error <span class="cf">in</span> <span class="fu">Ops.units</span>(<span class="fu">st_length</span>(conus), <span class="dv">100</span>)<span class="sc">:</span> both operands of the expression should be <span class="st">"units"</span> objects</span>
+<span id="cb134-9"><a></a></span>
+<span id="cb134-10"><a></a>conus <span class="sc">|&gt;</span> </span>
+<span id="cb134-11"><a></a>  <span class="fu">mutate</span>(<span class="at">area =</span> <span class="fu">st_area</span>(.)) <span class="sc">|&gt;</span> </span>
+<span id="cb134-12"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> area)) <span class="sc">+</span> </span>
+<span id="cb134-13"><a></a>  <span class="fu">geom_col</span>()</span>
+<span id="cb134-14"><a></a>Error <span class="cf">in</span> <span class="st">`</span><span class="at">stopifnot()</span><span class="st">`</span><span class="sc">:</span></span>
+<span id="cb134-15"><a></a>ℹ In argument<span class="sc">:</span> <span class="st">`</span><span class="at">area = st_area(.)</span><span class="st">`</span>.</span>
+<span id="cb134-16"><a></a>Caused by error<span class="sc">:</span></span>
+<span id="cb134-17"><a></a><span class="sc">!</span> object <span class="st">'.'</span> not found</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="unit-values-can-be-stripped-of-their-attributes-if-need-be" class="slide level2">
+<h2>Unit values can be stripped of their attributes if need be:</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a></a><span class="co"># Via drop_units</span></span>
+<span id="cb135-2"><a></a>(units<span class="sc">::</span><span class="fu">drop_units</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
+<span id="cb135-3"><a></a>[<span class="dv">1</span>] <span class="dv">94980149</span></span>
+<span id="cb135-4"><a></a></span>
+<span id="cb135-5"><a></a><span class="co"># Via casting</span></span>
+<span id="cb135-6"><a></a>(<span class="fu">as.numeric</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
+<span id="cb135-7"><a></a>[<span class="dv">1</span>] <span class="dv">94980149</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section></section>
