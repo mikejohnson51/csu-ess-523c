@@ -1,6 +1,28 @@
 ---
-title: "week3"
-format: html
+title: "Week 2"
+subtitle: "Features, Projections & Measures"
+format:
+  revealjs: 
+    smaller: true 
+    logo: ../csu-rams-logo.png
+    slide-number: c/t
+    footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
+    include-before-body: header.html
+    include-after-body: footer-annotations.html
+    theme: [default, csu-css.scss]
+    highlightStyle: github
+    highlightLines: true
+    width: 1600
+    height: 1000
+    countIncrementalSlides: false
+    incremental: false
+    title-slide-attributes:
+      data-background-color: "#1E4D2B"
+knitr:
+  opts_chunk: 
+    echo: true
+    collapse: true
+    comment: "#>"
 ---
 
 predicates: 12, 13
@@ -19,5 +41,9 @@ Week 5
 
 Week 6
 
-Tidymodels 1-2
-lab: 
+Tidymodels: ML week 1
+lab: model specifications
+
+Week 7
+
+Tuning

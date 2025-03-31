@@ -3,31 +3,29 @@ title: "Week 2"
 subtitle: "Features, Projections & Measures"
 format:
   revealjs: 
-    smaller: true 
+    smaller: false
+    incremental: true
     logo: ../csu-rams-logo.png
     slide-number: c/t
     footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
     include-before-body: header.html
     include-after-body: footer-annotations.html
     theme: [default, csu-css.scss]
-    highlightStyle: github
-    highlightLines: true
     width: 1600
-    height: 720
+    height: 1000
     countIncrementalSlides: false
-    incremental: false
     title-slide-attributes:
       data-background-color: "#1E4D2B"
 knitr:
   opts_chunk: 
     echo: true
+    message: true
     collapse: true
     comment: "#>"
 ---
 
-```{r, include = F}
-knitr::opts_chunk$set(fig.width = 6, message = TRUE, warning = FALSE, comment = "", cache = FALSE, fig.retina = 3)
-
+```{r}
+#| include: false
 library(tidyverse)
 library(sf)
 library(flipbookr)
@@ -38,16 +36,17 @@ co <- AOI::aoi_get(state = "CO", county = "all") |>
 
 ## Simple Features
 
-```{r, echo = FALSE, fig.align="center", out.width="75%"}
+```{r}
+#| echo: false
 knitr::include_graphics("images/09-sf-model.png")
 ```
 
-## Todays Data:
+## Todays Data: Colorado Counties!
 
 ```{r, echo = FALSE}
+#| echo: false
 co
 ```
-
 
 ## Simple Features 
 
@@ -64,7 +63,6 @@ co
   2. a set of operations
   
   3. binary and text encodings
-
 
 ## Simple Features Access
 
@@ -96,16 +94,18 @@ co
 
 - Spatial Features have a _geometry_ describing _where_  the feature is located and _how_ it is represented.
 
+- The geometry of a river can be its watershed, of its mainstem, or the point it drains to (see the OGC [HY_Feature](https://docs.opengeospatial.org/is/14-111r6/14-111r6.html) standard) 
+- Features can have attributes describing other properties of the feature 
+
+. . . 
+
 ```{r}
 str(co$geometry)
 ```
 
-- The geometry of a river can be its watershed, of its mainstem, or the point it drains to (see the OGC [HY_Feature](https://docs.opengeospatial.org/is/14-111r6/14-111r6.html) standard) 
-- Features can have attributes describing other properties of the feature 
-
 - Other properties may include its length, slope, stream order or average flowrate
 
-## Geometry types
+## Geometry types {.smaller}
 
 The following 7 simple feature types are the most common, and are the only ones used for [GeoJSON](https://tools.ietf.org/html/rfc7946):
 
@@ -128,7 +128,7 @@ The following 7 simple feature types are the most common, and are the only ones 
 
 - The descriptions above were copied from the [PostGIS manual](http://postgis.net/docs/using_postgis_dbmanagement.html).
 
-## 
+##  {.smaller}
 
 The remaining geometries 10 are rarer, but increasingly find implementations:
 
@@ -165,7 +165,7 @@ The remaining geometries 10 are rarer, but increasingly find implementations:
 
 ## Valid geometries
 
-Valid geometries obey the following properties:
+- Valid geometries obey the following properties:
 
   - `LINESTRINGS` shall not self-intersect
   
@@ -177,20 +177,27 @@ Valid geometries obey the following properties:
   
   - `POLYGON` rings shall not repeat their own path
   
-If any of the above is **not** the case, the geometry is not valid.
+- If any of the above is **not** the case, the geometry is not valid.
 
 ## Non-simple and non-valid geometries
 
-`st_is_simple` and `st_is_valid` provide methods to help detect non-simple and non-valid geometries:
+- `st_is_simple` and `st_is_valid` provide methods to help detect non-simple and non-valid geometries:
 
-- An example of a non-simple geometries is a self-intersecting lines;
+- An example of a non-simple geometries is a self-intersecting lines
+
+- An example of a non-valid geometry are would be a polygon with slivers or self-intersections.
+
+::: {columns}
+::: {.column width="50%"}
 
 ```{r}
 (x1 <- st_linestring(cbind(c(0,1,0,1),c(0,1,1,0))))
 st_is_simple(x1)
 ```
 
-```{r echo=FALSE,fig=TRUE,out.width="20%", fig.align="center"}
+```{r}
+#| echo: false
+#| fig.aling: 'center'
 opar <- par(mfrow = c(1,1))
 par(mar=c(1,1,4,1))
 plot(st_sfc(x1), type = 'b', axes = FALSE, xlab = NULL, ylab = NULL)
@@ -198,7 +205,8 @@ title(st_as_text(x1))
 par(opar)
 ```
 
-- An example of a non-valid geometry are would be a polygon with slivers or self-intersections.
+:::
+::: {.column width="50%"}
 
 ```{r}
 (x2 <- st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0)))))
@@ -207,7 +215,9 @@ par(opar)
 st_is_valid(c(x2,x3))
 ```
 
-```{r echo=FALSE,fig=TRUE,out.width="20%", fig.align="center"}
+```{r}
+#| echo: false
+#| fig.aling: 'center'
 opar <- par(mfrow = c(2,1))
 par(mar=c(1,1,4,1))
 plot(st_sfc(st_linestring((cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))), type='b', axes = FALSE)
@@ -216,7 +226,8 @@ plot(st_sfc(st_linestring(cbind(c(0,1,0,1,0),c(0,1,1,0,0)))), type = 'b', axes=F
 title(st_as_text(x3))
 par(opar)
 ```
-
+:::
+:::
 
 ## Empty Geometries
 
@@ -226,13 +237,18 @@ par(opar)
 
 - Empty geometries arise naturally from geometrical operations, for instance:
 
-```{r, message=TRUE}
+. . . 
+
+```{r}
+#| message: true
 (e = st_intersection(st_point(c(0,0)), st_point(c(1,1))))
 ```
 
 - It is not entirely clear what the benefit is of having `typed` empty geometries, but according to the simple feature standard they are type so the `sf` package abides by that.
 
 - Empty geometries can be detected by:
+
+. . . 
 
 ```{r}
 st_is_empty(e)
@@ -250,26 +266,27 @@ st_is_empty(e)
 
 ## WKT and WKB
 
-The simple feature standard includes two encodings: 
+- The simple feature standard includes two encodings:  Well-known text (WKT) & well-known binary (WKB) 
 
-Well-known text (WKT) & well-known binary (WKB) 
+- `Well Known Text` is human-readable:
 
-`Well Known Text` is human-readable:
-
+. . . 
 ```{r}
 x <- st_linestring(matrix(10:1,5))
 st_as_text(x)
 ```
 
-In this example, 
+- In this example, the word `LINESTRING` provides the geometry *type* which is followed by a parentheses, inside the parentheses are the `points` that make up the geometry.
 
-The word `LINESTRING` provides the geometry *type* which is followed by a parentheses, inside the parentheses are the `points` that make up the geometry.
+- Separate points are separated by a "comma", while the point coordinates are separated by a "space."
 
-Separate points are separated by a "comma", while the point coordinates are separated by a "space."
+- Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. 
 
-Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. 
+---
 
-For that reason, we use well-known binary (WKB) encoding
+- For that reason, we use well-known binary (WKB) encoding
+
+. . . 
 
 ```{r}
 x
@@ -280,12 +297,15 @@ st_as_binary(x)
 
 - WKT and WKB can both be transformed back into R native objects by
 
-```{r, message = TRUE}
+. . .
+
+```{r}
+#| message: true
 st_as_sfc("LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)")[[1]]
 st_as_sfc(structure(list(st_as_binary(x)), class = "WKB"))[[1]]
 ```
 
-Conversion between R native objects and WKB is done by package `sf` in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R.
+- Conversion between R native objects and WKB is done by package `sf` in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R.
 
 ## How simple features are organized in R?
 
@@ -303,6 +323,8 @@ Conversion between R native objects and WKB is done by package `sf` in compiled 
 
 - This means each observation (element) is a list itself!
 
+. . . 
+
 Remember our nested lists?
 
 ```{r}
@@ -315,19 +337,24 @@ list(list(c(1:5)))
 
 The three classes are used to represent simple feature obejcts are:
 
-* `sf`: `data.frame` with feature attributes and geometries
+`sf`: `data.frame` with feature attributes and geometries
 
-which is composed of
+. . . 
 
-* `sfc`: the `list-column` with the geometries for each feature
+which is contains an:\
 
-which is composed of
+`sfc`: the `list-column` with the geometries for each feature
 
-* `sfg`, individual simple feature geometries
+. . . 
+
+which is composed of:\
+
+`sfg`, individual simple feature geometries
 
 ## sf, sfc, sfg
 
-```{r, echo = FALSE, out.width = "75%", fig.align="center"}
+```{r}
+#| echo: false
 knitr::include_graphics("images/10-sf-diagram.png")
 ```
 
@@ -337,11 +364,12 @@ In the output we see:
 * in blue a single simple feature **geometry** (an object of class `sfg`)
 * in red a simple feature list-column (an object of class `sfc`, which is a column in the `data.frame`)
 
-Even though geometries are native R objects, they are printed as **well-known text**
+- Even though geometries are native R objects, they are printed as **well-known text**
 
 ## `sfg`: simple feature geometry (blue)
 
-```{r, echo = FALSE, out.width = "35%", fig.align="center"}
+```{r}
+#| echo: false
 knitr::include_graphics("images/10-sf-diagram.png")
 ```
 
@@ -384,43 +412,71 @@ attributes(pt2)
 
 ## `sfg`: simple feature geometry
 
-::: columns
-::: {.column width="50%"}
 ```{r}
 (m1 = rbind(c(8, 1), c(2, 5), c(3, 2)))
 
 (mp = st_multipoint(m1))
 attributes(mp)
-```
-:::
-::: {.column width="50%"}
-```{r}
+
 (ls = st_linestring(m1))
 attributes(ls)
 ```
-:::
-:::
 
 ## `sfg`: simple feature geometry
 
 Although these geometries contain the same `points` (m1), they have entirely different meaning: the point set is a zero-dimensional, the line a one-dimensional geometry:
 
-Here, dimensions is no the XY vs XYZ, but rather whether the geometry has length (1D) or area (2D) or greater...
+Here, dimensions is _not_ the XY vs XYZ, but rather whether the geometry has length (1D) or area (2D) or greater...
 
 ```{r}
 st_dimension(mp)
+
 st_length(mp)
+
 st_dimension(ls)
+
 st_length(ls)
 ```
 
+## Mixed geometries
+
+Sets of simple features also consist of features with heterogeneous geometries. In this case, the geometry type of the set is `GEOMETRY`:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+(g = st_sfc(st_point(c(0,0)), 
+            st_linestring(rbind(c(0,0), c(1,1)))))
+```
+:::
+::: {.column width="50%"}
+
+These set can be filtered by using `st_is`
+
+```{r}
+g |> st_is("LINESTRING")
+```
+
+or, when working with sf objects,
+
+```{r}
+# Note need of %>%
+st_sf(g) %>%
+  filter(st_is(., "LINESTRING"))
+```
+
+:::
+:::
+
 ## GEOMETRYCOLLECTION 
 
-- Single features can have a geometry that consists of several geometries of different types.
+- Single features (1 geometry per row) can have a single geometry, that consists of several geometries of different types.
 
 - Such cases arise rather naturally when looking for intersections. For instance, the intersection of two LINESTRING geometries may be the combination of a `LINESTRING` and a `POINT.` 
 
 - Putting this intersection into a single feature geometry needs a `GEOMETRYCOLLECTION`
+
+. . . 
 
 ```{r}
 pt <- st_point(c(1, 0))
@@ -429,10 +485,16 @@ poly1 <- st_polygon(list(matrix(c(5.5, 7, 7, 6, 5.5, 0, 0, -0.5, -0.5, 0), ncol 
 poly2 <- st_polygon(list(matrix(c(6.6, 8, 8, 7, 6.6, 1, 1, 1.5, 1.5, 1), ncol = 2)))
 multipoly <- st_multipolygon(list(poly1, poly2))
 
+st_sfc(pt, ls, poly1, poly2, multipoly)
+
 (j <- st_geometrycollection(list(pt, ls, poly1, poly2, multipoly)))
 ```
 
+## GEOMETRYCOLLECTION 
+
 - In case we end up with `GEOMETRYCOLLECTION` objects, the next question is often what to do with them. One thing we can do is extract elements from them:
+
+. . . 
 
 ```{r}
 st_collection_extract(j, "POLYGON")
@@ -442,7 +504,7 @@ st_collection_extract(j, "POINT")
 st_collection_extract(j, "LINESTRING")
 ```
 
-# Conversion between geometry types
+## Conversion between types
 
 We can convert simple feature geometries using the `st_cast` generic (up to the extent that a conversion is feasible):
 
@@ -450,14 +512,17 @@ We can convert simple feature geometries using the `st_cast` generic (up to the 
 methods(st_cast)
 ```
 
-Lets take the Santa Barbara County in our California sf object:
+## Conversion between types
+
+Lets take the Larimer County in our Colorado sf object:
 
 ```{r}
-(co1 = co$geometry[[35]])
+(co1 = filter(co, name == "Larimer")$geometry)
 (co_ls = st_cast(co1, "MULTILINESTRING"))
 ```
 
-```{r, echo = FALSE}
+```{r}
+#| echo: false
 par(mfrow = c(1,2))
 par(mar=c(1,1,1,1))
 plot(co1, col = "red")
@@ -466,23 +531,32 @@ plot(co_ls, col = "red")
 title("MULITLINESTRING")
 ```
 
-It is often convenient to analyze the the points that make up a `LINESTRING` However,
+## Conversion between types
+
+It is often convenient to analyze the the points that make up a `LINESTRING` However ...
 
 ```{r, warning=TRUE}
+#| warning: true
 rbind(c(0,0), c(1,1), c(1,0), c(0,1)) |> 
   st_linestring() |> 
   st_cast("POINT")
 ```
 
-does not what we expect, because it will convert a **single** geometry into a new **single** geometry (one line to one point)
+. . .
 
-Instead, we must recognize that a collection of points is what defines a `LINSETRING` and a collection of of `POINT`, operating as a single unit, is a `MULTIPOINT`
+does not do what we expect, because it will convert a **single** geometry into a new **single** geometry (one line to one point)
+
+. . . 
+
+Instead, we must recognize that a collection of points is what defines a `LINSETRING` and a collection of `POINT`s, operating as a single unit, is a `MULTIPOINT`
 
 ```{r}
 rbind(c(0,0), c(1,1), c(1,0), c(0,1)) |> 
   st_linestring() |> 
   st_cast("MULTIPOINT")
 ```
+
+. . .
 
 If we really wanted the individual `POINT` geometries, we need to work with sets:
 
@@ -499,9 +573,13 @@ If we really wanted the individual `POINT` geometries, we need to work with sets
 
 - We can create such a list column with constructor function `st_sfc`:
 
+. . . 
+
 ```{r}
 (sfc = st_sfc(st_point(c(0,1)), st_point(c(-3,2))))
 ```
+
+---
 
 The default report from the print method for sfc gives
 
@@ -512,11 +590,15 @@ The default report from the print method for sfc gives
 - the coordinate reference system for the set (epsg and proj4string)
 - the first few geometries, as (abbreviated) WKT
 
+. . . 
+
 The class of the geometry `list-column` is a combination of a specific class, and a superclass. 
 
 ```{r}
 class(sfc)
 ```
+
+---
 
 In addition to a class, the `sfc` object has further attributes (remember S3 class!)
 
@@ -531,6 +613,7 @@ which are used to record for the whole set:
 - a coordinate reference system
 - the number of empty geometries contained in the set
 
+---
 
 This means that all these properties are defined for the set (sfc), and not for geometries (sfg) individually.
 
@@ -542,24 +625,23 @@ p[[2]]
 
 and we will use these lists as _list columns_ in `data.frame` or `tibble` objects to represent simple features with geometries in a list column.
 
-`r flipbookr::chunq_reveal("set", title = "Sets of geometries arise when we separate compound geometries: ", widths = c(40,60,0))`
+`r flipbookr::chunq_reveal("set", title = "Sets of geometries arise when we separate compound geometries: ", lcolw = 40, rcolw = 60)`
 
-```{r set, include = FALSE, warning = TRUE}
+```{r set}
+#| include: false
+#| warning: true
 rbind(c(0,0), c(1,1), c(1,0), c(0,1)) |>
    st_linestring() |> 
    st_sfc() |> 
    st_cast("POINT") -> 
   p
-
-
-rbind(c(0,0), c(1,1), c(1,0), c(0,1)) |>
-   st_linestring() |> 
-   st_cast("POINT") 
 ```
 
 - On the last slide, `st_sfc` creates a set of _one_ `LINESTRING` (p), with a size of 4.
 
 - Going the other way around (from set to feature), we need to _combine_ geometries:
+
+. . .
 
 ::: columns
 ::: {.column width="50%"}
@@ -600,61 +682,53 @@ plot(co_geom)
 :::
 :::
 
---- 
+## {.smaller}
 
 ::: columns
 ::: {.column width="50%"}
 ```{r}
-(co_c = st_combine(co_geom) )
-(co_u = st_union(co_geom) )
+(co_c = st_combine(co_geom))
 ```
+
+```{r}
+#| echo: false
+#| fig.align: 'center'
+plot(co_c, col = "red", main = "st_combine")
+```
+
+```{r}
+(co_u = st_union(co_geom))
+```
+
+```{r}
+#| echo: false
+#| fig.align: 'center'
+plot(co_u, col = "red", main = "st_union")
+```
+
 :::
 ::: {.column width="50%"}
 ```{r}
 (co_c_ml = st_combine(co_geom) |> 
    st_cast("MULTILINESTRING"))
+```
+
+```{r}
+#| echo: false
+#| fig.align: 'center'
+plot(co_c_ml, col = "red", main = "st_combine / st_cast")
+```
+
+```{r}
 (co_u_ml = st_union(co_geom)  |> 
     st_cast("MULTILINESTRING"))
 ```
-:::
-:::
 
-```{r, echo = F, fig.align='center'}
-par(mfrow = c(2,2))
-par(mar=c(1,1,1,1))
-plot(co_c, col = "red", main = "st_combine")
-plot(co_u, col = "red", main = "st_union")
-plot(co_c_ml, col = "red", main = "st_combine / st_cast")
+```{r}
+#| echo: false
+#| fig.align: 'center'
 plot(co_u_ml, col = "red", main = "st_union / st_cast")
 ```
-
-## Mixed geometries
-
-Sets of simple features also consist of features with heterogeneous geometries. In this case, the geometry type of the set is `GEOMETRY`:
-
-::: columns
-::: {.column width="50%"}
-```{r}
-(g = st_sfc(st_point(c(0,0)), 
-            st_linestring(rbind(c(0,0), c(1,1)))))
-```
-:::
-::: {.column width="50%"}
-
-These set can be filtered by using `st_is`
-
-```{r}
-g |> st_is("LINESTRING")
-```
-
-or, when working with sf objects,
-
-```{r}
-# Note need of %>%
-st_sf(g) %>%
-  filter(st_is(., "LINESTRING"))
-```
-
 :::
 :::
 
@@ -678,13 +752,11 @@ meaning it extends `data.frame`, but with a single list-column with geometries, 
 attr(co, "sf_column")
 ```
 
----
-
 ## sfc: simple feature geometry list-column
 
 The column in the `sf` `data.frame` that contains the geometries is a list, of class `sfc`.
 
-We can retrieve the geometry list-column as we would any data.frame column (e.g. `ca$geometry`), or more generally with `st_geometry`:
+We can retrieve the geometry list-column as we would any data.frame column (e.g. `co$geometry`), or more generally with `st_geometry`:
 
 ```{r}
 (co_geom <- st_geometry(co))
@@ -696,290 +768,39 @@ Geometries are printed in abbreviated form, but we can view a complete geometry 
 co_geom[[1]]
 ```
 
----
+## The stickness of `sfc` column
 
-## Reading and writing
+- Geometry columns are "sticky" meaning they persist through data manipulation:
 
-As we've seen above, reading spatial data from an external file can be done via `sf`
-  - reading data requires the "parser function" and the file path
-
-```{r, eval = FALSE}
-co <- st_read("data/co.shp")
-```
-
-we can suppress the output by adding argument `quiet=TRUE` or by using the otherwise nearly identical but more quiet
-
-```{r, eval = TRUE}
-ca <- read_sf("data/co.shp")
-```
-
-Writing takes place in the same fashion, using `st_write`:
-
-```{r, eval = FALSE}
-st_write(co, "data/co.shp")
-```
-
-or its quiet alternative that silently overwrites existing files by default,
-
-```{r, eval = FALSE}
-write_sf(co, "co.shp") # silently overwrites
-```
-
----
-
-## From Tables (e.g. CSV)
-
-Spatial data can also be created from CSV and other flat files once it is in R:
-
-```{r,message=FALSE}
-(cities = readr::read_csv("../labs/data/uscities.csv") |> 
-  select(city, state_name, county_name, population, lat, lng) )
-```
-
----
-
-To do this, you must specify the `X` and the `Y` coordinate columns as well as a CRS:
-
-- A typical lat/long CRS is EPSG:4326
+. . . 
 
 ```{r}
-(cities_sf = st_as_sf(cities, coords = c("lng", "lat"), crs = 4326))
+co |> 
+  select(name) |> 
+  slice(1:2)
 ```
 
-## Data Manipulation
+- Dropping the geometry column requires dropping the geometry via `sf`:
 
-Since `sf` objects are `data.frames`, our `dplyr` verbs work!
-
-Lets find the most populous city in each California county...
-
---- 
-
-`r flipbookr::chunq_reveal("dplyr", title = "sf and dplyr", widths = c(40,60,0))`
-
-```{r dplyr, include = FALSE}
-cities_sf |> 
-  filter(state_name == "Colorado") |> 
-  group_by(county_name) |> 
-  slice_max(population, n = 1) -> 
-  co_cities
-```
-
----
-
-## Plotting
-
-We've already seen that `ggplot()` is a powerful visualization tool:
-
---
-
-The 5 steps we described for building a ggplot are:
-  1. canvas
-  2. layers (geoms)
-  3. labels
-  4. facets
-  5. themes
-
---
-  
-spatial work in R is becoming so common that `ggplot()` comes with a sf geom (`geom_sf`)
-
----
-
-`r flipbookr::chunq_reveal("ggplot", title = "##sf an ggplot", widths = c(60,40,0))`
-
-```{r ggplot, include = FALSE}
-ggplot() + 
-  geom_sf(data = co, aes(fill = aland/1e10)) + 
-  geom_sf(data = co_cities, aes(size = population/1e5), col = "red") + 
-  theme_linedraw() + 
-  labs(title = "California Counties: Land Area",
-       size = "Population \n(100,000)",
-       fill = "Acres \n(billions)")
-```
-
-
-## So far ...
-
-We've discussed the *simple feature* standard
-
- 1.  Geometries (type, dimension, and structure)
- 
-    - Empty, Valid, Simple
-    
- 2.  Encoding (WKT & WKB)
- 
- 3.  A set of operations
-
-And the implementation of the **simple features** standard in R
-
-  - _sfg_: a _single_ feature geometry
-
-  - _sfc_: a _set_ of geometries (`sfg`) stored as a list
-
-  - _sf_: a `sfc` list joined with a `data.frame` (attributes)
-
-This R implementation is ideal/special because it achieves the simple feature abstract goal of:
-
-> "_A simple feature is defined by the OpenGIS Abstract specification to have both **spatial** and **non-spatial** attributes..._"  - [standard](http://www.opengeospatial.org/standards/sfa).
-
-The shapefile/GIS traditional GIS view does not do this and seperates geometry (shp), from projection (prj), from data (dbf) and relates them through an shx file
-  
-## Integration with `tidyverse`
-
-- We saw how the `dplyr` verbs still work on an `sf` object since `sf` extends the data.frame class
-
-- How `geom_sf` support mapping ("spatial plotting") in `ggplot`
-
-- How to read spatial data into R via GDAL drivers:
-  - spatial files (`read_sf`) 
-  - flat files via `st_as_sf`
-  
-- Integration with a few `GEOS` geometry operations like:
-  - st_combine()
-  - st_union()
-
-## Taki ...
-
-::: {columns}
-::: {.column width="50%"}
+. . .
 
 ```{r}
-conus <-  USAboundaries::us_states() |>
-  filter(!state_name %in% c("Puerto Rico", 
-                            "Alaska", 
-                            "Hawaii"))
-
-length(st_geometry(conus))
+co |> 
+  st_drop_geometry() |> #<<
+  select(name) |> 
+  slice(1:2)
 ```
 
-:::
-::: {.column width="50%"}
+- Or cohersing the `sf` object to a `data.frame`:
+
+. . . 
 
 ```{r}
-#| echo: false
-ggplot() + 
-  geom_sf(data = conus, aes(fill = state_name)) + 
-  theme_linedraw() + 
-  theme(legend.position = "none") + 
-  labs(title = paste("CONUS:", length(st_geometry(conus)), "feature(s)") ) + 
-  scale_fill_viridis_d()
+co |> 
+  as.data.frame() |> #<<
+  select(name) |> 
+  slice(1:2)
 ```
-
-:::
-:::
-
-## 1 feature: resoloved and combined:
-
-::: {columns}
-::: {.column width="50%"}
-
-- st_cast / st_union work on `sfg`, `sfc`, and `sf` objects:
-
-```{r}
-us_c_ml = st_combine(conus) |>
-  st_cast("MULTILINESTRING")
-   
-us_u_ml = st_union(conus) |>
-  st_cast("MULTILINESTRING")
-```
-
-:::
-::: {.column width="50%"}
-
-```{r}
-#| echo: false
-#| 
-g1 = ggplot() + 
-  geom_sf(data = us_c_ml, color = "red") + 
-  theme_linedraw() + 
-  theme(legend.position = "none") + 
-  labs(title = paste("CONUS:", length(st_geometry(us_c_ml)), "feature(s)") ) 
-
-g2 = ggplot() + 
-  geom_sf(data = us_u_ml, color = "red") + 
-  theme_linedraw() + 
-  theme(legend.position = "none") + 
-  labs(title = paste("CONUS:", length(st_geometry(us_u_ml)), "feature(s)") ) 
-
-gridExtra::grid.arrange(g1, g2, nrow = 1)
-
-```
-:::
-:::
-
-## So what?
-
-Lets imagine we want to know the distance from Denver to the nearest state border:
-
-To do this, we need to:\
-
-  1: define Denver as a geometry in a CRS\
-  2: determine the correct geometry types / representation\
-  3: calculate the distance between (1) and (2)\
-
-## 1. Make "Denver" in the CRS of our states
-
-```{r}
-denver = data.frame(y = 39.7392, x = -104.9903, name = "Denver")
-(denver_sf = st_as_sf(denver, coords = c("x", "y"), crs = 4326))
-```
-
-`r flipbookr::chunq_reveal("q14", title = "2. Determine the 3 closest states:", lcolw = 40, rcolw = 60)`
-
-```{r q14, include = FALSE}
-conus |> 
-  select(state_name) %>%
-  mutate(dist = st_distance(., denver_sf)) |> 
-  slice_min(dist, n = 3) 
-```
-
-- That's close, but the distance to Colorado is 0, that's not a state border.
-
-##  Geometry Selection
-
-- `Polygon` (therefore MULTIPOLGYGONS) describe areas! 
-- The distance to a `point` **in** a `polygon` to that polygon is 0.
-
-`r flipbookr::chunq_reveal("q15", title = "To determine distance to border we need a linear representation:", widths = c(40,60,0))`
-
-```{r q15, include = FALSE}
-conus |> 
-  select(state_name) |> 
-  st_cast("MULTILINESTRING") %>%
-  mutate(dist = st_distance(., denver_sf)) |> 
-  slice_min(dist, n = 3) ->
-  near3
-```
-
-```{r, echo = FALSE}
-near3
-```
-
-- Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!
-
-- While this is not to complex for 1 <-> 49 features imagine we had 28,000+ (like) your lab!
-
-- That would result in 1,344,000 more calculations then needed ...
-
-## Revisting the idea of the feature level:
-
-A "feature" can "be part of the whole" or the whole
-
-  - A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)
-
-  - A city (POINT), or a set of cities meeting a condition (MULTIPOINT)
-
-  - A road (LINESTRING), or a route (MULTILINESTRING)
-  
-- Since we want the distance to the nearest border, _regardless_ of the state. Our **feature** is the _set of borders with preserved boundaries_.
-
-- In other words, a 1 feature `MULTILINESTRING`
-
-```{r}
-st_distance(denver_sf, st_cast(st_combine(conus), "MULTILINESTRING"))
-```
-
-The same principle would apply if the question was "_distance to national border_"
 
 ## The stickness of `sfc` column
 
@@ -998,36 +819,18 @@ knitr::include_graphics("images/11-sticky-geom.png")
     - `cbind()`
     - `do.call(cbind, list())`
 
-## The stickness of `sfc` column
 
-- Geometry columns are "sticky" meaning they persist through data manipulation:
 
-```{r}
-USAboundaries::us_states() |> 
-  select(name) |> 
-  slice(1:2)
-```
 
-Dropping the geometry column requires dropping the geometry via `sf`:
 
-```{r}
-USAboundaries::us_states() |> 
-  st_drop_geometry() |> #<<
-  select(name) |> 
-  slice(1:2)
-```
 
-Or cohersing the `sf` object to a `data.frame`:
 
-```{r}
-USAboundaries::us_states() |> 
-  as.data.frame() |> #<<
-  select(name) |> 
-  slice(1:2)
-```
 
-## Coordinate Systems
 
+
+# Coordinate Systems
+
+## What makes spatial data _spatial_?
 - What makes a feature geometry _spatial_ is the reference system...
 
 ```{r}
@@ -1037,10 +840,243 @@ USAboundaries::us_states() |>
 knitr::include_graphics("images/09-sf-model.png")
 ```
 
+## Reading and writing
+
+As we've seen above, reading spatial data from an external file can be done via `sf`
+  - reading data requires the "parser function" and the file path
+
+```{r}
+#| echo: false
+co <- st_read("data/co.shp")
+```
+
+we can suppress the output by adding argument `quiet=TRUE` or by using the otherwise nearly identical but more quiet
+
+```{r}
+#| eval: true
+co <- read_sf("data/co.shp")
+```
+
+Writing takes place in the same fashion, using `st_write`:
+
+```{r}
+#| eval: false
+st_write(co, "data/co.shp")
+```
+
+or its quiet alternative that silently overwrites existing files by default,
+
+```{r}
+#| eval: false
+write_sf(co, "co.shp") # silently overwrites
+```
+
+
+## From Tables (e.g. CSV)
+
+Spatial data can also be created from CSV and other flat files once it is in R:
+
+```{r}
+#| message: false
+(cities = readr::read_csv("../labs/data/uscities.csv") |> 
+  select(city, state_name, county_name, population, lat, lng) )
+```
+
+---
+
+To do this, you must specify the `X` and the `Y` coordinate columns as well as a CRS:
+
+- A typical lat/long CRS is EPSG:4326
+
+```{r}
+(cities_sf = st_as_sf(cities, coords = c("lng", "lat"), crs = 4326))
+```
+
+## Data Manipulation
+
+- Since `sf` objects are `data.frames`, our `dplyr` verbs work!
+
+- Lets find the most populous city in each Colorado county...
+
+`r flipbookr::chunq_reveal("dplyr", title = "sf and dplyr", widths = c(40,60,0))`
+
+```{r dplyr}
+#| include: false
+cities_sf |> 
+  filter(state_name == "Colorado") |> 
+  group_by(county_name) |> 
+  slice_max(population, n = 1) -> 
+  co_cities
+```
+
+## Plotting
+
+- We've already seen that `ggplot()` is a powerful visualization tool:
+
+- The 5 steps we described for building a ggplot are:
+  1. canvas
+  2. layers (geoms)
+  3. labels
+  4. facets
+  5. themes
+  
+- spatial work in R is becoming so common that `ggplot()` comes with a sf geom (`geom_sf`)
+
+`r flipbookr::chunq_reveal("ggplot", title = "sf an ggplot",
+rcolw = 60, lcolw = 40)`
+
+```{r ggplot}
+#| include: false
+ggplot() + 
+  geom_sf(data = co, aes(fill = aland/1e10)) + 
+  geom_sf(data = co_cities, aes(size = population/1e5), col = "red") + 
+  theme_linedraw() + 
+  labs(title = "Colorado Counties: Land Area",
+       size = "Population \n(100,000)",
+       fill = "Acres \n(billions)")
+```
+
+
+## CONUS 
+
+::: {columns}
+::: {.column width="50%"}
+
+```{r}
+conus <-  USAboundaries::us_states() |>
+  filter(!state_name %in% c("Puerto Rico", 
+                            "Alaska", 
+                            "Hawaii"))
+
+length(st_geometry(conus))
+```
+
+:::
+::: {.column width="50%"}
+
+```{r}
+ggplot() + 
+  geom_sf(data = conus, aes(fill = state_name)) + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(conus)), "feature(s)") ) + 
+  scale_fill_viridis_d()
+```
+
+:::
+:::
+
+## 1 feature: resoloved and combined:
+
+- `st_cast` / `st_union` work on `sfg`, `sfc`, and `sf` objects:
+
+```{r}
+us_c_ml = st_combine(conus) |>
+  st_cast("MULTILINESTRING")
+   
+us_u_ml = st_union(conus) |>
+  st_cast("MULTILINESTRING")
+```
+
+```{r}
+#| echo: false
+
+g1 = ggplot() + 
+  geom_sf(data = us_c_ml, color = "red") + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(us_c_ml)), "feature(s)") ) 
+
+g2 = ggplot() + 
+  geom_sf(data = us_u_ml, color = "red") + 
+  theme_linedraw() + 
+  theme(legend.position = "none") + 
+  labs(title = paste("CONUS:", length(st_geometry(us_u_ml)), "feature(s)") ) 
+
+gridExtra::grid.arrange(g1, g2, nrow = 1)
+
+```
+
+## So what?
+
+Lets imagine we want to know the distance from Denver to the nearest state border:
+
+To do this, we need to:\
+
+  1: define Denver as a geometry in a CRS\
+  2: determine the correct geometry types / representation\
+  3: calculate the distance between (1) and (2)\
+
+## 1. Make "Denver" in the CRS of our states
+
+```{r}
+denver_sf <- data.frame(y = 39.7392, 
+                       x = -104.9903, 
+                       name = "Denver") |> 
+  st_as_sf(coords = c("x", "y"), 
+           crs = 4326)
+```
+
+`r flipbookr::chunq_reveal("q14", title = "2. Determine the 3 closest states:", lcolw = 40, rcolw = 60)`
+
+```{r q14}
+#| include: false
+conus |> 
+  select(state_name) %>%
+  mutate(dist = st_distance(., denver_sf)) |> 
+  slice_min(dist, n = 3) 
+```
+
+- That's close, but the distance to Colorado is 0, that's not a state border.
+
+##  Geometry Selection
+
+- `Polygon` (therefore MULTIPOLGYGONS) describe areas! 
+- The distance to a `point` **in** a `polygon` to that polygon is 0.
+
+`r flipbookr::chunq_reveal("q15", title = "To determine distance to border we need a linear representation:", widths = c(40,60,0))`
+
+```{r q15}
+#| include: false
+conus |> 
+  select(state_name) |> 
+  st_cast("MULTILINESTRING") %>%
+  mutate(dist = st_distance(., denver_sf)) |> 
+  slice_min(dist, n = 3) 
+```
+
+- Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!
+
+- While this is not to complex for 1 <-> 49 features imagine we had 28,000+ (like your lab)!
+
+- That would result in 1,344,000 more calculations then needed ...
+
+## Revisting the idea of the feature level:
+
+- A "feature" can "be part of the whole" or the whole
+
+  - A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)
+
+  - A city (POINT), or a set of cities meeting a condition (MULTIPOINT)
+
+  - A road (LINESTRING), or a route (MULTILINESTRING)
+  
+- Since we want the distance to the nearest border, _regardless_ of the state. Our **feature** is the _set of borders with preserved boundaries_.
+
+- In other words, a 1 feature `MULTILINESTRING`
+
+. . . 
+
+```{r}
+st_distance(denver_sf, st_cast(st_combine(conus), "MULTILINESTRING"))
+```
+
+- The same principle would apply if the question was "_distance to national border_"
+
+
 ## Coordinate Systems
 
 - Coordinate Reference Systems (CRS) defines how spatial features relate to the surface of the Earth. 
-
 - CRSs are either geographic or projected...
 
 - CRSs are measurement units for coordinates: 
@@ -1055,21 +1091,21 @@ In `sf` we have _three_ tools for exploring, define, and changing CRS systems:
 
   -  *st_transform* : Transform or convert coordinates of simple feature
 
-- Again, "st" (like PostGIS) denotes it is an operation that can work on a " _s_ patial _t_ ype "  
-  
+- Again, "st" (like PostGIS) denotes it is an operation that can work on a " _s_ patial _t_ ype"  
+
 ## Geographic Coordinate Systms (GCS)
 
-A GCS identifies locations on the _curved_ surface of the earth. 
+- A GCS identifies locations on the _curved_ surface of the earth. 
 
-Locations are measured in **angular** units from the center of the earth relative to the plane defined by the equator and the plane defined by the prime meridian. 
+- Locations are measured in **angular** units from the center of the earth relative to the plane defined by the equator and the plane defined by the prime meridian. 
 
-The vertical angle describes the _latitude_ and the horizontal angle the _longitude_
+- The vertical angle describes the _latitude_ and the horizontal angle the _longitude_
 
-In most coordinate systems, the North-South and East-West directions are encoded as +/-.
+- In most coordinate systems, the North-South and East-West directions are encoded as +/-.
 
-North and East are positive (`+`) and South and West are negative (`-`) sign.
+- North and East are positive (`+`) and South and West are negative (`-`) sign.
 
-A GCS is defined by 3 components:
+- A GCS is defined by 3 components:
 
   - an **ellipsoid** 
   
@@ -1174,9 +1210,9 @@ or
 - When working in the USA, a the North American Datum of 1927 (or NAD27 for short) is standard
   - NAD27 is not well suited for other parts of the world.
 
-Examples of common local datums are shown in the following table:
+## {.smaller}
 
-##
+Examples of common local datums are shown in the following table:
 
 |Local datum	     | Acronym | Best for|	Comment |
 |------------------|---------|---------|---------|
@@ -1185,7 +1221,7 @@ Examples of common local datums are shown in the following table:
 | World Geodetic System 1972	| WGS72 |	Global |	Developed by the Department of Defense. |
 
 
-## Geocentric Datum
+## Geocentric Datum {.smaller}
 
 - Many modern datums use a geocentric alignment 
 
@@ -1194,8 +1230,6 @@ Examples of common local datums are shown in the following table:
   - North American Datums of 1983 (NAD83) 
 
 - Most popular geocentric datums use the WGS84 _ellipsoid_ or the GRS80 _ellipsoid_  which share nearly identical semi-major and semi-minor axes
-
-## 
 
 |Geocentric datum| Acronym | Best for|	Comment |
 ----------------|---------|---------|--------- |
@@ -1212,7 +1246,6 @@ NAD 27 is based on Clarke Ellipsoid of 1866 which is calculated by manual survey
 - So, a GCS is defined by the ellipsoid model and its alignment to the geoid defining the datum. 
 
 - Smooth Sphere - Mathmatical Geoid (in angular units)
-
 
 ## Projected Coordinate Systems
 
@@ -1232,7 +1265,9 @@ NAD 27 is based on Clarke Ellipsoid of 1866 which is calculated by manual survey
 
 ## Projection Types:
 
-```{r, echo = FALSE, out.width="50%", fig.align='center'}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-projected-crs.png")
 ```
 
@@ -1246,7 +1281,9 @@ knitr::include_graphics("images/11-projected-crs.png")
 
 - Typically used to map polar regions.
 
-```{r, echo = FALSE, out.width="50%", fig.align='center'}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-projected-crs.png")
 ```
 
@@ -1258,17 +1295,21 @@ knitr::include_graphics("images/11-projected-crs.png")
 
 - Most often when mapping the entire world. 
 
-```{r, echo = FALSE, out.width="50%", fig.align='center'}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-projected-crs.png")
 ```
 
 ## Conic 
 
-In a conic projection, the Earth’s surface is projected onto a cone along 1 or 2 lines of _tangency_ 
+- In a conic projection, the Earth’s surface is projected onto a cone along 1 or 2 lines of _tangency_ 
 
-Therefore, it is the best suited for maps of mid-latitude areas. 
+- Therefore, it is the best suited for maps of mid-latitude areas. 
 
-```{r, echo = FALSE, out.width="50%", fig.align='center'}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-projected-crs.png")
 ```
 
@@ -1278,7 +1319,7 @@ knitr::include_graphics("images/11-projected-crs.png")
 
 - Think about trying to unpeel an orange while preserving the skin
 
-The four spatial properties that are subject to distortion are: **shape**, **area**, **distance** and **direction**
+- The four spatial properties that are subject to distortion are: **shape**, **area**, **distance** and **direction**
 
   - A map that preserves shape is called `conformal`; 
   
@@ -1294,9 +1335,11 @@ The four spatial properties that are subject to distortion are: **shape**, **are
 
 - When working with small-scale (large area) maps and when multiple spatial properties are needed, it is best to break the analyses across projections to minimize errors associated with spatial distortion.
 
-## Setting CRSs/PCSs
+## Setting CRSs/PCSs {.smaller}
 
  - We saw that `sfc` objects have two attributes to store a CRS: `epsg` and `proj4string`
+
+. . .
 
 ```{r}
 st_geometry(conus)
@@ -1319,7 +1362,7 @@ st_geometry(conus)
 
 - fixing only the `proj4string` may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets (but may help reproducibility)
 
-## `PROJ4` coordinate syntax
+## `PROJ4` coordinate syntax {.smaller}
 
 The `PROJ4` syntax contains  a list of parameters, each prefixed with the `+` character. 
 
@@ -1344,28 +1387,6 @@ A list of some `PROJ4` parameters follows and the full list can be found [here](
 | +y_0    	| False northing                                                      	|
 | +zone   	| UTM zone                                                            	|
 
-## 
-
-**WGS84**  \
-_EPSG_: 4326  \
-_PROJ4_: `+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs`  \
-  - projection name: longlat\
-  - Latitude of origin: WGS84\
-  - Longitude of origin: WGS84\
-
-**WGS84**\
-_EPSG_: 5070\
-`"+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"`\
-  - projection name: `aea` (Albers Equal Area)\
-  - Latitude of origin: 23\
-  - Longitude of origin: -96\
-  - Latitude of first standard parallel: 29.5\
-  - Latitude of second standard parallel: 45.5\
-  - False Easting: 0\
-  - False Northing: 0\
-  - Datum: NAD83\
-  - Units: m\
-  
 ## Transform and retrive
 
 ::: {columns}
@@ -1387,7 +1408,9 @@ st_crs(conus5070)$datum
 :::
 :::
 
-```{r, echo = FALSE, out.width = "90%", fig.align='center'}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 g1 = ggplot(data = conus) + 
   geom_sf() + 
   theme_linedraw()+ 
@@ -1468,9 +1491,9 @@ ggplot(data =st_transform(conus, p)) +
 
 - In most cases, such errors other sources of error in the feature representation outweigh measurement errors made in a PCS making them tolorable.
 
-However, if the domain of analysis is large (i.e. the North American continent), then the measurement errors associated with a projected coordinate system may no longer be acceptable. 
+- However, if the domain of analysis is large (i.e. the North American continent), then the measurement errors associated with a projected coordinate system may no longer be acceptable. 
 
-A way to circumvent projected coordinate system limitations is to adopt a _geodesic_ solution.
+- A way to circumvent projected coordinate system limitations is to adopt a _geodesic_ solution.
 
 ## Geodesic Measurments
 
@@ -1488,6 +1511,7 @@ A way to circumvent projected coordinate system limitations is to adopt a _geode
 #| fig-height: 12
 #| fig-width: 24
 #| echo: false
+#| message: false
 
 library(tmap)
 library(geosphere)
@@ -1559,7 +1583,9 @@ tm_shape(wrld, bbox=ext) +
 - this curvature is a byproduct of the current reference system’s increasing distance distortion as one moves towards the pole! 
 - We can display the geodesic and planar distance on a 3D globe (or a projection that mimics the view of the 3D earth).
 
-```{r  fig.width=9,echo=FALSE, fig.align='center'}
+```{r}
+#| echo: false
+#| message: false
 tm_shape(wrld2) +
   tm_raster(legend.show = FALSE, palette= c("grey80")) +
   tm_graticules(col="grey90", labels.col="white")+
@@ -1588,7 +1614,7 @@ tm_shape(wrld2) +
 
 - Some more efficient algorithms that minimize computation time may reduce precision in the process. 
 
-- Some of ArcMap’s functions offer the option to compute geodesic distances and areas however ArcMap does not clearly indicate _how_ its geodesic calculations are implemented ([cite](https://mgimond.github.io/Spatial/coordinate-systems.html#geodesic-geometries) 
+- Some of ArcMap’s functions offer the option to compute geodesic distances and areas however ArcMap does not clearly indicate _how_ its geodesic calculations are implemented ([cite](https://mgimond.github.io/Spatial/coordinate-systems.html#geodesic-geometries))
 
 - R is well documented, and is efficient!
 
@@ -1596,7 +1622,9 @@ tm_shape(wrld2) +
 
 `?st_distance`
 
-```{r, fig.align='center', out.width="75%", echo = FALSE}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-sf-geos-measures.png")
 ```
 
@@ -1604,12 +1632,16 @@ knitr::include_graphics("images/11-sf-geos-measures.png")
 
 ::: {columns}
 ::: {.column width="50%"}
-```{r, fig.align='center', out.width="75%", echo = FALSE}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/11-lwgeom.png")
 ```
 :::
 ::: {.column width="50%"}
-```{r, fig.align='center', out.width="75%", echo = FALSE}
+```{r}
+#| echo: false
+#| fig.align: 'center'
 knitr::include_graphics("images/09-sf-depends.png")
 ```
 :::
@@ -1617,12 +1649,14 @@ knitr::include_graphics("images/09-sf-depends.png")
 
 `r flipbookr::chunq_reveal("dist1", title = "Distance Example", widths = c(40,60,0))`
 
-```{r dist1, include = FALSE}
+```{r dist1}
+#| include: false
 (pts = data.frame(y = c(40.7128, 34.4208), 
                   x = c(-74.0060, -119.6982 ), 
                   name = c("NYC","SB")))
 
-(pts = st_as_sf(pts, coords = c("x", "y"), crs = 4326))
+(pts = st_as_sf(pts, coords = c("x", "y"), 
+                crs = 4326))
 
 eqds = '+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'
 
@@ -1642,7 +1676,8 @@ st_distance(st_transform(pts, eqds))
 
 `r flipbookr::chunq_reveal("conus", title = "Area Example: CONUS", widths = c(40,60,0))`
 
-```{r conus, include = FALSE}
+```{r conus}
+#| include: false
 us_u_mp = st_cast(us_u_ml, "MULTIPOLYGON")
 
 df = data.frame(name = c("WGS84", "AEA", "EPDS"),
@@ -1686,7 +1721,8 @@ units::set_units(a, "in2")
 
 - units are an S3 data object with attribute information and "rules of engagement"
 
-```{r, error = TRUE}
+```{r}
+#| error: true
 class(st_length(conus)) 
 attributes(st_length(conus)) |> unlist()
 
