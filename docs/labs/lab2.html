@@ -213,6 +213,7 @@ window.Quarto = {
   <li><a href="#real-world-application" id="toc-real-world-application" class="nav-link" data-scroll-target="#real-world-application">Real World Application</a></li>
   <li><a href="#quantifing-border-zone" id="toc-quantifing-border-zone" class="nav-link" data-scroll-target="#quantifing-border-zone"><em>4.1</em> Quantifing Border Zone</a></li>
   <li><a href="#mapping-border-zone" id="toc-mapping-border-zone" class="nav-link" data-scroll-target="#mapping-border-zone"><em>4.2</em> Mapping Border Zone</a></li>
+  <li><a href="#instead-of-labeling-the-10-most-populous-cites-label-the-most-populous-city-in-each-state-within-the-danger-zone." id="toc-instead-of-labeling-the-10-most-populous-cites-label-the-most-populous-city-in-each-state-within-the-danger-zone." class="nav-link" data-scroll-target="#instead-of-labeling-the-10-most-populous-cites-label-the-most-populous-city-in-each-state-within-the-danger-zone."><em>4.3</em> : Instead of labeling the 10 most populous cites, label the most populous city in each state within the Danger Zone.</a></li>
   </ul></li>
   <li><a href="#rubric" id="toc-rubric" class="nav-link" data-scroll-target="#rubric">Rubric</a></li>
   <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission">Submission</a></li>
@@ -263,8 +264,6 @@ window.Quarto = {
 <li>Populate its YML with a title, author, subtitle, output type and theme. For example:</li>
 </ol>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>title<span class="sc">:</span> <span class="st">"Lab 02: Distances and the Border Zone"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>subtitle<span class="sc">:</span> <span class="st">'Ecosystem Science and Sustainability 523c'</span></span>
@@ -273,15 +272,12 @@ window.Quarto = {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    email<span class="sc">:</span> ...</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>format<span class="sc">:</span> html</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <hr>
 </section>
 <section id="libraries" class="level1">
 <h1>Libraries</h1>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># spatial data science</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
@@ -295,7 +291,6 @@ window.Quarto = {
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gghighlight)</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <hr>
 </section>
@@ -308,7 +303,7 @@ window.Quarto = {
 <li><strong>Calculating</strong> distances (Q2)</li>
 <li><strong>Building</strong> maps using ggplot (Q3)</li>
 </ol>
-<p>Hints and Tricks for this lab are available <a href="lab-02-hints.qmd">here</a></p>
+<p>Hints and Tricks for this lab are available <a href="../labs/lab2-hints.html">here</a></p>
 <hr>
 </section>
 <section id="question-1" class="level1">
@@ -323,22 +318,29 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="define-a-projection"><em>1.1</em> Define a Projection</h3>
 <p>For this lab we want to calculate distances between features, therefore we need a projection that preserves distance at the scale of CONUS. For this, we will use the North America Equidistant Conic:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>eqdc <span class="ot">&lt;-</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<p>Unfortunately, this projection does not have a EPSG code to reference so we must use the PROJ4 string above. Take a moment and describe this proection based on the parameters:</p>
+<p>This PROJ.4 string defines an Equidistant Conic projection with the following parameters:<br>
+</p>
+<p>+proj=eqdc → Equidistant Conic projection<br>
++lat_0=40 → Latitude of the projection’s center (40°N)<br>
++lon_0=-96 → Central meridian (96°W)<br>
++lat_1=20 → First standard parallel (20°N)<br>
++lat_2=60 → Second standard parallel (60°N)<br>
++x_0=0 → False easting (0 meters)<br>
++y_0=0 → False northing (0 meters)<br>
++datum=NAD83 → Uses the North American Datum 1983 (NAD83)<br>
++units=m → Units are in meters<br>
++no_defs → No additional default parameters from PROJ’s database<br>
+</p>
+<p>This projection is commonly used for mapping large areas with an east-west extent, especially in North America, as it balances distortion well between the two standard parallels.</p>
 </section>
 <section id="get-usa-state-boundaries" class="level3">
 <h3 class="anchored" data-anchor-id="get-usa-state-boundaries"><em>1.2</em> - Get USA state boundaries</h3>
 <p>In R, USA boundaries are stored in the <code>USAboundaries</code> package. In case this package and data are <strong>not</strong> installed:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ropensci/USAboundaries"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ropensci/USAboundariesData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>Once installed:</p>
 <ul>
@@ -352,10 +354,7 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="get-country-boundaries-for-mexico-the-united-states-of-america-and-canada"><em>1.3</em> - Get country boundaries for Mexico, the United States of America, and Canada</h3>
 <p>In R, country boundaries are stored in the <code>rnaturalearth</code> package. In case this package is not installed:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ropenscilabs/rnaturalearthdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <p>Once installed:</p>
 <ul>
@@ -446,33 +445,34 @@ window.Quarto = {
 <li>Use a color gradient from ‘orange’ to ‘darkred’.</li>
 <li>Label the 10 most populous cities in the Danger Zone</li>
 </ul>
-<p><strong>Extra Credit (10)</strong>: Instead of labeling the 10 most populous cites, label the most populous city in each state within the Danger Zone.</p>
+</section>
+<section id="instead-of-labeling-the-10-most-populous-cites-label-the-most-populous-city-in-each-state-within-the-danger-zone." class="level3">
+<h3 class="anchored" data-anchor-id="instead-of-labeling-the-10-most-populous-cites-label-the-most-populous-city-in-each-state-within-the-danger-zone."><em>4.3</em> : Instead of labeling the 10 most populous cites, label the most populous city in each state within the Danger Zone.</h3>
 <hr>
 </section>
 </section>
 <section id="rubric" class="level1">
 <h1>Rubric</h1>
 <ul class="task-list">
-<li><label><input type="checkbox"><strong>Question 1</strong> (10)</label></li>
+<li><label><input type="checkbox"><strong>Question 1</strong> (35)</label></li>
 <li><label><input type="checkbox"><strong>Question 2</strong> (35)</label></li>
-<li><label><input type="checkbox"><strong>Question 3</strong> (25)</label></li>
-<li><label><input type="checkbox"><strong>Question 4</strong> (20)</label></li>
-<li><label><input type="checkbox"><strong>Extra Credit</strong> (10)</label></li>
-<li><label><input type="checkbox"><strong>Well Structured and appealing Rmd deployed as web page</strong> (10)</label></li>
+<li><label><input type="checkbox"><strong>Question 3</strong> (35)</label></li>
+<li><label><input type="checkbox"><strong>Question 4</strong> (35)</label></li>
+<li><label><input type="checkbox"><strong>Well Structured and appealing Qmd deployed as web page</strong> (10)</label></li>
 </ul>
-<p><strong>Total:</strong> 100 points (110 points total)</p>
+<p><strong>Total:</strong> 150 points</p>
 </section>
 <section id="submission" class="level1">
 <h1>Submission</h1>
 <p>For this lab you will submit a URL to a webpage deployed with GitHub pages.</p>
 <p>To do this:</p>
 <ul>
-<li>Knit your lab document</li>
+<li>Render your lab document</li>
 <li>Stage/commit/push your files</li>
-<li>If you followed the naming conventions in the “Set Up”, your lab 3 link will be available at:</li>
+<li>If you followed the naming conventions in the “Set Up”, your lab 2 link will be available at:</li>
 </ul>
 <p>`https://USERNAME.github.io/csu-523c/lab-02.html``</p>
-<p>Submit this URL in the appropriate Gauchospace dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be your final!</p>
+<p>Submit this URL in the appropriate Canvas dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be your final!</p>
 
 
 </section>
