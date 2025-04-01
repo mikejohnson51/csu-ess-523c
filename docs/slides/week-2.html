@@ -1212,62 +1212,440 @@
 </div>
 </div></div>
 </section>
+<section id="feature-resoloved-and-combined" class="slide level2">
+<h2>1 feature: resoloved and combined:</h2>
+<ul>
+<li class="fragment"><code>st_cast</code> / <code>st_union</code> work on <code>sfg</code>, <code>sfc</code>, and <code>sf</code> objects:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>conus <span class="ot">&lt;-</span> AOI<span class="sc">::</span><span class="fu">aoi_get</span>(<span class="at">state =</span> <span class="st">"conus"</span>)</span>
+<span id="cb47-2"><a></a></span>
+<span id="cb47-3"><a></a>us_c_ml <span class="ot">=</span> <span class="fu">st_combine</span>(conus) <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span>
+<span id="cb47-5"><a></a>   </span>
+<span id="cb47-6"><a></a>us_u_ml <span class="ot">=</span> <span class="fu">st_union</span>(conus) <span class="sc">|&gt;</span></span>
+<span id="cb47-7"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-50-1.png" width="960" class="r-stretch"></section>
+<section id="so-what" class="slide level2">
+<h2>So what?</h2>
+<p>Lets imagine we want to know the distance from Denver to the nearest state border:</p>
+<p>To do this, we need to:<br>
+</p>
+<p>1: define Denver as a geometry in a CRS<br>
+2: determine the correct geometry types / representation<br>
+3: calculate the distance between (1) and (2)<br>
+</p>
+</section>
+<section id="make-denver-in-the-crs-of-our-states" class="slide level2">
+<h2>1. Make “Denver” in the CRS of our states</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a>denver_sf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fl">39.7392</span>, </span>
+<span id="cb48-2"><a></a>                       <span class="at">x =</span> <span class="sc">-</span><span class="fl">104.9903</span>, </span>
+<span id="cb48-3"><a></a>                       <span class="at">name =</span> <span class="st">"Denver"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb48-4"><a></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), </span>
+<span id="cb48-5"><a></a>           <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="determine-the-3-closest-states" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 14 fields
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;    state_region state_division feature_code           state_name state_abbr
+#&gt; 1             3              6      1779775              Alabama         AL
+#&gt; 2             4              8      1779777              Arizona         AZ
+#&gt; 3             3              7      0068085             Arkansas         AR
+#&gt; 4             4              9      1779778           California         CA
+#&gt; 5             4              8      1779779             Colorado         CO
+#&gt; 6             1              1      1779780          Connecticut         CT
+#&gt; 7             3              5      1779781             Delaware         DE
+#&gt; 8             3              5      1702382 District of Columbia         DC
+#&gt; 9             3              5      0294478              Florida         FL
+#&gt; 10            3              5      1705317              Georgia         GA
+#&gt;                    name fip_class tiger_class combined_area_code
+#&gt; 1               Alabama      &lt;NA&gt;       G4000                 NA
+#&gt; 2               Arizona      &lt;NA&gt;       G4000                 NA
+#&gt; 3              Arkansas      &lt;NA&gt;       G4000                 NA
+#&gt; 4            California      &lt;NA&gt;       G4000                 NA
+#&gt; 5              Colorado      &lt;NA&gt;       G4000                 NA
+#&gt; 6           Connecticut      &lt;NA&gt;       G4000                 NA
+#&gt; 7              Delaware      &lt;NA&gt;       G4000                 NA
+#&gt; 8  District of Columbia      &lt;NA&gt;       G4000                 NA
+#&gt; 9               Florida      &lt;NA&gt;       G4000                 NA
+#&gt; 10              Georgia      &lt;NA&gt;       G4000                 NA
+#&gt;    metropolitan_area_code functional_status    land_area  water_area fip_code
+#&gt; 1                    &lt;NA&gt;                 A 131175477769  4591897964       01
+#&gt; 2                    &lt;NA&gt;                 A 294363973043   855871553       04
+#&gt; 3                    &lt;NA&gt;                 A 134660767709  3121950081       05
+#&gt; 4                    &lt;NA&gt;                 A 403671756816 20293573058       06
+#&gt; 5                    &lt;NA&gt;                 A 268418796417  1185716938       08
+#&gt; 6                    &lt;NA&gt;                 A  12541690473  1816424193       09
+#&gt; 7                    &lt;NA&gt;                 A   5046731559  1399179670       10
+#&gt; 8                    &lt;NA&gt;                 A    158316124    18709762       11
+#&gt; 9                    &lt;NA&gt;                 A 138961722096 45972570361       12
+#&gt; 10                   &lt;NA&gt;                 A 149486624386  4418360134       13
+#&gt;                          geometry
+#&gt; 1  MULTIPOLYGON (((-85.4883 30...
+#&gt; 2  MULTIPOLYGON (((-110.7507 3...
+#&gt; 3  MULTIPOLYGON (((-90.95577 3...
+#&gt; 4  MULTIPOLYGON (((-116.1062 3...
+#&gt; 5  MULTIPOLYGON (((-105.155 36...
+#&gt; 6  MULTIPOLYGON (((-72.5279 41...
+#&gt; 7  MULTIPOLYGON (((-75.13846 3...
+#&gt; 8  MULTIPOLYGON (((-77.00244 3...
+#&gt; 9  MULTIPOLYGON (((-83.10874 2...
+#&gt; 10 MULTIPOLYGON (((-81.09538 3...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-1" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 1 field
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;              state_name                       geometry
+#&gt; 1               Alabama MULTIPOLYGON (((-85.4883 30...
+#&gt; 2               Arizona MULTIPOLYGON (((-110.7507 3...
+#&gt; 3              Arkansas MULTIPOLYGON (((-90.95577 3...
+#&gt; 4            California MULTIPOLYGON (((-116.1062 3...
+#&gt; 5              Colorado MULTIPOLYGON (((-105.155 36...
+#&gt; 6           Connecticut MULTIPOLYGON (((-72.5279 41...
+#&gt; 7              Delaware MULTIPOLYGON (((-75.13846 3...
+#&gt; 8  District of Columbia MULTIPOLYGON (((-77.00244 3...
+#&gt; 9               Florida MULTIPOLYGON (((-83.10874 2...
+#&gt; 10              Georgia MULTIPOLYGON (((-81.09538 3...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-2" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb53-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb53-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 2 fields
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;              state_name                       geometry          dist
+#&gt; 1               Alabama MULTIPOLYGON (((-85.4883 30... 1571007.9 [m]
+#&gt; 2               Arizona MULTIPOLYGON (((-110.7507 3...  466602.9 [m]
+#&gt; 3              Arkansas MULTIPOLYGON (((-90.95577 3...  975519.6 [m]
+#&gt; 4            California MULTIPOLYGON (((-116.1062 3... 1000950.5 [m]
+#&gt; 5              Colorado MULTIPOLYGON (((-105.155 36...       0.0 [m]
+#&gt; 6           Connecticut MULTIPOLYGON (((-72.5279 41... 2636635.7 [m]
+#&gt; 7              Delaware MULTIPOLYGON (((-75.13846 3... 2485997.1 [m]
+#&gt; 8  District of Columbia MULTIPOLYGON (((-77.00244 3... 2388920.9 [m]
+#&gt; 9               Florida MULTIPOLYGON (((-83.10874 2... 1847447.4 [m]
+#&gt; 10              Georgia MULTIPOLYGON (((-81.09538 3... 1788781.6 [m]</code></pre>
+</div>
+</div></div>
+</section>
+<section id="determine-the-3-closest-states-3" class="slide level2">
+<h2>2. Determine the 3 closest states:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb55-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
+<span id="cb55-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
+<span id="cb55-4"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 3 features and 2 fields
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -111.0546 ymin: 36.99246 xmax: -95.30829 ymax: 45.00582
+#&gt; Geodetic CRS:  WGS 84
+#&gt;   state_name         dist                       geometry
+#&gt; 1   Colorado      0.0 [m] MULTIPOLYGON (((-105.155 36...
+#&gt; 2    Wyoming 140002.6 [m] MULTIPOLYGON (((-106.3212 4...
+#&gt; 3   Nebraska 161243.2 [m] MULTIPOLYGON (((-95.93779 4...</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment">That’s close, but the distance to Colorado is 0, that’s not a state border.</li>
+</ul>
+</section>
+<section id="geometry-selection" class="slide level2">
+<h2>Geometry Selection</h2>
+<ul>
+<li class="fragment"><code>Polygon</code> (therefore MULTIPOLGYGONS) describe areas!</li>
+<li class="fragment">The distance to a <code>point</code> <strong>in</strong> a <code>polygon</code> to that polygon is 0.</li>
+</ul>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 14 fields
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;    state_region state_division feature_code           state_name state_abbr
+#&gt; 1             3              6      1779775              Alabama         AL
+#&gt; 2             4              8      1779777              Arizona         AZ
+#&gt; 3             3              7      0068085             Arkansas         AR
+#&gt; 4             4              9      1779778           California         CA
+#&gt; 5             4              8      1779779             Colorado         CO
+#&gt; 6             1              1      1779780          Connecticut         CT
+#&gt; 7             3              5      1779781             Delaware         DE
+#&gt; 8             3              5      1702382 District of Columbia         DC
+#&gt; 9             3              5      0294478              Florida         FL
+#&gt; 10            3              5      1705317              Georgia         GA
+#&gt;                    name fip_class tiger_class combined_area_code
+#&gt; 1               Alabama      &lt;NA&gt;       G4000                 NA
+#&gt; 2               Arizona      &lt;NA&gt;       G4000                 NA
+#&gt; 3              Arkansas      &lt;NA&gt;       G4000                 NA
+#&gt; 4            California      &lt;NA&gt;       G4000                 NA
+#&gt; 5              Colorado      &lt;NA&gt;       G4000                 NA
+#&gt; 6           Connecticut      &lt;NA&gt;       G4000                 NA
+#&gt; 7              Delaware      &lt;NA&gt;       G4000                 NA
+#&gt; 8  District of Columbia      &lt;NA&gt;       G4000                 NA
+#&gt; 9               Florida      &lt;NA&gt;       G4000                 NA
+#&gt; 10              Georgia      &lt;NA&gt;       G4000                 NA
+#&gt;    metropolitan_area_code functional_status    land_area  water_area fip_code
+#&gt; 1                    &lt;NA&gt;                 A 131175477769  4591897964       01
+#&gt; 2                    &lt;NA&gt;                 A 294363973043   855871553       04
+#&gt; 3                    &lt;NA&gt;                 A 134660767709  3121950081       05
+#&gt; 4                    &lt;NA&gt;                 A 403671756816 20293573058       06
+#&gt; 5                    &lt;NA&gt;                 A 268418796417  1185716938       08
+#&gt; 6                    &lt;NA&gt;                 A  12541690473  1816424193       09
+#&gt; 7                    &lt;NA&gt;                 A   5046731559  1399179670       10
+#&gt; 8                    &lt;NA&gt;                 A    158316124    18709762       11
+#&gt; 9                    &lt;NA&gt;                 A 138961722096 45972570361       12
+#&gt; 10                   &lt;NA&gt;                 A 149486624386  4418360134       13
+#&gt;                          geometry
+#&gt; 1  MULTIPOLYGON (((-85.4883 30...
+#&gt; 2  MULTIPOLYGON (((-110.7507 3...
+#&gt; 3  MULTIPOLYGON (((-90.95577 3...
+#&gt; 4  MULTIPOLYGON (((-116.1062 3...
+#&gt; 5  MULTIPOLYGON (((-105.155 36...
+#&gt; 6  MULTIPOLYGON (((-72.5279 41...
+#&gt; 7  MULTIPOLYGON (((-75.13846 3...
+#&gt; 8  MULTIPOLYGON (((-77.00244 3...
+#&gt; 9  MULTIPOLYGON (((-83.10874 2...
+#&gt; 10 MULTIPOLYGON (((-81.09538 3...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-1" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb59-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 1 field
+#&gt; Geometry type: MULTIPOLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;              state_name                       geometry
+#&gt; 1               Alabama MULTIPOLYGON (((-85.4883 30...
+#&gt; 2               Arizona MULTIPOLYGON (((-110.7507 3...
+#&gt; 3              Arkansas MULTIPOLYGON (((-90.95577 3...
+#&gt; 4            California MULTIPOLYGON (((-116.1062 3...
+#&gt; 5              Colorado MULTIPOLYGON (((-105.155 36...
+#&gt; 6           Connecticut MULTIPOLYGON (((-72.5279 41...
+#&gt; 7              Delaware MULTIPOLYGON (((-75.13846 3...
+#&gt; 8  District of Columbia MULTIPOLYGON (((-77.00244 3...
+#&gt; 9               Florida MULTIPOLYGON (((-83.10874 2...
+#&gt; 10              Georgia MULTIPOLYGON (((-81.09538 3...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-2" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb61-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 1 field
+#&gt; Geometry type: MULTILINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;              state_name                       geometry
+#&gt; 1               Alabama MULTILINESTRING ((-85.4883 ...
+#&gt; 2               Arizona MULTILINESTRING ((-110.7507...
+#&gt; 3              Arkansas MULTILINESTRING ((-90.95577...
+#&gt; 4            California MULTILINESTRING ((-116.1062...
+#&gt; 5              Colorado MULTILINESTRING ((-105.155 ...
+#&gt; 6           Connecticut MULTILINESTRING ((-72.5279 ...
+#&gt; 7              Delaware MULTILINESTRING ((-75.13846...
+#&gt; 8  District of Columbia MULTILINESTRING ((-77.00244...
+#&gt; 9               Florida MULTILINESTRING ((-83.10874...
+#&gt; 10              Georgia MULTILINESTRING ((-81.09538...</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-3" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb63-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb63-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb63-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 49 features and 2 fields
+#&gt; Geometry type: MULTILINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448
+#&gt; Geodetic CRS:  WGS 84
+#&gt; First 10 features:
+#&gt;              state_name                       geometry          dist
+#&gt; 1               Alabama MULTILINESTRING ((-85.4883 ... 1571007.9 [m]
+#&gt; 2               Arizona MULTILINESTRING ((-110.7507...  466602.9 [m]
+#&gt; 3              Arkansas MULTILINESTRING ((-90.95577...  975519.6 [m]
+#&gt; 4            California MULTILINESTRING ((-116.1062... 1000950.5 [m]
+#&gt; 5              Colorado MULTILINESTRING ((-105.155 ...  140002.6 [m]
+#&gt; 6           Connecticut MULTILINESTRING ((-72.5279 ... 2636635.7 [m]
+#&gt; 7              Delaware MULTILINESTRING ((-75.13846... 2485997.1 [m]
+#&gt; 8  District of Columbia MULTILINESTRING ((-77.00244... 2388920.9 [m]
+#&gt; 9               Florida MULTILINESTRING ((-83.10874... 1847447.4 [m]
+#&gt; 10              Georgia MULTILINESTRING ((-81.09538... 1788781.6 [m]</code></pre>
+</div>
+</div></div>
+</section>
+<section id="to-determine-distance-to-border-we-need-a-linear-representation-4" class="slide level2">
+<h2>To determine distance to border we need a linear representation:</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a></a>conus <span class="sc">|&gt;</span></span>
+<span id="cb65-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
+<span id="cb65-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb65-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
+<span id="cb65-5"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:60%;">
+<div class="cell">
+<pre><code>#&gt; Simple feature collection with 3 features and 2 fields
+#&gt; Geometry type: MULTILINESTRING
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -111.0546 ymin: 36.99246 xmax: -95.30829 ymax: 45.00582
+#&gt; Geodetic CRS:  WGS 84
+#&gt;   state_name         dist                       geometry
+#&gt; 1   Colorado 140002.6 [m] MULTILINESTRING ((-105.155 ...
+#&gt; 2    Wyoming 140002.6 [m] MULTILINESTRING ((-106.3212...
+#&gt; 3   Nebraska 161243.2 [m] MULTILINESTRING ((-95.93779...</code></pre>
+</div>
+</div></div>
+<ul>
+<li class="fragment"><p>Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!</p></li>
+<li class="fragment"><p>While this is not to complex for 1 &lt;-&gt; 49 features imagine we had 28,000+ (like your lab)!</p></li>
+<li class="fragment"><p>That would result in 1,344,000 more calculations then needed …</p></li>
+</ul>
+</section>
+<section id="revisting-the-idea-of-the-feature-level" class="slide level2">
+<h2>Revisting the idea of the feature level:</h2>
+<ul>
+<li class="fragment"><p>A “feature” can “be part of the whole” or the whole</p>
+<ul>
+<li class="fragment"><p>A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)</p></li>
+<li class="fragment"><p>A city (POINT), or a set of cities meeting a condition (MULTIPOINT)</p></li>
+<li class="fragment"><p>A road (LINESTRING), or a route (MULTILINESTRING)</p></li>
+</ul></li>
+<li class="fragment"><p>Since we want the distance to the nearest border, <em>regardless</em> of the state. Our <strong>feature</strong> is the <em>set of borders with preserved boundaries</em>.</p></li>
+<li class="fragment"><p>In other words, a 1 feature <code>MULTILINESTRING</code></p></li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a></a><span class="fu">st_distance</span>(denver_sf, <span class="fu">st_cast</span>(<span class="fu">st_combine</span>(conus), <span class="st">"MULTILINESTRING"</span>))</span>
+<span id="cb67-2"><a></a><span class="co">#&gt; Units: [m]</span></span>
+<span id="cb67-3"><a></a><span class="co">#&gt;          [,1]</span></span>
+<span id="cb67-4"><a></a><span class="co">#&gt; [1,] 140002.6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li class="fragment">The same principle would apply if the question was “<em>distance to national border</em>”</li>
+</ul>
+</div>
+</section>
 <section id="sf-objects-with-simple-features" class="slide level2">
 <h2><code>sf</code>: objects with simple features</h2>
 <p>Simple features <code>geometries</code> and feature <code>attributes</code> are put together in <code>sf</code> (simple feature) objects.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>co</span>
-<span id="cb47-2"><a></a><span class="co">#&gt; Simple feature collection with 64 features and 4 fields</span></span>
-<span id="cb47-3"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
-<span id="cb47-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb47-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342</span></span>
-<span id="cb47-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb47-7"><a></a><span class="co">#&gt; First 10 features:</span></span>
-<span id="cb47-8"><a></a><span class="co">#&gt;    geoid       name      aland state_nm                       geometry</span></span>
-<span id="cb47-9"><a></a><span class="co">#&gt; 1  08001      Adams 3021840487 Colorado MULTIPOLYGON (((-105.0532 3...</span></span>
-<span id="cb47-10"><a></a><span class="co">#&gt; 2  08003    Alamosa 1871643028 Colorado MULTIPOLYGON (((-105.4855 3...</span></span>
-<span id="cb47-11"><a></a><span class="co">#&gt; 3  08005   Arapahoe 2066438714 Colorado MULTIPOLYGON (((-103.7065 3...</span></span>
-<span id="cb47-12"><a></a><span class="co">#&gt; 4  08007  Archuleta 3496712164 Colorado MULTIPOLYGON (((-107.1287 3...</span></span>
-<span id="cb47-13"><a></a><span class="co">#&gt; 5  08009       Baca 6617400567 Colorado MULTIPOLYGON (((-102.0416 3...</span></span>
-<span id="cb47-14"><a></a><span class="co">#&gt; 6  08011       Bent 3918255148 Colorado MULTIPOLYGON (((-102.7476 3...</span></span>
-<span id="cb47-15"><a></a><span class="co">#&gt; 7  08013    Boulder 1881325109 Colorado MULTIPOLYGON (((-105.3978 3...</span></span>
-<span id="cb47-16"><a></a><span class="co">#&gt; 8  08014 Broomfield   85386685 Colorado MULTIPOLYGON (((-105.1092 3...</span></span>
-<span id="cb47-17"><a></a><span class="co">#&gt; 9  08015    Chaffee 2624715692 Colorado MULTIPOLYGON (((-105.9698 3...</span></span>
-<span id="cb47-18"><a></a><span class="co">#&gt; 10 08017   Cheyenne 4605713960 Colorado MULTIPOLYGON (((-103.1729 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a></a>co</span>
+<span id="cb68-2"><a></a><span class="co">#&gt; Simple feature collection with 64 features and 4 fields</span></span>
+<span id="cb68-3"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span id="cb68-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb68-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342</span></span>
+<span id="cb68-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb68-7"><a></a><span class="co">#&gt; First 10 features:</span></span>
+<span id="cb68-8"><a></a><span class="co">#&gt;    geoid       name      aland state_nm                       geometry</span></span>
+<span id="cb68-9"><a></a><span class="co">#&gt; 1  08001      Adams 3021840487 Colorado MULTIPOLYGON (((-105.0532 3...</span></span>
+<span id="cb68-10"><a></a><span class="co">#&gt; 2  08003    Alamosa 1871643028 Colorado MULTIPOLYGON (((-105.4855 3...</span></span>
+<span id="cb68-11"><a></a><span class="co">#&gt; 3  08005   Arapahoe 2066438714 Colorado MULTIPOLYGON (((-103.7065 3...</span></span>
+<span id="cb68-12"><a></a><span class="co">#&gt; 4  08007  Archuleta 3496712164 Colorado MULTIPOLYGON (((-107.1287 3...</span></span>
+<span id="cb68-13"><a></a><span class="co">#&gt; 5  08009       Baca 6617400567 Colorado MULTIPOLYGON (((-102.0416 3...</span></span>
+<span id="cb68-14"><a></a><span class="co">#&gt; 6  08011       Bent 3918255148 Colorado MULTIPOLYGON (((-102.7476 3...</span></span>
+<span id="cb68-15"><a></a><span class="co">#&gt; 7  08013    Boulder 1881325109 Colorado MULTIPOLYGON (((-105.3978 3...</span></span>
+<span id="cb68-16"><a></a><span class="co">#&gt; 8  08014 Broomfield   85386685 Colorado MULTIPOLYGON (((-105.1092 3...</span></span>
+<span id="cb68-17"><a></a><span class="co">#&gt; 9  08015    Chaffee 2624715692 Colorado MULTIPOLYGON (((-105.9698 3...</span></span>
+<span id="cb68-18"><a></a><span class="co">#&gt; 10 08017   Cheyenne 4605713960 Colorado MULTIPOLYGON (((-103.1729 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This <code>sf</code> object is of class</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a><span class="fu">class</span>(co)</span>
-<span id="cb48-2"><a></a><span class="co">#&gt; [1] "sf"         "data.frame"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a></a><span class="fu">class</span>(co)</span>
+<span id="cb69-2"><a></a><span class="co">#&gt; [1] "sf"         "data.frame"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>meaning it extends <code>data.frame</code>, but with a single list-column with geometries, which is held in the column named:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a><span class="fu">attr</span>(co, <span class="st">"sf_column"</span>)</span>
-<span id="cb49-2"><a></a><span class="co">#&gt; [1] "geometry"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="sfc-simple-feature-geometry-list-column" class="slide level2">
-<h2>sfc: simple feature geometry list-column</h2>
-<p>The column in the <code>sf</code> <code>data.frame</code> that contains the geometries is a list, of class <code>sfc</code>.</p>
-<p>We can retrieve the geometry list-column as we would any data.frame column (e.g.&nbsp;<code>co$geometry</code>), or more generally with <code>st_geometry</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a>(co_geom <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(co))</span>
-<span id="cb50-2"><a></a><span class="co">#&gt; Geometry set for 64 features </span></span>
-<span id="cb50-3"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
-<span id="cb50-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb50-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342</span></span>
-<span id="cb50-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb50-7"><a></a><span class="co">#&gt; First 5 geometries:</span></span>
-<span id="cb50-8"><a></a><span class="co">#&gt; MULTIPOLYGON (((-105.0532 39.79106, -104.976 39...</span></span>
-<span id="cb50-9"><a></a><span class="co">#&gt; MULTIPOLYGON (((-105.4855 37.5779, -105.4859 37...</span></span>
-<span id="cb50-10"><a></a><span class="co">#&gt; MULTIPOLYGON (((-103.7065 39.73989, -103.7239 3...</span></span>
-<span id="cb50-11"><a></a><span class="co">#&gt; MULTIPOLYGON (((-107.1287 37.42294, -107.2803 3...</span></span>
-<span id="cb50-12"><a></a><span class="co">#&gt; MULTIPOLYGON (((-102.0416 37.64428, -102.0558 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Geometries are printed in abbreviated form, but we can view a complete geometry by selecting it:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>co_geom[[<span class="dv">1</span>]]</span>
-<span id="cb51-2"><a></a><span class="co">#&gt; MULTIPOLYGON (((-105.0532 39.79106, -104.976 39.79104, -104.9731 39.79242, -104.9716 39.79829, -104.9687 39.7984, -104.9689 39.79104, -104.9602 39.79102, -104.9554 39.79463, -104.9405 39.7946, -104.9405 39.791, -104.927 39.79105, -104.927 39.78378, -104.9034 39.78381, -104.9036 39.79839, -104.8845 39.79832, -104.8844 39.81282, -104.8661 39.81285, -104.866 39.79839, -104.8291 39.79806, -104.7909 39.79825, -104.7909 39.8418, -104.7623 39.84179, -104.7623 39.84539, -104.731 39.84519, -104.7304 39.89613, -104.7033 39.89595, -104.7032 39.90693, -104.6921 39.90685, -104.6921 39.91418, -104.6796 39.91402, -104.6797 39.90701, -104.6309 39.90664, -104.6309 39.89929, -104.5996 39.89904, -104.5998 39.88131, -104.6052 39.88135, -104.6053 39.87311, -104.6192 39.87322, -104.6198 39.82242, -104.6554 39.82261, -104.6554 39.813, -104.6662 39.81307, -104.6661 39.82279, -104.7625 39.82344, -104.7626 39.79843, -104.7344 39.79844, -104.7346 39.76918, -104.7646 39.76919, -104.7646 39.77157, -104.7722 39.7715, -104.7722 39.77641, -104.7816 39.77648, -104.7816 39.7728, -104.8282 39.77278, -104.8282 39.76916, -104.833 39.76918, -104.8376 39.76717, -104.8564 39.76858, -104.8563 39.75813, -104.8482 39.75642, -104.8469 39.75469, -104.8799 39.75473, -104.88 39.74744, -104.8847 39.74747, -104.8846 39.74016, -104.8217 39.74029, -104.7256 39.74027, -104.6783 39.74, -104.6603 39.74048, -104.6528 39.73978, -104.6304 39.7395, -104.6246 39.74008, -104.5589 39.73933, -104.5074 39.73825, -104.3919 39.73804, -104.3401 39.73825, -104.265 39.73888, -104.2095 39.73902, -104.1151 39.73977, -104.0407 39.73998, -103.9776 39.74027, -103.9655 39.74052, -103.9075 39.74065, -103.8661 39.74024, -103.8002 39.7402, -103.794 39.74005, -103.7239 39.73978, -103.7065 39.73989, -103.7066 39.76555, -103.7063 39.82855, -103.7063 39.889, -103.7061 39.90854, -103.7062 39.95888, -103.7057 39.98511, -103.7057 40.00137, -103.8677 40.0012, -103.9546 40.00113, -104.0371 40.00113, -104.1503 40.00086, -104.1693 40.00078, -104.2674 40.00092, -104.3015 40.00077, -104.4523 40.00062, -104.6019 40.00053, -104.6406 40.00057, -104.7885 40.00041, -104.9048 40.00032, -104.9614 40.00034, -104.9809 40.00032, -104.9877 39.98648, -104.9878 39.97575, -104.9944 39.9758, -104.9971 39.97215, -104.9881 39.97218, -104.9881 39.96847, -104.9972 39.96853, -104.9974 39.98121, -105.0158 39.98119, -105.0156 39.95519, -105.0171 39.95281, -105.0122 39.95045, -105.0063 39.95044, -105.0063 39.9468, -104.9972 39.94677, -104.9971 39.94324, -105.0157 39.94313, -105.0155 39.9214, -105.0344 39.9213, -105.0343 39.91418, -105.0529 39.91422, -105.0532 39.86362, -105.0532 39.79106)))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a></a><span class="fu">attr</span>(co, <span class="st">"sf_column"</span>)</span>
+<span id="cb70-2"><a></a><span class="co">#&gt; [1] "geometry"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-stickness-of-sfc-column" class="slide level2">
@@ -1277,17 +1655,17 @@
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a>co <span class="sc">|&gt;</span> </span>
-<span id="cb52-2"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
-<span id="cb52-3"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb52-4"><a></a><span class="co">#&gt; Simple feature collection with 2 features and 1 field</span></span>
-<span id="cb52-5"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
-<span id="cb52-6"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb52-7"><a></a><span class="co">#&gt; Bounding box:  xmin: -106.0393 ymin: 37.3562 xmax: -103.7057 ymax: 40.00137</span></span>
-<span id="cb52-8"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb52-9"><a></a><span class="co">#&gt;      name                       geometry</span></span>
-<span id="cb52-10"><a></a><span class="co">#&gt; 1   Adams MULTIPOLYGON (((-105.0532 3...</span></span>
-<span id="cb52-11"><a></a><span class="co">#&gt; 2 Alamosa MULTIPOLYGON (((-105.4855 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a></a>co <span class="sc">|&gt;</span> </span>
+<span id="cb71-2"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb71-3"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb71-4"><a></a><span class="co">#&gt; Simple feature collection with 2 features and 1 field</span></span>
+<span id="cb71-5"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span id="cb71-6"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb71-7"><a></a><span class="co">#&gt; Bounding box:  xmin: -106.0393 ymin: 37.3562 xmax: -103.7057 ymax: 40.00137</span></span>
+<span id="cb71-8"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb71-9"><a></a><span class="co">#&gt;      name                       geometry</span></span>
+<span id="cb71-10"><a></a><span class="co">#&gt; 1   Adams MULTIPOLYGON (((-105.0532 3...</span></span>
+<span id="cb71-11"><a></a><span class="co">#&gt; 2 Alamosa MULTIPOLYGON (((-105.4855 3...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">Dropping the geometry column requires dropping the geometry via <code>sf</code>:</li>
@@ -1295,13 +1673,13 @@
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a>co <span class="sc">|&gt;</span> </span>
-<span id="cb53-2"><a></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
-<span id="cb53-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
-<span id="cb53-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb53-5"><a></a><span class="co">#&gt;      name</span></span>
-<span id="cb53-6"><a></a><span class="co">#&gt; 1   Adams</span></span>
-<span id="cb53-7"><a></a><span class="co">#&gt; 2 Alamosa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a></a>co <span class="sc">|&gt;</span> </span>
+<span id="cb72-2"><a></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb72-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb72-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb72-5"><a></a><span class="co">#&gt;      name</span></span>
+<span id="cb72-6"><a></a><span class="co">#&gt; 1   Adams</span></span>
+<span id="cb72-7"><a></a><span class="co">#&gt; 2 Alamosa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">Or cohersing the <code>sf</code> object to a <code>data.frame</code>:</li>
@@ -1309,13 +1687,13 @@
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a>co <span class="sc">|&gt;</span> </span>
-<span id="cb54-2"><a></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
-<span id="cb54-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
-<span id="cb54-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
-<span id="cb54-5"><a></a><span class="co">#&gt;      name</span></span>
-<span id="cb54-6"><a></a><span class="co">#&gt; 1   Adams</span></span>
-<span id="cb54-7"><a></a><span class="co">#&gt; 2 Alamosa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a></a>co <span class="sc">|&gt;</span> </span>
+<span id="cb73-2"><a></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> <span class="co">#&lt;&lt;</span></span>
+<span id="cb73-3"><a></a>  <span class="fu">select</span>(name) <span class="sc">|&gt;</span> </span>
+<span id="cb73-4"><a></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb73-5"><a></a><span class="co">#&gt;      name</span></span>
+<span id="cb73-6"><a></a><span class="co">#&gt; 1   Adams</span></span>
+<span id="cb73-7"><a></a><span class="co">#&gt; 2 Alamosa</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1346,768 +1724,6 @@
 </ul>
 
 <img data-src="images/09-sf-model.png" class="quarto-figure quarto-figure-center r-stretch" width="350"></section>
-<section id="reading-and-writing" class="slide level2">
-<h2>Reading and writing</h2>
-<p>As we’ve seen above, reading spatial data from an external file can be done via <code>sf</code> - reading data requires the “parser function” and the file path</p>
-<div class="cell">
-<pre><code>#&gt; Reading layer `co' from data source 
-#&gt;   `/Users/mikejohnson/github/csu-ess-523c/slides/data/co.shp' 
-#&gt;   using driver `ESRI Shapefile'
-#&gt; Simple feature collection with 64 features and 4 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -109.0602 ymin: 36.99246 xmax: -102.0415 ymax: 41.00342
-#&gt; Geodetic CRS:  WGS 84</code></pre>
-</div>
-<p>we can suppress the output by adding argument <code>quiet=TRUE</code> or by using the otherwise nearly identical but more quiet</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a></a>co <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">"data/co.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Writing takes place in the same fashion, using <code>st_write</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a><span class="fu">st_write</span>(co, <span class="st">"data/co.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>or its quiet alternative that silently overwrites existing files by default,</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a></a><span class="fu">write_sf</span>(co, <span class="st">"co.shp"</span>) <span class="co"># silently overwrites</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="from-tables-e.g.-csv" class="slide level2">
-<h2>From Tables (e.g.&nbsp;CSV)</h2>
-<p>Spatial data can also be created from CSV and other flat files once it is in R:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a></a>(<span class="at">cities =</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">"../labs/data/uscities.csv"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb59-2"><a></a>  <span class="fu">select</span>(city, state_name, county_name, population, lat, lng) )</span>
-<span id="cb59-3"><a></a><span class="co">#&gt; # A tibble: 31,254 × 6</span></span>
-<span id="cb59-4"><a></a><span class="co">#&gt;    city         state_name           county_name         population   lat    lng</span></span>
-<span id="cb59-5"><a></a><span class="co">#&gt;    &lt;chr&gt;        &lt;chr&gt;                &lt;chr&gt;                    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span id="cb59-6"><a></a><span class="co">#&gt;  1 New York     New York             Queens                18832416  40.7  -73.9</span></span>
-<span id="cb59-7"><a></a><span class="co">#&gt;  2 Los Angeles  California           Los Angeles           11885717  34.1 -118. </span></span>
-<span id="cb59-8"><a></a><span class="co">#&gt;  3 Chicago      Illinois             Cook                   8489066  41.8  -87.7</span></span>
-<span id="cb59-9"><a></a><span class="co">#&gt;  4 Miami        Florida              Miami-Dade             6113982  25.8  -80.2</span></span>
-<span id="cb59-10"><a></a><span class="co">#&gt;  5 Houston      Texas                Harris                 6046392  29.8  -95.4</span></span>
-<span id="cb59-11"><a></a><span class="co">#&gt;  6 Dallas       Texas                Dallas                 5843632  32.8  -96.8</span></span>
-<span id="cb59-12"><a></a><span class="co">#&gt;  7 Philadelphia Pennsylvania         Philadelphia           5696588  40.0  -75.1</span></span>
-<span id="cb59-13"><a></a><span class="co">#&gt;  8 Atlanta      Georgia              Fulton                 5211164  33.8  -84.4</span></span>
-<span id="cb59-14"><a></a><span class="co">#&gt;  9 Washington   District of Columbia District of Columb…    5146120  38.9  -77.0</span></span>
-<span id="cb59-15"><a></a><span class="co">#&gt; 10 Boston       Massachusetts        Suffolk                4355184  42.3  -71.1</span></span>
-<span id="cb59-16"><a></a><span class="co">#&gt; # ℹ 31,244 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section class="slide level2">
-
-<p>To do this, you must specify the <code>X</code> and the <code>Y</code> coordinate columns as well as a CRS:</p>
-<ul>
-<li class="fragment">A typical lat/long CRS is EPSG:4326</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a></a>(<span class="at">cities_sf =</span> <span class="fu">st_as_sf</span>(cities, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lng"</span>, <span class="st">"lat"</span>), <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb60-2"><a></a><span class="co">#&gt; Simple feature collection with 31254 features and 4 fields</span></span>
-<span id="cb60-3"><a></a><span class="co">#&gt; Geometry type: POINT</span></span>
-<span id="cb60-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb60-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -176.6295 ymin: 17.9559 xmax: 174.111 ymax: 71.2727</span></span>
-<span id="cb60-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb60-7"><a></a><span class="co">#&gt; # A tibble: 31,254 × 5</span></span>
-<span id="cb60-8"><a></a><span class="co">#&gt;    city         state_name      county_name population            geometry</span></span>
-<span id="cb60-9"><a></a><span class="co">#&gt;  * &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;</span></span>
-<span id="cb60-10"><a></a><span class="co">#&gt;  1 New York     New York        Queens        18832416  (-73.9249 40.6943)</span></span>
-<span id="cb60-11"><a></a><span class="co">#&gt;  2 Los Angeles  California      Los Angeles   11885717 (-118.4068 34.1141)</span></span>
-<span id="cb60-12"><a></a><span class="co">#&gt;  3 Chicago      Illinois        Cook           8489066  (-87.6866 41.8375)</span></span>
-<span id="cb60-13"><a></a><span class="co">#&gt;  4 Miami        Florida         Miami-Dade     6113982   (-80.2101 25.784)</span></span>
-<span id="cb60-14"><a></a><span class="co">#&gt;  5 Houston      Texas           Harris         6046392   (-95.3885 29.786)</span></span>
-<span id="cb60-15"><a></a><span class="co">#&gt;  6 Dallas       Texas           Dallas         5843632  (-96.7667 32.7935)</span></span>
-<span id="cb60-16"><a></a><span class="co">#&gt;  7 Philadelphia Pennsylvania    Philadelph…    5696588  (-75.1339 40.0077)</span></span>
-<span id="cb60-17"><a></a><span class="co">#&gt;  8 Atlanta      Georgia         Fulton         5211164   (-84.422 33.7628)</span></span>
-<span id="cb60-18"><a></a><span class="co">#&gt;  9 Washington   District of Co… District o…    5146120  (-77.0163 38.9047)</span></span>
-<span id="cb60-19"><a></a><span class="co">#&gt; 10 Boston       Massachusetts   Suffolk        4355184  (-71.0852 42.3188)</span></span>
-<span id="cb60-20"><a></a><span class="co">#&gt; # ℹ 31,244 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="data-manipulation" class="slide level2">
-<h2>Data Manipulation</h2>
-<ul>
-<li class="fragment"><p>Since <code>sf</code> objects are <code>data.frames</code>, our <code>dplyr</code> verbs work!</p></li>
-<li class="fragment"><p>Lets find the most populous city in each Colorado county…</p></li>
-</ul>
-</section>
-<section id="sf-and-dplyr" class="slide level2">
-<h2>sf and dplyr</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a></a>cities_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 31254 features and 4 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -176.6295 ymin: 17.9559 xmax: 174.111 ymax: 71.2727
-#&gt; Geodetic CRS:  WGS 84
-#&gt; # A tibble: 31,254 × 5
-#&gt;    city         state_name      county_name population            geometry
-#&gt;  * &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;
-#&gt;  1 New York     New York        Queens        18832416  (-73.9249 40.6943)
-#&gt;  2 Los Angeles  California      Los Angeles   11885717 (-118.4068 34.1141)
-#&gt;  3 Chicago      Illinois        Cook           8489066  (-87.6866 41.8375)
-#&gt;  4 Miami        Florida         Miami-Dade     6113982   (-80.2101 25.784)
-#&gt;  5 Houston      Texas           Harris         6046392   (-95.3885 29.786)
-#&gt;  6 Dallas       Texas           Dallas         5843632  (-96.7667 32.7935)
-#&gt;  7 Philadelphia Pennsylvania    Philadelph…    5696588  (-75.1339 40.0077)
-#&gt;  8 Atlanta      Georgia         Fulton         5211164   (-84.422 33.7628)
-#&gt;  9 Washington   District of Co… District o…    5146120  (-77.0163 38.9047)
-#&gt; 10 Boston       Massachusetts   Suffolk        4355184  (-71.0852 42.3188)
-#&gt; # ℹ 31,244 more rows</code></pre>
-</div>
-</div></div>
-</section>
-<section id="sf-and-dplyr-1" class="slide level2">
-<h2>sf and dplyr</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a></a>cities_sf <span class="sc">|&gt;</span></span>
-<span id="cb63-2"><a></a>  <span class="fu">filter</span>(state_name <span class="sc">==</span> <span class="st">"Colorado"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 477 features and 4 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -109.0066 ymin: 37.0155 xmax: -102.0804 ymax: 40.9849
-#&gt; Geodetic CRS:  WGS 84
-#&gt; # A tibble: 477 × 5
-#&gt;    city             state_name county_name population            geometry
-#&gt;  * &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;
-#&gt;  1 Denver           Colorado   Denver         2691349  (-104.8758 39.762)
-#&gt;  2 Colorado Springs Colorado   El Paso         638421 (-104.7605 38.8674)
-#&gt;  3 Aurora           Colorado   Arapahoe        390201 (-104.7237 39.7083)
-#&gt;  4 Fort Collins     Colorado   Larimer         339256 (-105.0656 40.5477)
-#&gt;  5 Lakewood         Colorado   Jefferson       156309 (-105.1172 39.6977)
-#&gt;  6 Greeley          Colorado   Weld            143554 (-104.7706 40.4152)
-#&gt;  7 Thornton         Colorado   Adams           142878 (-104.9438 39.9197)
-#&gt;  8 Grand Junction   Colorado   Mesa            141008 (-108.5673 39.0877)
-#&gt;  9 Arvada           Colorado   Jefferson       122835   (-105.151 39.832)
-#&gt; 10 Boulder          Colorado   Boulder         120121 (-105.2524 40.0248)
-#&gt; # ℹ 467 more rows</code></pre>
-</div>
-</div></div>
-</section>
-<section id="sf-and-dplyr-2" class="slide level2">
-<h2>sf and dplyr</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a></a>cities_sf <span class="sc">|&gt;</span></span>
-<span id="cb65-2"><a></a>  <span class="fu">filter</span>(state_name <span class="sc">==</span> <span class="st">"Colorado"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb65-3"><a></a>  <span class="fu">group_by</span>(county_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 477 features and 4 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -109.0066 ymin: 37.0155 xmax: -102.0804 ymax: 40.9849
-#&gt; Geodetic CRS:  WGS 84
-#&gt; # A tibble: 477 × 5
-#&gt; # Groups:   county_name [64]
-#&gt;    city             state_name county_name population            geometry
-#&gt;    &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;
-#&gt;  1 Denver           Colorado   Denver         2691349  (-104.8758 39.762)
-#&gt;  2 Colorado Springs Colorado   El Paso         638421 (-104.7605 38.8674)
-#&gt;  3 Aurora           Colorado   Arapahoe        390201 (-104.7237 39.7083)
-#&gt;  4 Fort Collins     Colorado   Larimer         339256 (-105.0656 40.5477)
-#&gt;  5 Lakewood         Colorado   Jefferson       156309 (-105.1172 39.6977)
-#&gt;  6 Greeley          Colorado   Weld            143554 (-104.7706 40.4152)
-#&gt;  7 Thornton         Colorado   Adams           142878 (-104.9438 39.9197)
-#&gt;  8 Grand Junction   Colorado   Mesa            141008 (-108.5673 39.0877)
-#&gt;  9 Arvada           Colorado   Jefferson       122835   (-105.151 39.832)
-#&gt; 10 Boulder          Colorado   Boulder         120121 (-105.2524 40.0248)
-#&gt; # ℹ 467 more rows</code></pre>
-</div>
-</div></div>
-</section>
-<section id="sf-and-dplyr-3" class="slide level2">
-<h2>sf and dplyr</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a></a>cities_sf <span class="sc">|&gt;</span></span>
-<span id="cb67-2"><a></a>  <span class="fu">filter</span>(state_name <span class="sc">==</span> <span class="st">"Colorado"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb67-3"><a></a>  <span class="fu">group_by</span>(county_name) <span class="sc">|&gt;</span></span>
-<span id="cb67-4"><a></a>  <span class="fu">slice_max</span>(population, <span class="at">n =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 64 features and 4 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -108.9071 ymin: 37.1751 xmax: -102.2627 ymax: 40.9849
-#&gt; Geodetic CRS:  WGS 84
-#&gt; # A tibble: 64 × 5
-#&gt; # Groups:   county_name [64]
-#&gt;    city           state_name county_name population            geometry
-#&gt;    &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;            &lt;dbl&gt;         &lt;POINT [°]&gt;
-#&gt;  1 Thornton       Colorado   Adams           142878 (-104.9438 39.9197)
-#&gt;  2 Alamosa        Colorado   Alamosa           9847  (-105.877 37.4752)
-#&gt;  3 Aurora         Colorado   Arapahoe        390201 (-104.7237 39.7083)
-#&gt;  4 Pagosa Springs Colorado   Archuleta         1718 (-107.0307 37.2675)
-#&gt;  5 Springfield    Colorado   Baca              1482  (-102.6189 37.405)
-#&gt;  6 Las Animas     Colorado   Bent              2480 (-103.2236 38.0695)
-#&gt;  7 Boulder        Colorado   Boulder         120121 (-105.2524 40.0248)
-#&gt;  8 Broomfield     Colorado   Broomfield       75110 (-105.0526 39.9542)
-#&gt;  9 Salida         Colorado   Chaffee           5786 (-105.9979 38.5298)
-#&gt; 10 Cheyenne Wells Colorado   Cheyenne           949 (-102.3521 38.8192)
-#&gt; # ℹ 54 more rows</code></pre>
-</div>
-</div></div>
-</section>
-<section id="sf-and-dplyr-4" class="slide level2">
-<h2>sf and dplyr</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a></a>cities_sf <span class="sc">|&gt;</span></span>
-<span id="cb69-2"><a></a>  <span class="fu">filter</span>(state_name <span class="sc">==</span> <span class="st">"Colorado"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb69-3"><a></a>  <span class="fu">group_by</span>(county_name) <span class="sc">|&gt;</span></span>
-<span id="cb69-4"><a></a>  <span class="fu">slice_max</span>(population, <span class="at">n =</span> <span class="dv">1</span>) <span class="ot">-&gt;</span></span>
-<span id="cb69-5"><a></a>  co_cities</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-
-</div></div>
-</section>
-<section id="plotting" class="slide level2">
-<h2>Plotting</h2>
-<ul>
-<li class="fragment"><p>We’ve already seen that <code>ggplot()</code> is a powerful visualization tool:</p></li>
-<li class="fragment"><p>The 5 steps we described for building a ggplot are:</p>
-<ol type="1">
-<li class="fragment">canvas</li>
-<li class="fragment">layers (geoms)</li>
-<li class="fragment">labels</li>
-<li class="fragment">facets</li>
-<li class="fragment">themes</li>
-</ol></li>
-<li class="fragment"><p>spatial work in R is becoming so common that <code>ggplot()</code> comes with a sf geom (<code>geom_sf</code>)</p></li>
-</ul>
-</section>
-<section id="sf-an-ggplot" class="slide level2">
-<h2>sf an ggplot</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a></a><span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/ggplot_auto_01_output-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="sf-an-ggplot-1" class="slide level2">
-<h2>sf an ggplot</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb71-2"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co, <span class="fu">aes</span>(<span class="at">fill =</span> aland<span class="sc">/</span><span class="fl">1e10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/ggplot_auto_02_output-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="sf-an-ggplot-2" class="slide level2">
-<h2>sf an ggplot</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb72-2"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co, <span class="fu">aes</span>(<span class="at">fill =</span> aland<span class="sc">/</span><span class="fl">1e10</span>)) <span class="sc">+</span></span>
-<span id="cb72-3"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co_cities, <span class="fu">aes</span>(<span class="at">size =</span> population<span class="sc">/</span><span class="fl">1e5</span>), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/ggplot_auto_03_output-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="sf-an-ggplot-3" class="slide level2">
-<h2>sf an ggplot</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb73-2"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co, <span class="fu">aes</span>(<span class="at">fill =</span> aland<span class="sc">/</span><span class="fl">1e10</span>)) <span class="sc">+</span></span>
-<span id="cb73-3"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co_cities, <span class="fu">aes</span>(<span class="at">size =</span> population<span class="sc">/</span><span class="fl">1e5</span>), <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb73-4"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/ggplot_auto_04_output-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="sf-an-ggplot-4" class="slide level2">
-<h2>sf an ggplot</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb74-2"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co, <span class="fu">aes</span>(<span class="at">fill =</span> aland<span class="sc">/</span><span class="fl">1e10</span>)) <span class="sc">+</span></span>
-<span id="cb74-3"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> co_cities, <span class="fu">aes</span>(<span class="at">size =</span> population<span class="sc">/</span><span class="fl">1e5</span>), <span class="at">col =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb74-4"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span></span>
-<span id="cb74-5"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Colorado Counties: Land Area"</span>,</span>
-<span id="cb74-6"><a></a>       <span class="at">size =</span> <span class="st">"Population </span><span class="sc">\n</span><span class="st">(100,000)"</span>,</span>
-<span id="cb74-7"><a></a>       <span class="at">fill =</span> <span class="st">"Acres </span><span class="sc">\n</span><span class="st">(billions)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/ggplot_auto_05_output-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="conus" class="slide level2">
-<h2>CONUS</h2>
-<div class="{columns}">
-<div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a></a>conus <span class="ot">&lt;-</span>  USAboundaries<span class="sc">::</span><span class="fu">us_states</span>() <span class="sc">|&gt;</span></span>
-<span id="cb75-2"><a></a>  <span class="fu">filter</span>(<span class="sc">!</span>state_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Puerto Rico"</span>, </span>
-<span id="cb75-3"><a></a>                            <span class="st">"Alaska"</span>, </span>
-<span id="cb75-4"><a></a>                            <span class="st">"Hawaii"</span>))</span>
-<span id="cb75-5"><a></a></span>
-<span id="cb75-6"><a></a><span class="fu">length</span>(<span class="fu">st_geometry</span>(conus))</span>
-<span id="cb75-7"><a></a><span class="co">#&gt; [1] 49</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb76-2"><a></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> conus, <span class="fu">aes</span>(<span class="at">fill =</span> state_name)) <span class="sc">+</span> </span>
-<span id="cb76-3"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span> </span>
-<span id="cb76-4"><a></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span> </span>
-<span id="cb76-5"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"CONUS:"</span>, <span class="fu">length</span>(<span class="fu">st_geometry</span>(conus)), <span class="st">"feature(s)"</span>) ) <span class="sc">+</span> </span>
-<span id="cb76-6"><a></a>  <span class="fu">scale_fill_viridis_d</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-66-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="feature-resoloved-and-combined" class="slide level2">
-<h2>1 feature: resoloved and combined:</h2>
-<ul>
-<li class="fragment"><code>st_cast</code> / <code>st_union</code> work on <code>sfg</code>, <code>sfc</code>, and <code>sf</code> objects:</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a></a>us_c_ml <span class="ot">=</span> <span class="fu">st_combine</span>(conus) <span class="sc">|&gt;</span></span>
-<span id="cb77-2"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span>
-<span id="cb77-3"><a></a>   </span>
-<span id="cb77-4"><a></a>us_u_ml <span class="ot">=</span> <span class="fu">st_union</span>(conus) <span class="sc">|&gt;</span></span>
-<span id="cb77-5"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<img data-src="week-2_files/figure-revealjs/unnamed-chunk-68-1.png" width="960" class="r-stretch"></section>
-<section id="so-what" class="slide level2">
-<h2>So what?</h2>
-<p>Lets imagine we want to know the distance from Denver to the nearest state border:</p>
-<p>To do this, we need to:<br>
-</p>
-<p>1: define Denver as a geometry in a CRS<br>
-2: determine the correct geometry types / representation<br>
-3: calculate the distance between (1) and (2)<br>
-</p>
-</section>
-<section id="make-denver-in-the-crs-of-our-states" class="slide level2">
-<h2>1. Make “Denver” in the CRS of our states</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a></a>denver_sf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fl">39.7392</span>, </span>
-<span id="cb78-2"><a></a>                       <span class="at">x =</span> <span class="sc">-</span><span class="fl">104.9903</span>, </span>
-<span id="cb78-3"><a></a>                       <span class="at">name =</span> <span class="st">"Denver"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb78-4"><a></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>), </span>
-<span id="cb78-5"><a></a>           <span class="at">crs =</span> <span class="dv">4326</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="determine-the-3-closest-states" class="slide level2">
-<h2>2. Determine the 3 closest states:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 12 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    statefp  statens    affgeoid geoid stusps       name lsad        aland
-#&gt; 1       06 01779778 0400000US06    06     CA California   00 403671196038
-#&gt; 2       55 01779806 0400000US55    55     WI  Wisconsin   00 140292246684
-#&gt; 3       16 01779783 0400000US16    16     ID      Idaho   00 214049923496
-#&gt; 4       27 00662849 0400000US27    27     MN  Minnesota   00 206232157570
-#&gt; 5       19 01779785 0400000US19    19     IA       Iowa   00 144659688848
-#&gt; 6       29 01779791 0400000US29    29     MO   Missouri   00 178052563675
-#&gt; 7       24 01714934 0400000US24    24     MD   Maryland   00  25151895765
-#&gt; 8       41 01155107 0400000US41    41     OR     Oregon   00 248628426864
-#&gt; 9       26 01779789 0400000US26    26     MI   Michigan   00 146614604273
-#&gt; 10      30 00767982 0400000US30    30     MT    Montana   00 376973673895
-#&gt;          awater state_name state_abbr jurisdiction_type
-#&gt; 1   20294133830 California         CA             state
-#&gt; 2   29343721650  Wisconsin         WI             state
-#&gt; 3    2391577745      Idaho         ID             state
-#&gt; 4   18949864226  Minnesota         MN             state
-#&gt; 5    1085996889       Iowa         IA             state
-#&gt; 6    2487215790   Missouri         MO             state
-#&gt; 7    6979171386   Maryland         MD             state
-#&gt; 8    6170953359     Oregon         OR             state
-#&gt; 9  103872203398   Michigan         MI             state
-#&gt; 10   3866689601    Montana         MT             state
-#&gt;                          geometry
-#&gt; 1  MULTIPOLYGON (((-118.594 33...
-#&gt; 2  MULTIPOLYGON (((-86.93428 4...
-#&gt; 3  MULTIPOLYGON (((-117.243 44...
-#&gt; 4  MULTIPOLYGON (((-97.22904 4...
-#&gt; 5  MULTIPOLYGON (((-96.62187 4...
-#&gt; 6  MULTIPOLYGON (((-95.76564 4...
-#&gt; 7  MULTIPOLYGON (((-76.04621 3...
-#&gt; 8  MULTIPOLYGON (((-124.5524 4...
-#&gt; 9  MULTIPOLYGON (((-84.61622 4...
-#&gt; 10 MULTIPOLYGON (((-116.0492 4...</code></pre>
-</div>
-</div></div>
-</section>
-<section id="determine-the-3-closest-states-1" class="slide level2">
-<h2>2. Determine the 3 closest states:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb81-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 1 field
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    state_name                       geometry
-#&gt; 1  California MULTIPOLYGON (((-118.594 33...
-#&gt; 2   Wisconsin MULTIPOLYGON (((-86.93428 4...
-#&gt; 3       Idaho MULTIPOLYGON (((-117.243 44...
-#&gt; 4   Minnesota MULTIPOLYGON (((-97.22904 4...
-#&gt; 5        Iowa MULTIPOLYGON (((-96.62187 4...
-#&gt; 6    Missouri MULTIPOLYGON (((-95.76564 4...
-#&gt; 7    Maryland MULTIPOLYGON (((-76.04621 3...
-#&gt; 8      Oregon MULTIPOLYGON (((-124.5524 4...
-#&gt; 9    Michigan MULTIPOLYGON (((-84.61622 4...
-#&gt; 10    Montana MULTIPOLYGON (((-116.0492 4...</code></pre>
-</div>
-</div></div>
-</section>
-<section id="determine-the-3-closest-states-2" class="slide level2">
-<h2>2. Determine the 3 closest states:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb83-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
-<span id="cb83-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 2 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    state_name                       geometry          dist
-#&gt; 1  California MULTIPOLYGON (((-118.594 33... 1000950.5 [m]
-#&gt; 2   Wisconsin MULTIPOLYGON (((-86.93428 4... 1146522.6 [m]
-#&gt; 3       Idaho MULTIPOLYGON (((-117.243 44...  567809.5 [m]
-#&gt; 4   Minnesota MULTIPOLYGON (((-97.22904 4...  823100.9 [m]
-#&gt; 5        Iowa MULTIPOLYGON (((-96.62187 4...  773889.8 [m]
-#&gt; 6    Missouri MULTIPOLYGON (((-95.76564 4...  789142.1 [m]
-#&gt; 7    Maryland MULTIPOLYGON (((-76.04621 3... 2174383.4 [m]
-#&gt; 8      Oregon MULTIPOLYGON (((-124.5524 4... 1041819.1 [m]
-#&gt; 9    Michigan MULTIPOLYGON (((-84.61622 4... 1401455.7 [m]
-#&gt; 10    Montana MULTIPOLYGON (((-116.0492 4...  585011.2 [m]</code></pre>
-</div>
-</div></div>
-</section>
-<section id="determine-the-3-closest-states-3" class="slide level2">
-<h2>2. Determine the 3 closest states:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb85-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">%&gt;%</span></span>
-<span id="cb85-3"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
-<span id="cb85-4"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 3 features and 2 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -111.0569 ymin: 36.99243 xmax: -95.30829 ymax: 45.0059
-#&gt; Geodetic CRS:  WGS 84
-#&gt;   state_name         dist                       geometry
-#&gt; 1   Colorado      0.0 [m] MULTIPOLYGON (((-109.06 38....
-#&gt; 2    Wyoming 139988.4 [m] MULTIPOLYGON (((-111.0569 4...
-#&gt; 3   Nebraska 161243.2 [m] MULTIPOLYGON (((-104.0531 4...</code></pre>
-</div>
-</div></div>
-<ul>
-<li class="fragment">That’s close, but the distance to Colorado is 0, that’s not a state border.</li>
-</ul>
-</section>
-<section id="geometry-selection" class="slide level2">
-<h2>Geometry Selection</h2>
-<ul>
-<li class="fragment"><code>Polygon</code> (therefore MULTIPOLGYGONS) describe areas!</li>
-<li class="fragment">The distance to a <code>point</code> <strong>in</strong> a <code>polygon</code> to that polygon is 0.</li>
-</ul>
-</section>
-<section id="to-determine-distance-to-border-we-need-a-linear-representation" class="slide level2">
-<h2>To determine distance to border we need a linear representation:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a></a>conus</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 12 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    statefp  statens    affgeoid geoid stusps       name lsad        aland
-#&gt; 1       06 01779778 0400000US06    06     CA California   00 403671196038
-#&gt; 2       55 01779806 0400000US55    55     WI  Wisconsin   00 140292246684
-#&gt; 3       16 01779783 0400000US16    16     ID      Idaho   00 214049923496
-#&gt; 4       27 00662849 0400000US27    27     MN  Minnesota   00 206232157570
-#&gt; 5       19 01779785 0400000US19    19     IA       Iowa   00 144659688848
-#&gt; 6       29 01779791 0400000US29    29     MO   Missouri   00 178052563675
-#&gt; 7       24 01714934 0400000US24    24     MD   Maryland   00  25151895765
-#&gt; 8       41 01155107 0400000US41    41     OR     Oregon   00 248628426864
-#&gt; 9       26 01779789 0400000US26    26     MI   Michigan   00 146614604273
-#&gt; 10      30 00767982 0400000US30    30     MT    Montana   00 376973673895
-#&gt;          awater state_name state_abbr jurisdiction_type
-#&gt; 1   20294133830 California         CA             state
-#&gt; 2   29343721650  Wisconsin         WI             state
-#&gt; 3    2391577745      Idaho         ID             state
-#&gt; 4   18949864226  Minnesota         MN             state
-#&gt; 5    1085996889       Iowa         IA             state
-#&gt; 6    2487215790   Missouri         MO             state
-#&gt; 7    6979171386   Maryland         MD             state
-#&gt; 8    6170953359     Oregon         OR             state
-#&gt; 9  103872203398   Michigan         MI             state
-#&gt; 10   3866689601    Montana         MT             state
-#&gt;                          geometry
-#&gt; 1  MULTIPOLYGON (((-118.594 33...
-#&gt; 2  MULTIPOLYGON (((-86.93428 4...
-#&gt; 3  MULTIPOLYGON (((-117.243 44...
-#&gt; 4  MULTIPOLYGON (((-97.22904 4...
-#&gt; 5  MULTIPOLYGON (((-96.62187 4...
-#&gt; 6  MULTIPOLYGON (((-95.76564 4...
-#&gt; 7  MULTIPOLYGON (((-76.04621 3...
-#&gt; 8  MULTIPOLYGON (((-124.5524 4...
-#&gt; 9  MULTIPOLYGON (((-84.61622 4...
-#&gt; 10 MULTIPOLYGON (((-116.0492 4...</code></pre>
-</div>
-</div></div>
-</section>
-<section id="to-determine-distance-to-border-we-need-a-linear-representation-1" class="slide level2">
-<h2>To determine distance to border we need a linear representation:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb89-2"><a></a>  <span class="fu">select</span>(state_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 1 field
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    state_name                       geometry
-#&gt; 1  California MULTIPOLYGON (((-118.594 33...
-#&gt; 2   Wisconsin MULTIPOLYGON (((-86.93428 4...
-#&gt; 3       Idaho MULTIPOLYGON (((-117.243 44...
-#&gt; 4   Minnesota MULTIPOLYGON (((-97.22904 4...
-#&gt; 5        Iowa MULTIPOLYGON (((-96.62187 4...
-#&gt; 6    Missouri MULTIPOLYGON (((-95.76564 4...
-#&gt; 7    Maryland MULTIPOLYGON (((-76.04621 3...
-#&gt; 8      Oregon MULTIPOLYGON (((-124.5524 4...
-#&gt; 9    Michigan MULTIPOLYGON (((-84.61622 4...
-#&gt; 10    Montana MULTIPOLYGON (((-116.0492 4...</code></pre>
-</div>
-</div></div>
-</section>
-<section id="to-determine-distance-to-border-we-need-a-linear-representation-2" class="slide level2">
-<h2>To determine distance to border we need a linear representation:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb91-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
-<span id="cb91-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 1 field
-#&gt; Geometry type: MULTILINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    state_name                       geometry
-#&gt; 1  California MULTILINESTRING ((-118.594 ...
-#&gt; 2   Wisconsin MULTILINESTRING ((-86.93428...
-#&gt; 3       Idaho MULTILINESTRING ((-117.243 ...
-#&gt; 4   Minnesota MULTILINESTRING ((-97.22904...
-#&gt; 5        Iowa MULTILINESTRING ((-96.62187...
-#&gt; 6    Missouri MULTILINESTRING ((-95.76564...
-#&gt; 7    Maryland MULTILINESTRING ((-76.04621...
-#&gt; 8      Oregon MULTILINESTRING ((-124.5524...
-#&gt; 9    Michigan MULTILINESTRING ((-84.61622...
-#&gt; 10    Montana MULTILINESTRING ((-116.0492...</code></pre>
-</div>
-</div></div>
-</section>
-<section id="to-determine-distance-to-border-we-need-a-linear-representation-3" class="slide level2">
-<h2>To determine distance to border we need a linear representation:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb93-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
-<span id="cb93-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb93-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 49 features and 2 fields
-#&gt; Geometry type: MULTILINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436
-#&gt; Geodetic CRS:  WGS 84
-#&gt; First 10 features:
-#&gt;    state_name                       geometry          dist
-#&gt; 1  California MULTILINESTRING ((-118.594 ... 1000950.5 [m]
-#&gt; 2   Wisconsin MULTILINESTRING ((-86.93428... 1146522.6 [m]
-#&gt; 3       Idaho MULTILINESTRING ((-117.243 ...  567809.5 [m]
-#&gt; 4   Minnesota MULTILINESTRING ((-97.22904...  823100.9 [m]
-#&gt; 5        Iowa MULTILINESTRING ((-96.62187...  773889.8 [m]
-#&gt; 6    Missouri MULTILINESTRING ((-95.76564...  789142.1 [m]
-#&gt; 7    Maryland MULTILINESTRING ((-76.04621... 2174383.4 [m]
-#&gt; 8      Oregon MULTILINESTRING ((-124.5524... 1041819.1 [m]
-#&gt; 9    Michigan MULTILINESTRING ((-84.61622... 1401455.7 [m]
-#&gt; 10    Montana MULTILINESTRING ((-116.0492...  585011.2 [m]</code></pre>
-</div>
-</div></div>
-</section>
-<section id="to-determine-distance-to-border-we-need-a-linear-representation-4" class="slide level2">
-<h2>To determine distance to border we need a linear representation:</h2>
-<div class="columns">
-<div class="column" style="width:40%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a></a>conus <span class="sc">|&gt;</span></span>
-<span id="cb95-2"><a></a>  <span class="fu">select</span>(state_name) <span class="sc">|&gt;</span></span>
-<span id="cb95-3"><a></a>  <span class="fu">st_cast</span>(<span class="st">"MULTILINESTRING"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb95-4"><a></a>  <span class="fu">mutate</span>(<span class="at">dist =</span> <span class="fu">st_distance</span>(., denver_sf)) <span class="sc">|&gt;</span></span>
-<span id="cb95-5"><a></a>  <span class="fu">slice_min</span>(dist, <span class="at">n =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div><div class="column" style="width:60%;">
-<div class="cell">
-<pre><code>#&gt; Simple feature collection with 3 features and 2 fields
-#&gt; Geometry type: MULTILINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -111.0569 ymin: 36.99243 xmax: -95.30829 ymax: 45.0059
-#&gt; Geodetic CRS:  WGS 84
-#&gt;   state_name         dist                       geometry
-#&gt; 1   Colorado 139988.4 [m] MULTILINESTRING ((-109.06 3...
-#&gt; 2    Wyoming 139988.4 [m] MULTILINESTRING ((-111.0569...
-#&gt; 3   Nebraska 161243.2 [m] MULTILINESTRING ((-104.0531...</code></pre>
-</div>
-</div></div>
-<ul>
-<li class="fragment"><p>Good. However, we were only interested in the distance to the closest border not to ALL boarders. Therefore we calculated 48 (49 - 1) more distances then needed!</p></li>
-<li class="fragment"><p>While this is not to complex for 1 &lt;-&gt; 49 features imagine we had 28,000+ (like your lab)!</p></li>
-<li class="fragment"><p>That would result in 1,344,000 more calculations then needed …</p></li>
-</ul>
-</section>
-<section id="revisting-the-idea-of-the-feature-level" class="slide level2">
-<h2>Revisting the idea of the feature level:</h2>
-<ul>
-<li class="fragment"><p>A “feature” can “be part of the whole” or the whole</p>
-<ul>
-<li class="fragment"><p>A island (POLYGON), or a set of islands acting as 1 unit (MULTIPOLYGON)</p></li>
-<li class="fragment"><p>A city (POINT), or a set of cities meeting a condition (MULTIPOINT)</p></li>
-<li class="fragment"><p>A road (LINESTRING), or a route (MULTILINESTRING)</p></li>
-</ul></li>
-<li class="fragment"><p>Since we want the distance to the nearest border, <em>regardless</em> of the state. Our <strong>feature</strong> is the <em>set of borders with preserved boundaries</em>.</p></li>
-<li class="fragment"><p>In other words, a 1 feature <code>MULTILINESTRING</code></p></li>
-</ul>
-<div class="fragment">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a></a><span class="fu">st_distance</span>(denver_sf, <span class="fu">st_cast</span>(<span class="fu">st_combine</span>(conus), <span class="st">"MULTILINESTRING"</span>))</span>
-<span id="cb97-2"><a></a><span class="co">#&gt; Units: [m]</span></span>
-<span id="cb97-3"><a></a><span class="co">#&gt;          [,1]</span></span>
-<span id="cb97-4"><a></a><span class="co">#&gt; [1,] 139988.4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ul>
-<li class="fragment">The same principle would apply if the question was “<em>distance to national border</em>”</li>
-</ul>
-</div>
-</section>
 <section id="coordinate-systems-1" class="slide level2">
 <h2>Coordinate Systems</h2>
 <ul>
@@ -2407,18 +2023,18 @@
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a></a><span class="fu">st_geometry</span>(conus)</span>
-<span id="cb98-2"><a></a><span class="co">#&gt; Geometry set for 49 features </span></span>
-<span id="cb98-3"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
-<span id="cb98-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
-<span id="cb98-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -124.7258 ymin: 24.49813 xmax: -66.9499 ymax: 49.38436</span></span>
-<span id="cb98-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
-<span id="cb98-7"><a></a><span class="co">#&gt; First 5 geometries:</span></span>
-<span id="cb98-8"><a></a><span class="co">#&gt; MULTIPOLYGON (((-118.594 33.4672, -118.4848 33....</span></span>
-<span id="cb98-9"><a></a><span class="co">#&gt; MULTIPOLYGON (((-86.93428 45.42115, -86.83575 4...</span></span>
-<span id="cb98-10"><a></a><span class="co">#&gt; MULTIPOLYGON (((-117.243 44.39097, -117.2151 44...</span></span>
-<span id="cb98-11"><a></a><span class="co">#&gt; MULTIPOLYGON (((-97.22904 49.00069, -96.93096 4...</span></span>
-<span id="cb98-12"><a></a><span class="co">#&gt; MULTIPOLYGON (((-96.62187 42.77925, -96.57794 4...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a></a><span class="fu">st_geometry</span>(conus)</span>
+<span id="cb74-2"><a></a><span class="co">#&gt; Geometry set for 49 features </span></span>
+<span id="cb74-3"><a></a><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span id="cb74-4"><a></a><span class="co">#&gt; Dimension:     XY</span></span>
+<span id="cb74-5"><a></a><span class="co">#&gt; Bounding box:  xmin: -124.8485 ymin: 24.39631 xmax: -66.88544 ymax: 49.38448</span></span>
+<span id="cb74-6"><a></a><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span id="cb74-7"><a></a><span class="co">#&gt; First 5 geometries:</span></span>
+<span id="cb74-8"><a></a><span class="co">#&gt; MULTIPOLYGON (((-85.4883 30.99706, -85.36962 30...</span></span>
+<span id="cb74-9"><a></a><span class="co">#&gt; MULTIPOLYGON (((-110.7507 37.00301, -110.8054 3...</span></span>
+<span id="cb74-10"><a></a><span class="co">#&gt; MULTIPOLYGON (((-90.95577 34.11871, -90.9569 34...</span></span>
+<span id="cb74-11"><a></a><span class="co">#&gt; MULTIPOLYGON (((-116.1062 32.61848, -116.0123 3...</span></span>
+<span id="cb74-12"><a></a><span class="co">#&gt; MULTIPOLYGON (((-105.155 36.99526, -105.1208 36...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment"><p>This implies that all geometries in a geometry list-column (sfc) must have the same CRS.</p></li>
@@ -2523,32 +2139,32 @@
 <div class="{columns}">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>epsg</span>
-<span id="cb99-2"><a></a><span class="co">#&gt; [1] 4326</span></span>
-<span id="cb99-3"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>proj4string</span>
-<span id="cb99-4"><a></a><span class="co">#&gt; [1] "+proj=longlat +datum=WGS84 +no_defs"</span></span>
-<span id="cb99-5"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>datum</span>
-<span id="cb99-6"><a></a><span class="co">#&gt; [1] "WGS84"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>epsg</span>
+<span id="cb75-2"><a></a><span class="co">#&gt; [1] 4326</span></span>
+<span id="cb75-3"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>proj4string</span>
+<span id="cb75-4"><a></a><span class="co">#&gt; [1] "+proj=longlat +datum=WGS84 +no_defs"</span></span>
+<span id="cb75-5"><a></a><span class="fu">st_crs</span>(conus)<span class="sc">$</span>datum</span>
+<span id="cb75-6"><a></a><span class="co">#&gt; [1] "WGS84"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a></a>conus5070 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(conus, <span class="dv">5070</span>)</span>
-<span id="cb100-2"><a></a></span>
-<span id="cb100-3"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>epsg</span>
-<span id="cb100-4"><a></a><span class="co">#&gt; [1] 5070</span></span>
-<span id="cb100-5"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>proj4string</span>
-<span id="cb100-6"><a></a><span class="co">#&gt; [1] "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"</span></span>
-<span id="cb100-7"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>datum</span>
-<span id="cb100-8"><a></a><span class="co">#&gt; [1] "NAD83"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a></a>conus5070 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(conus, <span class="dv">5070</span>)</span>
+<span id="cb76-2"><a></a></span>
+<span id="cb76-3"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>epsg</span>
+<span id="cb76-4"><a></a><span class="co">#&gt; [1] 5070</span></span>
+<span id="cb76-5"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>proj4string</span>
+<span id="cb76-6"><a></a><span class="co">#&gt; [1] "+proj=aea +lat_0=23 +lon_0=-96 +lat_1=29.5 +lat_2=45.5 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs"</span></span>
+<span id="cb76-7"><a></a><span class="fu">st_crs</span>(conus5070)<span class="sc">$</span>datum</span>
+<span id="cb76-8"><a></a><span class="co">#&gt; [1] "NAD83"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 
-<img data-src="week-2_files/figure-revealjs/unnamed-chunk-82-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-72-1.png" class="quarto-figure quarto-figure-center r-stretch" width="960"></section>
 <section id="revisit-denver" class="slide level2">
 <h2>Revisit Denver</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb101-1"><a></a><span class="bu">echo</span> <span class="at">-104.9903</span> 39.7392 <span class="kw">|</span> <span class="ex">proj</span> +proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span>
-<span id="cb101-2"><a></a><span class="co">#&gt; -723281.88   6827.29</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb77-1"><a></a><span class="bu">echo</span> <span class="at">-104.9903</span> 39.7392 <span class="kw">|</span> <span class="ex">proj</span> +proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs</span>
+<span id="cb77-2"><a></a><span class="co">#&gt; -723281.88   6827.29</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li class="fragment">red = false origin : blue = Denver</li>
@@ -2559,10 +2175,10 @@
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-84-1.png"></p>
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-74-1.png"></p>
 </div>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-84-2.png"></p>
+<p><img data-src="week-2_files/figure-revealjs/unnamed-chunk-74-2.png"></p>
 </div>
 </div>
 </div>
@@ -2586,7 +2202,7 @@
 <li class="fragment"><p>Compare the distances measured between Santa Barbara and Amsterdam. The blue line represents the shortest distance between the two points on a <em>planar</em> coordinate system. The red line as measured on a <em>ellipsoid</em>.</p></li>
 </ul>
 
-<img data-src="week-2_files/figure-revealjs/unnamed-chunk-85-1.png" width="2304" class="r-stretch"></section>
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-75-1.png" width="2304" class="r-stretch"></section>
 <section id="section-4" class="slide level2">
 <h2></h2>
 <ul>
@@ -2595,7 +2211,7 @@
 <li class="fragment"><p>We can display the geodesic and planar distance on a 3D globe (or a projection that mimics the view of the 3D earth).</p></li>
 </ul>
 
-<img data-src="week-2_files/figure-revealjs/unnamed-chunk-86-1.png" width="960" class="r-stretch"></section>
+<img data-src="week-2_files/figure-revealjs/unnamed-chunk-76-1.png" width="960" class="r-stretch"></section>
 <section id="section-5" class="slide level2">
 <h2></h2>
 <ul>
@@ -2650,9 +2266,9 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb102-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb102-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb78-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb78-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2667,12 +2283,12 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb104-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb104-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb104-4"><a></a></span>
-<span id="cb104-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb104-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb80-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb80-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb80-4"><a></a></span>
+<span id="cb80-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb80-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2695,14 +2311,14 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb106-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb106-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb106-4"><a></a></span>
-<span id="cb106-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb106-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb106-7"><a></a></span>
-<span id="cb106-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb82-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb82-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb82-4"><a></a></span>
+<span id="cb82-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb82-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb82-7"><a></a></span>
+<span id="cb82-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2725,17 +2341,17 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb108-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb108-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb108-4"><a></a></span>
-<span id="cb108-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb108-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb108-7"><a></a></span>
-<span id="cb108-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
-<span id="cb108-9"><a></a></span>
-<span id="cb108-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
-<span id="cb108-11"><a></a><span class="fu">st_distance</span>(pts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb84-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb84-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb84-4"><a></a></span>
+<span id="cb84-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb84-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb84-7"><a></a></span>
+<span id="cb84-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb84-9"><a></a></span>
+<span id="cb84-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb84-11"><a></a><span class="fu">st_distance</span>(pts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2762,20 +2378,20 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb110-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb110-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb110-4"><a></a></span>
-<span id="cb110-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb110-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb110-7"><a></a></span>
-<span id="cb110-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
-<span id="cb110-9"><a></a></span>
-<span id="cb110-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
-<span id="cb110-11"><a></a><span class="fu">st_distance</span>(pts)</span>
-<span id="cb110-12"><a></a></span>
-<span id="cb110-13"><a></a><span class="co"># Euclidean Distance</span></span>
-<span id="cb110-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb86-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb86-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb86-4"><a></a></span>
+<span id="cb86-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb86-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb86-7"><a></a></span>
+<span id="cb86-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb86-9"><a></a></span>
+<span id="cb86-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb86-11"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb86-12"><a></a></span>
+<span id="cb86-13"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb86-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2806,23 +2422,23 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb112-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb112-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb112-4"><a></a></span>
-<span id="cb112-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb112-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb112-7"><a></a></span>
-<span id="cb112-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
-<span id="cb112-9"><a></a></span>
-<span id="cb112-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
-<span id="cb112-11"><a></a><span class="fu">st_distance</span>(pts)</span>
-<span id="cb112-12"><a></a></span>
-<span id="cb112-13"><a></a><span class="co"># Euclidean Distance</span></span>
-<span id="cb112-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
-<span id="cb112-15"><a></a></span>
-<span id="cb112-16"><a></a><span class="co"># Equal Area PCS</span></span>
-<span id="cb112-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb88-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb88-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb88-4"><a></a></span>
+<span id="cb88-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb88-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb88-7"><a></a></span>
+<span id="cb88-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb88-9"><a></a></span>
+<span id="cb88-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb88-11"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb88-12"><a></a></span>
+<span id="cb88-13"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb88-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb88-15"><a></a></span>
+<span id="cb88-16"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb88-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2857,26 +2473,26 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb114-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb114-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb114-4"><a></a></span>
-<span id="cb114-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb114-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb114-7"><a></a></span>
-<span id="cb114-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
-<span id="cb114-9"><a></a></span>
-<span id="cb114-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
-<span id="cb114-11"><a></a><span class="fu">st_distance</span>(pts)</span>
-<span id="cb114-12"><a></a></span>
-<span id="cb114-13"><a></a><span class="co"># Euclidean Distance</span></span>
-<span id="cb114-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
-<span id="cb114-15"><a></a></span>
-<span id="cb114-16"><a></a><span class="co"># Equal Area PCS</span></span>
-<span id="cb114-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
-<span id="cb114-18"><a></a></span>
-<span id="cb114-19"><a></a><span class="co"># Equal Distance</span></span>
-<span id="cb114-20"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb90-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb90-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb90-4"><a></a></span>
+<span id="cb90-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb90-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb90-7"><a></a></span>
+<span id="cb90-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb90-9"><a></a></span>
+<span id="cb90-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb90-11"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb90-12"><a></a></span>
+<span id="cb90-13"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb90-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb90-15"><a></a></span>
+<span id="cb90-16"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb90-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
+<span id="cb90-18"><a></a></span>
+<span id="cb90-19"><a></a><span class="co"># Equal Distance</span></span>
+<span id="cb90-20"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2915,26 +2531,26 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
-<span id="cb116-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
-<span id="cb116-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
-<span id="cb116-4"><a></a></span>
-<span id="cb116-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
-<span id="cb116-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
-<span id="cb116-7"><a></a></span>
-<span id="cb116-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
-<span id="cb116-9"><a></a></span>
-<span id="cb116-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
-<span id="cb116-11"><a></a><span class="fu">st_distance</span>(pts)</span>
-<span id="cb116-12"><a></a></span>
-<span id="cb116-13"><a></a><span class="co"># Euclidean Distance</span></span>
-<span id="cb116-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
-<span id="cb116-15"><a></a></span>
-<span id="cb116-16"><a></a><span class="co"># Equal Area PCS</span></span>
-<span id="cb116-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
-<span id="cb116-18"><a></a></span>
-<span id="cb116-19"><a></a><span class="co"># Equal Distance</span></span>
-<span id="cb116-20"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a></a>(<span class="at">pts =</span> <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="fl">40.7128</span>, <span class="fl">34.4208</span>),</span>
+<span id="cb92-2"><a></a>                  <span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">74.0060</span>, <span class="sc">-</span><span class="fl">119.6982</span> ),</span>
+<span id="cb92-3"><a></a>                  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"NYC"</span>,<span class="st">"SB"</span>)))</span>
+<span id="cb92-4"><a></a></span>
+<span id="cb92-5"><a></a>(<span class="at">pts =</span> <span class="fu">st_as_sf</span>(pts, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>),</span>
+<span id="cb92-6"><a></a>                <span class="at">crs =</span> <span class="dv">4326</span>))</span>
+<span id="cb92-7"><a></a></span>
+<span id="cb92-8"><a></a>eqds <span class="ot">=</span> <span class="st">'+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs'</span></span>
+<span id="cb92-9"><a></a></span>
+<span id="cb92-10"><a></a><span class="co"># Greeat Circle Distance</span></span>
+<span id="cb92-11"><a></a><span class="fu">st_distance</span>(pts)</span>
+<span id="cb92-12"><a></a></span>
+<span id="cb92-13"><a></a><span class="co"># Euclidean Distance</span></span>
+<span id="cb92-14"><a></a><span class="fu">st_distance</span>(pts, <span class="at">which =</span> <span class="st">"Euclidean"</span>)</span>
+<span id="cb92-15"><a></a></span>
+<span id="cb92-16"><a></a><span class="co"># Equal Area PCS</span></span>
+<span id="cb92-17"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, <span class="dv">5070</span>))</span>
+<span id="cb92-18"><a></a></span>
+<span id="cb92-19"><a></a><span class="co"># Equal Distance</span></span>
+<span id="cb92-20"><a></a><span class="fu">st_distance</span>(<span class="fu">st_transform</span>(pts, eqds))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -2973,7 +2589,7 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 
@@ -2984,12 +2600,12 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
-<span id="cb119-2"><a></a></span>
-<span id="cb119-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
-<span id="cb119-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
-<span id="cb119-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
-<span id="cb119-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb95-2"><a></a></span>
+<span id="cb95-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb95-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb95-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb95-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 
@@ -3000,14 +2616,14 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
-<span id="cb120-2"><a></a></span>
-<span id="cb120-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
-<span id="cb120-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
-<span id="cb120-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
-<span id="cb120-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
-<span id="cb120-7"><a></a></span>
-<span id="cb120-8"><a></a><span class="fu">ggplot</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb96-2"><a></a></span>
+<span id="cb96-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb96-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb96-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb96-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb96-7"><a></a></span>
+<span id="cb96-8"><a></a><span class="fu">ggplot</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -3026,15 +2642,15 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
-<span id="cb121-2"><a></a></span>
-<span id="cb121-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
-<span id="cb121-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
-<span id="cb121-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
-<span id="cb121-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
-<span id="cb121-7"><a></a></span>
-<span id="cb121-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
-<span id="cb121-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb97-2"><a></a></span>
+<span id="cb97-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb97-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb97-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb97-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb97-7"><a></a></span>
+<span id="cb97-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb97-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -3053,16 +2669,16 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
-<span id="cb122-2"><a></a></span>
-<span id="cb122-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
-<span id="cb122-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
-<span id="cb122-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
-<span id="cb122-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
-<span id="cb122-7"><a></a></span>
-<span id="cb122-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
-<span id="cb122-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
-<span id="cb122-10"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb98-2"><a></a></span>
+<span id="cb98-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb98-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb98-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb98-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb98-7"><a></a></span>
+<span id="cb98-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb98-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
+<span id="cb98-10"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -3081,17 +2697,17 @@
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
-<span id="cb123-2"><a></a></span>
-<span id="cb123-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
-<span id="cb123-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
-<span id="cb123-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
-<span id="cb123-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
-<span id="cb123-7"><a></a></span>
-<span id="cb123-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
-<span id="cb123-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
-<span id="cb123-10"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span></span>
-<span id="cb123-11"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"SRS"</span>, <span class="at">y =</span> <span class="st">"m2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a></a>us_u_mp <span class="ot">=</span> <span class="fu">st_cast</span>(us_u_ml, <span class="st">"MULTIPOLYGON"</span>)</span>
+<span id="cb99-2"><a></a></span>
+<span id="cb99-3"><a></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="st">"WGS84"</span>, <span class="st">"AEA"</span>, <span class="st">"EPDS"</span>),</span>
+<span id="cb99-4"><a></a>           <span class="at">area =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">st_area</span>(conus)),</span>
+<span id="cb99-5"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, <span class="dv">5070</span>))),</span>
+<span id="cb99-6"><a></a>            <span class="fu">sum</span>(<span class="fu">st_area</span>(<span class="fu">st_transform</span>(conus, eqds)))))</span>
+<span id="cb99-7"><a></a></span>
+<span id="cb99-8"><a></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb99-9"><a></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> <span class="fu">as.numeric</span>(area) )) <span class="sc">+</span></span>
+<span id="cb99-10"><a></a>  <span class="fu">theme_linedraw</span>() <span class="sc">+</span></span>
+<span id="cb99-11"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"SRS"</span>, <span class="at">y =</span> <span class="st">"m2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -3113,27 +2729,27 @@
 <li class="fragment"><p>This can be both handy and very confusing for those new to it. Consider the following:</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a></a>(<span class="at">l =</span> <span class="fu">sum</span>(<span class="fu">st_length</span>(conus)))</span>
-<span id="cb124-2"><a></a><span class="co">#&gt; 94980149 [m]</span></span>
-<span id="cb124-3"><a></a>(<span class="at">a =</span> <span class="fu">sum</span>(<span class="fu">st_area</span>(conus)))</span>
-<span id="cb124-4"><a></a><span class="co">#&gt; 7.83761e+12 [m^2]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a></a>(<span class="at">l =</span> <span class="fu">sum</span>(<span class="fu">st_length</span>(conus)))</span>
+<span id="cb100-2"><a></a><span class="co">#&gt; 100093081 [m]</span></span>
+<span id="cb100-3"><a></a>(<span class="at">a =</span> <span class="fu">sum</span>(<span class="fu">st_area</span>(conus)))</span>
+<span id="cb100-4"><a></a><span class="co">#&gt; 8.096497e+12 [m^2]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="section-6" class="slide level2">
 <h2></h2>
 <p>We can set units if we do manipulations as well using the units package</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"km"</span>)</span>
-<span id="cb125-2"><a></a><span class="co">#&gt; 94980.15 [km]</span></span>
-<span id="cb125-3"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"mile"</span>)</span>
-<span id="cb125-4"><a></a><span class="co">#&gt; 59017.93 [mile]</span></span>
-<span id="cb125-5"><a></a></span>
-<span id="cb125-6"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"ha"</span>)</span>
-<span id="cb125-7"><a></a><span class="co">#&gt; 783760974 [ha]</span></span>
-<span id="cb125-8"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"km2"</span>)</span>
-<span id="cb125-9"><a></a><span class="co">#&gt; 7837610 [km^2]</span></span>
-<span id="cb125-10"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"in2"</span>)</span>
-<span id="cb125-11"><a></a><span class="co">#&gt; 1.214832e+16 [in^2]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"km"</span>)</span>
+<span id="cb101-2"><a></a><span class="co">#&gt; 100093.1 [km]</span></span>
+<span id="cb101-3"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(l, <span class="st">"mile"</span>)</span>
+<span id="cb101-4"><a></a><span class="co">#&gt; 62194.96 [mile]</span></span>
+<span id="cb101-5"><a></a></span>
+<span id="cb101-6"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"ha"</span>)</span>
+<span id="cb101-7"><a></a><span class="co">#&gt; 809649680 [ha]</span></span>
+<span id="cb101-8"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"km2"</span>)</span>
+<span id="cb101-9"><a></a><span class="co">#&gt; 8096497 [km^2]</span></span>
+<span id="cb101-10"><a></a>units<span class="sc">::</span><span class="fu">set_units</span>(a, <span class="st">"in2"</span>)</span>
+<span id="cb101-11"><a></a><span class="co">#&gt; 1.25496e+16 [in^2]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="units-are-a-class" class="slide level2">
@@ -3142,35 +2758,35 @@
 <li class="fragment">units are an S3 data object with attribute information and “rules of engagement”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a></a><span class="fu">class</span>(<span class="fu">st_length</span>(conus)) </span>
-<span id="cb126-2"><a></a><span class="co">#&gt; [1] "units"</span></span>
-<span id="cb126-3"><a></a><span class="fu">attributes</span>(<span class="fu">st_length</span>(conus)) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
-<span id="cb126-4"><a></a><span class="co">#&gt; units.numerator           class </span></span>
-<span id="cb126-5"><a></a><span class="co">#&gt;             "m"         "units"</span></span>
-<span id="cb126-6"><a></a></span>
-<span id="cb126-7"><a></a><span class="fu">st_length</span>(conus) <span class="sc">+</span> <span class="dv">100</span></span>
-<span id="cb126-8"><a></a><span class="co">#&gt; Error in Ops.units(st_length(conus), 100): both operands of the expression should be "units" objects</span></span>
-<span id="cb126-9"><a></a></span>
-<span id="cb126-10"><a></a>conus <span class="sc">|&gt;</span> </span>
-<span id="cb126-11"><a></a>  <span class="fu">mutate</span>(<span class="at">area =</span> <span class="fu">st_area</span>(.)) <span class="sc">|&gt;</span> </span>
-<span id="cb126-12"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> area)) <span class="sc">+</span> </span>
-<span id="cb126-13"><a></a>  <span class="fu">geom_col</span>()</span>
-<span id="cb126-14"><a></a><span class="co">#&gt; Error in `stopifnot()`:</span></span>
-<span id="cb126-15"><a></a><span class="co">#&gt; ℹ In argument: `area = st_area(.)`.</span></span>
-<span id="cb126-16"><a></a><span class="co">#&gt; Caused by error:</span></span>
-<span id="cb126-17"><a></a><span class="co">#&gt; ! object '.' not found</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a></a><span class="fu">class</span>(<span class="fu">st_length</span>(conus)) </span>
+<span id="cb102-2"><a></a><span class="co">#&gt; [1] "units"</span></span>
+<span id="cb102-3"><a></a><span class="fu">attributes</span>(<span class="fu">st_length</span>(conus)) <span class="sc">|&gt;</span> <span class="fu">unlist</span>()</span>
+<span id="cb102-4"><a></a><span class="co">#&gt; units.numerator           class </span></span>
+<span id="cb102-5"><a></a><span class="co">#&gt;             "m"         "units"</span></span>
+<span id="cb102-6"><a></a></span>
+<span id="cb102-7"><a></a><span class="fu">st_length</span>(conus) <span class="sc">+</span> <span class="dv">100</span></span>
+<span id="cb102-8"><a></a><span class="co">#&gt; Error in Ops.units(st_length(conus), 100): both operands of the expression should be "units" objects</span></span>
+<span id="cb102-9"><a></a></span>
+<span id="cb102-10"><a></a>conus <span class="sc">|&gt;</span> </span>
+<span id="cb102-11"><a></a>  <span class="fu">mutate</span>(<span class="at">area =</span> <span class="fu">st_area</span>(.)) <span class="sc">|&gt;</span> </span>
+<span id="cb102-12"><a></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> name, <span class="at">y =</span> area)) <span class="sc">+</span> </span>
+<span id="cb102-13"><a></a>  <span class="fu">geom_col</span>()</span>
+<span id="cb102-14"><a></a><span class="co">#&gt; Error in `stopifnot()`:</span></span>
+<span id="cb102-15"><a></a><span class="co">#&gt; ℹ In argument: `area = st_area(.)`.</span></span>
+<span id="cb102-16"><a></a><span class="co">#&gt; Caused by error:</span></span>
+<span id="cb102-17"><a></a><span class="co">#&gt; ! object '.' not found</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="unit-values-can-be-stripped-of-their-attributes-if-need-be" class="slide level2">
 <h2>Unit values can be stripped of their attributes if need be:</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a></a><span class="co"># Via drop_units</span></span>
-<span id="cb127-2"><a></a>(units<span class="sc">::</span><span class="fu">drop_units</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
-<span id="cb127-3"><a></a><span class="co">#&gt; [1] 94980149</span></span>
-<span id="cb127-4"><a></a></span>
-<span id="cb127-5"><a></a><span class="co"># Via casting</span></span>
-<span id="cb127-6"><a></a>(<span class="fu">as.numeric</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
-<span id="cb127-7"><a></a><span class="co">#&gt; [1] 94980149</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a></a><span class="co"># Via drop_units</span></span>
+<span id="cb103-2"><a></a>(units<span class="sc">::</span><span class="fu">drop_units</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
+<span id="cb103-3"><a></a><span class="co">#&gt; [1] 100093081</span></span>
+<span id="cb103-4"><a></a></span>
+<span id="cb103-5"><a></a><span class="co"># Via casting</span></span>
+<span id="cb103-6"><a></a>(<span class="fu">as.numeric</span>(<span class="fu">sum</span>(<span class="fu">st_length</span>(conus))))</span>
+<span id="cb103-7"><a></a><span class="co">#&gt; [1] 100093081</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

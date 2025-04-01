@@ -732,245 +732,13 @@ plot(co_u_ml, col = "red", main = "st_union / st_cast")
 :::
 :::
 
-## `sf`: objects with simple features
-
-Simple features `geometries` and feature `attributes` are put together in `sf` (simple feature) objects.  
-
-```{r}
-co
-```
-
-This `sf` object is of class
-
-```{r}
-class(co)
-```
-
-meaning it extends `data.frame`, but with a single list-column with geometries, which is held in the column named:
-
-```{r}
-attr(co, "sf_column")
-```
-
-## sfc: simple feature geometry list-column
-
-The column in the `sf` `data.frame` that contains the geometries is a list, of class `sfc`.
-
-We can retrieve the geometry list-column as we would any data.frame column (e.g. `co$geometry`), or more generally with `st_geometry`:
-
-```{r}
-(co_geom <- st_geometry(co))
-```
-
-Geometries are printed in abbreviated form, but we can view a complete geometry by selecting it:
-
-```{r}
-co_geom[[1]]
-```
-
-## The stickness of `sfc` column
-
-- Geometry columns are "sticky" meaning they persist through data manipulation:
-
-. . . 
-
-```{r}
-co |> 
-  select(name) |> 
-  slice(1:2)
-```
-
-- Dropping the geometry column requires dropping the geometry via `sf`:
-
-. . .
-
-```{r}
-co |> 
-  st_drop_geometry() |> #<<
-  select(name) |> 
-  slice(1:2)
-```
-
-- Or cohersing the `sf` object to a `data.frame`:
-
-. . . 
-
-```{r}
-co |> 
-  as.data.frame() |> #<<
-  select(name) |> 
-  slice(1:2)
-```
-
-## The stickness of `sfc` column
-
-- A simple features object (sf) is the connection of a `sfc` list-column and `data.frame` of attributes
-
-```{r}
-#| echo: false
-#| fig.align: 'center'
-#| out.wisth: '75%'
-
-knitr::include_graphics("images/11-sticky-geom.png")
-```
-
-- This binding is unique compared to other column bindings built with things like
-    - `dplyr::bind_cols()`
-    - `cbind()`
-    - `do.call(cbind, list())`
-
-
-
-
-
-
-
-
-
-
-# Coordinate Systems
-
-## What makes spatial data _spatial_?
-- What makes a feature geometry _spatial_ is the reference system...
-
-```{r}
-#| echo: false
-#| fig.align: 'center'
-#| out.wisth: '75%'
-knitr::include_graphics("images/09-sf-model.png")
-```
-
-## Reading and writing
-
-As we've seen above, reading spatial data from an external file can be done via `sf`
-  - reading data requires the "parser function" and the file path
-
-```{r}
-#| echo: false
-co <- st_read("data/co.shp")
-```
-
-we can suppress the output by adding argument `quiet=TRUE` or by using the otherwise nearly identical but more quiet
-
-```{r}
-#| eval: true
-co <- read_sf("data/co.shp")
-```
-
-Writing takes place in the same fashion, using `st_write`:
-
-```{r}
-#| eval: false
-st_write(co, "data/co.shp")
-```
-
-or its quiet alternative that silently overwrites existing files by default,
-
-```{r}
-#| eval: false
-write_sf(co, "co.shp") # silently overwrites
-```
-
-
-## From Tables (e.g. CSV)
-
-Spatial data can also be created from CSV and other flat files once it is in R:
-
-```{r}
-#| message: false
-(cities = readr::read_csv("../labs/data/uscities.csv") |> 
-  select(city, state_name, county_name, population, lat, lng) )
-```
-
----
-
-To do this, you must specify the `X` and the `Y` coordinate columns as well as a CRS:
-
-- A typical lat/long CRS is EPSG:4326
-
-```{r}
-(cities_sf = st_as_sf(cities, coords = c("lng", "lat"), crs = 4326))
-```
-
-## Data Manipulation
-
-- Since `sf` objects are `data.frames`, our `dplyr` verbs work!
-
-- Lets find the most populous city in each Colorado county...
-
-`r flipbookr::chunq_reveal("dplyr", title = "sf and dplyr", widths = c(40,60,0))`
-
-```{r dplyr}
-#| include: false
-cities_sf |> 
-  filter(state_name == "Colorado") |> 
-  group_by(county_name) |> 
-  slice_max(population, n = 1) -> 
-  co_cities
-```
-
-## Plotting
-
-- We've already seen that `ggplot()` is a powerful visualization tool:
-
-- The 5 steps we described for building a ggplot are:
-  1. canvas
-  2. layers (geoms)
-  3. labels
-  4. facets
-  5. themes
-  
-- spatial work in R is becoming so common that `ggplot()` comes with a sf geom (`geom_sf`)
-
-`r flipbookr::chunq_reveal("ggplot", title = "sf an ggplot",
-rcolw = 60, lcolw = 40)`
-
-```{r ggplot}
-#| include: false
-ggplot() + 
-  geom_sf(data = co, aes(fill = aland/1e10)) + 
-  geom_sf(data = co_cities, aes(size = population/1e5), col = "red") + 
-  theme_linedraw() + 
-  labs(title = "Colorado Counties: Land Area",
-       size = "Population \n(100,000)",
-       fill = "Acres \n(billions)")
-```
-
-
-## CONUS 
-
-::: {columns}
-::: {.column width="50%"}
-
-```{r}
-conus <-  USAboundaries::us_states() |>
-  filter(!state_name %in% c("Puerto Rico", 
-                            "Alaska", 
-                            "Hawaii"))
-
-length(st_geometry(conus))
-```
-
-:::
-::: {.column width="50%"}
-
-```{r}
-ggplot() + 
-  geom_sf(data = conus, aes(fill = state_name)) + 
-  theme_linedraw() + 
-  theme(legend.position = "none") + 
-  labs(title = paste("CONUS:", length(st_geometry(conus)), "feature(s)") ) + 
-  scale_fill_viridis_d()
-```
-
-:::
-:::
-
 ## 1 feature: resoloved and combined:
 
 - `st_cast` / `st_union` work on `sfg`, `sfc`, and `sf` objects:
 
 ```{r}
+conus <- AOI::aoi_get(state = "conus")
+
 us_c_ml = st_combine(conus) |>
   st_cast("MULTILINESTRING")
    
@@ -1073,6 +841,89 @@ st_distance(denver_sf, st_cast(st_combine(conus), "MULTILINESTRING"))
 
 - The same principle would apply if the question was "_distance to national border_"
 
+
+## `sf`: objects with simple features
+
+Simple features `geometries` and feature `attributes` are put together in `sf` (simple feature) objects.  
+
+```{r}
+co
+```
+
+This `sf` object is of class
+
+```{r}
+class(co)
+```
+
+meaning it extends `data.frame`, but with a single list-column with geometries, which is held in the column named:
+
+```{r}
+attr(co, "sf_column")
+```
+
+## The stickness of `sfc` column
+
+- Geometry columns are "sticky" meaning they persist through data manipulation:
+
+. . . 
+
+```{r}
+co |> 
+  select(name) |> 
+  slice(1:2)
+```
+
+- Dropping the geometry column requires dropping the geometry via `sf`:
+
+. . .
+
+```{r}
+co |> 
+  st_drop_geometry() |> #<<
+  select(name) |> 
+  slice(1:2)
+```
+
+- Or cohersing the `sf` object to a `data.frame`:
+
+. . . 
+
+```{r}
+co |> 
+  as.data.frame() |> #<<
+  select(name) |> 
+  slice(1:2)
+```
+
+## The stickness of `sfc` column
+
+- A simple features object (sf) is the connection of a `sfc` list-column and `data.frame` of attributes
+
+```{r}
+#| echo: false
+#| fig.align: 'center'
+#| out.wisth: '75%'
+
+knitr::include_graphics("images/11-sticky-geom.png")
+```
+
+- This binding is unique compared to other column bindings built with things like
+    - `dplyr::bind_cols()`
+    - `cbind()`
+    - `do.call(cbind, list())`
+
+# Coordinate Systems
+
+## What makes spatial data _spatial_?
+- What makes a feature geometry _spatial_ is the reference system...
+
+```{r}
+#| echo: false
+#| fig.align: 'center'
+#| out.wisth: '75%'
+knitr::include_graphics("images/09-sf-model.png")
+```
 
 ## Coordinate Systems
 
