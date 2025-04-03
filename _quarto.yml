@@ -6,6 +6,7 @@ project:
     - "!slides/to-come"
     - "!labs/keys"
     - "!resources"
+    - "labs"
 
 website:
   title: "ESS 523c"
