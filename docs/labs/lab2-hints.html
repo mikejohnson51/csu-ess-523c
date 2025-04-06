@@ -180,7 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Lab 2: Distances and Projections</h1>
-<p class="subtitle lead">Hints and Tricks</p>
+<p class="subtitle lead">Hints &amp; Tricks</p>
 </div>
 
 
@@ -197,7 +197,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<hr>
 <section id="question-1" class="level1">
 <h1>Question 1:</h1>
 <section id="making-spatial-objects-coordinate-transformation" class="level3">
@@ -218,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6   Colorado -105.5130 38.6777</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Geographic Coordinate System (GCS)</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(df_sf_gcs <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(df, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">df_sf_gcs =</span> <span class="fu">st_as_sf</span>(df, </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"X"</span>, <span class="st">"Y"</span>), </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">crs =</span> <span class="dv">4269</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -310,7 +309,7 @@ Projected CRS: NAD83 / Conus Albers
 3 Chicago        8489066 (684628.5 2122697)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fort Collins</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">fc =</span> <span class="fu">filter</span>(cities, city <span class="sc">==</span> <span class="st">"Fort Collins"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">foco =</span> <span class="fu">filter</span>(cities, city <span class="sc">==</span> <span class="st">"Fort Collins"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(city, population))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Simple feature collection with 1 feature and 2 fields
@@ -323,8 +322,8 @@ Projected CRS: NAD83 / Conus Albers
   &lt;chr&gt;             &lt;dbl&gt;         &lt;POINT [m]&gt;
 1 Fort Collins     339256 (-760147.5 1984621)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distance from FC to population centers</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_distance</span>(big3, fc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distance from foco to population centers</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">st_distance</span>(big3, foco)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [m]
         [,1]
@@ -336,7 +335,7 @@ Projected CRS: NAD83 / Conus Albers
 <p>There are two notable things about this result:</p>
 <ol type="1">
 <li>It has <code>units</code></li>
-<li>It is returned as a matrix, even though Fort Collins only had one row</li>
+<li>It is returned as a matrix, even though foco only had one row</li>
 </ol>
 <p>This second point highlights a useful feature of <code>st_distance</code>, namley, its ability to return distance matrices between all combinations of features in <code>x</code> and <code>y</code>.</p>
 </section>
@@ -352,10 +351,10 @@ Projected CRS: NAD83 / Conus Albers
 <p>Units can be converted using <code>units::set_units</code>. For example, ‘m’ can be converted to ‘km’:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>big3 <span class="ot">=</span> <span class="fu">mutate</span>(big3, </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">st_distance</span>(big3, fc),</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">set_units</span>(dist_to_fc, <span class="st">"km"</span>)) </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">st_distance</span>(big3, foco),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">set_units</span>(dist_to_foco, <span class="st">"km"</span>)) </span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>(big3<span class="sc">$</span>dist_to_fc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>(big3<span class="sc">$</span>dist_to_foco)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Units: [km]
          [,1]
@@ -366,12 +365,13 @@ Projected CRS: NAD83 / Conus Albers
 </div>
 <p>You might have noticed the data <code>type</code> of the <code>st_distance</code> objects are an S3 class of <code>units</code>. Sometimes, this class can cause problems when trying to using it with other classes or methods:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>big3<span class="sc">$</span>dist_to_fc <span class="sc">+</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>big3<span class="sc">$</span>dist_to_foco <span class="sc">+</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>Error in Ops.units(big3$dist_to_fc, 4): both operands of the expression should be "units" objects</code></pre>
+<pre><code>Error in Ops.units(big3$dist_to_foco, 4): both operands of the expression should be "units" objects</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> big3) <span class="sc">+</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> city, <span class="at">y =</span> dist_to_fc))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> city, <span class="at">y =</span> dist_to_foco)) <span class="sc">+</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: The `scale_name` argument of `continuous_scale()` is deprecated as of ggplot2
 3.5.0.</code></pre>
@@ -386,12 +386,12 @@ Projected CRS: NAD83 / Conus Albers
 </div>
 <p>In these cases, the units class can be dropped with <code>units::drop_units</code></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>big3 <span class="ot">&lt;-</span> <span class="fu">mutate</span>(big3, </span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">st_distance</span>(big3, fc),</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">set_units</span>(dist_to_fc, <span class="st">"km"</span>),</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">drop_units</span>(dist_to_fc))</span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>big3 <span class="ot">=</span> <span class="fu">mutate</span>(big3, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">st_distance</span>(big3, foco),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">set_units</span>(dist_to_foco, <span class="st">"km"</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">drop_units</span>(dist_to_foco))</span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>big3<span class="sc">$</span>dist_to_fc <span class="sc">+</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>big3<span class="sc">$</span>dist_to_foco <span class="sc">+</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>         [,1]
 [1,] 2604.790
@@ -399,7 +399,7 @@ Projected CRS: NAD83 / Conus Albers
 [3,] 1455.359</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> big3) <span class="sc">+</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(city, <span class="sc">-</span>dist_to_fc), <span class="at">y =</span> dist_to_fc)) <span class="sc">+</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(city, <span class="sc">-</span>dist_to_foco), <span class="at">y =</span> dist_to_foco)) <span class="sc">+</span> </span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distance to Fort Collins (km)"</span>) <span class="sc">+</span> </span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_fivethirtyeight</span>() <span class="sc">+</span> </span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -414,15 +414,15 @@ Projected CRS: NAD83 / Conus Albers
 <p>As with all functions, these steps can be nested:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>big3 <span class="ot">=</span> <span class="fu">mutate</span>(big3, </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_fc =</span> <span class="fu">drop_units</span>(<span class="fu">set_units</span>(<span class="fu">st_distance</span>(big3, fc), <span class="st">"km"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>              <span class="at">dist_to_foco =</span> <span class="fu">drop_units</span>(<span class="fu">set_units</span>(<span class="fu">st_distance</span>(big3, foco), <span class="st">"km"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 <section id="geometry-review" class="level3">
 <h3 class="anchored" data-anchor-id="geometry-review"><code>Geometry</code> review</h3>
-<p>There are a few ways to manipulate existing geometries, here we discuss <code>st_union()</code>, <code>st_combine()</code> and <code>st_cast()</code></p>
+<p>There are a few ways to manipulate existing geometries, here we discuss <code>st_union</code>, <code>st_combine</code> and <code>st_cast</code></p>
 <ul>
-<li><p><code>st_combine()</code> returns a single, combined geometry, with <strong>no</strong> resolved boundaries.</p></li>
+<li><p><code>st_combine</code> returns a single, combined geometry, with <strong>no</strong> resolved boundaries.</p></li>
 <li><p><code>st_union()</code> returns a single geometry with resolved boundaries</p></li>
 <li><p><code>st_cast()</code> casts one geometry type to another</p></li>
 </ul>
@@ -451,7 +451,7 @@ Geodetic CRS:  WGS 84
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine Geometries</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">combined_rk =</span> <span class="fu">st_combine</span>(rockies))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">combined_wc =</span> <span class="fu">st_combine</span>(rockies))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Geometry set for 1 feature 
 Geometry type: MULTIPOLYGON
@@ -462,7 +462,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>MULTIPOLYGON (((-116.0492 49.00091, -115.501 49...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(combined_rk, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(combined_wc, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -471,7 +471,7 @@ Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unioned Geometries</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">unioned_rk =</span> <span class="fu">st_union</span>(rockies))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">unioned_wc =</span> <span class="fu">st_union</span>(rockies))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Geometry set for 1 feature 
 Geometry type: POLYGON
@@ -482,7 +482,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>POLYGON ((-109.0601 38.27549, -109.0418 38.1646...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(unioned_rk, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(unioned_wc, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -491,8 +491,8 @@ Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine Geometries</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>line_rk <span class="ot">=</span> <span class="fu">st_cast</span>(unioned_rk, <span class="st">"MULTILINESTRING"</span>)</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(line_rk, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>line_wc <span class="ot">=</span> <span class="fu">st_cast</span>(unioned_wc, <span class="st">"MULTILINESTRING"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(line_wc, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -510,7 +510,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <h3 class="anchored" data-anchor-id="get-some-data-review">Get some data (review)</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a state/region classifier and select the southern states</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>state.of.interest <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">state =</span> state.name, <span class="at">region =</span> state.region) <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>state.of.interest <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">state =</span> state.name, <span class="at">region =</span> state.region) <span class="sc">|&gt;</span> </span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(region <span class="sc">==</span> <span class="st">"South"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(state)</span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
@@ -552,9 +552,8 @@ Geodetic CRS:  WGS 84</code></pre>
 <span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> city, <span class="at">geometry =</span> geometry),</span>
 <span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">stat =</span> <span class="st">"sf_coordinates"</span>,</span>
 <span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"Disticts with &gt; 5e10 Area Land are highlighted"</span>,</span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Area Land"</span>) <span class="sc">+</span> </span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_map</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Area Land"</span>) <span class="sc">+</span> </span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  ggthemes<span class="sc">::</span><span class="fu">theme_map</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

@@ -170,7 +170,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#step-1.5" id="toc-step-1.5" class="nav-link" data-scroll-target="#step-1.5">Step 1.5</a></li>
   <li><a href="#step-1.6" id="toc-step-1.6" class="nav-link" data-scroll-target="#step-1.6">Step 1.6</a></li>
   <li><a href="#step-1.7" id="toc-step-1.7" class="nav-link" data-scroll-target="#step-1.7">Step 1.7</a></li>
-  <li><a href="#step-1.7-1" id="toc-step-1.7-1" class="nav-link" data-scroll-target="#step-1.7-1">Step 1.7</a></li>
   </ul></li>
   <li><a href="#question-2" id="toc-question-2" class="nav-link" data-scroll-target="#question-2">Question 2:</a>
   <ul class="collapse">
@@ -189,14 +188,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#step-3.5" id="toc-step-3.5" class="nav-link" data-scroll-target="#step-3.5">Step 3.5</a></li>
   <li><a href="#step-3.6" id="toc-step-3.6" class="nav-link" data-scroll-target="#step-3.6">Step 3.6</a></li>
   </ul></li>
-  <li><a href="#question-4" id="toc-question-4" class="nav-link" data-scroll-target="#question-4">Question 4:</a>
+  <li><a href="#question-4" id="toc-question-4" class="nav-link" data-scroll-target="#question-4">Question 4</a>
   <ul class="collapse">
   <li><a href="#step-4.1" id="toc-step-4.1" class="nav-link" data-scroll-target="#step-4.1">Step 4.1</a></li>
   <li><a href="#step-4.2" id="toc-step-4.2" class="nav-link" data-scroll-target="#step-4.2">Step 4.2</a></li>
   <li><a href="#step-4.3" id="toc-step-4.3" class="nav-link" data-scroll-target="#step-4.3">Step 4.3</a></li>
   </ul></li>
-  <li><a href="#extra-credit" id="toc-extra-credit" class="nav-link" data-scroll-target="#extra-credit">Extra Credit:</a></li>
-  <li><a href="#rubric" id="toc-rubric" class="nav-link" data-scroll-target="#rubric">Rubric:</a></li>
+  <li><a href="#question-5" id="toc-question-5" class="nav-link" data-scroll-target="#question-5">Question 5:</a></li>
+  <li><a href="#rubric" id="toc-rubric" class="nav-link" data-scroll-target="#rubric">Rubric</a></li>
   <li><a href="#submission" id="toc-submission" class="nav-link" data-scroll-target="#submission">Submission</a></li>
   </ul>
 </nav>
@@ -225,25 +224,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/lab-04-dams.jpg" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="images/lab-04-dams.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
 </div>
 <section id="background" class="level1">
 <h1>Background</h1>
-<p>In this lab we will an explore the impacts of tessellated surfaces and the modifiable areal unit problem (MAUP) using the <a href="https://nid.sec.usace.army.mil/#/">National Dam Inventory</a> maintained by the United States Army Corps of Engineers. Doing this will require repetitive tasks that we will write as functions and careful consideration of feature aggregation/simplification, spatial joins, and data visualization. The end goal is to visualize the distribution of dams and there purposes across the country.</p>
+<p>In this lab we will an explore the impacts of tessellated surfaces and the modifiable areal unit problem (MAUP) using the National Dam Inventory maintained by the United States Army Corps of Engineers. Doing this will require repetitive tasks that we will write as functions and careful consideration of feature aggregation/simplification, spatial joins, and data visualization. The end goal is to visualize the distribution of dams and there purposes across the country.</p>
 <p><strong>DISCLAIMER</strong>: This lab will be crunching a <em>TON</em> of data, in some cases 562,590,604 values for a single process! Therefore, I encourage you to run your code chuck-by-chunk rather then regularly knitting. Your final knit may take a couple of minutes to process. I know this is painful but be proud that, all said, your report will be analyzing <strong>billions</strong> of meaningful data and geometric relations.</p>
 <hr>
 <p>This labs covers 4 main skills:</p>
 <ol type="1">
-<li><strong>Tesselating Surfaces</strong> to discretized space</li>
+<li><strong>Tessellating Surfaces</strong> to discritized space</li>
 <li><strong>Geometry Simplification</strong>: to expedite expensive intersections</li>
-<li><strong>Writting functions</strong> to expedite repetitious reporting and mapping tasks</li>
+<li><strong>Writing functions</strong> to expedite repetitious reporting and mapping tasks</li>
 <li><strong>Point-in-polygon counts</strong> to aggregate point data</li>
 </ol>
 <section id="libraries" class="level3">
@@ -253,14 +252,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="question-1" class="level1">
 <h1>Question 1:</h1>
-<p>Here we will prepare five tesselated surfaces of CONUS and write a function to plot them in a descriptive way.</p>
+<p>Here we will prepare five tessellated surfaces from CONUS and write a function to plot them in a descriptive way.</p>
 <section id="step-1.1" class="level3">
 <h3 class="anchored" data-anchor-id="step-1.1">Step 1.1</h3>
 <p>First, we need a spatial file of CONUS counties. For future area calculations we want these in an equal area projection (<code>EPSG:5070</code>).</p>
 <p>To achieve this:</p>
 <ul>
-<li>get an <code>sf</code> object of CONUS counties (<code>AOI::aoi_get(state = "conus", county = "all")</code></li>
-<li>transform the data to <code>EPSG:5070</code></li>
+<li><p>get an <code>sf</code> object of US counties (<code>AOI::aoi_get(state = "conus", county = "all")</code>)</p></li>
+<li><p>transform the data to <code>EPSG:5070</code></p></li>
 </ul>
 </section>
 <section id="step-1.2" class="level3">
@@ -275,7 +274,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-1.3" class="level3">
 <h3 class="anchored" data-anchor-id="step-1.3">Step 1.3</h3>
-<p>Tessellations/Coverages describe the <strong>extent</strong> of a region with geometric shapes, called <strong>tiles</strong>, with <em>no</em> overlaps or gaps.</p>
+<p>Tessellations/Coverage’s describe the <strong>extent</strong> of a region with geometric shapes, called <strong>tiles</strong>, with <em>no</em> overlaps or gaps.</p>
 <p><strong>Tiles</strong> can range in <em>size</em>, <em>shape</em>, <em>area</em> and have different methods for being created.</p>
 <p>Some methods generate triangular tiles across a set of defined points (e.g.&nbsp;<code>voroni</code> and <code>delauny triangulation</code>)</p>
 <p>Others generate equal area tiles over a known extent (<code>st_make_grid</code>)</p>
@@ -285,11 +284,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><code>st_voroni</code>: creates voroni tessellation</p></li>
 <li><p><code>st_traingulate</code>: triangulates set of points (not constrained)</p></li>
 </ul>
-<p><strong>Coverages</strong>:</p>
+<p><strong>Coverage’s</strong>:</p>
 <ul>
 <li><p><code>st_make_grid</code>: Creates a <em>square</em> grid covering the geometry of an sf or sfc object</p></li>
 <li><p><code>st_make_grid(square = FALSE)</code>: Create a <em>hexagonal</em> grid covering the geometry of an sf or sfc object</p></li>
-<li><p>The size of coverage tiles can be defined by a cell resolution or a specificed number of cell in the X and Y direction</p></li>
+<li><p>The side of coverage tiles can be defined by a cell resolution or a specified number of cell in the X and Y direction</p></li>
 </ul>
 <hr>
 <p>For this step:</p>
@@ -299,17 +298,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Make a gridded coverage with n = 70, over your counties object</li>
 <li>Make a hexagonal coverage with n = 70, over your counties object</li>
 </ul>
-<p>In addition to creating these 4 coverages we need to add an ID to each <em>tile</em> within each tesselation.</p>
+<p>In addition to creating these 4 coverage’s we need to add an ID to each <em>tile</em>.</p>
 <p>To do this:</p>
 <ul>
 <li><p>add a new column to each tessellation that spans from <code>1:n()</code>.</p></li>
-<li><p>Remember that <strong>ALL</strong> tessellation methods return an <code>sfc</code> <code>GEOMETRYCOLLECTION</code>, and to add attribute information - like our ID - you will have to coerse the <code>sfc</code> list into an <code>sf</code> object (<code>st_sf</code> or <code>st_as_sf</code>)</p></li>
+<li><p>Remember that <strong>ALL</strong> tessellation methods return an <code>sfc</code> <code>GEOMETRYCOLLECTION</code>, and to add attribute information - like our ID - you will have to coerce the <code>sfc</code> list into an <code>sf</code> object (<code>st_sf</code> or <code>st_as_sf</code>)</p></li>
 </ul>
 <p>Last, we want to ensure that our surfaces are topologically valid/simple.</p>
 <ul>
 <li><p>To ensure this, we can pass our surfaces through <code>st_cast</code>.</p></li>
 <li><p>Remember that casting an object explicitly (e.g.&nbsp;<code>st_cast(x, "POINT")</code>) changes a geometry</p></li>
-<li><p>If no output type is specified (e.g.&nbsp;<code>st_cast(x)</code>) then the cast attempts to simplifiy the geometry.</p></li>
+<li><p>If no output type is specified (e.g.&nbsp;<code>st_cast(x)</code>) then the cast attempts to simplify the geometry.</p></li>
 <li><p>If you don’t do this you might get unexpected “TopologyException” errors.</p></li>
 </ul>
 </section>
@@ -317,14 +316,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="step-1.4">Step 1.4</h3>
 <p>If you plot the above tessellations you’ll see the triangulated surfaces produce regions far beyond the boundaries of CONUS.</p>
 <p>We need to cut these boundaries to CONUS border.</p>
-<p>To do this, we will call on <code>st_intersection</code>, but will first need a geometry of CONUS to serve as our differencing feature. We can get this by unioning our existing county boundaries to dissolve the internal boundaries.</p>
+<p>To do this, we will call on <code>st_intersection</code>, but will first need a geometry of CONUS to serve as our differencing feature. We can get this by unioning our existing county boundaries.</p>
 </section>
 <section id="step-1.5" class="level3">
 <h3 class="anchored" data-anchor-id="step-1.5">Step 1.5</h3>
-<p>With a single feature boundary, we must carefully consider the complexity of the geometry. Remember, the more points our geometry contains, the more computations needed for spatial predicates or differencing. For a task like ours, we do not need a finely resolved coastal boarder.</p>
-<p>To achieve or more approaratie feature …</p>
+<p>With a single feature boundary, we must carefully consider the complexity of the geometry. Remember, the more points our geometry contains, the more computations needed for spatial predicates our differencing. For a task like ours, we do not need a finely resolved coastal boarder.</p>
+<p>To achieve this:</p>
 <ul>
-<li><p>Simplify your unioned border using the Visvalingam algotithm provided by <code>rmapshaper::ms_simplify</code>.</p></li>
+<li><p>Simplify your unioned border using the Visvalingam algorithm provided by <code>rmapshaper::ms_simplify</code>.</p></li>
 <li><p>Choose what percentage of vertices to retain using the <code>keep</code> argument and work to find the highest number that provides a shape <em>you</em> are comfortable with for the analysis:</p></li>
 </ul>
 <ul>
@@ -337,26 +336,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-1.6" class="level3">
 <h3 class="anchored" data-anchor-id="step-1.6">Step 1.6</h3>
-<p>While croping the triangulated methods makes sense, for our gridded appraoches we would rather removed those tiles that are not fully within the CONUS boundary. For this, we can use st_filter with the defualt <code>st_intersects</code> predicate.</p>
-<ul>
-<li>Use your simplified country object to filter the two gridded tessellations:</li>
-</ul>
-</section>
-<section id="step-1.7" class="level3">
-<h3 class="anchored" data-anchor-id="step-1.7">Step 1.7</h3>
 <p>The last step is to plot your tessellations. We don’t want to write out 5 ggplots (or mindlessly copy and paste 😄)</p>
 <p>Instead, lets make a function that takes an <code>sf</code> object as <em>arg1</em> and a character string as <em>arg2</em> and returns a ggplot object showing <em>arg1</em> titled with <em>arg2</em>.</p>
 <hr>
 <p>The form of a function is:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>name <span class="ot">=</span> <span class="cf">function</span>(arg1, arg2) {</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  ... code goes here ...</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 <p>For this function:</p>
@@ -376,14 +365,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul>
 </section>
-<section id="step-1.7-1" class="level3">
-<h3 class="anchored" data-anchor-id="step-1.7-1">Step 1.7</h3>
+<section id="step-1.7" class="level3">
+<h3 class="anchored" data-anchor-id="step-1.7">Step 1.7</h3>
 <p>Use your new function to plot each of your tessellated surfaces and the original county data (5 plots in total):</p>
 </section>
 </section>
 <section id="question-2" class="level1">
 <h1>Question 2:</h1>
-<p>In this question, we will write out a function to summarize our tessellated surfaces.</p>
+<p>In this question, we will write out a function to summarize our tessellated surfaces. Most of this should have been done in your daily assignments.</p>
 <section id="step-2.1" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.1">Step 2.1</h3>
 <p>First, we need a function that takes a <code>sf</code> object and a <code>character</code> string and returns a <code>data.frame</code>.</p>
@@ -404,24 +393,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-2.2" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.2">Step 2.2</h3>
-<p>Use your new function to summarize each of your tessellations and the origional counties.</p>
+<p>Use your new function to summarize each of your tessellations and the original counties.</p>
 </section>
 <section id="step-2.3" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.3">Step 2.3</h3>
 <p>Multiple <code>data.frame</code> objects can bound row-wise with <code>bind_rows</code> into a single <code>data.frame</code></p>
 <p>For example, if your function is called <code>sum_tess</code>, the following would bind your summaries of the triangulation and voroni object.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tess_summary <span class="ot">=</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_tess</span>(triangulation ,<span class="st">"triangulation"</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_tess</span>(voroni, <span class="st">"voroni"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
 </section>
 <section id="step-2.4" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.4">Step 2.4</h3>
-<p>Once your 5 summaries are bound (2 tessellations, 2 coverages, and the raw counties) print the <code>data.frame</code> as a nice table using <code>knitr</code>/<code>kableExtra.</code></p>
+<p>Once your 5 summaries are bound (2 tessellations, 2 coverage’s, and the raw counties) print the <code>data.frame</code> as a nice table using <code>knitr</code>/<code>kableExtra.</code></p>
 </section>
 <section id="step-2.5" class="level3">
 <h3 class="anchored" data-anchor-id="step-2.5">Step 2.5</h3>
@@ -435,16 +416,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>For the remainder of this lab we will analysis the distributions of these dams (<em>Q3</em>) and their purpose (<em>Q4</em>) through using a point-in-polygon analysis.</p>
 <section id="step-3.1" class="level3">
 <h3 class="anchored" data-anchor-id="step-3.1">Step 3.1</h3>
-<p>In the tradition of this class - and true to data science/GIS work - you need to find, download, and manage raw data. While the raw <strong>NID</strong> data is no longer easy to get with the transition of the USACE services to ESRI Featrues Services, I staged the data in the resources directory of this class. To get it, navigate to that location and downlaod the <em>raw</em> file into you lab data directory.</p>
+<p>In the tradition of this class - and true to data science/GIS work - you need to find, download, and manage raw data. While the raw NID data is no longer easy to get with the transition of the USACE services to ESRI Features Services, I staged the data in the resources directory of this class. To get it, navigate to that location and download the raw file into you lab data directory.</p>
 <ul>
-<li>Return to your RStudio Project and read the data in using the <code>readr::read_csv</code> `
+<li>Return to your RStudio Project and read the data in using the <code>readr::read_csv</code>
 <ul>
 <li>After reading the data in, be sure to remove rows that don’t have location values (<code>!is.na()</code>)</li>
-<li>Convert the <code>data.frame</code> to a <code>sf</code> object by defining the coordinates and CRS</li>
+<li>Convert the data.frame to a sf object by defining the coordinates and CRS</li>
 <li>Transform the data to a CONUS AEA (EPSG:5070) projection - matching your tessellation</li>
 <li>Filter to include only those within your CONUS boundary</li>
 </ul></li>
 </ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dams <span class="ot">=</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'../labs/data/NID2019_U.csv'</span>) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>usa <span class="ot">&lt;-</span> AOI<span class="sc">::</span><span class="fu">aoi_get</span>(<span class="at">state =</span> <span class="st">"conus"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_union</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">5070</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dams2 <span class="ot">=</span> dams <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(LATITUDE) ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"LONGITUDE"</span>, <span class="st">"LATITUDE"</span>), <span class="at">crs =</span> <span class="dv">4236</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="dv">5070</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_filter</span>(usa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="step-3.2" class="level3">
 <h3 class="anchored" data-anchor-id="step-3.2">Step 3.2</h3>
@@ -495,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 <section id="question-4" class="level1">
-<h1>Question 4:</h1>
+<h1>Question 4</h1>
 <p>The NID provides a comprehensive data dictionary <a href="https://files.hawaii.gov/dbedt/op/gis/data/nid_dams_data_dictionary.htm#Purposes">here</a>. In it we find that dam purposes are designated by a character <a href="https://files.hawaii.gov/dbedt/op/gis/data/nid_dams_data_dictionary.htm#Purposes">code</a>.</p>
 <p>These are shown below for convenience (built using knitr on a data.frame called <code>nid_classifier</code>):</p>
 <div class="cell">
@@ -569,12 +563,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>A standard summary indicates there are over 400 unique combinations of dam purposes:</p></li>
 </ul>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(dams2<span class="sc">$</span>PURPOSES) <span class="sc">|&gt;</span> <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(dams2<span class="sc">$</span>PURPOSES) <span class="sc">%&gt;%</span> <span class="fu">length</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 493</code></pre>
+<pre><code>[1] 494</code></pre>
 </div>
 </div>
 <ul>
@@ -583,24 +574,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 <p>To overcome this data structure limitation, we can identify how many dams serve each purpose by splitting the PURPOSES values (<code>strsplit</code>) and tabulating the unlisted results as a data.frame. Effectively this is double/triple/quadruple counting dams bases on how many purposes they serve:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a vector of all characters in your purpose and unlist </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dam_freq <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(dams2<span class="sc">$</span>PURPOSES, <span class="at">split =</span> <span class="st">""</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"abbr"</span>, <span class="st">"count"</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nid_classifier) <span class="sc">|&gt;</span> </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lab =</span> <span class="fu">paste0</span>(purpose, <span class="st">"</span><span class="sc">\n</span><span class="st">("</span>, abbr, <span class="st">")"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(abbr)`</code></pre>
+</div>
 </div>
 <p>The result of this would indicate:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="lab3_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<p><img src="lab3_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -616,18 +599,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 <p>For example:</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find flood control dams in the first 5 records:</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dams2<span class="sc">$</span>PURPOSES[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "FR" "R"  "C"  "FR" "R" </code></pre>
 </div>
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grepl</span>(<span class="st">"F"</span>, dams2<span class="sc">$</span>PURPOSES[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  TRUE FALSE FALSE  TRUE FALSE</code></pre>
 </div>
@@ -642,18 +619,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Now use your plotting function from Q3 to map these counts.</p></li>
 <li><p><em>But!</em> you will use <code>gghighlight</code> to <strong>only</strong> color those tiles where the count (<em>n</em>) is greater then the (<code>mean + 1 standard deviation</code>) of the set</p></li>
 <li><p>Since your plotting function returns a <code>ggplot</code> object already, the <code>gghighlight</code> call can be added “<code>+</code>” directly to the function.</p></li>
-<li><p>The result of this exploration is to highlight the areas of the country with the most dams of a given class</p></li>
+<li><p>The result of this exploration is to highlight the areas of the country with the most</p></li>
 </ul>
 </section>
 <section id="step-4.3" class="level3">
 <h3 class="anchored" data-anchor-id="step-4.3">Step 4.3</h3>
-<p>Comment on the geographic distribution of dams you found. Does it make sense? How might the tessellation you chose impact your findings? How does the distribution of dams coiencide with other geogaphic factors such as river systems, climate, ect?</p>
+<p>Comment of geographic distribution of dams you found. Does it make sense? How might the tessellation you chose impact your findings? How does the distribution of dams coincide with other geographic factors such as river systems, climate, ect?</p>
 </section>
 </section>
-<section id="extra-credit" class="level1">
-<h1>Extra Credit:</h1>
+<section id="question-5" class="level1">
+<h1>Question 5:</h1>
 <p>You have also been asked to identify the largest, at risk, flood control dams in the country</p>
-<p>You must also map the Mississippi River System - This data is avialable <a href="https://datacatalog.worldbank.org/dataset/major-rivers-world">here</a> under the ‘Data &amp; Resources’ tab - Download the shapefile and unzip it into your data directory. - Use <code>read_sf</code> to import this data and filter it to only include the Mississippi <code>SYSTEM</code></p>
+<p>You must also map the Mississippi River System - This data is available <a href="https://datacatalog.worldbank.org/dataset/major-rivers-world">here</a> - Download the shapefile and unzip it into your data directory. - Use <code>read_sf</code> to import this data and filter it to only include the Mississippi <code>SYSTEM</code></p>
 <p>To achieve this:</p>
 <p>Create an interactive map using <code>leaflet</code> to show the largest (NID_STORAGE); high-hazard (HAZARD == “H”) dam in each state</p>
 <ul>
@@ -665,28 +642,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 <section id="rubric" class="level1">
-<h1>Rubric:</h1>
+<h1>Rubric</h1>
 <ul class="task-list">
 <li><label><input type="checkbox"><strong>Question 1: Tessellations</strong> (30)</label></li>
-<li><label><input type="checkbox"><strong>Question 2: Tessellation Comparison</strong> (20)</label></li>
-<li><label><input type="checkbox"><strong>Question 3: PIP</strong> (20)</label></li>
-<li><label><input type="checkbox"><strong>Question 4: Conditional PIP</strong> (20)</label></li>
-<li><label><input type="checkbox"><strong>Extra Credit: Dam Age</strong> (20)</label></li>
-<li><label><input type="checkbox"><strong>Well Structured and appealing Rmd deployed as web page</strong> (10)</label></li>
+<li><label><input type="checkbox"><strong>Question 2: Tessellation Comparison</strong> (30)</label></li>
+<li><label><input type="checkbox"><strong>Question 3: PIP</strong> (30)</label></li>
+<li><label><input type="checkbox"><strong>Question 4: Conditional PIP</strong> (30)</label></li>
+<li><label><input type="checkbox"><strong>Question 5: Dam Age</strong> (20)</label></li>
+<li><label><input type="checkbox"><strong>Well Structured and appealing Qmd deployed as web page</strong> (10)</label></li>
 </ul>
-<p><strong>Total:</strong> 100 points (120 points total)</p>
+<p><strong>Total:</strong> 150</p>
 </section>
 <section id="submission" class="level1">
 <h1>Submission</h1>
 <p>You will submit a URL to your web page deployed with GitHub pages.</p>
 <p>To do this:</p>
 <ul>
-<li>Knit your lab 4 document</li>
+<li>Render your lab document</li>
 <li>Stage/commit/push your files</li>
-<li>If you followed the naming conventions in the “Set Up” of lab 2, your lab 4 link will be available at:</li>
+<li>If you followed the naming conventions in the “Set Up” of lab 1, your lab 3 link will be available at:</li>
 </ul>
-<p><code>https://USERNAME.github.io/geog-13-labs/lab-04.html</code></p>
-<p>Submit this URL in the appropriate Gauchospace dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be your final!</p>
+<p><code>https://USERNAME.github.io/csu-523c/lab-03.html</code></p>
+<p>Submit this URL in the appropriate Canvas dropbox. Also take a moment to update your personal webpage with this link and some bullet points of what you learned. While not graded as part of this lab, it will be extra credit!</p>
 
 
 </section>
