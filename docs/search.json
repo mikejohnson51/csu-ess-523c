@@ -3294,7 +3294,7 @@
     "href": "slides/functions.html#to-date",
     "title": "Week 3",
     "section": "To date …",
-    "text": "To date …\n\nWe have been using functions written for us - mostly by sf and the tidyverse\nThis how any commercial GIS suite operates as well\nAnalysis and workflows are limited to the tools kits and options exposed to the user\nIn R, a lot more is actually exposed!\nEverytime we install a new package, we download code that provides new specific features (as functions)\nEverytime we attach a package to a working session (library()) we are making those functions available/visible"
+    "text": "To date …\n\nWe have been using functions written for us - mostly by sf and the tidyverse\nThis how any commercial GIS suite operates as well\nAnalysis and workflows are limited to the tools kits and options exposed to the user\nIn R, a lot more is actually exposed!\nEvery time we install a new package, we download code that provides new specific features (as functions)\nEvery time we attach a package to a working session (library()) we are making those functions available/visible"
   },
   {
     "objectID": "slides/functions.html#functions-are-objects",
@@ -3322,7 +3322,7 @@
     "href": "slides/functions.html#so-why-write-functions-opposed-to-scripts",
     "title": "Week 3",
     "section": "So why write functions opposed to scripts?",
-    "text": "So why write functions opposed to scripts?\n\nThe process can be named\nAs requirements change, you only need to update code in one place\nYou eliminate the chance of making incidental mistakes when you copy and paste (forgetting to change dist_to_state to dist_to_border).\nfunctions can be ‘sourced’ into Rmd files and R Scripts\nYou save youself time"
+    "text": "So why write functions opposed to scripts?\n\nThe process can be named\nAs requirements change, you only need to update code in one place\nYou eliminate the chance of making incidental mistakes when you copy and paste (forgetting to change dist_to_state to dist_to_border).\nfunctions can be ‘sourced’ into Qmd/Rmd files and R Scripts\nYou save yourself time"
   },
   {
     "objectID": "slides/functions.html#rule-of-thumb",
@@ -3371,7 +3371,7 @@
     "href": "slides/functions.html#code-body",
     "title": "Week 3",
     "section": "Code body",
-    "text": "Code body\nWe then have to carry these generalizations into the function directions using the arguments as our operators:\n\nget_conus = function(data, var){\n  conus = filter(data, !!var %in% c(\"Hawaii\", \"Puerto Rico\", \"Alaska\"))\n  return(conus)\n}\n\n\nhere, we replace us_states() with data\nwe use get() to return the value of a named object\nWe assign our filtered object to the name conus\nAnd explicitly return the conus object from the function\nThe value returned by the function is usually the last evaluated statement, if we don’t specify return we can take advantage of this default:\n\n\nget_conus = function(data, var){\n  filter(data, !get(var) %in% c(\"Hawaii\", \"Puerto Rico\", \"Alaska\"))\n}"
+    "text": "Code body\nWe then have to carry these generalizations into the function directions using the arguments as our operators:\n\nget_conus = function(data, var){\n  conus = filter(data, !get(var) %in% c(\"Hawaii\", \"Puerto Rico\", \"Alaska\"))\n  return(conus)\n}\n\n\nhere, we replace us_states() with data\nwe use get() to return the value of a named object\nWe assign our filtered object to the name conus\nAnd explicitly return the conus object from the function\nThe value returned by the function is usually the last evaluated statement, if we don’t specify return we can take advantage of this default:\n\n\nget_conus = function(data, var){\n  filter(data, !get(var) %in% c(\"Hawaii\", \"Puerto Rico\", \"Alaska\"))\n}"
   },
   {
     "objectID": "slides/functions.html#using-our-function",
@@ -3427,7 +3427,7 @@
     "href": "slides/functions.html#step-2-point-counts-by-polygon",
     "title": "Week 3",
     "section": "Step 2: Point counts by Polygon",
-    "text": "Step 2: Point counts by Polygon\ncount() is a dplyr function that “lets you quickly count the unique values of one or more variables: df |&gt; count(a, b) is roughly equivalent to df |&gt; group_by(a, b) |&gt; summarise(n = n())”\n\n(count(starbucks1, geoid))\n#&gt; Simple feature collection with 64 features and 2 fields\n#&gt; Geometry type: MULTIPOLYGON\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -1146480 ymin: 1566911 xmax: -504612.5 ymax: 2073715\n#&gt; Projected CRS: NAD83 / Conus Albers\n#&gt; First 10 features:\n#&gt;    geoid  n                       geometry\n#&gt; 1  08001 35 MULTIPOLYGON (((-765835.6 1...\n#&gt; 2  08003  1 MULTIPOLYGON (((-878691.4 1...\n#&gt; 3  08005 58 MULTIPOLYGON (((-769015.2 1...\n#&gt; 4  08007  1 MULTIPOLYGON (((-1004101 16...\n#&gt; 5  08009  1 MULTIPOLYGON (((-617878.8 1...\n#&gt; 6  08011  1 MULTIPOLYGON (((-640691.8 1...\n#&gt; 7  08013 36 MULTIPOLYGON (((-819541.3 1...\n#&gt; 8  08014  9 MULTIPOLYGON (((-775389.1 1...\n#&gt; 9  08015  1 MULTIPOLYGON (((-905015.4 1...\n#&gt; 10 08017  1 MULTIPOLYGON (((-616732 176..."
+    "text": "Step 2: Point counts by Polygon\ncount() is a dplyr function that “lets you quickly count the unique values of one or more variables: df |&gt; count(a, b) is roughly equivalent to df |&gt; group_by(a, b) |&gt; summarize(n = n())”\n\n(count(starbucks1, geoid))\n#&gt; Simple feature collection with 64 features and 2 fields\n#&gt; Geometry type: MULTIPOLYGON\n#&gt; Dimension:     XY\n#&gt; Bounding box:  xmin: -1146480 ymin: 1566911 xmax: -504612.5 ymax: 2073715\n#&gt; Projected CRS: NAD83 / Conus Albers\n#&gt; First 10 features:\n#&gt;    geoid  n                       geometry\n#&gt; 1  08001 35 MULTIPOLYGON (((-765835.6 1...\n#&gt; 2  08003  1 MULTIPOLYGON (((-878691.4 1...\n#&gt; 3  08005 58 MULTIPOLYGON (((-769015.2 1...\n#&gt; 4  08007  1 MULTIPOLYGON (((-1004101 16...\n#&gt; 5  08009  1 MULTIPOLYGON (((-617878.8 1...\n#&gt; 6  08011  1 MULTIPOLYGON (((-640691.8 1...\n#&gt; 7  08013 36 MULTIPOLYGON (((-819541.3 1...\n#&gt; 8  08014  9 MULTIPOLYGON (((-775389.1 1...\n#&gt; 9  08015  1 MULTIPOLYGON (((-905015.4 1...\n#&gt; 10 08017  1 MULTIPOLYGON (((-616732 176..."
   },
   {
     "objectID": "slides/functions.html#step-3-combine-the-processes",
@@ -3483,14 +3483,14 @@
     "href": "slides/functions.html#to-keep-geometery-or-not",
     "title": "Week 3",
     "section": "To keep geometery or not?",
-    "text": "To keep geometery or not?\n\nRemember our geometries are sticky, that means they carry through all calculations - whether they are needed or not\nWe can ease alot of computational overhead by being mindfull of when we retain our geometry data with our attribute data.\n\n\n\n\nsystem.time({\n  st_join(counties, starbucks) |&gt; \n    count(geoid) \n})\n\n#user    system  elapsed \n#3.970   0.421   5.521\n\n\n\nsystem.time({\n  st_join(counties, starbucks) |&gt; \n    st_drop_geometry() |&gt; \n    count(geoid) |&gt; \n    left_join(counties, by = 'geoid') |&gt; \n    st_as_sf() \n})\n\n# user    system  elapsed \n# 0.396   0.017   0.598"
+    "text": "To keep geometery or not?\n\nRemember our geometries are sticky, that means they carry through all calculations - whether they are needed or not\nWe can ease alot of computational overhead by being mindful of when we retain our geometry data with our attribute data.\n\n\n\n\nsystem.time({\n  st_join(counties, starbucks) |&gt; \n    count(geoid) \n})\n\n#user    system  elapsed \n#3.970   0.421   5.521\n\n\n\nsystem.time({\n  st_join(counties, starbucks) |&gt; \n    st_drop_geometry() |&gt; \n    count(geoid) |&gt; \n    left_join(counties, by = 'geoid') |&gt; \n    st_as_sf() \n})\n\n# user    system  elapsed \n# 0.396   0.017   0.598"
   },
   {
     "objectID": "slides/functions.html#section-1",
     "href": "slides/functions.html#section-1",
     "title": "Week 3",
     "section": "",
-    "text": "# How many seconds per point?\n# How many seconds per point?\n(point_per_sec = .598 / (nrow(counties) * nrow(starbucks)))\n#&gt; [1] 1.442037e-08\n\n# How will this scale to our dams data\n# (assuming the process is linear)\n\npoint_per_sec * (nrow(counties) * 91000)\n#&gt; [1] 4.077171\n\nAwesome!\nEffectivly a 86% decrease in time needed ((29-4) / 29)\n“Function-izing” our improvements\n\npoint_in_polygon3 = function(points, polygon, var){\n  st_join(polygon, points) |&gt; \n    st_drop_geometry() |&gt; \n    count(get(var)) |&gt; \n    setNames(c(var, \"n\")) |&gt; #&lt;&lt; \n    left_join(polygon, by = var) |&gt; \n    st_as_sf() \n}"
+    "text": "# How many seconds per point?\n# How many seconds per point?\n(point_per_sec = .598 / (nrow(counties) * nrow(starbucks)))\n#&gt; [1] 1.442037e-08\n\n# How will this scale to our dams data\n# (assuming the process is linear)\n\npoint_per_sec * (nrow(counties) * 91000)\n#&gt; [1] 4.077171\n\nAwesome!\nEffectively a 86% decrease in time needed ((29-4) / 29)\n“Function-izing” our improvements\n\npoint_in_polygon3 = function(points, polygon, var){\n  st_join(polygon, points) |&gt; \n    st_drop_geometry() |&gt; \n    count(get(var)) |&gt; \n    setNames(c(var, \"n\")) |&gt; #&lt;&lt; \n    left_join(polygon, by = var) |&gt; \n    st_as_sf() \n}"
   },
   {
     "objectID": "slides/functions.html#what-else-can-we-wrap",

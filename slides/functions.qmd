@@ -151,7 +151,7 @@ knitr::include_graphics('images/14-function-objects.png')
  
  - You eliminate the chance of making incidental mistakes when you copy and paste (forgetting to change `dist_to_state` to `dist_to_border`).
  
- - functions can be 'sourced' into Rmd files and R Scripts
+ - functions can be 'sourced' into Qmd/Rmd files and R Scripts
 
  - You save yourself time
 
@@ -257,7 +257,7 @@ We then have to carry these generalizations into the function directions using t
  
 ```{r}
 get_conus = function(data, var){
-  conus = filter(data, !!var %in% c("Hawaii", "Puerto Rico", "Alaska"))
+  conus = filter(data, !get(var) %in% c("Hawaii", "Puerto Rico", "Alaska"))
   return(conus)
 }
 ```
@@ -353,6 +353,7 @@ knitr::include_graphics('images/14-pip.jpg')
 ## Data
 
 ### CONUS counties
+
 ```{r}
 counties = st_transform(us_counties()[,-9], 5070) |> 
   select(name, geoid, state_name) |> 
@@ -360,6 +361,7 @@ counties = st_transform(us_counties()[,-9], 5070) |>
 ```
 
 ### CONUS Starbucks
+
 ```{r, message = FALSE}
 starbucks = read_csv('data/directory.csv') |> 
   filter(!is.na(Latitude), Country == "US") |> 
@@ -370,6 +372,7 @@ starbucks = read_csv('data/directory.csv') |>
 ```
 
 ### Colorado Counties 
+
 ```{r}
 co = filter(counties, state_name == "Colorado")
 ```
