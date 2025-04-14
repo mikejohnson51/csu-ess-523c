@@ -53,7 +53,6 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 01**: Quarto/Flextable\
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 01**: [Lab 1: COVID Trends](labs/lab1.qmd)\
 
-
 ### **Component 2**: _Working with Vector Data_
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 02**: [Projections & Measures](slides/week-2.qmd)\
@@ -61,13 +60,13 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 02**: [Lab 2: Border summaries](labs/lab2.qmd)\
 <i class="fa fa-question" aria-hidden="true"></i> **Lab 02**: [Lab 2: Hints & Tricks](labs/lab2-hints.qmd)\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 03**: [Predicates, Simplification $ Tesselations](slides/week-3.qmd)\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 03**: [Predicates, Simplification & Tesselations](slides/week-3.qmd)\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 03**: [Functions](slides/functions.qmd) \
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 03**: [Lab 3: Dams in the US](labs/lab3.qmd)\
 
 ### **Component 3**: _Working with Raster Data_
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 04**: Raster's in R\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 04**: [Raster's in R](slides/week-4.qmd)\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 04**: STAC\
 <i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: Lab 4: Remote Sensing\
 
