@@ -68,7 +68,7 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 04**: [Raster's in R](slides/week-4.qmd)\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 04**: STAC\
-<i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: Lab 4: Remote Sensing\
+<i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: [Lab 4: Remote Sensing](labs/lab4.qmd)\
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 05**: Time Series\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 01**: OSM + HAND\
