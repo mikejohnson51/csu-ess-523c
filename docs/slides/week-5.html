@@ -241,27 +241,6 @@
 <p>Illustration credit: <a href="https://vas3k.com/blog/machine_learning/" class="uri">https://vas3k.com/blog/machine_learning/</a></p>
 </div>
 </section>
-<section id="what-is-tidymodels" class="slide level2">
-<h2>What is <code>tidymodels</code>? <img data-src="hexes/tidymodels.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb1-2"><a></a><span class="co">#&gt; ── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──</span></span>
-<span id="cb1-3"><a></a><span class="co">#&gt; ✔ broom        1.0.7     ✔ rsample      1.2.1</span></span>
-<span id="cb1-4"><a></a><span class="co">#&gt; ✔ dials        1.4.0     ✔ tibble       3.2.1</span></span>
-<span id="cb1-5"><a></a><span class="co">#&gt; ✔ dplyr        1.1.4     ✔ tidyr        1.3.1</span></span>
-<span id="cb1-6"><a></a><span class="co">#&gt; ✔ infer        1.0.7     ✔ tune         1.3.0</span></span>
-<span id="cb1-7"><a></a><span class="co">#&gt; ✔ modeldata    1.4.0     ✔ workflows    1.2.0</span></span>
-<span id="cb1-8"><a></a><span class="co">#&gt; ✔ parsnip      1.3.0     ✔ workflowsets 1.1.0</span></span>
-<span id="cb1-9"><a></a><span class="co">#&gt; ✔ purrr        1.0.4     ✔ yardstick    1.3.2</span></span>
-<span id="cb1-10"><a></a><span class="co">#&gt; ✔ recipes      1.1.1</span></span>
-<span id="cb1-11"><a></a><span class="co">#&gt; ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──</span></span>
-<span id="cb1-12"><a></a><span class="co">#&gt; ✖ purrr::discard() masks scales::discard()</span></span>
-<span id="cb1-13"><a></a><span class="co">#&gt; ✖ dplyr::filter()  masks stats::filter()</span></span>
-<span id="cb1-14"><a></a><span class="co">#&gt; ✖ dplyr::lag()     masks stats::lag()</span></span>
-<span id="cb1-15"><a></a><span class="co">#&gt; ✖ recipes::step()  masks stats::step()</span></span>
-<span id="cb1-16"><a></a><span class="co">#&gt; • Search for functions across packages at https://www.tidymodels.org/find/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
 <section id="section" class="slide level2" data-background-image="images/tm-org.png" data-background-size="contain">
 <h2></h2>
 </section>
@@ -269,10 +248,7 @@
 <h2>The big picture: Road map</h2>
 
 <img data-src="images/whole-game-final-performance.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
-<section id="tidymodels" class="slide level2" data-background-color="#C8C372">
-<h2>Tidymodels</h2>
-</section>
-<section id="what-is-tidymodels-1" class="slide level2">
+<section id="what-is-tidymodels" class="slide level2">
 <h2>What is <code>tidymodels</code>?</h2>
 <ul>
 <li>An R package ecosystem for modeling and machine learning</li>
@@ -292,14 +268,14 @@
 <p>📦 <code>rsample</code>: Resampling and validation</p>
 <p>📦 <code>yardstick</code>: Model evaluation metrics</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">'images/tidymodels-packages.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">'images/tidymodels-packages.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>tidymodels<span class="sc">::</span><span class="fu">tidymodels_packages</span>()</span>
-<span id="cb3-2"><a></a><span class="co">#&gt;  [1] "broom"        "cli"          "conflicted"   "dials"        "dplyr"       </span></span>
-<span id="cb3-3"><a></a><span class="co">#&gt;  [6] "ggplot2"      "hardhat"      "infer"        "modeldata"    "parsnip"     </span></span>
-<span id="cb3-4"><a></a><span class="co">#&gt; [11] "purrr"        "recipes"      "rlang"        "rsample"      "rstudioapi"  </span></span>
-<span id="cb3-5"><a></a><span class="co">#&gt; [16] "tibble"       "tidyr"        "tune"         "workflows"    "workflowsets"</span></span>
-<span id="cb3-6"><a></a><span class="co">#&gt; [21] "yardstick"    "tidymodels"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>tidymodels<span class="sc">::</span><span class="fu">tidymodels_packages</span>()</span>
+<span id="cb2-2"><a></a><span class="co">#&gt;  [1] "broom"        "cli"          "conflicted"   "dials"        "dplyr"       </span></span>
+<span id="cb2-3"><a></a><span class="co">#&gt;  [6] "ggplot2"      "hardhat"      "infer"        "modeldata"    "parsnip"     </span></span>
+<span id="cb2-4"><a></a><span class="co">#&gt; [11] "purrr"        "recipes"      "rlang"        "rsample"      "rstudioapi"  </span></span>
+<span id="cb2-5"><a></a><span class="co">#&gt; [16] "tibble"       "tidyr"        "tune"         "workflows"    "workflowsets"</span></span>
+<span id="cb2-6"><a></a><span class="co">#&gt; [21] "yardstick"    "tidymodels"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <img data-src="images/tidymodels-packages.png" style="width:100.0%" class="r-stretch"></section>
 <section id="typcical-workflow-in-tidymodels" class="slide level2">
@@ -413,35 +389,35 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb4-2"><a></a></span>
-<span id="cb4-3"><a></a>(recipe_obj <span class="ot">&lt;-</span> <span class="fu">recipe</span>(flipper_length_mm <span class="sc">~</span> </span>
-<span id="cb4-4"><a></a>                       bill_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> </span>
-<span id="cb4-5"><a></a>                       sex <span class="sc">+</span> island <span class="sc">+</span> species, </span>
-<span id="cb4-6"><a></a>                      <span class="at">data =</span> penguins) <span class="sc">|&gt;</span> </span>
-<span id="cb4-7"><a></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb4-8"><a></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb4-9"><a></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()))</span>
-<span id="cb4-10"><a></a></span>
-<span id="cb4-11"><a></a><span class="co"># Prepare and apply transformations</span></span>
-<span id="cb4-12"><a></a>prep_recipe     <span class="ot">&lt;-</span> <span class="fu">prep</span>(recipe_obj, <span class="at">training =</span> penguins) </span>
-<span id="cb4-13"><a></a></span>
-<span id="cb4-14"><a></a>normalized_data <span class="ot">&lt;-</span> <span class="fu">bake</span>(prep_recipe, <span class="at">new_data =</span> <span class="cn">NULL</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-15"><a></a>  <span class="fu">mutate</span>(<span class="at">species =</span> penguins<span class="sc">$</span>species) <span class="sc">|&gt;</span> </span>
-<span id="cb4-16"><a></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb4-17"><a></a></span>
-<span id="cb4-18"><a></a><span class="fu">head</span>(normalized_data)</span>
-<span id="cb4-19"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
-<span id="cb4-20"><a></a><span class="co">#&gt;   bill_length_mm body_mass_g flipper_length_mm sex_male island_Dream</span></span>
-<span id="cb4-21"><a></a><span class="co">#&gt;            &lt;dbl&gt;       &lt;dbl&gt;             &lt;int&gt;    &lt;dbl&gt;        &lt;dbl&gt;</span></span>
-<span id="cb4-22"><a></a><span class="co">#&gt; 1         -0.886      -0.565               181    0.990       -0.750</span></span>
-<span id="cb4-23"><a></a><span class="co">#&gt; 2         -0.812      -0.502               186   -1.01        -0.750</span></span>
-<span id="cb4-24"><a></a><span class="co">#&gt; 3         -0.665      -1.19                195   -1.01        -0.750</span></span>
-<span id="cb4-25"><a></a><span class="co">#&gt; 4         -1.33       -0.940               193   -1.01        -0.750</span></span>
-<span id="cb4-26"><a></a><span class="co">#&gt; 5         -0.849      -0.690               190    0.990       -0.750</span></span>
-<span id="cb4-27"><a></a><span class="co">#&gt; 6         -0.923      -0.721               181   -1.01        -0.750</span></span>
-<span id="cb4-28"><a></a><span class="co">#&gt; # ℹ 4 more variables: island_Torgersen &lt;dbl&gt;, species_Chinstrap &lt;dbl&gt;,</span></span>
-<span id="cb4-29"><a></a><span class="co">#&gt; #   species_Gentoo &lt;dbl&gt;, species &lt;fct&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a>(recipe_obj <span class="ot">&lt;-</span> <span class="fu">recipe</span>(flipper_length_mm <span class="sc">~</span> </span>
+<span id="cb3-4"><a></a>                       bill_length_mm <span class="sc">+</span> body_mass_g <span class="sc">+</span> </span>
+<span id="cb3-5"><a></a>                       sex <span class="sc">+</span> island <span class="sc">+</span> species, </span>
+<span id="cb3-6"><a></a>                      <span class="at">data =</span> penguins) <span class="sc">|&gt;</span> </span>
+<span id="cb3-7"><a></a>  <span class="fu">step_impute_mean</span>(<span class="fu">all_numeric_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a></a>  <span class="fu">step_dummy</span>(<span class="fu">all_factor_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a></a>  <span class="fu">step_normalize</span>(<span class="fu">all_numeric_predictors</span>()))</span>
+<span id="cb3-10"><a></a></span>
+<span id="cb3-11"><a></a><span class="co"># Prepare and apply transformations</span></span>
+<span id="cb3-12"><a></a>prep_recipe     <span class="ot">&lt;-</span> <span class="fu">prep</span>(recipe_obj, <span class="at">training =</span> penguins) </span>
+<span id="cb3-13"><a></a></span>
+<span id="cb3-14"><a></a>normalized_data <span class="ot">&lt;-</span> <span class="fu">bake</span>(prep_recipe, <span class="at">new_data =</span> <span class="cn">NULL</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-15"><a></a>  <span class="fu">mutate</span>(<span class="at">species =</span> penguins<span class="sc">$</span>species) <span class="sc">|&gt;</span> </span>
+<span id="cb3-16"><a></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb3-17"><a></a></span>
+<span id="cb3-18"><a></a><span class="fu">head</span>(normalized_data)</span>
+<span id="cb3-19"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
+<span id="cb3-20"><a></a><span class="co">#&gt;   bill_length_mm body_mass_g flipper_length_mm sex_male island_Dream</span></span>
+<span id="cb3-21"><a></a><span class="co">#&gt;            &lt;dbl&gt;       &lt;dbl&gt;             &lt;int&gt;    &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb3-22"><a></a><span class="co">#&gt; 1         -0.886      -0.565               181    0.990       -0.750</span></span>
+<span id="cb3-23"><a></a><span class="co">#&gt; 2         -0.812      -0.502               186   -1.01        -0.750</span></span>
+<span id="cb3-24"><a></a><span class="co">#&gt; 3         -0.665      -1.19                195   -1.01        -0.750</span></span>
+<span id="cb3-25"><a></a><span class="co">#&gt; 4         -1.33       -0.940               193   -1.01        -0.750</span></span>
+<span id="cb3-26"><a></a><span class="co">#&gt; 5         -0.849      -0.690               190    0.990       -0.750</span></span>
+<span id="cb3-27"><a></a><span class="co">#&gt; 6         -0.923      -0.721               181   -1.01        -0.750</span></span>
+<span id="cb3-28"><a></a><span class="co">#&gt; # ℹ 4 more variables: island_Torgersen &lt;dbl&gt;, species_Chinstrap &lt;dbl&gt;,</span></span>
+<span id="cb3-29"><a></a><span class="co">#&gt; #   species_Gentoo &lt;dbl&gt;, species &lt;fct&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <h4 id="explanation">Explanation:</h4>
@@ -461,7 +437,7 @@
 <div class="columns smallcode">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -484,9 +460,9 @@
 <div class="columns smallcode">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
-<span id="cb7-2"><a></a></span>
-<span id="cb7-3"><a></a><span class="fu">glance</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
+<span id="cb6-2"><a></a></span>
+<span id="cb6-3"><a></a><span class="fu">glance</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -514,11 +490,11 @@
 <div class="columns smallcode">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
-<span id="cb9-2"><a></a></span>
-<span id="cb9-3"><a></a><span class="fu">glance</span>(model)</span>
-<span id="cb9-4"><a></a></span>
-<span id="cb9-5"><a></a>(pred <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, normalized_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
+<span id="cb8-2"><a></a></span>
+<span id="cb8-3"><a></a><span class="fu">glance</span>(model)</span>
+<span id="cb8-4"><a></a></span>
+<span id="cb8-5"><a></a>(pred <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, normalized_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -563,17 +539,17 @@
 <div class="columns smallcode">
 <div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
-<span id="cb11-2"><a></a></span>
-<span id="cb11-3"><a></a><span class="fu">glance</span>(model)</span>
-<span id="cb11-4"><a></a></span>
-<span id="cb11-5"><a></a>(pred <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, normalized_data))</span>
-<span id="cb11-6"><a></a></span>
-<span id="cb11-7"><a></a><span class="fu">ggscatter</span>(pred,</span>
-<span id="cb11-8"><a></a>          <span class="at">x =</span> <span class="st">'flipper_length_mm'</span>, <span class="at">y =</span> <span class="st">'.fitted'</span>,</span>
-<span id="cb11-9"><a></a>          <span class="at">add =</span> <span class="st">"reg.line"</span>, <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb11-10"><a></a>          <span class="at">cor.coef =</span> <span class="cn">TRUE</span>, <span class="at">cor.method =</span> <span class="st">"pearson"</span>,</span>
-<span id="cb11-11"><a></a>          <span class="at">color =</span> <span class="st">"species"</span>, <span class="at">palette =</span> <span class="st">"jco"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>(<span class="at">model =</span> <span class="fu">lm</span>(flipper_length_mm <span class="sc">~</span> . , <span class="at">data =</span> normalized_data) )</span>
+<span id="cb10-2"><a></a></span>
+<span id="cb10-3"><a></a><span class="fu">glance</span>(model)</span>
+<span id="cb10-4"><a></a></span>
+<span id="cb10-5"><a></a>(pred <span class="ot">&lt;-</span> <span class="fu">augment</span>(model, normalized_data))</span>
+<span id="cb10-6"><a></a></span>
+<span id="cb10-7"><a></a><span class="fu">ggscatter</span>(pred,</span>
+<span id="cb10-8"><a></a>          <span class="at">x =</span> <span class="st">'flipper_length_mm'</span>, <span class="at">y =</span> <span class="st">'.fitted'</span>,</span>
+<span id="cb10-9"><a></a>          <span class="at">add =</span> <span class="st">"reg.line"</span>, <span class="at">conf.int =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-10"><a></a>          <span class="at">cor.coef =</span> <span class="cn">TRUE</span>, <span class="at">cor.method =</span> <span class="st">"pearson"</span>,</span>
+<span id="cb10-11"><a></a>          <span class="at">color =</span> <span class="st">"species"</span>, <span class="at">palette =</span> <span class="st">"jco"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:60%;">
 <div class="cell">
@@ -701,14 +677,14 @@
 <li>The default is 0.75, which means 75% of the data will be used for training and 25% for testing.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="fu">set.seed</span>(<span class="dv">101991</span>)</span>
-<span id="cb13-2"><a></a>(resample_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(penguins, <span class="at">prop =</span> <span class="fl">0.8</span>))</span>
-<span id="cb13-3"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
-<span id="cb13-4"><a></a><span class="co">#&gt; &lt;275/69/344&gt;</span></span>
-<span id="cb13-5"><a></a></span>
-<span id="cb13-6"><a></a><span class="co">#Sanity check</span></span>
-<span id="cb13-7"><a></a><span class="dv">69</span><span class="sc">/</span><span class="dv">344</span></span>
-<span id="cb13-8"><a></a><span class="co">#&gt; [1] 0.2005814</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">set.seed</span>(<span class="dv">101991</span>)</span>
+<span id="cb12-2"><a></a>(resample_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(penguins, <span class="at">prop =</span> <span class="fl">0.8</span>))</span>
+<span id="cb12-3"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
+<span id="cb12-4"><a></a><span class="co">#&gt; &lt;275/69/344&gt;</span></span>
+<span id="cb12-5"><a></a></span>
+<span id="cb12-6"><a></a><span class="co">#Sanity check</span></span>
+<span id="cb12-7"><a></a><span class="dv">69</span><span class="sc">/</span><span class="dv">344</span></span>
+<span id="cb12-8"><a></a><span class="co">#&gt; [1] 0.2005814</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="accessing-the-data" class="slide level2">
@@ -717,52 +693,52 @@
 <li>Once the data is split, we can access the training and testing data using the <code>training()</code> and <code>testing()</code> functions to extract the partitioned data from the full set:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>penguins_train <span class="ot">&lt;-</span> <span class="fu">training</span>(resample_split)</span>
-<span id="cb14-2"><a></a><span class="fu">glimpse</span>(penguins_train)</span>
-<span id="cb14-3"><a></a><span class="co">#&gt; Rows: 275</span></span>
-<span id="cb14-4"><a></a><span class="co">#&gt; Columns: 7</span></span>
-<span id="cb14-5"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Gentoo, Adelie, Gentoo, Chinstrap, Gentoo, Chinstrap…</span></span>
-<span id="cb14-6"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Biscoe, Torgersen, Biscoe, Dream, Biscoe, Dream, Dre…</span></span>
-<span id="cb14-7"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; 46.2, 43.1, 46.2, 45.9, 46.5, 48.1, 45.2, 55.9, 38.1…</span></span>
-<span id="cb14-8"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; 14.9, 19.2, 14.4, 17.1, 13.5, 16.4, 17.8, 17.0, 17.0…</span></span>
-<span id="cb14-9"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; 221, 197, 214, 190, 210, 199, 198, 228, 181, 195, 20…</span></span>
-<span id="cb14-10"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; 5300, 3500, 4650, 3575, 4550, 3325, 3950, 5600, 3175…</span></span>
-<span id="cb14-11"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; male, male, NA, female, female, female, female, male…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>penguins_train <span class="ot">&lt;-</span> <span class="fu">training</span>(resample_split)</span>
+<span id="cb13-2"><a></a><span class="fu">glimpse</span>(penguins_train)</span>
+<span id="cb13-3"><a></a><span class="co">#&gt; Rows: 275</span></span>
+<span id="cb13-4"><a></a><span class="co">#&gt; Columns: 7</span></span>
+<span id="cb13-5"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Gentoo, Adelie, Gentoo, Chinstrap, Gentoo, Chinstrap…</span></span>
+<span id="cb13-6"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Biscoe, Torgersen, Biscoe, Dream, Biscoe, Dream, Dre…</span></span>
+<span id="cb13-7"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; 46.2, 43.1, 46.2, 45.9, 46.5, 48.1, 45.2, 55.9, 38.1…</span></span>
+<span id="cb13-8"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; 14.9, 19.2, 14.4, 17.1, 13.5, 16.4, 17.8, 17.0, 17.0…</span></span>
+<span id="cb13-9"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; 221, 197, 214, 190, 210, 199, 198, 228, 181, 195, 20…</span></span>
+<span id="cb13-10"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; 5300, 3500, 4650, 3575, 4550, 3325, 3950, 5600, 3175…</span></span>
+<span id="cb13-11"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; male, male, NA, female, female, female, female, male…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a>penguins_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(resample_split)</span>
-<span id="cb15-2"><a></a><span class="fu">glimpse</span>(penguins_test)</span>
-<span id="cb15-3"><a></a><span class="co">#&gt; Rows: 69</span></span>
-<span id="cb15-4"><a></a><span class="co">#&gt; Columns: 7</span></span>
-<span id="cb15-5"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
-<span id="cb15-6"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Biscoe, Biscoe, Bis…</span></span>
-<span id="cb15-7"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; NA, 39.3, 36.6, 35.9, 38.8, 37.9, 39.2, 39.6, 36.7, …</span></span>
-<span id="cb15-8"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; NA, 20.6, 17.8, 19.2, 17.2, 18.6, 21.1, 17.2, 18.8, …</span></span>
-<span id="cb15-9"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; NA, 190, 185, 189, 180, 172, 196, 196, 187, 205, 187…</span></span>
-<span id="cb15-10"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; NA, 3650, 3700, 3800, 3800, 3150, 4150, 3550, 3800, …</span></span>
-<span id="cb15-11"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; NA, male, female, female, male, female, male, female…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>penguins_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(resample_split)</span>
+<span id="cb14-2"><a></a><span class="fu">glimpse</span>(penguins_test)</span>
+<span id="cb14-3"><a></a><span class="co">#&gt; Rows: 69</span></span>
+<span id="cb14-4"><a></a><span class="co">#&gt; Columns: 7</span></span>
+<span id="cb14-5"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…</span></span>
+<span id="cb14-6"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Biscoe, Biscoe, Bis…</span></span>
+<span id="cb14-7"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; NA, 39.3, 36.6, 35.9, 38.8, 37.9, 39.2, 39.6, 36.7, …</span></span>
+<span id="cb14-8"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; NA, 20.6, 17.8, 19.2, 17.2, 18.6, 21.1, 17.2, 18.8, …</span></span>
+<span id="cb14-9"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; NA, 190, 185, 189, 180, 172, 196, 196, 187, 205, 187…</span></span>
+<span id="cb14-10"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; NA, 3650, 3700, 3800, 3800, 3150, 4150, 3550, 3800, …</span></span>
+<span id="cb14-11"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; NA, male, female, female, male, female, male, female…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="proportional-gaps" class="slide level2">
 <h2>Proportional Gaps</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># Dataset</span></span>
-<span id="cb16-2"><a></a>(<span class="fu">table</span>(penguins<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins))</span>
-<span id="cb16-3"><a></a><span class="co">#&gt; </span></span>
-<span id="cb16-4"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb16-5"><a></a><span class="co">#&gt; 0.4418605 0.1976744 0.3604651</span></span>
-<span id="cb16-6"><a></a><span class="co"># Training Data</span></span>
-<span id="cb16-7"><a></a>(<span class="fu">table</span>(penguins_train<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins_train))</span>
-<span id="cb16-8"><a></a><span class="co">#&gt; </span></span>
-<span id="cb16-9"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb16-10"><a></a><span class="co">#&gt; 0.4581818 0.1818182 0.3600000</span></span>
-<span id="cb16-11"><a></a><span class="co"># Testing Data</span></span>
-<span id="cb16-12"><a></a>(<span class="fu">table</span>(penguins_test<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins_test))</span>
-<span id="cb16-13"><a></a><span class="co">#&gt; </span></span>
-<span id="cb16-14"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb16-15"><a></a><span class="co">#&gt; 0.3768116 0.2608696 0.3623188</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># Dataset</span></span>
+<span id="cb15-2"><a></a>(<span class="fu">table</span>(penguins<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins))</span>
+<span id="cb15-3"><a></a><span class="co">#&gt; </span></span>
+<span id="cb15-4"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb15-5"><a></a><span class="co">#&gt; 0.4418605 0.1976744 0.3604651</span></span>
+<span id="cb15-6"><a></a><span class="co"># Training Data</span></span>
+<span id="cb15-7"><a></a>(<span class="fu">table</span>(penguins_train<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins_train))</span>
+<span id="cb15-8"><a></a><span class="co">#&gt; </span></span>
+<span id="cb15-9"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb15-10"><a></a><span class="co">#&gt; 0.4581818 0.1818182 0.3600000</span></span>
+<span id="cb15-11"><a></a><span class="co"># Testing Data</span></span>
+<span id="cb15-12"><a></a>(<span class="fu">table</span>(penguins_test<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins_test))</span>
+<span id="cb15-13"><a></a><span class="co">#&gt; </span></span>
+<span id="cb15-14"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb15-15"><a></a><span class="co">#&gt; 0.3768116 0.2608696 0.3623188</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="stratification-example" class="slide level2">
@@ -774,38 +750,38 @@
 <li><p>This ensures that the training and testing sets have the same proportion of each species as the original data.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># Set the seed</span></span>
-<span id="cb17-2"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb17-3"><a></a></span>
-<span id="cb17-4"><a></a><span class="co"># Drop missing values and split the data</span></span>
-<span id="cb17-5"><a></a>penguins <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(penguins)</span>
-<span id="cb17-6"><a></a>penguins_strata <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(penguins, <span class="at">strata =</span> species, <span class="at">prop =</span> .<span class="dv">8</span>)</span>
-<span id="cb17-7"><a></a></span>
-<span id="cb17-8"><a></a><span class="co"># Extract the training and testing sets</span></span>
-<span id="cb17-9"><a></a></span>
-<span id="cb17-10"><a></a>train_strata <span class="ot">&lt;-</span> <span class="fu">training</span>(penguins_strata)</span>
-<span id="cb17-11"><a></a>test_strata  <span class="ot">&lt;-</span> <span class="fu">testing</span>(penguins_strata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># Set the seed</span></span>
+<span id="cb16-2"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-3"><a></a></span>
+<span id="cb16-4"><a></a><span class="co"># Drop missing values and split the data</span></span>
+<span id="cb16-5"><a></a>penguins <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(penguins)</span>
+<span id="cb16-6"><a></a>penguins_strata <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(penguins, <span class="at">strata =</span> species, <span class="at">prop =</span> .<span class="dv">8</span>)</span>
+<span id="cb16-7"><a></a></span>
+<span id="cb16-8"><a></a><span class="co"># Extract the training and testing sets</span></span>
+<span id="cb16-9"><a></a></span>
+<span id="cb16-10"><a></a>train_strata <span class="ot">&lt;-</span> <span class="fu">training</span>(penguins_strata)</span>
+<span id="cb16-11"><a></a>test_strata  <span class="ot">&lt;-</span> <span class="fu">testing</span>(penguins_strata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="proportional-alignment" class="slide level2">
 <h2>Proportional Alignment</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a><span class="co"># Check the proportions</span></span>
-<span id="cb18-2"><a></a><span class="co"># Dataset</span></span>
-<span id="cb18-3"><a></a><span class="fu">table</span>(penguins<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins)</span>
-<span id="cb18-4"><a></a><span class="co">#&gt; </span></span>
-<span id="cb18-5"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb18-6"><a></a><span class="co">#&gt; 0.4384384 0.2042042 0.3573574</span></span>
-<span id="cb18-7"><a></a><span class="co"># Training Data</span></span>
-<span id="cb18-8"><a></a><span class="fu">table</span>(train_strata<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(train_strata)</span>
-<span id="cb18-9"><a></a><span class="co">#&gt; </span></span>
-<span id="cb18-10"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb18-11"><a></a><span class="co">#&gt; 0.4377358 0.2037736 0.3584906</span></span>
-<span id="cb18-12"><a></a><span class="co"># Testing Data</span></span>
-<span id="cb18-13"><a></a><span class="fu">table</span>(test_strata<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(test_strata)</span>
-<span id="cb18-14"><a></a><span class="co">#&gt; </span></span>
-<span id="cb18-15"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
-<span id="cb18-16"><a></a><span class="co">#&gt; 0.4411765 0.2058824 0.3529412</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="co"># Check the proportions</span></span>
+<span id="cb17-2"><a></a><span class="co"># Dataset</span></span>
+<span id="cb17-3"><a></a><span class="fu">table</span>(penguins<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(penguins)</span>
+<span id="cb17-4"><a></a><span class="co">#&gt; </span></span>
+<span id="cb17-5"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb17-6"><a></a><span class="co">#&gt; 0.4384384 0.2042042 0.3573574</span></span>
+<span id="cb17-7"><a></a><span class="co"># Training Data</span></span>
+<span id="cb17-8"><a></a><span class="fu">table</span>(train_strata<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(train_strata)</span>
+<span id="cb17-9"><a></a><span class="co">#&gt; </span></span>
+<span id="cb17-10"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb17-11"><a></a><span class="co">#&gt; 0.4377358 0.2037736 0.3584906</span></span>
+<span id="cb17-12"><a></a><span class="co"># Testing Data</span></span>
+<span id="cb17-13"><a></a><span class="fu">table</span>(test_strata<span class="sc">$</span>species) <span class="sc">/</span> <span class="fu">nrow</span>(test_strata)</span>
+<span id="cb17-14"><a></a><span class="co">#&gt; </span></span>
+<span id="cb17-15"><a></a><span class="co">#&gt;    Adelie Chinstrap    Gentoo </span></span>
+<span id="cb17-16"><a></a><span class="co">#&gt; 0.4411765 0.2058824 0.3529412</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="modeling" class="slide level2">
@@ -945,37 +921,37 @@
 <div class="{columns}">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a>penguins_train <span class="sc">|&gt;</span> <span class="fu">glimpse</span>() </span>
-<span id="cb19-2"><a></a><span class="co">#&gt; Rows: 275</span></span>
-<span id="cb19-3"><a></a><span class="co">#&gt; Columns: 7</span></span>
-<span id="cb19-4"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Gentoo, Adelie, Gentoo, Chinstrap, Gentoo, Chinstrap…</span></span>
-<span id="cb19-5"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Biscoe, Torgersen, Biscoe, Dream, Biscoe, Dream, Dre…</span></span>
-<span id="cb19-6"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; 46.2, 43.1, 46.2, 45.9, 46.5, 48.1, 45.2, 55.9, 38.1…</span></span>
-<span id="cb19-7"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; 14.9, 19.2, 14.4, 17.1, 13.5, 16.4, 17.8, 17.0, 17.0…</span></span>
-<span id="cb19-8"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; 221, 197, 214, 190, 210, 199, 198, 228, 181, 195, 20…</span></span>
-<span id="cb19-9"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; 5300, 3500, 4650, 3575, 4550, 3325, 3950, 5600, 3175…</span></span>
-<span id="cb19-10"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; male, male, NA, female, female, female, female, male…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>penguins_train <span class="sc">|&gt;</span> <span class="fu">glimpse</span>() </span>
+<span id="cb18-2"><a></a><span class="co">#&gt; Rows: 275</span></span>
+<span id="cb18-3"><a></a><span class="co">#&gt; Columns: 7</span></span>
+<span id="cb18-4"><a></a><span class="co">#&gt; $ species           &lt;fct&gt; Gentoo, Adelie, Gentoo, Chinstrap, Gentoo, Chinstrap…</span></span>
+<span id="cb18-5"><a></a><span class="co">#&gt; $ island            &lt;fct&gt; Biscoe, Torgersen, Biscoe, Dream, Biscoe, Dream, Dre…</span></span>
+<span id="cb18-6"><a></a><span class="co">#&gt; $ bill_length_mm    &lt;dbl&gt; 46.2, 43.1, 46.2, 45.9, 46.5, 48.1, 45.2, 55.9, 38.1…</span></span>
+<span id="cb18-7"><a></a><span class="co">#&gt; $ bill_depth_mm     &lt;dbl&gt; 14.9, 19.2, 14.4, 17.1, 13.5, 16.4, 17.8, 17.0, 17.0…</span></span>
+<span id="cb18-8"><a></a><span class="co">#&gt; $ flipper_length_mm &lt;int&gt; 221, 197, 214, 190, 210, 199, 198, 228, 181, 195, 20…</span></span>
+<span id="cb18-9"><a></a><span class="co">#&gt; $ body_mass_g       &lt;int&gt; 5300, 3500, 4650, 3575, 4550, 3325, 3950, 5600, 3175…</span></span>
+<span id="cb18-10"><a></a><span class="co">#&gt; $ sex               &lt;fct&gt; male, male, NA, female, female, female, female, male…</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="fu">nrow</span>(penguins_train) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span></span>
-<span id="cb20-2"><a></a><span class="co">#&gt; [1] 27.5</span></span>
-<span id="cb20-3"><a></a></span>
-<span id="cb20-4"><a></a><span class="fu">vfold_cv</span>(penguins_train, <span class="at">v =</span> <span class="dv">10</span>) <span class="co"># v = 10 is default</span></span>
-<span id="cb20-5"><a></a><span class="co">#&gt; #  10-fold cross-validation </span></span>
-<span id="cb20-6"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
-<span id="cb20-7"><a></a><span class="co">#&gt;    splits           id    </span></span>
-<span id="cb20-8"><a></a><span class="co">#&gt;    &lt;list&gt;           &lt;chr&gt; </span></span>
-<span id="cb20-9"><a></a><span class="co">#&gt;  1 &lt;split [247/28]&gt; Fold01</span></span>
-<span id="cb20-10"><a></a><span class="co">#&gt;  2 &lt;split [247/28]&gt; Fold02</span></span>
-<span id="cb20-11"><a></a><span class="co">#&gt;  3 &lt;split [247/28]&gt; Fold03</span></span>
-<span id="cb20-12"><a></a><span class="co">#&gt;  4 &lt;split [247/28]&gt; Fold04</span></span>
-<span id="cb20-13"><a></a><span class="co">#&gt;  5 &lt;split [247/28]&gt; Fold05</span></span>
-<span id="cb20-14"><a></a><span class="co">#&gt;  6 &lt;split [248/27]&gt; Fold06</span></span>
-<span id="cb20-15"><a></a><span class="co">#&gt;  7 &lt;split [248/27]&gt; Fold07</span></span>
-<span id="cb20-16"><a></a><span class="co">#&gt;  8 &lt;split [248/27]&gt; Fold08</span></span>
-<span id="cb20-17"><a></a><span class="co">#&gt;  9 &lt;split [248/27]&gt; Fold09</span></span>
-<span id="cb20-18"><a></a><span class="co">#&gt; 10 &lt;split [248/27]&gt; Fold10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="fu">nrow</span>(penguins_train) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span></span>
+<span id="cb19-2"><a></a><span class="co">#&gt; [1] 27.5</span></span>
+<span id="cb19-3"><a></a></span>
+<span id="cb19-4"><a></a><span class="fu">vfold_cv</span>(penguins_train, <span class="at">v =</span> <span class="dv">10</span>) <span class="co"># v = 10 is default</span></span>
+<span id="cb19-5"><a></a><span class="co">#&gt; #  10-fold cross-validation </span></span>
+<span id="cb19-6"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span id="cb19-7"><a></a><span class="co">#&gt;    splits           id    </span></span>
+<span id="cb19-8"><a></a><span class="co">#&gt;    &lt;list&gt;           &lt;chr&gt; </span></span>
+<span id="cb19-9"><a></a><span class="co">#&gt;  1 &lt;split [247/28]&gt; Fold01</span></span>
+<span id="cb19-10"><a></a><span class="co">#&gt;  2 &lt;split [247/28]&gt; Fold02</span></span>
+<span id="cb19-11"><a></a><span class="co">#&gt;  3 &lt;split [247/28]&gt; Fold03</span></span>
+<span id="cb19-12"><a></a><span class="co">#&gt;  4 &lt;split [247/28]&gt; Fold04</span></span>
+<span id="cb19-13"><a></a><span class="co">#&gt;  5 &lt;split [247/28]&gt; Fold05</span></span>
+<span id="cb19-14"><a></a><span class="co">#&gt;  6 &lt;split [248/27]&gt; Fold06</span></span>
+<span id="cb19-15"><a></a><span class="co">#&gt;  7 &lt;split [248/27]&gt; Fold07</span></span>
+<span id="cb19-16"><a></a><span class="co">#&gt;  8 &lt;split [248/27]&gt; Fold08</span></span>
+<span id="cb19-17"><a></a><span class="co">#&gt;  9 &lt;split [248/27]&gt; Fold09</span></span>
+<span id="cb19-18"><a></a><span class="co">#&gt; 10 &lt;split [248/27]&gt; Fold10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell" data-layout-align="center">
@@ -1002,19 +978,19 @@
 <h2>Cross-validation <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <p>What is in this?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a>penguins_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(penguins_train)</span>
-<span id="cb21-2"><a></a>penguins_folds<span class="sc">$</span>splits[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span>
-<span id="cb21-3"><a></a><span class="co">#&gt; [[1]]</span></span>
-<span id="cb21-4"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
-<span id="cb21-5"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span>
-<span id="cb21-6"><a></a><span class="co">#&gt; </span></span>
-<span id="cb21-7"><a></a><span class="co">#&gt; [[2]]</span></span>
-<span id="cb21-8"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
-<span id="cb21-9"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span>
-<span id="cb21-10"><a></a><span class="co">#&gt; </span></span>
-<span id="cb21-11"><a></a><span class="co">#&gt; [[3]]</span></span>
-<span id="cb21-12"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
-<span id="cb21-13"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a>penguins_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(penguins_train)</span>
+<span id="cb20-2"><a></a>penguins_folds<span class="sc">$</span>splits[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]</span>
+<span id="cb20-3"><a></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb20-4"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
+<span id="cb20-5"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span>
+<span id="cb20-6"><a></a><span class="co">#&gt; </span></span>
+<span id="cb20-7"><a></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb20-8"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
+<span id="cb20-9"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span>
+<span id="cb20-10"><a></a><span class="co">#&gt; </span></span>
+<span id="cb20-11"><a></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb20-12"><a></a><span class="co">#&gt; &lt;Analysis/Assess/Total&gt;</span></span>
+<span id="cb20-13"><a></a><span class="co">#&gt; &lt;247/28/275&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -1055,59 +1031,59 @@
 <section id="bootstrapping-1" class="slide level2">
 <h2>Bootstrapping <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">set.seed</span>(<span class="dv">3214</span>)</span>
-<span id="cb22-2"><a></a><span class="fu">bootstraps</span>(penguins_train)</span>
-<span id="cb22-3"><a></a><span class="co">#&gt; # Bootstrap sampling </span></span>
-<span id="cb22-4"><a></a><span class="co">#&gt; # A tibble: 25 × 2</span></span>
-<span id="cb22-5"><a></a><span class="co">#&gt;    splits            id         </span></span>
-<span id="cb22-6"><a></a><span class="co">#&gt;    &lt;list&gt;            &lt;chr&gt;      </span></span>
-<span id="cb22-7"><a></a><span class="co">#&gt;  1 &lt;split [275/96]&gt;  Bootstrap01</span></span>
-<span id="cb22-8"><a></a><span class="co">#&gt;  2 &lt;split [275/105]&gt; Bootstrap02</span></span>
-<span id="cb22-9"><a></a><span class="co">#&gt;  3 &lt;split [275/108]&gt; Bootstrap03</span></span>
-<span id="cb22-10"><a></a><span class="co">#&gt;  4 &lt;split [275/111]&gt; Bootstrap04</span></span>
-<span id="cb22-11"><a></a><span class="co">#&gt;  5 &lt;split [275/102]&gt; Bootstrap05</span></span>
-<span id="cb22-12"><a></a><span class="co">#&gt;  6 &lt;split [275/98]&gt;  Bootstrap06</span></span>
-<span id="cb22-13"><a></a><span class="co">#&gt;  7 &lt;split [275/92]&gt;  Bootstrap07</span></span>
-<span id="cb22-14"><a></a><span class="co">#&gt;  8 &lt;split [275/97]&gt;  Bootstrap08</span></span>
-<span id="cb22-15"><a></a><span class="co">#&gt;  9 &lt;split [275/100]&gt; Bootstrap09</span></span>
-<span id="cb22-16"><a></a><span class="co">#&gt; 10 &lt;split [275/99]&gt;  Bootstrap10</span></span>
-<span id="cb22-17"><a></a><span class="co">#&gt; # ℹ 15 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="fu">set.seed</span>(<span class="dv">3214</span>)</span>
+<span id="cb21-2"><a></a><span class="fu">bootstraps</span>(penguins_train)</span>
+<span id="cb21-3"><a></a><span class="co">#&gt; # Bootstrap sampling </span></span>
+<span id="cb21-4"><a></a><span class="co">#&gt; # A tibble: 25 × 2</span></span>
+<span id="cb21-5"><a></a><span class="co">#&gt;    splits            id         </span></span>
+<span id="cb21-6"><a></a><span class="co">#&gt;    &lt;list&gt;            &lt;chr&gt;      </span></span>
+<span id="cb21-7"><a></a><span class="co">#&gt;  1 &lt;split [275/96]&gt;  Bootstrap01</span></span>
+<span id="cb21-8"><a></a><span class="co">#&gt;  2 &lt;split [275/105]&gt; Bootstrap02</span></span>
+<span id="cb21-9"><a></a><span class="co">#&gt;  3 &lt;split [275/108]&gt; Bootstrap03</span></span>
+<span id="cb21-10"><a></a><span class="co">#&gt;  4 &lt;split [275/111]&gt; Bootstrap04</span></span>
+<span id="cb21-11"><a></a><span class="co">#&gt;  5 &lt;split [275/102]&gt; Bootstrap05</span></span>
+<span id="cb21-12"><a></a><span class="co">#&gt;  6 &lt;split [275/98]&gt;  Bootstrap06</span></span>
+<span id="cb21-13"><a></a><span class="co">#&gt;  7 &lt;split [275/92]&gt;  Bootstrap07</span></span>
+<span id="cb21-14"><a></a><span class="co">#&gt;  8 &lt;split [275/97]&gt;  Bootstrap08</span></span>
+<span id="cb21-15"><a></a><span class="co">#&gt;  9 &lt;split [275/100]&gt; Bootstrap09</span></span>
+<span id="cb21-16"><a></a><span class="co">#&gt; 10 &lt;split [275/99]&gt;  Bootstrap10</span></span>
+<span id="cb21-17"><a></a><span class="co">#&gt; # ℹ 15 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="monte-carlo-cross-validation" class="slide level2">
 <h2>Monte Carlo Cross-Validation <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="fu">set.seed</span>(<span class="dv">322</span>)</span>
-<span id="cb23-2"><a></a><span class="fu">mc_cv</span>(penguins_train, <span class="at">times =</span> <span class="dv">10</span>)</span>
-<span id="cb23-3"><a></a><span class="co">#&gt; # Monte Carlo cross-validation (0.75/0.25) with 10 resamples  </span></span>
-<span id="cb23-4"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
-<span id="cb23-5"><a></a><span class="co">#&gt;    splits           id        </span></span>
-<span id="cb23-6"><a></a><span class="co">#&gt;    &lt;list&gt;           &lt;chr&gt;     </span></span>
-<span id="cb23-7"><a></a><span class="co">#&gt;  1 &lt;split [206/69]&gt; Resample01</span></span>
-<span id="cb23-8"><a></a><span class="co">#&gt;  2 &lt;split [206/69]&gt; Resample02</span></span>
-<span id="cb23-9"><a></a><span class="co">#&gt;  3 &lt;split [206/69]&gt; Resample03</span></span>
-<span id="cb23-10"><a></a><span class="co">#&gt;  4 &lt;split [206/69]&gt; Resample04</span></span>
-<span id="cb23-11"><a></a><span class="co">#&gt;  5 &lt;split [206/69]&gt; Resample05</span></span>
-<span id="cb23-12"><a></a><span class="co">#&gt;  6 &lt;split [206/69]&gt; Resample06</span></span>
-<span id="cb23-13"><a></a><span class="co">#&gt;  7 &lt;split [206/69]&gt; Resample07</span></span>
-<span id="cb23-14"><a></a><span class="co">#&gt;  8 &lt;split [206/69]&gt; Resample08</span></span>
-<span id="cb23-15"><a></a><span class="co">#&gt;  9 &lt;split [206/69]&gt; Resample09</span></span>
-<span id="cb23-16"><a></a><span class="co">#&gt; 10 &lt;split [206/69]&gt; Resample10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a></a><span class="fu">set.seed</span>(<span class="dv">322</span>)</span>
+<span id="cb22-2"><a></a><span class="fu">mc_cv</span>(penguins_train, <span class="at">times =</span> <span class="dv">10</span>)</span>
+<span id="cb22-3"><a></a><span class="co">#&gt; # Monte Carlo cross-validation (0.75/0.25) with 10 resamples  </span></span>
+<span id="cb22-4"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span id="cb22-5"><a></a><span class="co">#&gt;    splits           id        </span></span>
+<span id="cb22-6"><a></a><span class="co">#&gt;    &lt;list&gt;           &lt;chr&gt;     </span></span>
+<span id="cb22-7"><a></a><span class="co">#&gt;  1 &lt;split [206/69]&gt; Resample01</span></span>
+<span id="cb22-8"><a></a><span class="co">#&gt;  2 &lt;split [206/69]&gt; Resample02</span></span>
+<span id="cb22-9"><a></a><span class="co">#&gt;  3 &lt;split [206/69]&gt; Resample03</span></span>
+<span id="cb22-10"><a></a><span class="co">#&gt;  4 &lt;split [206/69]&gt; Resample04</span></span>
+<span id="cb22-11"><a></a><span class="co">#&gt;  5 &lt;split [206/69]&gt; Resample05</span></span>
+<span id="cb22-12"><a></a><span class="co">#&gt;  6 &lt;split [206/69]&gt; Resample06</span></span>
+<span id="cb22-13"><a></a><span class="co">#&gt;  7 &lt;split [206/69]&gt; Resample07</span></span>
+<span id="cb22-14"><a></a><span class="co">#&gt;  8 &lt;split [206/69]&gt; Resample08</span></span>
+<span id="cb22-15"><a></a><span class="co">#&gt;  9 &lt;split [206/69]&gt; Resample09</span></span>
+<span id="cb22-16"><a></a><span class="co">#&gt; 10 &lt;split [206/69]&gt; Resample10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="validation-set" class="slide level2">
 <h2>Validation set <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="fu">set.seed</span>(<span class="dv">853</span>)</span>
-<span id="cb24-2"><a></a>penguins_val_split <span class="ot">&lt;-</span> <span class="fu">initial_validation_split</span>(penguins)</span>
-<span id="cb24-3"><a></a>penguins_val_split</span>
-<span id="cb24-4"><a></a><span class="co">#&gt; &lt;Training/Validation/Testing/Total&gt;</span></span>
-<span id="cb24-5"><a></a><span class="co">#&gt; &lt;199/67/67/333&gt;</span></span>
-<span id="cb24-6"><a></a><span class="fu">validation_set</span>(penguins_val_split)</span>
-<span id="cb24-7"><a></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
-<span id="cb24-8"><a></a><span class="co">#&gt;   splits           id        </span></span>
-<span id="cb24-9"><a></a><span class="co">#&gt;   &lt;list&gt;           &lt;chr&gt;     </span></span>
-<span id="cb24-10"><a></a><span class="co">#&gt; 1 &lt;split [199/67]&gt; validation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a></a><span class="fu">set.seed</span>(<span class="dv">853</span>)</span>
+<span id="cb23-2"><a></a>penguins_val_split <span class="ot">&lt;-</span> <span class="fu">initial_validation_split</span>(penguins)</span>
+<span id="cb23-3"><a></a>penguins_val_split</span>
+<span id="cb23-4"><a></a><span class="co">#&gt; &lt;Training/Validation/Testing/Total&gt;</span></span>
+<span id="cb23-5"><a></a><span class="co">#&gt; &lt;199/67/67/333&gt;</span></span>
+<span id="cb23-6"><a></a><span class="fu">validation_set</span>(penguins_val_split)</span>
+<span id="cb23-7"><a></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb23-8"><a></a><span class="co">#&gt;   splits           id        </span></span>
+<span id="cb23-9"><a></a><span class="co">#&gt;   &lt;list&gt;           &lt;chr&gt;     </span></span>
+<span id="cb23-10"><a></a><span class="co">#&gt; 1 &lt;split [199/67]&gt; validation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>A validation set is just another type of resample</p>
@@ -1150,31 +1126,31 @@
 <div class="columns">
 <div class="column" style="width:70%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb25-2"><a></a><span class="fu">library</span>(forested)</span>
-<span id="cb25-3"><a></a><span class="fu">dim</span>(forested)</span>
-<span id="cb25-4"><a></a><span class="co">#&gt; [1] 7107   19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb24-2"><a></a><span class="fu">library</span>(forested)</span>
+<span id="cb24-3"><a></a><span class="fu">dim</span>(forested)</span>
+<span id="cb24-4"><a></a><span class="co">#&gt; [1] 7107   19</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p>One observation from each of 7,107 6000-acre hexagons in Washington state.</p></li>
 <li><p>A nominal outcome, <code>forested</code>, with levels <code>"Yes"</code> and <code>"No"</code>, measured “on-the-ground.”</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">table</span>(forested<span class="sc">$</span>forested)</span>
-<span id="cb26-2"><a></a><span class="co">#&gt; </span></span>
-<span id="cb26-3"><a></a><span class="co">#&gt;  Yes   No </span></span>
-<span id="cb26-4"><a></a><span class="co">#&gt; 3894 3213</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a></a><span class="fu">table</span>(forested<span class="sc">$</span>forested)</span>
+<span id="cb25-2"><a></a><span class="co">#&gt; </span></span>
+<span id="cb25-3"><a></a><span class="co">#&gt;  Yes   No </span></span>
+<span id="cb25-4"><a></a><span class="co">#&gt; 3894 3213</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>18 remotely-sensed and easily-accessible predictors:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a><span class="fu">names</span>(forested)</span>
-<span id="cb27-2"><a></a><span class="co">#&gt;  [1] "forested"         "year"             "elevation"        "eastness"        </span></span>
-<span id="cb27-3"><a></a><span class="co">#&gt;  [5] "northness"        "roughness"        "tree_no_tree"     "dew_temp"        </span></span>
-<span id="cb27-4"><a></a><span class="co">#&gt;  [9] "precip_annual"    "temp_annual_mean" "temp_annual_min"  "temp_annual_max" </span></span>
-<span id="cb27-5"><a></a><span class="co">#&gt; [13] "temp_january_min" "vapor_min"        "vapor_max"        "canopy_cover"    </span></span>
-<span id="cb27-6"><a></a><span class="co">#&gt; [17] "lon"              "lat"              "land_type"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a></a><span class="fu">names</span>(forested)</span>
+<span id="cb26-2"><a></a><span class="co">#&gt;  [1] "forested"         "year"             "elevation"        "eastness"        </span></span>
+<span id="cb26-3"><a></a><span class="co">#&gt;  [5] "northness"        "roughness"        "tree_no_tree"     "dew_temp"        </span></span>
+<span id="cb26-4"><a></a><span class="co">#&gt;  [9] "precip_annual"    "temp_annual_mean" "temp_annual_min"  "temp_annual_max" </span></span>
+<span id="cb26-5"><a></a><span class="co">#&gt; [13] "temp_january_min" "vapor_min"        "vapor_max"        "canopy_cover"    </span></span>
+<span id="cb26-6"><a></a><span class="co">#&gt; [17] "lon"              "lat"              "land_type"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:30%;">
 <p><img data-src="images/forest.svg" class="center"></p>
@@ -1187,47 +1163,47 @@
 <h2>Data splitting and spending</h2>
 <h3 id="the-initial-split">The initial split <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb28-2"><a></a>forested_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(forested, <span class="at">prop =</span> .<span class="dv">8</span>, <span class="at">strata =</span> tree_no_tree)</span>
-<span id="cb28-3"><a></a>forested_split</span>
-<span id="cb28-4"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
-<span id="cb28-5"><a></a><span class="co">#&gt; &lt;5685/1422/7107&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb27-2"><a></a>forested_split <span class="ot">&lt;-</span> <span class="fu">initial_split</span>(forested, <span class="at">prop =</span> .<span class="dv">8</span>, <span class="at">strata =</span> tree_no_tree)</span>
+<span id="cb27-3"><a></a>forested_split</span>
+<span id="cb27-4"><a></a><span class="co">#&gt; &lt;Training/Testing/Total&gt;</span></span>
+<span id="cb27-5"><a></a><span class="co">#&gt; &lt;5685/1422/7107&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="accessing-the-data-1" class="slide level2">
 <h2>Accessing the data <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a>forested_train <span class="ot">&lt;-</span> <span class="fu">training</span>(forested_split)</span>
-<span id="cb29-2"><a></a>forested_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(forested_split)</span>
-<span id="cb29-3"><a></a></span>
-<span id="cb29-4"><a></a><span class="fu">nrow</span>(forested_train)</span>
-<span id="cb29-5"><a></a><span class="co">#&gt; [1] 5685</span></span>
-<span id="cb29-6"><a></a><span class="fu">nrow</span>(forested_test)</span>
-<span id="cb29-7"><a></a><span class="co">#&gt; [1] 1422</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a></a>forested_train <span class="ot">&lt;-</span> <span class="fu">training</span>(forested_split)</span>
+<span id="cb28-2"><a></a>forested_test  <span class="ot">&lt;-</span> <span class="fu">testing</span>(forested_split)</span>
+<span id="cb28-3"><a></a></span>
+<span id="cb28-4"><a></a><span class="fu">nrow</span>(forested_train)</span>
+<span id="cb28-5"><a></a><span class="co">#&gt; [1] 5685</span></span>
+<span id="cb28-6"><a></a><span class="fu">nrow</span>(forested_test)</span>
+<span id="cb28-7"><a></a><span class="co">#&gt; [1] 1422</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="k-fold-cross-validation" class="slide level2">
 <h2>K-Fold Cross-Validation <img data-src="hexes/rsample.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a><span class="co"># Load the dataset</span></span>
-<span id="cb30-2"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb30-3"><a></a></span>
-<span id="cb30-4"><a></a><span class="co"># Create a 10-fold cross-validation object</span></span>
-<span id="cb30-5"><a></a>(forested_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(forested_train, <span class="at">v =</span> <span class="dv">10</span>))</span>
-<span id="cb30-6"><a></a><span class="co">#&gt; #  10-fold cross-validation </span></span>
-<span id="cb30-7"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
-<span id="cb30-8"><a></a><span class="co">#&gt;    splits             id    </span></span>
-<span id="cb30-9"><a></a><span class="co">#&gt;    &lt;list&gt;             &lt;chr&gt; </span></span>
-<span id="cb30-10"><a></a><span class="co">#&gt;  1 &lt;split [5116/569]&gt; Fold01</span></span>
-<span id="cb30-11"><a></a><span class="co">#&gt;  2 &lt;split [5116/569]&gt; Fold02</span></span>
-<span id="cb30-12"><a></a><span class="co">#&gt;  3 &lt;split [5116/569]&gt; Fold03</span></span>
-<span id="cb30-13"><a></a><span class="co">#&gt;  4 &lt;split [5116/569]&gt; Fold04</span></span>
-<span id="cb30-14"><a></a><span class="co">#&gt;  5 &lt;split [5116/569]&gt; Fold05</span></span>
-<span id="cb30-15"><a></a><span class="co">#&gt;  6 &lt;split [5117/568]&gt; Fold06</span></span>
-<span id="cb30-16"><a></a><span class="co">#&gt;  7 &lt;split [5117/568]&gt; Fold07</span></span>
-<span id="cb30-17"><a></a><span class="co">#&gt;  8 &lt;split [5117/568]&gt; Fold08</span></span>
-<span id="cb30-18"><a></a><span class="co">#&gt;  9 &lt;split [5117/568]&gt; Fold09</span></span>
-<span id="cb30-19"><a></a><span class="co">#&gt; 10 &lt;split [5117/568]&gt; Fold10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a></a><span class="co"># Load the dataset</span></span>
+<span id="cb29-2"><a></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb29-3"><a></a></span>
+<span id="cb29-4"><a></a><span class="co"># Create a 10-fold cross-validation object</span></span>
+<span id="cb29-5"><a></a>(forested_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(forested_train, <span class="at">v =</span> <span class="dv">10</span>))</span>
+<span id="cb29-6"><a></a><span class="co">#&gt; #  10-fold cross-validation </span></span>
+<span id="cb29-7"><a></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span id="cb29-8"><a></a><span class="co">#&gt;    splits             id    </span></span>
+<span id="cb29-9"><a></a><span class="co">#&gt;    &lt;list&gt;             &lt;chr&gt; </span></span>
+<span id="cb29-10"><a></a><span class="co">#&gt;  1 &lt;split [5116/569]&gt; Fold01</span></span>
+<span id="cb29-11"><a></a><span class="co">#&gt;  2 &lt;split [5116/569]&gt; Fold02</span></span>
+<span id="cb29-12"><a></a><span class="co">#&gt;  3 &lt;split [5116/569]&gt; Fold03</span></span>
+<span id="cb29-13"><a></a><span class="co">#&gt;  4 &lt;split [5116/569]&gt; Fold04</span></span>
+<span id="cb29-14"><a></a><span class="co">#&gt;  5 &lt;split [5116/569]&gt; Fold05</span></span>
+<span id="cb29-15"><a></a><span class="co">#&gt;  6 &lt;split [5117/568]&gt; Fold06</span></span>
+<span id="cb29-16"><a></a><span class="co">#&gt;  7 &lt;split [5117/568]&gt; Fold07</span></span>
+<span id="cb29-17"><a></a><span class="co">#&gt;  8 &lt;split [5117/568]&gt; Fold08</span></span>
+<span id="cb29-18"><a></a><span class="co">#&gt;  9 &lt;split [5117/568]&gt; Fold09</span></span>
+<span id="cb29-19"><a></a><span class="co">#&gt; 10 &lt;split [5117/568]&gt; Fold10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="how-do-you-fit-a-linear-model-in-r" class="slide level2">
@@ -1289,7 +1265,7 @@
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a>?linear_reg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a></a>?linear_reg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1332,16 +1308,16 @@
 <li>Logistic Regression</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a><span class="fu">logistic_reg</span>()</span>
-<span id="cb32-2"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
-<span id="cb32-3"><a></a><span class="co">#&gt; </span></span>
-<span id="cb32-4"><a></a><span class="co">#&gt; Computational engine: glm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a></a><span class="fu">logistic_reg</span>()</span>
+<span id="cb31-2"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
+<span id="cb31-3"><a></a><span class="co">#&gt; </span></span>
+<span id="cb31-4"><a></a><span class="co">#&gt; Computational engine: glm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a><span class="fu">decision_tree</span>()</span>
-<span id="cb33-2"><a></a><span class="co">#&gt; Decision Tree Model Specification (unknown mode)</span></span>
-<span id="cb33-3"><a></a><span class="co">#&gt; </span></span>
-<span id="cb33-4"><a></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a></a><span class="fu">decision_tree</span>()</span>
+<span id="cb32-2"><a></a><span class="co">#&gt; Decision Tree Model Specification (unknown mode)</span></span>
+<span id="cb32-3"><a></a><span class="co">#&gt; </span></span>
+<span id="cb32-4"><a></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We chose these two because they are robust, simple model that fit our goal of predicting a binary condition/class (forested/not forested)</p>
 </section>
@@ -1356,7 +1332,7 @@
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a>?<span class="fu">logistic_reg</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a></a>?<span class="fu">logistic_reg</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1372,20 +1348,20 @@
 <section id="specify-a-model-engine-1" class="slide level2">
 <h2>Specify a model: engine <img data-src="hexes/parsnip.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a><span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
-<span id="cb35-3"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
-<span id="cb35-4"><a></a><span class="co">#&gt; </span></span>
-<span id="cb35-5"><a></a><span class="co">#&gt; Computational engine: glmnet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a></a><span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glmnet"</span>)</span>
+<span id="cb34-3"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
+<span id="cb34-4"><a></a><span class="co">#&gt; </span></span>
+<span id="cb34-5"><a></a><span class="co">#&gt; Computational engine: glmnet</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a></a><span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb36-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"stan"</span>)</span>
-<span id="cb36-3"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
-<span id="cb36-4"><a></a><span class="co">#&gt; </span></span>
-<span id="cb36-5"><a></a><span class="co">#&gt; Computational engine: stan</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a></a><span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"stan"</span>)</span>
+<span id="cb35-3"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
+<span id="cb35-4"><a></a><span class="co">#&gt; </span></span>
+<span id="cb35-5"><a></a><span class="co">#&gt; Computational engine: stan</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -1400,7 +1376,7 @@
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a>?<span class="fu">logistic_reg</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a></a>?<span class="fu">logistic_reg</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1417,24 +1393,24 @@
 <h2>Specify a model: mode <img data-src="hexes/parsnip.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "></h2>
 <h4 id="some-models-have-limit-classes">Some models have limit classes …</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a><span class="fu">logistic_reg</span>() </span>
-<span id="cb38-2"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
-<span id="cb38-3"><a></a><span class="co">#&gt; </span></span>
-<span id="cb38-4"><a></a><span class="co">#&gt; Computational engine: glm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a></a><span class="fu">logistic_reg</span>() </span>
+<span id="cb37-2"><a></a><span class="co">#&gt; Logistic Regression Model Specification (classification)</span></span>
+<span id="cb37-3"><a></a><span class="co">#&gt; </span></span>
+<span id="cb37-4"><a></a><span class="co">#&gt; Computational engine: glm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>. . .</p>
 <h4 id="others-requires-specification">Others requires specification …</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a><span class="fu">decision_tree</span>()</span>
-<span id="cb39-2"><a></a><span class="co">#&gt; Decision Tree Model Specification (unknown mode)</span></span>
-<span id="cb39-3"><a></a><span class="co">#&gt; </span></span>
-<span id="cb39-4"><a></a><span class="co">#&gt; Computational engine: rpart</span></span>
-<span id="cb39-5"><a></a></span>
-<span id="cb39-6"><a></a><span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb39-7"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
-<span id="cb39-8"><a></a><span class="co">#&gt; Decision Tree Model Specification (classification)</span></span>
-<span id="cb39-9"><a></a><span class="co">#&gt; </span></span>
-<span id="cb39-10"><a></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a></a><span class="fu">decision_tree</span>()</span>
+<span id="cb38-2"><a></a><span class="co">#&gt; Decision Tree Model Specification (unknown mode)</span></span>
+<span id="cb38-3"><a></a><span class="co">#&gt; </span></span>
+<span id="cb38-4"><a></a><span class="co">#&gt; Computational engine: rpart</span></span>
+<span id="cb38-5"><a></a></span>
+<span id="cb38-6"><a></a><span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb38-7"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb38-8"><a></a><span class="co">#&gt; Decision Tree Model Specification (classification)</span></span>
+<span id="cb38-9"><a></a><span class="co">#&gt; </span></span>
+<span id="cb38-10"><a></a><span class="co">#&gt; Computational engine: rpart</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="r-fit-text">
 <p>All available models are listed at <a href="https://www.tidymodels.org/find/parsnip/" class="uri">https://www.tidymodels.org/find/parsnip/</a></p>
@@ -1580,26 +1556,26 @@
 <li>This is done using the <code>fit()</code> function</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>dt_model <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb40-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">'rpart'</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb40-3"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
-<span id="cb40-4"><a></a></span>
-<span id="cb40-5"><a></a><span class="co"># Model, formula, data inputs</span></span>
-<span id="cb40-6"><a></a>(output <span class="ot">&lt;-</span> <span class="fu">fit</span>(dt_model, forested <span class="sc">~</span> ., <span class="at">data =</span> forested_train) )</span>
-<span id="cb40-7"><a></a><span class="co">#&gt; parsnip model object</span></span>
-<span id="cb40-8"><a></a><span class="co">#&gt; </span></span>
-<span id="cb40-9"><a></a><span class="co">#&gt; n= 5685 </span></span>
-<span id="cb40-10"><a></a><span class="co">#&gt; </span></span>
-<span id="cb40-11"><a></a><span class="co">#&gt; node), split, n, loss, yval, (yprob)</span></span>
-<span id="cb40-12"><a></a><span class="co">#&gt;       * denotes terminal node</span></span>
-<span id="cb40-13"><a></a><span class="co">#&gt; </span></span>
-<span id="cb40-14"><a></a><span class="co">#&gt;  1) root 5685 2571 Yes (0.54775726 0.45224274)  </span></span>
-<span id="cb40-15"><a></a><span class="co">#&gt;    2) land_type=Tree 3025  289 Yes (0.90446281 0.09553719) *</span></span>
-<span id="cb40-16"><a></a><span class="co">#&gt;    3) land_type=Barren,Non-tree vegetation 2660  378 No (0.14210526 0.85789474)  </span></span>
-<span id="cb40-17"><a></a><span class="co">#&gt;      6) temp_annual_max&lt; 13.395 351  155 Yes (0.55840456 0.44159544)  </span></span>
-<span id="cb40-18"><a></a><span class="co">#&gt;       12) tree_no_tree=Tree 91    5 Yes (0.94505495 0.05494505) *</span></span>
-<span id="cb40-19"><a></a><span class="co">#&gt;       13) tree_no_tree=No tree 260  110 No (0.42307692 0.57692308) *</span></span>
-<span id="cb40-20"><a></a><span class="co">#&gt;      7) temp_annual_max&gt;=13.395 2309  182 No (0.07882200 0.92117800) *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a></a>dt_model <span class="ot">&lt;-</span> <span class="fu">decision_tree</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">'rpart'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb39-4"><a></a></span>
+<span id="cb39-5"><a></a><span class="co"># Model, formula, data inputs</span></span>
+<span id="cb39-6"><a></a>(output <span class="ot">&lt;-</span> <span class="fu">fit</span>(dt_model, forested <span class="sc">~</span> ., <span class="at">data =</span> forested_train) )</span>
+<span id="cb39-7"><a></a><span class="co">#&gt; parsnip model object</span></span>
+<span id="cb39-8"><a></a><span class="co">#&gt; </span></span>
+<span id="cb39-9"><a></a><span class="co">#&gt; n= 5685 </span></span>
+<span id="cb39-10"><a></a><span class="co">#&gt; </span></span>
+<span id="cb39-11"><a></a><span class="co">#&gt; node), split, n, loss, yval, (yprob)</span></span>
+<span id="cb39-12"><a></a><span class="co">#&gt;       * denotes terminal node</span></span>
+<span id="cb39-13"><a></a><span class="co">#&gt; </span></span>
+<span id="cb39-14"><a></a><span class="co">#&gt;  1) root 5685 2571 Yes (0.54775726 0.45224274)  </span></span>
+<span id="cb39-15"><a></a><span class="co">#&gt;    2) land_type=Tree 3025  289 Yes (0.90446281 0.09553719) *</span></span>
+<span id="cb39-16"><a></a><span class="co">#&gt;    3) land_type=Barren,Non-tree vegetation 2660  378 No (0.14210526 0.85789474)  </span></span>
+<span id="cb39-17"><a></a><span class="co">#&gt;      6) temp_annual_max&lt; 13.395 351  155 Yes (0.55840456 0.44159544)  </span></span>
+<span id="cb39-18"><a></a><span class="co">#&gt;       12) tree_no_tree=Tree 91    5 Yes (0.94505495 0.05494505) *</span></span>
+<span id="cb39-19"><a></a><span class="co">#&gt;       13) tree_no_tree=No tree 260  110 No (0.42307692 0.57692308) *</span></span>
+<span id="cb39-20"><a></a><span class="co">#&gt;      7) temp_annual_max&gt;=13.395 2309  182 No (0.07882200 0.92117800) *</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="component-extracts" class="slide level2">
@@ -1617,13 +1593,13 @@
 </ul>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>ex <span class="ot">&lt;-</span> <span class="fu">extract_fit_engine</span>(output)</span>
-<span id="cb41-2"><a></a><span class="fu">class</span>(ex) <span class="co"># the class of the engine used!</span></span>
-<span id="cb41-3"><a></a><span class="co">#&gt; [1] "rpart"</span></span>
-<span id="cb41-4"><a></a></span>
-<span id="cb41-5"><a></a><span class="co"># Use rpart plot and text methods ...</span></span>
-<span id="cb41-6"><a></a><span class="fu">plot</span>(ex)</span>
-<span id="cb41-7"><a></a><span class="fu">text</span>(ex, <span class="at">cex =</span> <span class="fl">0.9</span>, <span class="at">use.n =</span> <span class="cn">TRUE</span>, <span class="at">xpd =</span> <span class="cn">TRUE</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a></a>ex <span class="ot">&lt;-</span> <span class="fu">extract_fit_engine</span>(output)</span>
+<span id="cb40-2"><a></a><span class="fu">class</span>(ex) <span class="co"># the class of the engine used!</span></span>
+<span id="cb40-3"><a></a><span class="co">#&gt; [1] "rpart"</span></span>
+<span id="cb40-4"><a></a></span>
+<span id="cb40-5"><a></a><span class="co"># Use rpart plot and text methods ...</span></span>
+<span id="cb40-6"><a></a><span class="fu">plot</span>(ex)</span>
+<span id="cb40-7"><a></a><span class="fu">text</span>(ex, <span class="at">cex =</span> <span class="fl">0.9</span>, <span class="at">use.n =</span> <span class="cn">TRUE</span>, <span class="at">xpd =</span> <span class="cn">TRUE</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1675,10 +1651,10 @@
 <section id="a-model-workflow-1" class="slide level2">
 <h2>A model workflow <img data-src="hexes/workflows.png" class="absolute" style="top: -20px; right: 0px; width: 64px; height: 74.24px; "> <img data-src="hexes/parsnip.png" class="absolute" style="top: -20px; right: 64px; width: 64px; height: 74.24px; "></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a></a>dt_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb42-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb42-3"><a></a>  <span class="fu">add_model</span>(dt_model) <span class="sc">%&gt;%</span></span>
-<span id="cb42-4"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> forested_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a></a>dt_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a></a>  <span class="fu">add_model</span>(dt_model) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> forested_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
@@ -1711,7 +1687,7 @@
 <li><code>augment()</code> will return the dataset with predictions and residuals added.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a></a>dt_preds <span class="ot">&lt;-</span> <span class="fu">augment</span>(dt_wf, <span class="at">new_data =</span> forested_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a></a>dt_preds <span class="ot">&lt;-</span> <span class="fu">augment</span>(dt_wf, <span class="at">new_data =</span> forested_test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
@@ -1744,13 +1720,13 @@
 <li><p>The default metric for <em>regression</em> models are <strong>RMSE</strong>, <strong>R^2</strong>, and <strong>MAE</strong></p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a><span class="co"># We have a classification model</span></span>
-<span id="cb46-2"><a></a><span class="fu">metrics</span>(dt_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
-<span id="cb46-3"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb46-4"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
-<span id="cb46-5"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span id="cb46-6"><a></a><span class="co">#&gt; 1 accuracy binary         0.885</span></span>
-<span id="cb46-7"><a></a><span class="co">#&gt; 2 kap      binary         0.768</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a></a><span class="co"># We have a classification model</span></span>
+<span id="cb45-2"><a></a><span class="fu">metrics</span>(dt_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb45-3"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span id="cb45-4"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
+<span id="cb45-5"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb45-6"><a></a><span class="co">#&gt; 1 accuracy binary         0.885</span></span>
+<span id="cb45-7"><a></a><span class="co">#&gt; 2 kap      binary         0.768</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
@@ -1768,41 +1744,41 @@
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a>log_mod <span class="ot">=</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb47-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb47-3"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
-<span id="cb47-4"><a></a></span>
-<span id="cb47-5"><a></a>log_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb47-6"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb47-7"><a></a>  <span class="fu">add_model</span>(log_mod) <span class="sc">%&gt;%</span></span>
-<span id="cb47-8"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> forested_train)</span>
-<span id="cb47-9"><a></a></span>
-<span id="cb47-10"><a></a>log_preds <span class="ot">&lt;-</span> <span class="fu">augment</span>(log_wf, <span class="at">new_data =</span> forested_test)</span>
-<span id="cb47-11"><a></a></span>
-<span id="cb47-12"><a></a><span class="fu">metrics</span>(log_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
-<span id="cb47-13"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb47-14"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
-<span id="cb47-15"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span id="cb47-16"><a></a><span class="co">#&gt; 1 accuracy binary         0.890</span></span>
-<span id="cb47-17"><a></a><span class="co">#&gt; 2 kap      binary         0.777</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a></a>log_mod <span class="ot">=</span> <span class="fu">logistic_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb46-2"><a></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb46-3"><a></a>  <span class="fu">set_mode</span>(<span class="st">"classification"</span>)</span>
+<span id="cb46-4"><a></a></span>
+<span id="cb46-5"><a></a>log_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb46-6"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb46-7"><a></a>  <span class="fu">add_model</span>(log_mod) <span class="sc">%&gt;%</span></span>
+<span id="cb46-8"><a></a>  <span class="fu">fit</span>(<span class="at">data =</span> forested_train)</span>
+<span id="cb46-9"><a></a></span>
+<span id="cb46-10"><a></a>log_preds <span class="ot">&lt;-</span> <span class="fu">augment</span>(log_wf, <span class="at">new_data =</span> forested_test)</span>
+<span id="cb46-11"><a></a></span>
+<span id="cb46-12"><a></a><span class="fu">metrics</span>(log_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb46-13"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span id="cb46-14"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
+<span id="cb46-15"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb46-16"><a></a><span class="co">#&gt; 1 accuracy binary         0.890</span></span>
+<span id="cb46-17"><a></a><span class="co">#&gt; 2 kap      binary         0.777</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="so-who-wins" class="slide level2">
 <h2>So who wins?</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a><span class="fu">metrics</span>(dt_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
-<span id="cb48-2"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb48-3"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
-<span id="cb48-4"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span id="cb48-5"><a></a><span class="co">#&gt; 1 accuracy binary         0.885</span></span>
-<span id="cb48-6"><a></a><span class="co">#&gt; 2 kap      binary         0.768</span></span>
-<span id="cb48-7"><a></a><span class="fu">metrics</span>(log_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
-<span id="cb48-8"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
-<span id="cb48-9"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
-<span id="cb48-10"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
-<span id="cb48-11"><a></a><span class="co">#&gt; 1 accuracy binary         0.890</span></span>
-<span id="cb48-12"><a></a><span class="co">#&gt; 2 kap      binary         0.777</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a></a><span class="fu">metrics</span>(dt_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb47-2"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span id="cb47-3"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
+<span id="cb47-4"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb47-5"><a></a><span class="co">#&gt; 1 accuracy binary         0.885</span></span>
+<span id="cb47-6"><a></a><span class="co">#&gt; 2 kap      binary         0.768</span></span>
+<span id="cb47-7"><a></a><span class="fu">metrics</span>(log_preds, <span class="at">truth =</span> forested, <span class="at">estimate =</span> .pred_class)</span>
+<span id="cb47-8"><a></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span id="cb47-9"><a></a><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
+<span id="cb47-10"><a></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
+<span id="cb47-11"><a></a><span class="co">#&gt; 1 accuracy binary         0.890</span></span>
+<span id="cb47-12"><a></a><span class="co">#&gt; 2 kap      binary         0.777</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Right out of the gate, there doesn’t seem to be much difference, but …</p>
 </section>
@@ -1814,12 +1790,12 @@
 <li>Instead, we can use our <code>resamples</code> to better understand the skill of a model based on the iterative leave out policy:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a></a>dt_wf_rs <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb49-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb49-3"><a></a>  <span class="fu">add_model</span>(dt_model) <span class="sc">%&gt;%</span></span>
-<span id="cb49-4"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> forested_folds, </span>
-<span id="cb49-5"><a></a>                <span class="co"># Here we just ask tidymodels to save all predictions...</span></span>
-<span id="cb49-6"><a></a>                <span class="at">control   =</span> <span class="fu">control_resamples</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a></a>dt_wf_rs <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb48-3"><a></a>  <span class="fu">add_model</span>(dt_model) <span class="sc">%&gt;%</span></span>
+<span id="cb48-4"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> forested_folds, </span>
+<span id="cb48-5"><a></a>                <span class="co"># Here we just ask tidymodels to save all predictions...</span></span>
+<span id="cb48-6"><a></a>                <span class="at">control   =</span> <span class="fu">control_resamples</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
@@ -1848,11 +1824,11 @@
 <li>We can execute the same workflow for the logistic regression model, this time evaluating the resamples instead of the test data.</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a></a>log_wf_rs <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb51-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb51-3"><a></a>  <span class="fu">add_model</span>(log_mod) <span class="sc">%&gt;%</span></span>
-<span id="cb51-4"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> forested_folds,</span>
-<span id="cb51-5"><a></a>                <span class="at">control =</span> <span class="fu">control_resamples</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a></a>log_wf_rs <span class="ot">&lt;-</span> <span class="fu">workflow</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a></a>  <span class="fu">add_formula</span>(forested <span class="sc">~</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb50-3"><a></a>  <span class="fu">add_model</span>(log_mod) <span class="sc">%&gt;%</span></span>
+<span id="cb50-4"><a></a>  <span class="fu">fit_resamples</span>(<span class="at">resamples =</span> forested_folds,</span>
+<span id="cb50-5"><a></a>                <span class="at">control =</span> <span class="fu">control_resamples</span>(<span class="at">save_pred =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
@@ -1885,21 +1861,21 @@
 </ul></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a></span>
-<span id="cb53-2"><a></a><span class="fu">collect_metrics</span>(log_wf_rs)</span>
-<span id="cb53-3"><a></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
-<span id="cb53-4"><a></a><span class="co">#&gt;   .metric     .estimator   mean     n std_err .config             </span></span>
-<span id="cb53-5"><a></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
-<span id="cb53-6"><a></a><span class="co">#&gt; 1 accuracy    binary     0.906     10 0.00360 Preprocessor1_Model1</span></span>
-<span id="cb53-7"><a></a><span class="co">#&gt; 2 brier_class binary     0.0714    10 0.00191 Preprocessor1_Model1</span></span>
-<span id="cb53-8"><a></a><span class="co">#&gt; 3 roc_auc     binary     0.961     10 0.00164 Preprocessor1_Model1</span></span>
-<span id="cb53-9"><a></a><span class="fu">collect_metrics</span>(dt_wf_rs)</span>
-<span id="cb53-10"><a></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
-<span id="cb53-11"><a></a><span class="co">#&gt;   .metric     .estimator   mean     n std_err .config             </span></span>
-<span id="cb53-12"><a></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
-<span id="cb53-13"><a></a><span class="co">#&gt; 1 accuracy    binary     0.896     10 0.00385 Preprocessor1_Model1</span></span>
-<span id="cb53-14"><a></a><span class="co">#&gt; 2 brier_class binary     0.0889    10 0.00224 Preprocessor1_Model1</span></span>
-<span id="cb53-15"><a></a><span class="co">#&gt; 3 roc_auc     binary     0.909     10 0.00267 Preprocessor1_Model1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a></a></span>
+<span id="cb52-2"><a></a><span class="fu">collect_metrics</span>(log_wf_rs)</span>
+<span id="cb52-3"><a></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
+<span id="cb52-4"><a></a><span class="co">#&gt;   .metric     .estimator   mean     n std_err .config             </span></span>
+<span id="cb52-5"><a></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
+<span id="cb52-6"><a></a><span class="co">#&gt; 1 accuracy    binary     0.906     10 0.00360 Preprocessor1_Model1</span></span>
+<span id="cb52-7"><a></a><span class="co">#&gt; 2 brier_class binary     0.0714    10 0.00191 Preprocessor1_Model1</span></span>
+<span id="cb52-8"><a></a><span class="co">#&gt; 3 roc_auc     binary     0.961     10 0.00164 Preprocessor1_Model1</span></span>
+<span id="cb52-9"><a></a><span class="fu">collect_metrics</span>(dt_wf_rs)</span>
+<span id="cb52-10"><a></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
+<span id="cb52-11"><a></a><span class="co">#&gt;   .metric     .estimator   mean     n std_err .config             </span></span>
+<span id="cb52-12"><a></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               </span></span>
+<span id="cb52-13"><a></a><span class="co">#&gt; 1 accuracy    binary     0.896     10 0.00385 Preprocessor1_Model1</span></span>
+<span id="cb52-14"><a></a><span class="co">#&gt; 2 brier_class binary     0.0889    10 0.00224 Preprocessor1_Model1</span></span>
+<span id="cb52-15"><a></a><span class="co">#&gt; 3 roc_auc     binary     0.909     10 0.00267 Preprocessor1_Model1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="further-simplification-workflowsets" class="slide level2">
@@ -1924,12 +1900,12 @@
 <li><p>Both must be lists, by nature of the underlying <code>purrr</code> code.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a>(wf_obj <span class="ot">&lt;-</span> <span class="fu">workflow_set</span>(<span class="fu">list</span>(forested <span class="sc">~</span>.), <span class="fu">list</span>(log_mod, dt_model)))</span>
-<span id="cb54-2"><a></a><span class="co">#&gt; # A workflow set/tibble: 2 × 4</span></span>
-<span id="cb54-3"><a></a><span class="co">#&gt;   wflow_id              info             option    result    </span></span>
-<span id="cb54-4"><a></a><span class="co">#&gt;   &lt;chr&gt;                 &lt;list&gt;           &lt;list&gt;    &lt;list&gt;    </span></span>
-<span id="cb54-5"><a></a><span class="co">#&gt; 1 formula_logistic_reg  &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span></span>
-<span id="cb54-6"><a></a><span class="co">#&gt; 2 formula_decision_tree &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a></a>(wf_obj <span class="ot">&lt;-</span> <span class="fu">workflow_set</span>(<span class="fu">list</span>(forested <span class="sc">~</span>.), <span class="fu">list</span>(log_mod, dt_model)))</span>
+<span id="cb53-2"><a></a><span class="co">#&gt; # A workflow set/tibble: 2 × 4</span></span>
+<span id="cb53-3"><a></a><span class="co">#&gt;   wflow_id              info             option    result    </span></span>
+<span id="cb53-4"><a></a><span class="co">#&gt;   &lt;chr&gt;                 &lt;list&gt;           &lt;list&gt;    &lt;list&gt;    </span></span>
+<span id="cb53-5"><a></a><span class="co">#&gt; 1 formula_logistic_reg  &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span></span>
+<span id="cb53-6"><a></a><span class="co">#&gt; 2 formula_decision_tree &lt;tibble [1 × 4]&gt; &lt;opts[0]&gt; &lt;list [0]&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="iteritive-extecution" class="slide level2">
@@ -1939,9 +1915,9 @@
 <li><p>Here we are mapping the <code>fit_resamples</code> function across the <code>workflow_set</code> combinations using the <code>resamples</code> argument to specify the resamples we want to use (<code>forested_folds</code>).</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a></a>wf_obj <span class="ot">&lt;-</span> </span>
-<span id="cb55-2"><a></a>  <span class="fu">workflow_set</span>(<span class="fu">list</span>(forested <span class="sc">~</span>.), <span class="fu">list</span>(log_mod, dt_model)) <span class="sc">%&gt;%</span></span>
-<span id="cb55-3"><a></a>  <span class="fu">workflow_map</span>(<span class="st">"fit_resamples"</span>, <span class="at">resamples =</span> forested_folds) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a></a>wf_obj <span class="ot">&lt;-</span> </span>
+<span id="cb54-2"><a></a>  <span class="fu">workflow_set</span>(<span class="fu">list</span>(forested <span class="sc">~</span>.), <span class="fu">list</span>(log_mod, dt_model)) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a></a>  <span class="fu">workflow_map</span>(<span class="st">"fit_resamples"</span>, <span class="at">resamples =</span> forested_folds) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell">
@@ -1958,9 +1934,9 @@
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a><span class="co"># Quick plot function</span></span>
-<span id="cb57-2"><a></a><span class="fu">autoplot</span>(wf_obj) <span class="sc">+</span> </span>
-<span id="cb57-3"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a></a><span class="co"># Quick plot function</span></span>
+<span id="cb56-2"><a></a><span class="fu">autoplot</span>(wf_obj) <span class="sc">+</span> </span>
+<span id="cb56-3"><a></a>  <span class="fu">theme_linedraw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1971,19 +1947,19 @@
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a></a><span class="co"># Long list of results, ranked by accuracy</span></span>
-<span id="cb58-2"><a></a><span class="fu">rank_results</span>(wf_obj, </span>
-<span id="cb58-3"><a></a>            <span class="at">rank_metric =</span> <span class="st">"accuracy"</span>, </span>
-<span id="cb58-4"><a></a>            <span class="at">select_best =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb58-5"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
-<span id="cb58-6"><a></a><span class="co">#&gt;   wflow_id         .config .metric   mean std_err     n preprocessor model  rank</span></span>
-<span id="cb58-7"><a></a><span class="co">#&gt;   &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;</span></span>
-<span id="cb58-8"><a></a><span class="co">#&gt; 1 formula_logisti… Prepro… accura… 0.906  0.00360    10 formula      logi…     1</span></span>
-<span id="cb58-9"><a></a><span class="co">#&gt; 2 formula_logisti… Prepro… brier_… 0.0714 0.00191    10 formula      logi…     1</span></span>
-<span id="cb58-10"><a></a><span class="co">#&gt; 3 formula_logisti… Prepro… roc_auc 0.961  0.00164    10 formula      logi…     1</span></span>
-<span id="cb58-11"><a></a><span class="co">#&gt; 4 formula_decisio… Prepro… accura… 0.896  0.00385    10 formula      deci…     2</span></span>
-<span id="cb58-12"><a></a><span class="co">#&gt; 5 formula_decisio… Prepro… brier_… 0.0889 0.00224    10 formula      deci…     2</span></span>
-<span id="cb58-13"><a></a><span class="co">#&gt; 6 formula_decisio… Prepro… roc_auc 0.909  0.00267    10 formula      deci…     2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a></a><span class="co"># Long list of results, ranked by accuracy</span></span>
+<span id="cb57-2"><a></a><span class="fu">rank_results</span>(wf_obj, </span>
+<span id="cb57-3"><a></a>            <span class="at">rank_metric =</span> <span class="st">"accuracy"</span>, </span>
+<span id="cb57-4"><a></a>            <span class="at">select_best =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb57-5"><a></a><span class="co">#&gt; # A tibble: 6 × 9</span></span>
+<span id="cb57-6"><a></a><span class="co">#&gt;   wflow_id         .config .metric   mean std_err     n preprocessor model  rank</span></span>
+<span id="cb57-7"><a></a><span class="co">#&gt;   &lt;chr&gt;            &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb57-8"><a></a><span class="co">#&gt; 1 formula_logisti… Prepro… accura… 0.906  0.00360    10 formula      logi…     1</span></span>
+<span id="cb57-9"><a></a><span class="co">#&gt; 2 formula_logisti… Prepro… brier_… 0.0714 0.00191    10 formula      logi…     1</span></span>
+<span id="cb57-10"><a></a><span class="co">#&gt; 3 formula_logisti… Prepro… roc_auc 0.961  0.00164    10 formula      logi…     1</span></span>
+<span id="cb57-11"><a></a><span class="co">#&gt; 4 formula_decisio… Prepro… accura… 0.896  0.00385    10 formula      deci…     2</span></span>
+<span id="cb57-12"><a></a><span class="co">#&gt; 5 formula_decisio… Prepro… brier_… 0.0889 0.00224    10 formula      deci…     2</span></span>
+<span id="cb57-13"><a></a><span class="co">#&gt; 6 formula_decisio… Prepro… roc_auc 0.909  0.00267    10 formula      deci…     2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 <div class="fragment">
@@ -1993,7 +1969,8 @@
 <section id="the-whole-game---status-update-1" class="slide level2">
 <h2>The whole game - status update</h2>
 
-<img data-src="images/whole-game-transparent-select.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>On Wednesday, we’ll talk more about models we can chose from.</p>
+<img data-src="images/whole-game-transparent-select.jpg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>On Wednesday, we’ll talk more about models we can chose from…</p>
+<p>Next week we will cover</p>
 
 
 </section></section>

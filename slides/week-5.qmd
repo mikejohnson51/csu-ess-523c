@@ -88,13 +88,6 @@ Illustration credit: <https://vas3k.com/blog/machine_learning/>
 Illustration credit: <https://vas3k.com/blog/machine_learning/>
 :::
 
-## What is `tidymodels`? `r hexes("tidymodels")`
-
-```{r load-tm}
-#| message: true
-library(tidymodels)
-```
-
 ##  {background-image="images/tm-org.png" background-size="contain"}
 
 ## The big picture: Road map
@@ -104,8 +97,6 @@ library(tidymodels)
 #| echo: false
 knitr::include_graphics("images/whole-game-final-performance.jpg")
 ```
-
-## Tidymodels {background-color="#C8C372"}
 
 ## What is `tidymodels`?
 
