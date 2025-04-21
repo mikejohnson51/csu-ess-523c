@@ -6095,5 +6095,208 @@
     "title": "Week 5",
     "section": "The whole game - status update",
     "text": "The whole game - status update\n\nOn Wednesday, we’ll talk more about models we can chose from."
+  },
+  {
+    "objectID": "labs/lab5.html",
+    "href": "labs/lab5.html",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "",
+    "text": "In this lab, we will explore predictive modeling in hydrology using the tidymodels framework and the CAMELS (Catchment Attributes and Meteorology for Large-sample Studies) dataset.\n\n\n\n\n\n\n\n\n\n\n\ntidymodels is an R framework designed for machine learning and statistical modeling. Built on the principles of the tidyverse, tidymodels provides a consistent and modular approach to tasks like data preprocessing, model training, evaluation, and validation. By leveraging the strengths of packages such as recipes, parsnip, and yardstick, tidymodels streamlines the modeling workflow, making it easier to experiment with different models while maintaining reproducibility and interpretability.\n\n\n\nThe CAMELS dataset is a widely used resource in hydrology and environmental science, providing data on over 500 self-draining river basins across the United States. It includes meteorological forcings, streamflow observations, and catchment attributes such as land cover, topography, and soil properties. This dataset is particularly valuable for large-sample hydrology studies, enabling researchers to develop and test models across diverse climatic and physiographic conditions.\nIn this lab, we will focus on predicting mean streamflow for these basins using their associated characteristics. CAMELS has been instrumental in various hydrologic and machine learning applications, including:\n\nCalibrating Hydrologic Models – Used for parameter tuning in models like SAC-SMA, VIC, and HBV, improving regional and large-sample studies.\nTraining Machine Learning Models – Supports deep learning (e.g., LSTMs) and regression-based streamflow predictions, often outperforming traditional methods.\nUnderstanding Model Behavior – Assists in assessing model generalization, uncertainty analysis, and the role of catchment attributes.\nBenchmarking & Regionalization – Facilitates large-scale model comparisons and parameter transfer to ungauged basins.\nHybrid Modeling – Enhances physics-based models with machine learning for bias correction and improved hydrologic simulations.\n\nA notable study by Kratzert et al. (2019) demonstrated that LSTMs can outperform conceptual models in streamflow prediction. As part of this lab, we will explore how to programmatically download and load the data into R."
+  },
+  {
+    "objectID": "labs/lab5.html#what-is-tidymodels",
+    "href": "labs/lab5.html#what-is-tidymodels",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "",
+    "text": "tidymodels is an R framework designed for machine learning and statistical modeling. Built on the principles of the tidyverse, tidymodels provides a consistent and modular approach to tasks like data preprocessing, model training, evaluation, and validation. By leveraging the strengths of packages such as recipes, parsnip, and yardstick, tidymodels streamlines the modeling workflow, making it easier to experiment with different models while maintaining reproducibility and interpretability."
+  },
+  {
+    "objectID": "labs/lab5.html#what-is-the-camels-dataset",
+    "href": "labs/lab5.html#what-is-the-camels-dataset",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "",
+    "text": "The CAMELS dataset is a widely used resource in hydrology and environmental science, providing data on over 500 self-draining river basins across the United States. It includes meteorological forcings, streamflow observations, and catchment attributes such as land cover, topography, and soil properties. This dataset is particularly valuable for large-sample hydrology studies, enabling researchers to develop and test models across diverse climatic and physiographic conditions.\nIn this lab, we will focus on predicting mean streamflow for these basins using their associated characteristics. CAMELS has been instrumental in various hydrologic and machine learning applications, including:\n\nCalibrating Hydrologic Models – Used for parameter tuning in models like SAC-SMA, VIC, and HBV, improving regional and large-sample studies.\nTraining Machine Learning Models – Supports deep learning (e.g., LSTMs) and regression-based streamflow predictions, often outperforming traditional methods.\nUnderstanding Model Behavior – Assists in assessing model generalization, uncertainty analysis, and the role of catchment attributes.\nBenchmarking & Regionalization – Facilitates large-scale model comparisons and parameter transfer to ungauged basins.\nHybrid Modeling – Enhances physics-based models with machine learning for bias correction and improved hydrologic simulations.\n\nA notable study by Kratzert et al. (2019) demonstrated that LSTMs can outperform conceptual models in streamflow prediction. As part of this lab, we will explore how to programmatically download and load the data into R."
+  },
+  {
+    "objectID": "labs/lab5.html#lab-goals",
+    "href": "labs/lab5.html#lab-goals",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Lab Goals",
+    "text": "Lab Goals\nIn this lab, you will:\n\nLearn how to programatically download and access data.\nPractice using tidymodels for predictive modeling.\nTrain and evaluate models to predict mean streamflow across the country.\nInterpret and compare model performance using workflows.\n\nBy the end of this lab, you will have hands-on experience applying machine learning techniques to real-world data, helping to bridge the gap between statistical modeling and environmental science."
+  },
+  {
+    "objectID": "labs/lab5.html#data-download",
+    "href": "labs/lab5.html#data-download",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Data Download",
+    "text": "Data Download\nThe CAMELS dataset is hosted by NCAR and can be accessed here under the “Individual Files” section. The root URL for all data seen on the “Individual Files” page is:\n\nroot  &lt;- 'https://gdex.ucar.edu/dataset/camels/file'\n\nNear the bottom of that page, there are many .txt files that contain the data we want. Some hold climate data for each basin, some hold geology data, some hold soil data, etc. There is also a PDF with descriptions of the columns in each file. We are going to download all of the .txt files and the PDF."
+  },
+  {
+    "objectID": "labs/lab5.html#getting-the-documentation-pdf",
+    "href": "labs/lab5.html#getting-the-documentation-pdf",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Getting the documentation PDF",
+    "text": "Getting the documentation PDF\nWe can download the documentation PDF which provides a descriptions for the various columns as many are not self-explanatory. Here we can use download.file to download the PDF to our data directory.\n\ndownload.file('https://gdex.ucar.edu/dataset/camels/file/camels_attributes_v2.0.pdf', \n              '../data/camels_attributes_v2.0.pdf')"
+  },
+  {
+    "objectID": "labs/lab5.html#getting-basin-characteristics",
+    "href": "labs/lab5.html#getting-basin-characteristics",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Getting Basin characteristics",
+    "text": "Getting Basin characteristics\nNow we want to download the .txt files that store the actual data documented in the PDF. Doing this file by file (like we did with the PDF) is possible, but lets look at a better/easier way…\n\nLets create a vector storing the data types/file names we want to download:\n\n\ntypes &lt;- c(\"clim\", \"geol\", \"soil\", \"topo\", \"vege\", \"hydro\")\n\n\n\n\n\n\n\nglue\n\n\n\n\n\nThe glue package provides an efficient way to interpolate and manipulate strings. It is particularly useful for dynamically constructing text, formatting outputs, and embedding R expressions within strings.\n\nKey Features of glue:\n\nString Interpolation: Embed R expressions inside strings using {}.\nImproved Readability: Eliminates the need for cumbersome paste(), paste0() and sprintf() commands.\nMulti-line Strings: Easily handle multi-line text formatting.\nSafe and Efficient: Optimized for performance and readability.\n\n\n\nBasic Usage\n\nTo use glue, you need to load the package and then call the glue() function with the desired string template. You can embed R expressions within curly braces {} to interpolate values into the string.\n\n\nclass &lt;- \"ESS 330\"\nyear  &lt;- 2024\n\nglue(\"We are taking {class} together in {year}\")\n\nWe are taking ESS 330 together in 2024\n\n\n\n\nMultiples\n\nYou can also use glue to interpolate multiple values at once\n\n\nclasses &lt;- c(\"ESS 330\", \"ESS 523c\")\n\nglue(\"We are taking {classes} together in {year}\")\n\nWe are taking ESS 330 together in 2024\nWe are taking ESS 523c together in 2024\n\n\n\n\n\n\n\nUsing glue, we can construct the needed URLs and file names for the data we want to download:\n\n\n# Where the files live online ...\nremote_files  &lt;- glue('{root}/camels_{types}.txt')\n# where we want to download the data ...\nlocal_files   &lt;- glue('data/camels_{types}.txt')\n\n\nNow we can download the data: walk2 comes from the purrr package and is used to apply a function to multiple arguments in parallel (much like map2 works over paired lists). Here, we are asking walk2 to pass the first element of remote_files and the first element of local_files to the download.file function to download the data, and setting quiet = TRUE to suppress output. The process is then iterated for the second element of each vector, and so on.\n\n\nwalk2(remote_files, local_files, download.file, quiet = TRUE)\n\n\nOnce downloaded, the data can be read it into R using readr::read_delim(), again instead of applying this to each file individually, we can use map to apply the function to each element of the local_files list.\n\n\n# Read and merge data\ncamels &lt;- map(local_files, read_delim, show_col_types = FALSE) \n\n\nThis gives us a list of data.frames, one for each file that we want to merge into a single table. So far in class we have focused on *_join functions to merge data based on a primary and foreign key relationship.\n\nIn this current list, we have &gt;2 tables, but, have a shared column called gauge_id that we can use to merge the data. However, since we have more then a left and right hand table, we need a more robust tool. We will use the powerjoin package to merge the data into a single data frame. powerjoin is a flexible package for joining lists of data.frames. It provides a wide range of join types, including inner, left, right, full, semi, anti, and cross joins making it a versatile tool for data manipulation and analysis, and one that should feel familiar to users of dplyr.\nIn this case, we are join to merge every data.frame in the list (n = 6) by the shared gauge_id column. Since we want to keep all data, we want a full join.\n\ncamels &lt;- power_full_join(camels ,by = 'gauge_id')\n\n\n\n\n\n\n\nNote\n\n\n\nAlternatively, we could have read straight form the urls. Strongly consider the implications of this approach as the longevity and persistence of the data is not guaranteed.\n\n# Read and merge data\ncamels &lt;- map(remote_files, read_delim, show_col_types = FALSE) |&gt; \n  power_full_join(by = 'gauge_id')"
+  },
+  {
+    "objectID": "labs/lab5.html#exploratory-data-analysis",
+    "href": "labs/lab5.html#exploratory-data-analysis",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Exploratory Data Analysis",
+    "text": "Exploratory Data Analysis\nFirst, lets make a map of the sites. Use the borders() ggplot function to add state boundaries to the map and initially color the points by the mean flow (q_mean) at each site.\n\nggplot(data = camels, aes(x = gauge_lon, y = gauge_lat)) +\n  borders(\"state\", colour = \"gray50\") +\n  geom_point(aes(color = q_mean)) +\n  scale_color_gradient(low = \"pink\", high = \"dodgerblue\") +\n  ggthemes::theme_map()\n\n\n\n\n\n\n\n\nWe can take a moment here to are learn a few new things about ggplot2!\n\n\n\n\n\n\nColor scales\n\n\n\nIn ggplot, sometimes you want different things (like bars, dots, or lines) to have different colors. But how does R know which colors to use? That’s where color scales come in!\nscales can be used to map data values to colors (scale_color_*) or fill aesthetics (scale_fill_*). There are two main types of color scales:\n\nDiscrete color scales – for things that are categories, like “apples,” “bananas,” and “cherries.” Each gets its own separate color.\n\n\nscale_color_manual(values = c(\"red\", \"yellow\", \"pink\")) #lets you pick your own colors.\n\nOr\n\nscale_color_brewer(palette = \"Set1\") #uses a built-in color set.\n\n\nContinuous color scales – for numbers, like temperature (cold to hot) or height (short to tall). The color changes smoothly.\n\n\nscale_color_gradient(low = \"blue\", high = \"red\") #makes small numbers blue and big numbers red."
+  },
+  {
+    "objectID": "labs/lab5.html#visual-eda",
+    "href": "labs/lab5.html#visual-eda",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Visual EDA",
+    "text": "Visual EDA\n\nLets start by looking that the 3 dimensions (variables) of this data. We’ll start with a XY plot of aridity and rainfall. We are going to use the scale_color_viridis_c() function to color the points by the q_mean column. This scale functions maps the color of the points to the values in the q_mean column along the viridis continuous (c) palette. Because a scale_color_* function is applied, it maps to the known color aesthetic in the plot.\n\n\n# Create a scatter plot of aridity vs rainfall\nggplot(camels, aes(x = aridity, y = p_mean)) +\n  # Add points colored by mean flow\n  geom_point(aes(color = q_mean)) +\n  # Add a linear regression line\n  geom_smooth(method = \"lm\", color = \"red\", linetype = 2) +\n  # Apply the viridis color scale\n  scale_color_viridis_c() +\n  # Add a title, axis labels, and theme (w/ legend on the bottom)\n  theme_linedraw() + \n  theme(legend.position = \"bottom\") + \n  labs(title = \"Aridity vs Rainfall vs Runnoff\", \n       x = \"Aridity\", \n       y = \"Rainfall\",\n       color = \"Mean Flow\")\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nOk! so it looks like there is a relationship between rainfall, aridity, and rainfall but it looks like an exponential decay function and is certainly not linear.\nTo test a transformation, we can log transform the x and y axes using the scale_x_log10() and scale_y_log10() functions:\n\nggplot(camels, aes(x = aridity, y = p_mean)) +\n  geom_point(aes(color = q_mean)) +\n  geom_smooth(method = \"lm\") +\n  scale_color_viridis_c() +\n  # Apply log transformations to the x and y axes\n  scale_x_log10() + \n  scale_y_log10() +\n  theme_linedraw() +\n  theme(legend.position = \"bottom\") + \n  labs(title = \"Aridity vs Rainfall vs Runnoff\", \n       x = \"Aridity\", \n       y = \"Rainfall\",\n       color = \"Mean Flow\")\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nGreat! We can see a log-log relationship between aridity and rainfall provides a more linear relationship. This is a common relationship in hydrology and is often used to estimate rainfall in ungauged basins. However, once the data is transformed, the lack of spread in the streamflow data is quite evident with high mean flow values being compressed to the low end of aridity/high end of rainfall.\nTo address this, we can visualize how a log transform may benifit the q_mean data as well. Since the data is represented by color, rather then an axis, we can use the trans (transform) argument in the scale_color_viridis_c() function to log transform the color scale.\n\nggplot(camels, aes(x = aridity, y = p_mean)) +\n  geom_point(aes(color = q_mean)) +\n  geom_smooth(method = \"lm\") +\n  # Apply a log transformation to the color scale\n  scale_color_viridis_c(trans = \"log\") +\n  scale_x_log10() + \n  scale_y_log10() +\n  theme_linedraw() +\n  theme(legend.position = \"bottom\",\n        # Expand the legend width ...\n        legend.key.width = unit(2.5, \"cm\"),\n        legend.key.height = unit(.5, \"cm\")) + \n  labs(title = \"Aridity vs Rainfall vs Runnoff\", \n       x = \"Aridity\", \n       y = \"Rainfall\",\n       color = \"Mean Flow\") \n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\nExcellent! Treating these three right skewed variables as log transformed, we can see a more evenly spread relationship between aridity, rainfall, and mean flow. This is a good sign for building a model to predict mean flow using aridity and rainfall."
+  },
+  {
+    "objectID": "labs/lab5.html#lets-start-by-splitting-the-data",
+    "href": "labs/lab5.html#lets-start-by-splitting-the-data",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Lets start by splitting the data",
+    "text": "Lets start by splitting the data\nFirst, we set a seed for reproducabilty, then transform the q_mean column to a log scale. Remember it is error prone to apply transformations to the outcome variable within a recipe. So, we’ll do it a prioi.\nOnce set, we can split the data into a training and testing set. We are going to use 80% of the data for training and 20% for testing with no stratification.\nAdditionally, we are going to create a 10-fold cross validation dataset to help us evaluate multi-model setups.\n\nset.seed(123)\n# Bad form to perform simple transformations on the outcome variable within a \n# recipe. So, we'll do it here.\ncamels &lt;- camels |&gt; \n  mutate(logQmean = log(q_mean))\n\n# Generate the split\ncamels_split &lt;- initial_split(camels, prop = 0.8)\ncamels_train &lt;- training(camels_split)\ncamels_test  &lt;- testing(camels_split)\n\ncamels_cv &lt;- vfold_cv(camels_train, v = 10)"
+  },
+  {
+    "objectID": "labs/lab5.html#preprocessor-recipe",
+    "href": "labs/lab5.html#preprocessor-recipe",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Preprocessor: recipe",
+    "text": "Preprocessor: recipe\nIn lecture, we have focused on using formulas as a workflow preprocessor. Separately we have used the recipe function to define a series of data preprocessing steps. Here, we are going to use the recipe function to define a series of data preprocessing steps.\nWe learned quite a lot about the data in the visual EDA. We know that the q_mean, aridity and p_mean columns are right skewed and can be helped by log transformations. We also know that the relationship between aridity and p_mean is non-linear and can be helped by adding an interaction term to the model. To implement these, lets build a recipe!\n\n# Create a recipe to preprocess the data\nrec &lt;-  recipe(logQmean ~ aridity + p_mean, data = camels_train) %&gt;%\n  # Log transform the predictor variables (aridity and p_mean)\n  step_log(all_predictors()) %&gt;%\n  # Add an interaction term between aridity and p_mean\n  step_interact(terms = ~ aridity:p_mean) |&gt; \n  # Drop any rows with missing values in the pred\n  step_naomit(all_predictors(), all_outcomes())"
+  },
+  {
+    "objectID": "labs/lab5.html#naive-base-lm-approach",
+    "href": "labs/lab5.html#naive-base-lm-approach",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Naive base lm approach:",
+    "text": "Naive base lm approach:\nOk, to start, lets do what we are comfortable with … fitting a linear model to the data. First, we use prep and bake on the training data to apply the recipe. Then, we fit a linear model to the data.\n\n# Prepare the data\nbaked_data &lt;- prep(rec, camels_train) |&gt; \n  bake(new_data = NULL)\n\n# Interaction with lm\n#  Base lm sets interaction terms with the * symbol\nlm_base &lt;- lm(logQmean ~ aridity * p_mean, data = baked_data)\nsummary(lm_base)\n\n\nCall:\nlm(formula = logQmean ~ aridity * p_mean, data = baked_data)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.91162 -0.21601 -0.00716  0.21230  2.85706 \n\nCoefficients:\n               Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)    -1.77586    0.16365 -10.852  &lt; 2e-16 ***\naridity        -0.88397    0.16145  -5.475 6.75e-08 ***\np_mean          1.48438    0.15511   9.570  &lt; 2e-16 ***\naridity:p_mean  0.10484    0.07198   1.457    0.146    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.5696 on 531 degrees of freedom\nMultiple R-squared:  0.7697,    Adjusted R-squared:  0.7684 \nF-statistic: 591.6 on 3 and 531 DF,  p-value: &lt; 2.2e-16\n\n# Sanity Interaction term from recipe ... these should be equal!!\nsummary(lm(logQmean ~ aridity + p_mean + aridity_x_p_mean, data = baked_data))\n\n\nCall:\nlm(formula = logQmean ~ aridity + p_mean + aridity_x_p_mean, \n    data = baked_data)\n\nResiduals:\n     Min       1Q   Median       3Q      Max \n-2.91162 -0.21601 -0.00716  0.21230  2.85706 \n\nCoefficients:\n                 Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)      -1.77586    0.16365 -10.852  &lt; 2e-16 ***\naridity          -0.88397    0.16145  -5.475 6.75e-08 ***\np_mean            1.48438    0.15511   9.570  &lt; 2e-16 ***\naridity_x_p_mean  0.10484    0.07198   1.457    0.146    \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.5696 on 531 degrees of freedom\nMultiple R-squared:  0.7697,    Adjusted R-squared:  0.7684 \nF-statistic: 591.6 on 3 and 531 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "labs/lab5.html#where-things-get-a-little-messy",
+    "href": "labs/lab5.html#where-things-get-a-little-messy",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Where things get a little messy…",
+    "text": "Where things get a little messy…\nOk so now we have our trained model lm_base and want to validate it on the test data.\n\nRemember a models ability to predict on new data is the most important part of the modeling process. It really doesnt matter how well it does on data it has already seen!\n\nWe have to be careful about how we do this with the base R approach:\n\nWrong version 1: augment\nThe broom package provides a convenient way to extract model predictions and residuals. We can use the augment function to add predicted values to the test data. However, if we use augment directly on the test data, we will get incorrect results because the preprocessing steps defined in the recipe object have not been applied to the test data.\n\nnrow(camels_test)\n\n[1] 135\n\nnrow(camels_train)\n\n[1] 536\n\nbroom::augment(lm_base, data = camels_test)\n\nError in `$&lt;-`:\n! Assigned data `predict(x, na.action = na.pass, ...) %&gt;% unname()` must\n  be compatible with existing data.\n✖ Existing data has 135 rows.\n✖ Assigned data has 535 rows.\nℹ Only vectors of size 1 are recycled.\nCaused by error in `vectbl_recycle_rhs_rows()`:\n! Can't recycle input of size 535 to size 135.\n\n\n\n\nWrong version 2: predict\nThe predict function can be used to make predictions on new data. However, if we use predict directly on the test data, we will get incorrect results because the preprocessing steps defined in the recipe object have not been applied to the test data.\n\ncamels_test$p2 = predict(lm_base, newdata = camels_test)\n\n## Scales way off!\nggplot(camels_test, aes(x = p2, y = logQmean)) + \n  geom_point() + \n  # Linear fit line, no error bands\n  geom_smooth(method = \"lm\", se = FALSE, size =1) +\n  # 1:1 line\n  geom_abline(color = \"red\", size = 1) + \n  labs(title = \"Linear Model Using `predict()`\",\n       x = \"Predicted Log Mean Flow\",\n       y = \"Observed Log Mean Flow\") + \n  theme_linedraw()\n\nWarning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.\nℹ Please use `linewidth` instead.\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\n\nCorrect version: prep -&gt; bake -&gt; predict\nTo correctly evaluate the model on the test data, we need to apply the same preprocessing steps to the test data that we applied to the training data. We can do this using the prep and bake functions with the recipe object. This ensures the test data is transformed in the same way as the training data before making predictions.\n\ntest_data &lt;-  bake(prep(rec), new_data = camels_test)\ntest_data$lm_pred &lt;- predict(lm_base, newdata = test_data)"
+  },
+  {
+    "objectID": "labs/lab5.html#model-evaluation-statistical-and-visual",
+    "href": "labs/lab5.html#model-evaluation-statistical-and-visual",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Model Evaluation: statistical and visual",
+    "text": "Model Evaluation: statistical and visual\nNow that we have the predicted values, we can evaluate the model using the metrics function from the yardstick package. This function calculates common regression metrics such as RMSE, R-squared, and MAE between the observed and predicted values.\n\nmetrics(test_data, truth = logQmean, estimate = lm_pred)\n\n# A tibble: 3 × 3\n  .metric .estimator .estimate\n  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n1 rmse    standard       0.583\n2 rsq     standard       0.742\n3 mae     standard       0.390\n\nggplot(test_data, aes(x = logQmean, y = lm_pred, colour = aridity)) +\n  # Apply a gradient color scale\n  scale_color_gradient2(low = \"brown\", mid = \"orange\", high = \"darkgreen\") +\n  geom_point() +\n  geom_abline(linetype = 2) +\n  theme_linedraw() + \n  labs(title = \"Linear Model: Observed vs Predicted\",\n       x = \"Observed Log Mean Flow\",\n       y = \"Predicted Log Mean Flow\",\n       color = \"Aridity\")\n\n\n\n\n\n\n\n\nOk so that was a bit burdensome, is really error prone (fragile), and is worthless if we wanted to test a different algorithm… lets look at a better approach!"
+  },
+  {
+    "objectID": "labs/lab5.html#using-a-workflow-instead",
+    "href": "labs/lab5.html#using-a-workflow-instead",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Using a workflow instead",
+    "text": "Using a workflow instead\ntidymodels provides a framework for building and evaluating models using a consistent and modular workflow. The workflows package allows you to define a series of modeling steps, including data preprocessing, model fitting, and model fitting, in a single object. This makes it easier to experiment with different models, compare performance, and ensure reproducibility.\nworkflows are built from a model, a preprocessor, and a execution. Here, we are going to use the linear_reg function to define a linear regression model, set the engine to lm, and the mode to regression. We then add our recipe to the workflow, fit the model to the training data, and extract the model coefficients.\n\n# Define model\nlm_model &lt;- linear_reg() %&gt;%\n  # define the engine\n  set_engine(\"lm\") %&gt;%\n  # define the mode\n  set_mode(\"regression\")\n\n# Instantiate a workflow ...\nlm_wf &lt;- workflow() %&gt;%\n  # Add the recipe\n  add_recipe(rec) %&gt;%\n  # Add the model\n  add_model(lm_model) %&gt;%\n  # Fit the model to the training data\n  fit(data = camels_train) \n\n# Extract the model coefficients from the workflow\nsummary(extract_fit_engine(lm_wf))$coefficients\n\n                   Estimate Std. Error    t value     Pr(&gt;|t|)\n(Intercept)      -1.7758557 0.16364755 -10.851710 6.463654e-25\naridity          -0.8839738 0.16144589  -5.475357 6.745512e-08\np_mean            1.4843771 0.15511117   9.569762 4.022500e-20\naridity_x_p_mean  0.1048449 0.07198145   1.456555 1.458304e-01\n\n\nLets ensure we replicated the results from the lm_base model. How do they look to you?\n\n# From the base implementation\nsummary(lm_base)$coefficients\n\n                 Estimate Std. Error    t value     Pr(&gt;|t|)\n(Intercept)    -1.7758557 0.16364755 -10.851710 6.463654e-25\naridity        -0.8839738 0.16144589  -5.475357 6.745512e-08\np_mean          1.4843771 0.15511117   9.569762 4.022500e-20\naridity:p_mean  0.1048449 0.07198145   1.456555 1.458304e-01"
+  },
+  {
+    "objectID": "labs/lab5.html#making-predictions",
+    "href": "labs/lab5.html#making-predictions",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Making Predictions",
+    "text": "Making Predictions\nNow that lm_wf is a workflow, data is not embedded in the model, we can use augment with the new_data argument to make predictions on the test data.\n\n#\nlm_data &lt;- augment(lm_wf, new_data = camels_test)\ndim(lm_data)\n\n[1] 135  62"
+  },
+  {
+    "objectID": "labs/lab5.html#model-evaluation-statistical-and-visual-1",
+    "href": "labs/lab5.html#model-evaluation-statistical-and-visual-1",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Model Evaluation: statistical and visual",
+    "text": "Model Evaluation: statistical and visual\nAs with EDA, applying for graphical and statistical evaluation of the model is a key Here, we use the metrics function to extract the default metrics (rmse, rsq, mae) between the observed and predicted mean streamflow values.\nWe then create a scatter plot of the observed vs predicted values, colored by aridity, to visualize the model performance.\n\nmetrics(lm_data, truth = logQmean, estimate = .pred)\n\n# A tibble: 3 × 3\n  .metric .estimator .estimate\n  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n1 rmse    standard       0.583\n2 rsq     standard       0.742\n3 mae     standard       0.390\n\nggplot(lm_data, aes(x = logQmean, y = .pred, colour = aridity)) +\n  scale_color_viridis_c() +\n  geom_point() +\n  geom_abline() +\n  theme_linedraw()"
+  },
+  {
+    "objectID": "labs/lab5.html#switch-it-up",
+    "href": "labs/lab5.html#switch-it-up",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Switch it up!",
+    "text": "Switch it up!\nThe real power of this approach is that we can easily switch out the models/recipes and see how it performs. Here, we are going to instead use a random forest model to predict mean streamflow. We define a random forest model using the rand_forest function, set the engine to ranger, and the mode to regression. We then add the recipe, fit the model, and evaluate the skill.\n\nlibrary(baguette)\nrf_model &lt;- rand_forest() %&gt;%\n  set_engine(\"ranger\", importance = \"impurity\") %&gt;%\n  set_mode(\"regression\")\n\nrf_wf &lt;- workflow() %&gt;%\n  # Add the recipe\n  add_recipe(rec) %&gt;%\n  # Add the model\n  add_model(rf_model) %&gt;%\n  # Fit the model\n  fit(data = camels_train)"
+  },
+  {
+    "objectID": "labs/lab5.html#predictions",
+    "href": "labs/lab5.html#predictions",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Predictions",
+    "text": "Predictions\n\nMake predictions on the test data using the augment function and the new_data argument.\n\n\nrf_data &lt;- augment(rf_wf, new_data = camels_test)\ndim(rf_data)\n\n[1] 135  61"
+  },
+  {
+    "objectID": "labs/lab5.html#model-evaluation-statistical-and-visual-2",
+    "href": "labs/lab5.html#model-evaluation-statistical-and-visual-2",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Model Evaluation: statistical and visual",
+    "text": "Model Evaluation: statistical and visual\nEvaluate the model using the metrics function and create a scatter plot of the observed vs predicted values, colored by aridity.\n\nmetrics(rf_data, truth = logQmean, estimate = .pred)\n\n# A tibble: 3 × 3\n  .metric .estimator .estimate\n  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n1 rmse    standard       0.587\n2 rsq     standard       0.741\n3 mae     standard       0.363\n\nggplot(rf_data, aes(x = logQmean, y = .pred, colour = aridity)) +\n  scale_color_viridis_c() +\n  geom_point() +\n  geom_abline() +\n  theme_linedraw()\n\n\n\n\n\n\n\n\nAwesome! We just set up a completely new model and were able to utilize all of the things we had done for the linear model. This is the power of the tidymodels framework!\nThat said, we still can reduce some to the repetition. Further, we are not really able to compare these models to one another as they"
+  },
+  {
+    "objectID": "labs/lab5.html#a-workflowset-approach",
+    "href": "labs/lab5.html#a-workflowset-approach",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "A workflowset approach",
+    "text": "A workflowset approach\nworkflow_set is a powerful tool for comparing multiple models on the same data. It allows you to define a set of workflows, fit them to the same data, and evaluate their performance using a common metric. Here, we are going to create a workflow_set object with the linear regression and random forest models, fit them to the training data, and compare their performance using the autoplot and rank_results functions.\n\nwf &lt;- workflow_set(list(rec), list(lm_model, rf_model)) %&gt;%\n  workflow_map('fit_resamples', resamples = camels_cv) \n\nautoplot(wf)\n\n\n\n\n\n\n\nrank_results(wf, rank_metric = \"rsq\", select_best = TRUE)\n\n# A tibble: 4 × 9\n  wflow_id          .config .metric  mean std_err     n preprocessor model  rank\n  &lt;chr&gt;             &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;        &lt;chr&gt; &lt;int&gt;\n1 recipe_rand_fore… Prepro… rmse    0.563  0.0247    10 recipe       rand…     1\n2 recipe_rand_fore… Prepro… rsq     0.771  0.0259    10 recipe       rand…     1\n3 recipe_linear_reg Prepro… rmse    0.569  0.0260    10 recipe       line…     2\n4 recipe_linear_reg Prepro… rsq     0.770  0.0223    10 recipe       line…     2\n\n\nOverall it seems the random forest model is outperforming the linear model. This is not surprising given the non-linear relationship between the predictors and the outcome :)"
+  },
+  {
+    "objectID": "labs/lab5.html#final-model",
+    "href": "labs/lab5.html#final-model",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Final Model",
+    "text": "Final Model\n\nrf_fin &lt;- rand_forest() %&gt;%\n  set_engine(\"ranger\", importance = \"impurity\") %&gt;%\n  set_mode(\"regression\")\n\nfinal &lt;- workflow() |&gt; \n  add_recipe(rec) |&gt; \n  add_model(rf_fin) |&gt; \n  fit(data = camels_train)"
+  },
+  {
+    "objectID": "labs/lab5.html#evaluation",
+    "href": "labs/lab5.html#evaluation",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Evaluation",
+    "text": "Evaluation\nAs a last step, lets evaluate the Random Forest model’s performance in predicting streamflow using the vip, augment, and ggplot2. We’ll starts by computing variable importance (vip::vip()) to understand which predictors most influence the model.\nNext, we’ll apply the trained model (final) to the test dataset using augment to append predictions to the test data.\nModel performance is then assessed using metrics(), comparing the actual (logQmean) and predicted (.pred) log-transformed mean streamflow values.\nFinally, a scatter plot is generated , visualizing the observed vs. predicted values, color-coded by aridity. The plot includes a 1:1 reference line (geom_abline()) to indicate perfect predictions and uses the viridis color scale to improve readability.\n\n# VIP: \nvip::vip(final)\n\n\n\n\n\n\n\n## Predcition\nrf_data &lt;- augment(final, new_data = camels_test)\n\n## Evaluation\nmetrics(rf_data, truth = logQmean, estimate = .pred)\n\n# A tibble: 3 × 3\n  .metric .estimator .estimate\n  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n1 rmse    standard       0.593\n2 rsq     standard       0.735\n3 mae     standard       0.366\n\nggplot(rf_data, aes(x = logQmean, y = .pred, colour = aridity)) +\n  scale_color_viridis_c() +\n  geom_point() +\n  geom_abline() +\n  geom_smooth(method = \"lm\", col = 'red', lty = 2, se = FALSE) +\n  theme_linedraw() + \n  labs(title = \"Random Forest Model: Observed vs Predicted\",\n       x = \"Observed Log Mean Flow\",\n       y = \"Predicted Log Mean Flow\",\n       color = \"Aridity\")\n\n`geom_smooth()` using formula = 'y ~ x'"
+  },
+  {
+    "objectID": "labs/lab5.html#data-spliting-15",
+    "href": "labs/lab5.html#data-spliting-15",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Data Spliting (15)",
+    "text": "Data Spliting (15)\n\nSet a seed for reproducible\nCreate an initial split with 75% used for training and 25% for testing\nExtract your training and testing sets\nBuild a 10-fold CV dataset as well"
+  },
+  {
+    "objectID": "labs/lab5.html#recipe-15",
+    "href": "labs/lab5.html#recipe-15",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Recipe (15)",
+    "text": "Recipe (15)\n\nDefine a formula you want to use to predict logQmean\nDescribe in words why you are choosing the formula you are. Consult the downloaded PDF for the data to help you make this decision.\nBuild a recipe that you feel handles the predictors chosen well"
+  },
+  {
+    "objectID": "labs/lab5.html#define-3-models-25",
+    "href": "labs/lab5.html#define-3-models-25",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Define 3 models (25)",
+    "text": "Define 3 models (25)\n\nDefine a random forest model using the rand_forest function\nSet the engine to ranger and the mode to regression\nDefine two other models of your choice"
+  },
+  {
+    "objectID": "labs/lab5.html#workflowset",
+    "href": "labs/lab5.html#workflowset",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "workflowset ()",
+    "text": "workflowset ()\nWith your preprocessing steps and models defined, you can now build a workflow_set object to fit and evaluate your models. This will allow you to compare the performance of different models on the same data.\n\nCreate a workflow object\nAdd the recipe\nAdd the model(s)\nFit the model to the resamples"
+  },
+  {
+    "objectID": "labs/lab5.html#evaluation-1",
+    "href": "labs/lab5.html#evaluation-1",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Evaluation",
+    "text": "Evaluation\n\nUse autoplot and rank_results to compare the models.\nDescribe what model you think is best and why!\n\n\nTune the best model\n\nUse the tune_grid function to tune at least one of the model hyperparameters\nUse show_best to find the best hyperparameter values for the metric of your choic\nUse a workflow to fit your final, tuned, model\n\n\n\nLook at VIP\n\nUse the vip::vip package to visualize the variable importance of your final model\nDescribe what you think of the results and if they make sense\nIf the model you elect cant provide VIP, instead discuss the pros and cons of a less interpretable model"
+  },
+  {
+    "objectID": "labs/lab5.html#extact-and-evaluate",
+    "href": "labs/lab5.html#extact-and-evaluate",
+    "title": "Lab 6: Machine Learning in Hydrology",
+    "section": "Extact and Evaluate",
+    "text": "Extact and Evaluate\n\nUse augment to make predictions on the test data\nUse metrics to evaluate the model performance on the test data\nCreate a plot of the observed vs predicted values with clear title, axis labels, and a compelling color scale\nDescribe what you think of the results!"
   }
 ]

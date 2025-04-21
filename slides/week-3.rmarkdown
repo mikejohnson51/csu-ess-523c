@@ -46,6 +46,11 @@ plot_tess = function(data, title){
 }
 ```
 
+
+
+
+
+
 # Last week
 
 We learned about the SRS (Spatial Reference Systems)
@@ -119,13 +124,28 @@ We learned about the SRS (Spatial Reference Systems)
 
 ## For example ...
 
+
+
+
+
+
 ```{r}
 usa <- st_cast(st_union(aoi_get(state = "conus")), "MULTILINESTRING")
 
 nrow(cities)
 ```
 
+
+
+
+
+
 <br>
+
+
+
+
+
 
 ```{r,eval = FALSE}
 # Great Circle Distance in GCS
@@ -139,9 +159,19 @@ system.time({x <- st_distance(usa, cities, which = "Euclidean")})
 # 2.422   0.019   2.494 
 ```
 
+
+
+
+
+
 ## Units
 
 When possible measure operations report results with a units appropriate for the CRS:
+
+
+
+
+
 
 ```{r}
 co <- st_read("data/co.shp")
@@ -149,22 +179,52 @@ a <- st_area(co[1,])
 attributes(a) |> unlist()
 ```
 
+
+
+
+
+
 The **units** package can be used to convert between units:
+
+
+
+
+
 
 ```{r}
 units::set_units(a, km^2) # result in square kilometers
 units::set_units(a, ha) # result in hectares
 ```
 
+
+
+
+
+
 and the results can be stripped of their attributes for cases where numeric values are needed (e.g. math operators and ggplot):
+
+
+
+
+
 
 ```{r}
 as.numeric(a)
 ```
 
+
+
+
+
+
 ## Topologic Diminsion
 
 A **POINT** is shape with a dimension of 0 that occupies a single location in coordinate space.
+
+
+
+
+
 
 ```{r}
 # POINT defined as numeric vector
@@ -172,19 +232,44 @@ A **POINT** is shape with a dimension of 0 that occupies a single location in co
 ```
 
 
+
+
+
+
+
 A **LINESTRING** is shape that has a dimension of 1 (length)
+
+
+
+
+
 
 ```{r}
 # LINESTRING defined by matrix
 (st_dimension(st_linestring(matrix(1:4, nrow = 2))))
 ```
 
+
+
+
+
+
 A **POLYGON** is surface stored as a list of its exterior and interior rings. It has a dimension of 2. (area)
+
+
+
+
+
 
 ```{r}
 # POLYGON defined by LIST (interior and exterior rings)
 (st_dimension(st_polygon(list(matrix(c(1:4, 1,2), nrow = 3, byrow = TRUE)))))
 ```
+
+
+
+
+
 
 # Predicates
 
@@ -203,6 +288,11 @@ The OGC has define these states for the common geometry types in the simple feat
 | Polygon                       | 2   	| Points within the rings.                                   	| Set of rings.    |   	
   
 ## Interior, Boundary and Exterior: POINTS
+
+
+
+
+
 
 ```{r fig.height=6, fig.width=10, echo=FALSE, message=FALSE, fig.align='center'}
 
@@ -240,7 +330,17 @@ p3 = ggplot() +
 gridExtra::grid.arrange(p1,p0,p2,p3, nrow = 1)
 ```
 
+
+
+
+
+
 ## Interior, Boundary and Exterior: LINESTRING
+
+
+
+
+
 
 ```{r fig.height=6, fig.width=10, echo=FALSE, message=FALSE, fig.align='center'}
 l0 = ggplot() + 
@@ -275,7 +375,17 @@ l3 = ggplot() +
 gridExtra::grid.arrange(l0,l1,l2,l3, nrow = 1)
 ```
 
+
+
+
+
+
 ## Interior, Boundary and Exterior: POLYGON
+
+
+
+
+
 
 ```{r fig.height=6, fig.width=10, echo=FALSE, message=FALSE, fig.align='center'}
 pg = g[c(23:28, 33:38)] 
@@ -312,7 +422,17 @@ pg3 = ggplot() +
 gridExtra::grid.arrange(pg0,pg1,pg2,pg3, nrow = 1)
 ```
 
+
+
+
+
+
 ## Summary
+
+
+
+
+
 
 ```{r fig.height=7, fig.width=10, echo=FALSE, message=FALSE, fig.align='center'}
 fin  = gridExtra::grid.arrange(p0,p1,p2,p3,
@@ -323,11 +443,21 @@ fin  = gridExtra::grid.arrange(p0,p1,p2,p3,
 ggsave(fin, filename = "images/12-int-ext-bound.png", width = 10, height = 7)
 ```
 
+
+
+
+
+
 ## Predicates
 
 In the following, we are interested in the resulting geometry that occurs when 2 geometries are overlaid...
 
 ## Overlap is a POINT: 0D
+
+
+
+
+
 
 ```{r, echo = F, fig.width=10, fig.height=2, fig.align='center'}
 geom1 = g[c(12:16, 22:26)] |> 
@@ -419,7 +549,17 @@ g4 = ggplot() +
 gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
+
+
+
+
+
 ## Overlap is a LINESTRING: 1D
+
+
+
+
+
 
 ```{r, echo = F, fig.width=10, fig.height=2, fig.align='center'}
 geom1 = g[c(32:36, 42:46)] |> 
@@ -512,7 +652,17 @@ g4 = ggplot() +
 gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
+
+
+
+
+
 ## Overlap is a POLYGON: 2D
+
+
+
+
+
 
 ```{r, echo = F, fig.width=10, fig.height=2, fig.align='center'}
 geom1 = g[c(23:27, 33:37)] |> 
@@ -604,7 +754,17 @@ g4 = ggplot() +
 gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
+
+
+
+
+
 ## No Overlap = FALSE
+
+
+
+
+
 
 ```{r, echo = F, fig.width=10, fig.height=2, fig.align='center'}
 geom1 = g[c(23:25, 33:35)] |> 
@@ -637,6 +797,11 @@ gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
 
+
+
+
+
+
 ## Dimensionally Extended 9-Intersection Model
 
 - The DE-9IM is a **topological** model and (standard) used to describe the spatial relations of two geometries 
@@ -657,9 +822,19 @@ gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 
 The **DE-9IM** matrix is based on a 3x3 intersection matrix:
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "50%", echo = FALSE}
 knitr::include_graphics('images/12-de-9Im-matrix.png')
 ```
+
+
+
+
+
 
 Where: 
 
@@ -696,9 +871,19 @@ The OGC has standardized the typical spatial predicates (Contains, Crosses, Inte
 
 ## Illustration
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "50%", echo = FALSE}
 knitr::include_graphics('images/12-de-91m-figure.png')
 ```
+
+
+
+
+
 
 Reading from left-to-right and top-to-bottom, the DE-9IM(a,b) string code is '212101212'
 
@@ -709,6 +894,11 @@ Reading from left-to-right and top-to-bottom, the DE-9IM(a,b) string code is '21
 
 ::: columns
 ::: {.column-width = "50%"}
+
+
+
+
+
 ```{r, echo = FALSE}
 #| out.width: '50%'
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
@@ -723,13 +913,28 @@ y = st_sfc(a0,a1,a2,a3)
 plot(x, border = 'red')
 plot(y, border = 'blue', add = TRUE)
 ```
+
+
+
+
+
 ::: {.column-width = "50%"}
 :::
+
+
+
+
+
 ```{r}
 st_relate(x,y)
 st_relate(x,x)
 st_relate(y,y)
 ```
+
+
+
+
+
 :::
 :::
 
@@ -759,9 +964,19 @@ st_relate(y,y)
 
 - These are include in PostGIS/GEOS and are made accessible via R sf
 
+
+
+
+
+
 ```{r, fig.align='center', fout.width = "50%", echo = FALSE}
 knitr::include_graphics('images/13-sf-binary.png')
 ```
+
+
+
+
+
 
 ## Named predicates in R 
 
@@ -769,11 +984,26 @@ knitr::include_graphics('images/13-sf-binary.png')
 
 #### *sparse* matrix
 
+
+
+
+
+
 ```{r}
 st_intersects(x,y)
 ```
 
+
+
+
+
+
 #### *dense* matrix
+
+
+
+
+
 
 ```{r}
 st_intersects(x, y, sparse = FALSE)
@@ -785,7 +1015,17 @@ st_touches(x, y, sparse = FALSE)
 st_within(x, y, sparse = FALSE)
 ```
 
+
+
+
+
+
 ## st_relates vs. predicate calls...
+
+
+
+
+
 
 ```{r, message = F, warning = F}
 states = filter(aoi_get(state = "all"), state_abbr %in% c("WA", "OR", "MT", "ID")) |>
@@ -794,19 +1034,44 @@ states = filter(aoi_get(state = "all"), state_abbr %in% c("WA", "OR", "MT", "ID"
 wa = filter(states, name == "Washington")
 ```
 
+
+
+
+
+
 ::: columns
 ::: {column.wdith = "50%"}
+
+
+
+
+
 ```{r}
 #| out.width: '50%'
 plot(states$geometry)
 ```
+
+
+
+
+
 :::
 ::: {column.wdith = "50%"}
+
+
+
+
+
 ```{r, message = F, warning = F}
 (mutate(states, 
         deim9 = st_relate(states, wa),
         touch = st_touches(states, wa, sparse = F)))
 ```
+
+
+
+
+
 :::
 :::
 
@@ -815,6 +1080,11 @@ plot(states$geometry)
 - binary predicates return conditional _{T,F}_ relations based on predefined masks of the DE-9IM strings
 
 - Up to this point in class we have been using Boolean _{T,F}_ masks to filter data.frames by columns:
+
+
+
+
+
 
 ```{r}
 fruits = c("apple", "orange", "lemon", "watermelon")
@@ -828,21 +1098,46 @@ fruits == "apple"
 fruits %in% c("apple", "lemon")
 ```
 
+
+
+
+
+
 ## Filtering on data.frames
 
 - We have used `dplyr::filter` to  subset a data frame, retaining all rows that satisfy a `boolean` condition. 
 
 ::: columns
 ::: {column.wdith = "50%"}
+
+
+
+
+
 ```{r}
 mutate(states, equalsWA = (name == "Washington")) |> 
   st_drop_geometry()
 ```
+
+
+
+
+
 :::
 ::: {column.wdith = "50%"}
+
+
+
+
+
 ```{r}
 filter(states, name == "Washington")
 ```
+
+
+
+
+
 :::
 :::
 
@@ -858,19 +1153,44 @@ filter(states, name == "Washington")
 
 ::: columns
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r}
 mutate(states, 
        touch = st_touches(states, wa, sparse = FALSE)) 
 ```
+
+
+
+
+
 :::
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r}
 st_filter(states, wa, .predicate = st_touches) 
 ```
+
+
+
+
+
 :::
 :::
 
 ## Result 
+
+
+
+
+
 
 ```{r, message = FALSE, echo = TRUE, fig.width=6, fig.height=6,fig.align='center'}
 ggplot(states) + 
@@ -880,7 +1200,17 @@ ggplot(states) +
   theme_void()
 ```
 
+
+
+
+
+
 ## Distance Example (additional parameter)
+
+
+
+
+
 
 ```{r, message = FALSE }
 cities = read_csv("../labs/data/uscities.csv") |> 
@@ -895,6 +1225,11 @@ st_filter(cities,
           .predicate = st_is_within_distance, 10000) 
 ```
 
+
+
+
+
+
 # Spatial Data Science
 
 - Filtering is a nice way to reduce the dimensions of a **single** dataset
@@ -908,9 +1243,19 @@ st_filter(cities,
 
 - Joining two non-spatial datasets relies on a shared _key_  that uniquely identifies each record in a table
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 5, echo = FALSE}
 knitr::include_graphics('images/07-joins.png')
 ```
+
+
+
+
+
 
 - Spatially joining data relies on shared _geographic relations_ rather then a shared _key_
 
@@ -924,15 +1269,35 @@ knitr::include_graphics('images/07-joins.png')
 
 - By default, `st_join` performs a _left_ join (Returns all records from x, and the matched records from y)
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "25%", echo = FALSE}
 knitr::include_graphics('images/13-left-join.png')
 ```
 
+
+
+
+
+
 - It can also do inner joins by setting `left = FALSE`. 
+
+
+
+
+
 
 ```{r, fig.align='center', out.width = "25%", echo = FALSE}
 knitr::include_graphics('images/13-inner-join.png')
 ```
+
+
+
+
+
 
 - The default predicate for `st_join` (and `st_filter`) is `st_intersects`
 
@@ -941,6 +1306,11 @@ knitr::include_graphics('images/13-inner-join.png')
 # Every Starbucks in the World
 
 What county has the most Starbucks in each state?
+
+
+
+
+
 
 ```{r, message= FALSE, warning = FALSE}
 (starbucks = readr::read_csv('../labs/data/directory.csv') |> 
@@ -955,7 +1325,17 @@ counties = aoi_get(state = "conus", county = "all") |>
   select(name, state_name)
 ```
 
+
+
+
+
+
 ## 
+
+
+
+
+
 
 ```{r,message=FALSE, fig.align = 'center'}
 topSB <- st_join(counties, starbucks) |> 
@@ -977,6 +1357,11 @@ ggplot() +
        fill = "Number of stores: ")
 ```
 
+
+
+
+
+
 ## 
 
 - Neither _joining_ nor _filtering_ spatially alter the underlying geometry of the features
@@ -988,13 +1373,28 @@ ggplot() +
 
 - Clipping can only apply to features more complex than points: (lines, polygons and their ‘multi’ equivalents). 
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 5, echo = FALSE}
 knitr::include_graphics('images/13-clipping.png')
 ```
 
+
+
+
+
+
 ## Spatial Subsetting
 
 - By default the data.frame subsetting methods we've seen (e.g `[,]`) implements `st_intersection`
+
+
+
+
+
 
 ```{r, fig.align='center', fig.height=6}
 wa = st_transform(wa, 5070)
@@ -1002,6 +1402,11 @@ wa_starbucks = starbucks[wa,] #<<
 
 ggplot() + geom_sf(data = wa) + geom_sf(data = wa_starbucks) + theme_void()
 ```
+
+
+
+
+
 
 # Simplification
 
@@ -1035,15 +1440,35 @@ The most common algorithms are Ramer–Douglas–Peucker and Visvalingam-Whyatt.
 
 - Otherwise, mark p as kept and repeat steps 1-4 using the points between first and p and between p and last (the call to recursion)
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "100%", echo = FALSE}
 knitr::include_graphics('images/13-douglas-peucker-animated.gif')
 ```
 
+
+
+
+
+
 ## st_simplify
+
+
+
+
+
 
 ```{r, fig.align='center', out.width = "90%", echo = FALSE}
 knitr::include_graphics('images/13-postgis-st-simplify.png')
 ```
+
+
+
+
+
 
 ## st_simplify
 
@@ -1051,11 +1476,26 @@ knitr::include_graphics('images/13-postgis-st-simplify.png')
 
 - `st_simplify` uses the `dTolerance` to control the level of generalization in map units (see Douglas and Peucker 1973 for details). 
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "50%", echo = FALSE}
 knitr::include_graphics('images/13-r-st-simplify.png')
 ```
 
+
+
+
+
+
 ##
+
+
+
+
+
 
 ```{r}
 usa = aoi_get(state = "conus") |> 
@@ -1096,11 +1536,21 @@ g4 = ggplot(usa100000) +
 gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
+
+
+
+
+
 ## 
 
 - A limitation with Douglas-Peucker (therefore st_simplify) is that it simplifies objects on a per-geometry basis. 
 
 - This means the ‘topology’ is lost, resulting in overlapping and disconnected geometries. 
+
+
+
+
+
 
 ```{r}
 states = st_transform(states, 5070)
@@ -1108,21 +1558,41 @@ simp_states   = st_simplify(states, dTolerance = 20000)
 plot(simp_states$geometry)
 ```
 
+
+
+
+
+
 ## Visvalingam
 
 - The Visvalingam algorithm overcomes some limitations of the Douglas-Peucker algorithm (Visvalingam and Whyatt 1993).
 - it progressively removes points with the least-perceptible change. 
 - Simplification often allows the elimination of 95% or more points while retaining sufficient detail for visualization and often analysis
 
+
+
+
+
+
 ```{r, fig.align='center', out.width = "50%", echo = FALSE}
 knitr::include_graphics('images/13-ms-simplify.png')
 ```
+
+
+
+
+
 
 ## rmapshaper
 
 In R, the `rmapshaper` package implements the Visvalingam algorithm in the `ms_simplify` function. 
 
 - The `ms_simplify` function is a wrapper around the `mapshaper` JavaScript library (created by lead viz experts at the NYT)
+
+
+
+
+
 
 ```{r}
 library(rmapshaper)
@@ -1161,7 +1631,17 @@ g4 = ggplot(usa1) +
 gridExtra::grid.arrange(g1,g2,g3,g4, nrow = 1)
 ```
 
+
+
+
+
+
 ##
+
+
+
+
+
 
 ```{r}
 states = st_transform(states, 5070)
@@ -1169,9 +1649,19 @@ simp_states   = ms_simplify(states, keep = .05)
 plot(simp_states$geometry)
 ```
 
+
+
+
+
+
 ##
 
 In all cases, the number of points in a geometry can be calculated with `mapview::npts()`
+
+
+
+
+
 
 ```{r}
 states = st_transform(states, 5070)
@@ -1182,6 +1672,11 @@ mapview::npts(states)
 mapview::npts(simp_states_st)
 mapview::npts(simp_states_ms)
 ```
+
+
+
+
+
 
 # Tesselation
 
@@ -1197,9 +1692,19 @@ mapview::npts(simp_states_ms)
 
 ## Core Concepts of Spatial Data: ([Kuhn 2012](https://www.tandfonline.com/doi/full/10.1080/13658816.2012.722637))
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 5, echo = FALSE}
 knitr::include_graphics('images/15-cc.png')
 ```
+
+
+
+
+
 
 ## Core Concepts of Spatial Data: ([Kuhn 2012](https://www.tandfonline.com/doi/full/10.1080/13658816.2012.722637))
 
@@ -1253,9 +1758,19 @@ knitr::include_graphics('images/15-cc.png')
 
 - Field-based spatial information can also represent attributes that are computed rather than measured, such as probabilities or densities.
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 3, echo = FALSE}
 knitr::include_graphics('images/15-prob-snow-christmas.jpg')
 ```
+
+
+
+
+
 
 Together, fields and objects are  the two fundamental ways of structuring spatial information. 
 
@@ -1272,6 +1787,11 @@ Together, fields and objects are  the two fundamental ways of structuring spatia
 ## LANDSAT Path Row
 
 - Serves tiles based on a path/row index
+
+
+
+
+
 
 ```{r, echo = FALSE, fig.align='center', fig.width=10}
 ls = read_sf('../labs/data/CONUS_ARD_grid/conus_ard_grid.shp')
@@ -1296,9 +1816,19 @@ ggplot() +
 ```
 
 
+
+
+
+
+
 ## MODIS Sinisoial Grid
 
 - Serves tiles based on a path/row index
+
+
+
+
+
 
 ```{r, echo = FALSE, fig.align='center', fig.width=10}
 ls = read_sf('../labs/data/modis_grid/modis_sinusoidal_grid_world.shp') |> 
@@ -1322,6 +1852,11 @@ ggplot() +
   labs(title = "MODIS Path/row")
 ```
 
+
+
+
+
+
 ## [Uber Hex Addressing](https://eng.uber.com/h3/)
 
 - Breaks the world into Hexagons...\
@@ -1331,20 +1866,40 @@ ggplot() +
 ::: columns
 ::: {.column width="50%"}
 
+
+
+
+
+
 ```{r}
 #| echo: false
 #| out.width: "100%"
 knitr::include_graphics('images/15-uber-h3.jpeg')
 ```
 
+
+
+
+
+
 :::
 ::: {.column width="50%"}
+
+
+
+
+
 
 ```{r}
 #| echo: false
 #| out.width: "100%"
 knitr::include_graphics('images/15-uber-h3-zoom.jpeg')
 ```
+
+
+
+
+
 
 :::
 :::
@@ -1353,30 +1908,65 @@ knitr::include_graphics('images/15-uber-h3-zoom.jpeg')
 
 - Breaks the world into 3m grids encoded with unique 3 word strings
 
+
+
+
+
+
 ```{r, fig.align='center', fig.width = 7, echo = FALSE}
 knitr::include_graphics('images/15-what3words.png')
 ```
+
+
+
+
+
 
 ## [Map Tiles / slippy maps / Pyramids](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames)
 
 - Use XYZ where Z is a zoom level ...
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 6, echo = FALSE}
 knitr::include_graphics('images/15-pyramid.jpg')
 ```
 
+
+
+
+
+
 ## Our Data for today ...
 
 #### Southern Counties
+
+
+
+
+
 
 ```{r}
 south_counties = aoi_get(state = "south", county = "all") |> 
   st_transform(st_crs(cities))
 ```
 
+
+
+
+
+
 <br>
 
 #### Unioned to States using `dplyr`
+
+
+
+
+
 
 ```{r}
 south_states = south_counties |> 
@@ -1384,9 +1974,19 @@ south_states = south_counties |>
   summarise()
 ```
 
+
+
+
+
+
 <br>
 
 #### South County Centroids
+
+
+
+
+
 
 ```{r}
 south_cent = st_centroid(south_counties)
@@ -1400,11 +2000,26 @@ ggplot() +
   theme_void()
 ```
 
+
+
+
+
+
 ## Southern Coverage: County
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width =10, echo = FALSE}
 plot_tess(south_counties, "Counties")
 ```
+
+
+
+
+
 
 ## Regular Tiles
 
@@ -1418,6 +2033,11 @@ plot_tess(south_counties, "Counties")
 
 - Grids can be specified by _cellsize_ or number of grid cells (*n*) in the X and Y direction
 
+
+
+
+
+
 ```{r}
 # Create a grid over the south with 70 rows and 50 columns
 sq_grid = st_make_grid(south_counties, n = c(70, 50)) |> 
@@ -1425,11 +2045,26 @@ sq_grid = st_make_grid(south_counties, n = c(70, 50)) |>
   mutate(id = 1:n())
 ```
 
+
+
+
+
+
 ## Southern Coverage: Square
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10, echo = FALSE}
 plot_tess(sq_grid, "Square Coverage")
 ```
+
+
+
+
+
 
 ## Hexagonal Grid
 
@@ -1437,17 +2072,37 @@ plot_tess(sq_grid, "Square Coverage")
 
 - They are created in the same way but by setting `square = FALSE`
 
+
+
+
+
+
 ```{r}
 hex_grid = st_make_grid(south_counties, n = c(70, 50), square = FALSE) |> 
   st_as_sf() |> 
   mutate(id = 1:n())
 ```
 
+
+
+
+
+
 ## Southern Coverage: Hexagon
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10, echo = FALSE}
 plot_tess(hex_grid, "Hexegonal Coverage")
 ```
+
+
+
+
+
 
 ## Advantages Square Grids
 
@@ -1476,9 +2131,19 @@ plot_tess(hex_grid, "Hexegonal Coverage")
 
 ##
 
+
+
+
+
+
 ```{r, fig.align='center', fig.width = 18, echo = FALSE}
 knitr::include_graphics('images/15-hex-vs-others.png')
 ```
+
+
+
+
+
 
 ## Triangulations
 
@@ -1499,15 +2164,35 @@ knitr::include_graphics('images/15-hex-vs-others.png')
 
 - They are defined by the _perpendicular_ bisectors of the lines between all points.
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 8, echo = FALSE}
 knitr::include_graphics('images/15-voronoi-animation.gif')
 ```
 
+
+
+
+
+
 ## Voronoi Polygons
+
+
+
+
+
 
 ```{r, fig.align='center', fig.height = 8, echo = FALSE}
 knitr::include_graphics('images/15-Voronoi_growth_euclidean.gif')
 ```
+
+
+
+
+
 
 ## Voronoi Polygons
 
@@ -1521,14 +2206,34 @@ knitr::include_graphics('images/15-Voronoi_growth_euclidean.gif')
 
 ::: columns
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r, echo = FALSE, fig.width = 6}
 knitr::include_graphics('images/15-gage-rainfall.png')
 ```
+
+
+
+
+
 :::
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r, echo = FALSE, fig.width = 6}
 knitr::include_graphics('images/15-triangle-rainfall.png')
 ```
+
+
+
+
+
 :::
 :::
 
@@ -1536,14 +2241,34 @@ knitr::include_graphics('images/15-triangle-rainfall.png')
 
 ::: columns
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r, echo = FALSE, fig.width = 6}
 knitr::include_graphics('images/15-ocean-eddy.png')
 ```
+
+
+
+
+
 :::
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r, echo = FALSE, fig.width = 6}
 knitr::include_graphics('images/15-jetstream.png')
 ```
+
+
+
+
+
 :::
 :::
 
@@ -1557,6 +2282,11 @@ knitr::include_graphics('images/15-jetstream.png')
 
 - If to be treated as an object for analysis, should be id'd
 
+
+
+
+
+
 ```{r}
 south_cent_u = st_union(south_cent)
 
@@ -1566,13 +2296,33 @@ v_grid = st_voronoi(south_cent_u) |>
   mutate(id = 1:n())
 ```
 
+
+
+
+
+
 ## Southern Coverage: Voronoi
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10, echo = FALSE}
 plot_tess(v_grid, "Voronoi Coverage")
 ```
 
+
+
+
+
+
 ## Southern Coverage: Voronoi
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10, echo = FALSE}
 v_grid = st_intersection(v_grid, st_union(south_states))
@@ -1583,13 +2333,28 @@ plot_tess(v_grid, "Voroni Coverage") +
   geom_sf(data = south_cent, col = "darkred", size = .2)
 ```
 
+
+
+
+
+
 ## Delaunay triangulation
 
 - A Delaunay triangulation for a given set of points (P) in a plane, is a triangulation DT(P), where no point is inside the circumcircle of any triangle in DT(P). 
 
+
+
+
+
+
 ```{r, fig.align='center', fig.height = 8, echo = FALSE}
 knitr::include_graphics('images/15-Delaunay_triangles.gif')
 ```
+
+
+
+
+
 
 ## Delaunay triangulation
 
@@ -1597,23 +2362,53 @@ knitr::include_graphics('images/15-Delaunay_triangles.gif')
 
 - The circumcenters (center of circles) of Delaunay triangles are the vertices of the Voronoi diagram. 
 
+
+
+
+
+
 ```{r,  fig.width = 10, fig.align='center', echo = FALSE}
 knitr::include_graphics('images/15-vor-delun.png')
 ```
+
+
+
+
+
 
 ## Used in landscape evaluation and terrian modeling
 
 ::: columns
 ::: {.column width="50%"}
 
+
+
+
+
+
 ```{r,  fig.height = 6, echo = FALSE}
 knitr::include_graphics('images/15-flood-plain-mapping.jpg')
 ```
+
+
+
+
+
 ::: 
 ::: {.column width="50%"}
+
+
+
+
+
 ```{r,echo = FALSE}
 knitr::include_graphics('images/15-tin-terrain.jpg')
 ```
+
+
+
+
+
 :::
 :::
 
@@ -1627,6 +2422,11 @@ knitr::include_graphics('images/15-tin-terrain.jpg')
 
 - If to be treated as an object for analysis, should be id'd
 
+
+
+
+
+
 ```{r}
 t_grid = st_triangulate(south_cent_u) |> 
   st_cast() |> 
@@ -1634,13 +2434,33 @@ t_grid = st_triangulate(south_cent_u) |>
   mutate(id = 1:n())
 ```
 
+
+
+
+
+
 ## Southern Coverage: Triangles
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10, echo = FALSE}
 plot_tess(t_grid, "Triangular Coverage")
 ```
 
+
+
+
+
+
 ## Southern Coverage: Triangles
+
+
+
+
+
 
 ```{r, fig.align='center', fig.width=10}
 t_grid = st_intersection(t_grid, st_union(south_states))
@@ -1651,7 +2471,17 @@ plot_tess(t_grid, "Voroni Coverage") +
   geom_sf(data = south_cent, col = "darkred", size = .3)
 ```
 
+
+
+
+
+
 ## Difference in object coverages:
+
+
+
+
+
 
 ```{r, echo = FALSE}
 sum_tess = function(data, type){
@@ -1671,6 +2501,11 @@ knitr::kable(caption = "Tesselation Characteristics",
   kableExtra::kable_styling("striped", full_width = T, font_size = 48)
 ```
 
+
+
+
+
+
 ## Modifiable areal unit problem (MAUP)
 
 - The modifiable areal unit problem (MAUP) is a source of statistical bias that can significantly impact the results of statistical hypothesis tests. 
@@ -1679,9 +2514,19 @@ knitr::kable(caption = "Tesselation Characteristics",
 
 - The resulting summary values (e.g., totals or proportions) are influenced by both the shape and scale of the aggregation unit.
 
+
+
+
+
+
 ```{r, fig.align='center', fig.width = 2, echo = FALSE}
 knitr::include_graphics('images/15-maup.png')
 ```
+
+
+
+
+
 
 # Real World Example
 
@@ -1697,9 +2542,19 @@ knitr::include_graphics('images/15-maup.png')
 
 # [Examples](https://thefulcrum.us/worst-gerrymandering-districts-example)
 
+
+
+
+
+
 ```{r, fig.align='center', out.width="90%", echo = FALSE}
 knitr::include_graphics('images/15-gm-maup.png')
 ```
+
+
+
+
+
 
 ## Wrap up
  
@@ -1719,3 +2574,4 @@ Combined with your understanding of
 We are well suited to move on to raster data (gridded coverage model!) next week
 
 Congrats!!
+
