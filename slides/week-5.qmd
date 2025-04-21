@@ -1,0 +1,1533 @@
+---
+title: "Week 5"
+subtitle: "Machine Learning Part 1"
+format:
+  revealjs: 
+    smaller: true
+    incremental: false
+    logo: ../csu-rams-logo.png
+    slide-number: c/t
+    footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
+    include-before-body: header.html
+    include-after-body: footer-annotations.html
+    theme: [default, csu-css.scss]
+    width: 1600
+    height: 1000
+    countIncrementalSlides: false
+    title-slide-attributes:
+      data-background-color: "#1E4D2B"
+knitr:
+  opts_chunk: 
+    echo: true
+    message: false
+    collapse: true
+    comment: "#>"
+    out.width: "100%"
+---
+
+
+```{r}
+#| echo: false
+hexes <- function(..., size = 64) {
+  x <- c(...)
+  x <- sort(unique(x), decreasing = TRUE)
+  right <- (seq_along(x) - 1) * size
+
+  res <- glue::glue(
+    '![](hexes/<x>.png){.absolute top=-20 right=<right> width="<size>" height="<size * 1.16>"}',
+    .open = "<", .close = ">"
+  )
+
+  paste0(res, collapse = " ")
+}
+
+library(ggpubr)
+
+train_color <- '#1E4D2B'
+test_color  <- '#C8C372'
+data_color  <- "#767381"
+assess_color <- "#84cae1"
+splits_pal <- c(data_color, train_color, test_color)
+```
+
+
+## Unit 3: Modeling (Machine Learning)
+
+![](https://imgs.xkcd.com/comics/machine_learning.png){fig-align="center"}
+
+::: footer
+<https://xkcd.com/1838/>
+:::
+
+## What is machine learning?
+
+![](images/what_is_ml.png){.absolute top=0 left=150 style="z-index: -1;"}
+
+::: footer
+Illustration credit: <https://vas3k.com/blog/machine_learning/>
+:::
+
+## What is machine learning? (2025 edition)
+
+:::{.callout-note}
+In the early 2010s, "Artificial intelligence" (AI) was largely synonymous with what we'll refer to as "machine learning" in this workshop. In the late 2010s and early 2020s, AI usually referred to deep learning methods. Since the release of ChatGPT in late 2022, "AI" has come to also encompass large language models (LLMs) / generative models.
+:::
+
+![](images/what_is_ml_expanding.gif){.absolute top=150 left=150 style="z-index: -1;"}
+
+
+::: footer
+Illustration credit: <https://vas3k.com/blog/machine_learning/>
+:::
+
+## Classic Conceptual Model
+
+![](images/ml_illustration.jpg){fig-align="center"}
+
+::: footer
+Illustration credit: <https://vas3k.com/blog/machine_learning/>
+:::
+
+## What is `tidymodels`? `r hexes("tidymodels")`
+
+```{r load-tm}
+#| message: true
+library(tidymodels)
+```
+
+##  {background-image="images/tm-org.png" background-size="contain"}
+
+## The big picture: Road map
+
+```{r end-game}
+#| fig-align: "center"
+#| echo: false
+knitr::include_graphics("images/whole-game-final-performance.jpg")
+```
+
+## Tidymodels {background-color="#C8C372"}
+
+## What is `tidymodels`?
+
+  - An R package ecosystem for modeling and machine learning
+  - Built on the `tidyverse` principles (consistent syntax, modular design)
+  - Provides a structured workflow for preprocessing, model fitting, and evaluation
+  - Includes packages for model specification, preprocessing, resampling, tuning, and evaluation
+  - Promotes best practices for reproducibility and efficiency
+  - Offers a unified interface for different models and tasks
+
+## Key tidymodels Packages
+
+📦 `recipes`: Feature engineering and preprocessing
+
+📦 `parsnip`: Unified interface for model specification
+
+📦 `workflows`: Streamlined modeling pipelines
+
+📦 `tune`: Hyperparameter tuning
+
+📦 `rsample`: Resampling and validation
+
+📦 `yardstick`: Model evaluation metrics
+
+```{r}
+knitr::include_graphics('images/tidymodels-packages.png')
+tidymodels::tidymodels_packages()
+```
+
+## Typcical Workflow in `tidymodels`
+
+1️⃣ Load Package & Data
+
+2️⃣ Preprocess Data (`recipes`)
+
+3️⃣ Define Model (`parsnip`)
+
+4️⃣ Create a Workflow (`workflows`)
+
+5️⃣ Train & Tune (`tune`)
+
+6️⃣ Evaluate Performance (`yardstick`)
+
+## Data Normalization: `tidymodels`
+
+- Data normalization is a crucial step in data preprocessing for machine learning. 
+
+- It ensures that features contribute equally to model performance by transforming them into a common scale. 
+
+- This is particularly important for algorithms that rely on distance metrics (e.g., k-nearest neighbors, support vector machines) or gradient-based optimization (e.g., neural networks, logistic regression).
+
+- In the `tidymodels` framework, data normalization is handled within preprocessing workflows using the `recipes` package, which provides a structured way to apply transformations consistently.
+
+## Why Normalize Data for ML?
+
+✅ Improves Model Convergence: Many machine learning models rely on gradient descent, which can be inefficient if features are on different scales.
+
+✅ Prevents Feature Domination: Features with large magnitudes can overshadow smaller ones, leading to biased models.
+
+✅ Enhances Interpretability: Standardized data improves comparisons across variables and aids in better model understanding.
+
+✅  Facilitates Distance-Based Methods: Algorithms like k-nearest neighbors and principal component analysis (PCA) perform best when data is normalized.
+
+## Common Normalization Techniques
+
+#### 1. `Min-Max Scaling`
+
+  - Transforms data into a fixed range (typically [0,1]).
+
+  - Preserves relationships but sensitive to outliers.
+
+  - Formula: $$ x' = \frac{x - x_{min}}{x_{max} - x_{min}} $$
+
+  - Implemented using `step_range()` in `recipes.`
+
+#### 2. `Z-Score Standardization (Standard Scaling)`
+  
+  - Centers data to have zero mean and unit variance.
+
+  - More robust to outliers compared to min-max scaling.
+
+  - Formula: $$ x' = \frac{x - \mu}{\sigma} $$
+
+  - Implemented using `step_normalize()` in `recipes`.
+
+## Common Normalization Techniques
+
+#### 3. `Robust Scaling`
+
+  - Uses median and interquartile range (IQR) for scaling.
+  
+  - Less sensitive to outliers.
+  
+  - Formula: $$ x' = \frac{x - median(x)}{IQR(x)} $$
+
+  - Implemented using `step_YeoJohnson()` or `step_BoxCox()` in `recipes.`
+
+#### 4. `Log Transformation`
+
+  - Useful for skewed distributions to reduce the impact of extreme values.
+
+  - Implemented using `step_log()` in `recipes.`
+
+## Common Normalization Techniques
+
+#### 5. `Principal Component Analysis (PCA)` 
+
+  - Projects data into a lower-dimensional space while maintaining variance.
+
+  - Used in high-dimensional datasets.
+
+  - Implemented using `step_pca()` in recipes.
+
+## Other Feature Engineering Tasks
+
+#### Handling Missing Data
+
+  - `step_impute_mean()`
+  - `step_impute_median()`
+  - `step_impute_knn() `
+
+can be used to fill missing values.
+
+#### Encoding Categorical Variables
+
+  - `step_dummy()` creates dummy variables for categorical features.
+
+  - `step_other()` groups infrequent categories into an "other" category.
+
+#### Creating Interaction Terms
+
+  - `step_interact()` generates interaction terms between predictors.
+
+#### Feature Extraction
+
+  - `step_pca()` or `step_ica()` can be used to extract important components.
+
+#### Text Feature Engineering
+
+`step_tokenize()`, `step_stopwords()`, and `step_tf()` for text processing.
+
+#### Binning Numerical Data
+
+`step_bin2factor()` converts continuous variables into categorical bins.
+
+#### Polynomial and Spline Features
+
+`step_poly()` and `step_bs()` for generating polynomial and spline transformations.
+
+## Implementing Normalization in Tidymodels
+
+## What will we do?
+
+1. We will create a recipe to normalize the numerical predictors in the `penguins` dataset using the `recipes` package.
+
+2. We will then prepare (`prep`) the recipe and apply it to the dataset to obtain normalized data.
+
+3. We will then `bake` the recipe to apply the transformations to the dataset.
+
+4. Once processed, we can implement a linear regression model using the normalized data.
+
+. . .
+
+### Example Workflow
+
+:::: {.columns}
+::: {.column width = "50%"}
+```{r}
+library(tidymodels)
+
+(recipe_obj <- recipe(flipper_length_mm ~ 
+                       bill_length_mm + body_mass_g + 
+                       sex + island + species, 
+                      data = penguins) |> 
+  step_impute_mean(all_numeric_predictors()) |>
+  step_dummy(all_factor_predictors()) |>
+  step_normalize(all_numeric_predictors()))
+
+# Prepare and apply transformations
+prep_recipe     <- prep(recipe_obj, training = penguins) 
+
+normalized_data <- bake(prep_recipe, new_data = NULL) |> 
+  mutate(species = penguins$species) |> 
+  drop_na()
+
+head(normalized_data)
+```
+
+:::
+::: {.column width = "50%"}
+
+#### Explanation:
+
+- `recipe()` defines preprocessing steps for modeling.
+
+- `step_impute_mean(all_numeric_predictors())` standardizes all numerical predictors.
+
+- `step_dummy(all_factor_predictors())` creates dummy variables for categorical predictors.
+
+- `step_normalize(all_numeric_predictors()))` standardizes all numerical predictors.
+
+- `prep()` estimates parameters for transformations.
+
+- `bake()` applies the transformations to the dataset.
+
+::: 
+::::
+
+`r flipbookr::chunq_reveal("example", title = "Build a model with Normalized Data", lcolw = "40", rcolw = "60", smallcode=TRUE)`
+
+```{r, example, include=FALSE}
+(model = lm(flipper_length_mm ~ . , data = normalized_data) )
+
+glance(model)
+
+(pred <- augment(model, normalized_data))
+
+ggscatter(pred, 
+          x = 'flipper_length_mm', y = '.fitted', 
+          add = "reg.line", conf.int = TRUE,
+          cor.coef = TRUE, cor.method = "pearson",
+          color = "species", palette = "jco")
+```
+
+## Data Budget
+
+- In any modeling effort, it's crucial to evaluate the performance of a model using different validation techniques to ensure a model can generalize to unseen data. 
+
+- But data is limited even in the age of "big data".
+
+```{r diagram-split}
+#| fig-align: "center"
+#| echo: false
+knitr::include_graphics("images/whole-game-split.jpg")
+```
+
+## Our typical process will like this:
+
+1.  Read in raw data (`readr`, `dplyr::*_join`) (single or multi table)
+
+. . . 
+
+2.  Prepare the data (EDA/mutate/summarize/clean, etc)
+   
+
+  - This is "Feature Engineering"
+
+. . .
+
+3.  Once we've established our features (rows), we decide how to "spend" them ... 
+
+. . . 
+
+
+For machine learning, we typically split data into **training** and **test** sets:
+
+. . .
+
+  - The **training set** is used to estimate model parameters.
+  
+  - Spending too much data in **training** prevents us from computing a good assessment of model **performance**.
+    
+. . . 
+
+  - The **test set** is used as an independent assessment of performance.
+  
+  - Spending too much data in **testing** prevents us from computing good model parameter estimates.
+
+
+## How we split data 
+
+```{r test-train-split}
+#| echo: false
+#| fig.width: 12
+#| fig.height: 3
+#| 
+set.seed(123)
+
+library(forcats)
+
+one_split <- tibble(x = 1:30) %>% 
+  initial_split() %>% 
+  tidy() %>% 
+  add_row(Row = 1:30, Data = "Original") %>% 
+  mutate(Data = case_when(
+    Data == "Analysis" ~ "Training",
+    Data == "Assessment" ~ "Testing",
+    TRUE ~ Data
+  )) %>% 
+  mutate(Data = factor(Data, levels = c("Original", "Training", "Testing")))
+
+all_split <-
+  ggplot(one_split, aes(x = Row, y = fct_rev(Data), fill = Data)) + 
+  geom_tile(color = "white",
+            linewidth = 1) + 
+  scale_fill_manual(values = splits_pal, guide = "none") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = rel(2)),
+        axis.text.x = element_blank(),
+        legend.position = "top",
+        panel.grid = element_blank()) +
+  coord_equal(ratio = 1) +
+  labs(x = NULL, y = NULL)
+
+all_split
+```
+
+. . . 
+
+- Splitting can be handled in many of ways. Typically, we base it off of a "hold out" percentage (e.g. 20%)
+
+- These hold out cases are extracted randomly from the data set. (remember seeds?)
+ 
+ . . . 
+ 
+- The **training** set is usually the majority of the data and provides a sandbox for testing different modeling appraoches. 
+
+. . . 
+
+- The **test** set is held in reserve until one or two models are chosen. 
+
+- The **test** set is then used as the final arbiter to determine the efficacy of the model. 
+
+
+## Startification
+
+- In many cases, there is a structure to the data that would inhibit inpartial spliiting (e.g. a class, a region, a species, a sex, etc)
+
+- Imagine you have a jar of M&Ms in different colors — red, blue, and green. You want to take some candies out to taste, but you want to make sure you get a fair mix of each color, not just grabbing a bunch of red ones by accident.
+
+- Stratified resampling is like making sure that if your jar is 50% red, 30% blue, and 20% green, then the handful of candies you take keeps the same balance.
+
+- In data science, we do the same thing when we pick samples from a dataset: we make sure that different groups (like categories of people, animals, or weather types) are still fairly represented!
+
+## Initial splits `r hexes("rsample")`
+
+- In `tidymodels`, the `rsample` package provides functions for creating initial splits of data.
+- The `initial_split()` function is used to create a single split of the data.
+- The `prop` argument defines the proportion of the data to be used for training.
+- The default is 0.75, which means 75% of the data will be used for training and 25% for testing.
+
+```{r}
+set.seed(101991)
+(resample_split <- initial_split(penguins, prop = 0.8))
+
+#Sanity check
+69/344
+```
+
+## Accessing the data: `r hexes("rsample")`
+
+- Once the data is split, we can access the training and testing data using the `training()` and `testing()` functions to extract the partitioned data from the full set:
+
+```{r}
+penguins_train <- training(resample_split)
+glimpse(penguins_train)
+```
+
+. . .
+
+```{r}
+penguins_test <- testing(resample_split)
+glimpse(penguins_test)
+```
+
+## Proportional Gaps
+
+```{r}
+# Dataset
+(table(penguins$species) / nrow(penguins))
+# Training Data
+(table(penguins_train$species) / nrow(penguins_train))
+# Testing Data
+(table(penguins_test$species) / nrow(penguins_test))
+```
+
+## Stratification Example
+
+- A stratified random sample conducts a specified split within defined subsets of subsets, and then pools the results. 
+
+- Only one column can be used to define a strata but grouping/mutate opperations can be used to create a new column that can be used as a strata (e.g. species/island)
+
+- In the case of the penguins data, we can stratify by species (think back to our nested/linear model appraoch)
+
+- This ensures that the training and testing sets have the same proportion of each species as the original data.
+
+
+```{r}
+# Set the seed
+set.seed(123)
+
+# Drop missing values and split the data
+penguins <- drop_na(penguins)
+penguins_strata <- initial_split(penguins, strata = species, prop = .8)
+
+# Extract the training and testing sets
+
+train_strata <- training(penguins_strata)
+test_strata  <- testing(penguins_strata)
+```
+
+## Proportional Alignment
+
+```{r}
+# Check the proportions
+# Dataset
+table(penguins$species) / nrow(penguins)
+# Training Data
+table(train_strata$species) / nrow(train_strata)
+# Testing Data
+table(test_strata$species) / nrow(test_strata)
+```
+
+## Modeling
+
+:::{columns}
+:::{.column width="50%"}
+- Once the data is split, we can decide what type of model to invoke.
+
+- Often, users simply pick a well known model type or class for a type of problem (Classic Conceptual Model)
+
+- We will learn more about model types and uses next week!
+
+- For now, just know that the **training** data is used to fit a model.
+
+- If we are certain about the model, we can use the **test** data to evaluate the model.
+:::
+:::{.column width="50%"}
+
+```{r diagram-model-2}
+#| echo: false
+#| out.width: '45%'
+knitr::include_graphics("images/whole-game-split.jpg")
+```
+
+```{r diagram-model-3, echo = FALSE}
+#| echo: false
+#| out.width: '200%'
+knitr::include_graphics("images/whole-game-model-1.jpg")
+```
+:::
+:::
+
+## Modeling Options
+
+- But, there are many types of models, with different assumptions, behaviors, and qualities, that make some more applicable to a given dataset!
+
+- Most models have some type of parmeterization, that can often be _tuned_.
+
+- Testing combinations of model and tuning parmaters also requires some combintation of `training`/`testing` splits.
+
+```{r diagram-model-n}
+#| echo: false
+#| fig-align: "center"
+
+knitr::include_graphics("images/whole-game-model-n.jpg")
+```
+
+## Modeling Options
+
+What if we want to compare more models?
+
+. . .
+
+And/or more model configurations?
+
+. . .
+
+And we want to understand if these are important differences?
+
+. . . 
+
+How can we use the *training* data to compare and evaluate different models? 🤔
+
+. . . 
+
+```{r diagram-resamples, echo = FALSE}
+#| fig-align: "center"
+knitr::include_graphics("images/whole-game-resamples.jpg")
+```
+
+## Resampling
+
+::: columns
+::: {.column width="50%"}
+
+- Testing combinations of model and tuning parmaters also requires some combintation of `training`/`testing` splits.
+
+- Resampling methods, such as cross-validation and bootstraping, are empirical simulation systems that help facilitate this. 
+
+- They create a series of data sets similar to the initial `training`/`testing` split.
+
+- In the first level of the diagram to the right, we first split the original data into `training`/`testing` sets. Then, the training set is chosen for resampling.
+
+:::
+:::{.column width="50%"}
+```{r diagram-resamples2, echo = FALSE}
+#| fig-align: "center"
+#| caption: 'This schematic from [Kuhn and Johnson (2019)](https://bookdown.org/max/FES/resampling.html) illustrates data usage for resampling methods'
+
+knitr::include_graphics("images/resampling.svg")
+```
+:::
+:::
+
+
+## Key Resampling Methods
+
+:::{.callout-warning}
+Resampling is always used with the training set.
+:::
+
+Resampling is a key step in model validation and assessment. The `rsample` package provides tools to create resampling strategies such as cross-validation, bootstrapping, and validation splits.
+
+. . . 
+
+1. **K-Fold Cross-Validation**: The dataset is split into multiple "folds" (e.g., 5-fold or 10-fold), where each fold is used as a validation set while the remaining data is used for training.
+
+. . .
+
+2. **Bootstrap Resampling**: Samples are drawn _with replacement_ from the training dataset to generate multiple datasets, which used to train and test the model.
+
+
+. . .
+
+3. **Monte Carlo Resampling (Repeated Train-Test Splits)**: Randomly splits data multiple times.
+
+. . .
+
+4. **Validation Split**: Creates a single training and testing partition.
+
+
+## Cross-validation
+
+![](https://www.tmwr.org/premade/three-CV.svg)
+
+## Cross-validation
+
+![](https://www.tmwr.org/premade/three-CV-iter.svg)
+
+## Cross-validation `r hexes("rsample")`
+
+:::{columns}
+:::{.column width="50%"}
+```{r vfold-cv}
+penguins_train |> glimpse() 
+```
+
+<br>
+
+```{r}
+nrow(penguins_train) * 1/10
+
+vfold_cv(penguins_train, v = 10) # v = 10 is default
+```
+:::
+:::{.column width="50%"}
+```{r}
+#| fig.align: "center"
+#| echo: false
+knitr::include_graphics("https://www.tmwr.org/premade/three-CV.svg")
+```
+
+```{r}
+#| fig.align: "center"
+#| echo: false
+knitr::include_graphics("https://www.tmwr.org/premade/three-CV-iter.svg")
+```
+
+:::
+:::
+
+## Cross-validation `r hexes("rsample")`
+
+What is in this?
+
+```{r forested-splits}
+penguins_folds <- vfold_cv(penguins_train)
+penguins_folds$splits[1:3]
+```
+
+:::{.callout-note}
+Here is another example of a list column enabling the storage of non-atomic types in tibble
+:::
+
+:::{.callout-important}
+Set the seed when creating resamples
+:::
+
+# Alternate resampling schemes
+
+## Bootstrapping
+
+![](https://www.tmwr.org/premade/bootstraps.svg)
+
+## Bootstrapping `r hexes("rsample")`
+
+```{r bootstraps}
+set.seed(3214)
+bootstraps(penguins_train)
+```
+
+## Monte Carlo Cross-Validation `r hexes("rsample")`
+
+```{r mc-cv}
+set.seed(322)
+mc_cv(penguins_train, times = 10)
+```
+
+## Validation set `r hexes("rsample")`
+
+```{r validation-split}
+set.seed(853)
+penguins_val_split <- initial_validation_split(penguins)
+penguins_val_split
+validation_set(penguins_val_split)
+```
+
+. . .
+
+A validation set is just another type of resample
+
+## The whole game - status update
+
+```{r diagram-resamples3, echo = FALSE}
+#| fig-align: "center"
+
+knitr::include_graphics("images/whole-game-transparent-resamples.jpg")
+```
+
+##  {background-iframe="https://rsample.tidymodels.org/reference/index.html"}
+
+::: footer
+:::
+
+# Unit Example {background-image="images/oregon-forest.png" background-opacity=".5"}
+
+Can we predict if a plot of land is forested?
+ - Interested in classification models
+ - We have a dataset of 7,107 6000-acre hexagons in Washington state.
+ - Each hexagon has a nominal outcome, `forested`, with levels `"Yes"` and `"No"`.
+
+
+## Data on forests in Washington
+
+::: columns
+::: {.column width="60%"}
+-   The U.S. Forest Service maintains ML models to predict whether a plot of land is "forested."
+-   This classification is important for all sorts of research, legislation, and land management purposes.
+-  Plots are typically remeasured every 10 years and this dataset contains the most recent measurement per plot.
+-   Type `?forested` to learn more about this dataset, including references.
+:::
+
+::: {.column width="40%"}
+![](images/forest_mountain.svg)
+:::
+
+:::
+
+::: footer
+Credit: <https://www.svgrepo.com/svg/251793/forest-mountain>
+:::
+
+## Data on forests in Washington
+
+::: columns
+::: {.column width="70%"}
+
+```{r}
+#| message: false
+library(tidymodels)
+library(forested)
+dim(forested)
+```
+-   One observation  from each of 7,107 6000-acre hexagons in Washington state.
+
+-   A nominal outcome, `forested`, with levels `"Yes"` and `"No"`, measured "on-the-ground."
+
+```{r}
+table(forested$forested)
+```
+
+-   18 remotely-sensed and easily-accessible predictors:
+     
+```{r}
+names(forested)
+```
+:::
+
+::: {.column width="30%"}
+![](images/forest.svg){.center}
+:::
+:::
+
+::: footer
+Credit: <https://www.svgrepo.com/svg/67614/forest>
+:::
+
+## Data splitting and spending
+
+### The initial split `r hexes("rsample")`
+
+```{r forested-split}
+set.seed(123)
+forested_split <- initial_split(forested, prop = .8, strata = tree_no_tree)
+forested_split
+```
+
+## Accessing the data `r hexes("rsample")`
+
+```{r forested-train-test}
+forested_train <- training(forested_split)
+forested_test  <- testing(forested_split)
+
+nrow(forested_train)
+nrow(forested_test)
+```
+
+## K-Fold Cross-Validation `r hexes("rsample")`
+
+```{r}
+# Load the dataset
+set.seed(123)
+
+# Create a 10-fold cross-validation object
+(forested_folds <- vfold_cv(forested_train, v = 10))
+```
+
+
+## How do you fit a linear model in R?
+
+-   `lm` for linear model <-- The one we have looked at!
+
+-   `glmnet` for regularized regression
+
+-   `keras` for regression using TensorFlow
+
+-   `stan` for Bayesian regression using Stan
+
+-   `spark` for large data sets using spark
+
+-   `brulee` for regression using torch (PyTourch)
+
+
+## Challenge
+
+ - All of these models have different syntax and functions
+ - How do you keep track of all of them?
+ - How do you know which one to use?
+ - How would you compare them?
+ 
+Comparing 3-5 of these models is a lot of work using functions for diverse packages.
+
+:::{columns}
+:::{.column width="40%"}
+```{r}
+#| echo: false
+knitr::include_graphics(c('images/lm-help.png'))
+``` 
+:::
+:::{.column width="50%"}
+```{r}
+#| echo: false
+#| out.width: '70%'
+knitr::include_graphics(c('images/glm-help.png'))
+``` 
+:::
+:::
+
+## The tidymodels advantage
+
+::: columns
+::: {.column width="60%"}
+- In the `tidymodels` framework, all models are created using the same syntax:
+  - This makes it easy to compare models
+  - This makes it easy to switch between models
+  - This makes it easy to use the same model with different engines (packages)
+- The `parsnip` package provides a consistent interface to many models
+- For example, to fit a linear model you would be able to access the `linear_reg(`) function
+
+:::
+::: {.column width="40%"}
+
+```{r}
+#| eval: false
+?linear_reg
+```
+
+```{r}
+#| echo: false
+knitr::include_graphics("images/lm_engines.png")
+```
+:::
+:::
+
+## A tidymodels prediction will ... `r hexes("tidymodels")`
+
+-   always be inside a **tibble**
+-   have column names and types are **unsurprising** and **predictable**
+-   ensure the number of rows in `new_data` and the output **are the same**
+
+## To specify a model `r hexes("parsnip")`
+
+. . .
+
+::: columns
+::: {.column width="60%"}
+-   Choose a [model]{.underline}
+-   Specify an engine
+-   Set the mode
+:::
+
+::: {.column width="40%"}
+<br><br><br>
+![](images/forest_mountain.svg){.absolute height="300"}
+:::
+:::
+
+## Specify a model: Type `r hexes("parsnip")`
+
+Next week we will discuss model types more thoroughly. For now, we will focus on two types:
+
+1. Logistic Regression
+
+```{r}
+logistic_reg()
+```
+
+```{r}
+decision_tree()
+```
+
+We chose these two because they are robust, simple model that fit our goal of predicting a binary condition/class (forested/not forested) 
+
+## Specify a model: engine `r hexes("parsnip")`
+
+::: columns
+::: {.column width="60%"}
+-   Choose a model
+-   Specify an [engine]{.underline}
+-   Set the mode
+:::
+::: {.column width="40%"}
+```{r logistic-reg}
+#| eval: false
+?logistic_reg()
+```
+```{r}
+#| echo: false
+knitr::include_graphics("images/log_reg_help_engine.png")
+```
+:::
+:::
+
+## Specify a model: engine `r hexes("parsnip")`
+
+```{r logistic-reg-glmnet}
+logistic_reg() %>%
+  set_engine("glmnet")
+```
+
+. . . 
+
+<br>
+
+```{r logistic-reg-stan}
+logistic_reg() %>%
+  set_engine("stan")
+```
+
+## Specify a model: mode `r hexes("parsnip")`
+
+::: columns
+::: {.column width="60%"}
+-   Choose a model
+-   Specify an engine
+-   Set the [mode]{.underline}
+:::
+::: {.column width="40%"}
+```{r logistic-reg2}
+#| eval: false
+?logistic_reg()
+```
+```{r}
+#| echo: false
+knitr::include_graphics("images/log_reg_help_class.png")
+```
+:::
+:::
+
+## Specify a model: mode `r hexes("parsnip")`
+
+#### Some models have limit classes ... 
+```{r decision-tree-classification}
+logistic_reg() 
+```
+
+. . . 
+
+#### Others requires specification ...
+```{r decision-tree-classification2}
+decision_tree()
+
+decision_tree() %>% 
+  set_mode("classification")
+```
+
+::: r-fit-text
+All available models are listed at <https://www.tidymodels.org/find/parsnip/> 
+:::
+
+##  {background-iframe="https://www.tidymodels.org/find/parsnip/"}
+
+::: footer
+:::
+
+## To specify a model `r hexes("parsnip")`
+
+::: columns
+::: {.column width="60%"}
+-   Choose a [model]{.underline}
+-   Specify an [engine]{.underline}
+-   Set the [mode]{.underline}
+:::
+
+::: {.column width="40%"}
+<br><br><br>
+![](images/forest_mountain.svg){.absolute height="300"}
+:::
+:::
+
+```{r sim-model-viz}
+#| echo: false
+set.seed(1)
+# 500 samples, equation
+dat <- sim_logistic(500, ~ .1 + 2 * A)
+dat$bin <- cut(dat$A, breaks = c(seq(-3, 3, by = .5)), include.lowest = TRUE)
+bin_midpoints <- data.frame(A = seq(-3, 3, by = .5) + 0.25)
+
+rates <- 
+  dat %>% 
+  nest(.by = bin) %>% 
+  mutate(
+    probs = map(data, ~ binom.test(sum(.x$class == "one"), nrow(.x))),
+    probs = map(probs, ~ tidy(.x))
+  ) %>% 
+  select(-data) %>% 
+  unnest(cols = probs) %>% 
+  arrange(bin) %>% 
+  mutate(A = seq(-3, 3, by = .5) + 0.25) 
+
+plot_rates <- left_join(rates, bin_midpoints, by = join_by(A)) %>% 
+  filter(-2.5 < A, A < 3) %>% 
+  ggplot() + 
+  geom_point(aes(A, estimate)) +
+  geom_errorbar(aes(A, estimate, ymin = conf.low, ymax = conf.high), width = .25)  +
+  xlim(c(-3, 3.5)) +
+  theme_bw(base_size = 18)
+```
+
+## Logistic regression
+
+
+::: columns
+::: {.column width="50%"}
+- Logistic regression predicts probability—instead of a straight line, it gives an S-shaped curve that estimates how likely an outcome (e.g., is forested) is based on a predictor (e.g., rainfall and temperature).
+
+ - The dots in the plot show the actual proportion of "successes" (e.g., is forested) within different bins of the predictor variable(s) (A).
+
+ - The vertical error bars represent uncertainty—showing a range where the true probability might fall.
+
+- Logistic regression helps answer "how likely" questions—e.g., "How likely is someone to pass based on their study hours?" rather than just predicting a yes/no outcome.
+:::
+
+::: {.column width="50%"}
+```{r plot-logistic-reg-2}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 7
+
+logistic_preds <- logistic_reg() %>% 
+  fit(class ~ A, data = dat) %>% 
+  augment(new_data = bin_midpoints) 
+
+plot_rates +
+  geom_line(aes(A, .pred_one, col = I(test_color)), linewidth = 2, alpha = 0.8, data = logistic_preds)
+```
+:::
+:::
+
+## Decision trees
+
+::: columns
+::: {.column width="50%"}
+```{r tree-fit}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 7
+
+tree_fit <- decision_tree(mode = "classification") %>% 
+  fit(class ~ A, data = mutate(dat, class = forcats::fct_rev(class)))
+
+tree_preds <- augment(tree_fit, new_data = bin_midpoints)
+```
+
+```{r plot-tree-fit}
+#| echo: false
+#| fig.width: 4
+#| fig.height: 3.5
+#| fig-align: center
+
+library(rpart.plot)
+tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot(roundint = FALSE)
+```
+
+:::
+
+::: {.column width="50%"}
+:::
+:::
+
+## Decision trees
+
+::: columns
+::: {.column width="50%"}
+```{r plot-tree-fit-2}
+#| echo: false
+#| fig.width: 4
+#| fig.height: 3.5
+#| fig-align: center
+
+library(rpart.plot)
+tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot(roundint = FALSE)
+```
+:::
+
+::: {.column width="50%"}
+-   Series of splits or if/then statements based on predictors
+
+-   First the tree *grows* until some condition is met (maximum depth, no more data)
+
+-   Then the tree is *pruned* to reduce its complexity
+:::
+:::
+
+## Decision trees
+
+::: columns
+::: {.column width="50%"}
+```{r plot-tree-fit-3}
+#| echo: false
+#| fig.width: 4
+#| fig.height: 3.5
+#| fig-align: center
+
+library(rpart.plot)
+tree_fit %>%
+  extract_fit_engine() %>%
+  rpart.plot(roundint = FALSE)
+```
+:::
+
+::: {.column width="50%"}
+```{r plot-tree-preds}
+#| echo: false
+#| fig.width: 8
+#| fig.height: 7
+
+plot_rates +
+  geom_step(aes(A, .pred_one, col = I(test_color)), linewidth = 2, alpha = 0.8, data = tree_preds)
+```
+:::
+:::
+
+## What algorithm is best for estimate forested plots?
+
+We can only really know by testing them ...
+
+::: columns
+::: {.column width="50%"}
+#### Logistic regression
+```{r plot-logistic-reg-3}
+#| echo: false
+#| fig.width: 7
+#| fig.height: 6
+
+plot_rates +
+  geom_line(aes(A, .pred_one, col = I(test_color)), linewidth = 2, alpha = 0.8, data = logistic_preds)
+```
+:::
+
+::: {.column width="50%"}
+#### Decision trees
+```{r plot-tree-preds-2}
+#| echo: false
+#| fig.width: 7
+#| fig.height: 6
+
+plot_rates +
+  geom_step(aes(A, .pred_one, col = I(test_color)), linewidth = 2, alpha = 0.8, data = tree_preds)
+```
+:::
+:::
+
+## Fitting your model: 
+
+ - OK! So you have split data, you have a model, and you have an engine and mode
+ - Now you need to fit the model!
+ - This is done using the `fit()` function
+
+```{r}
+dt_model <- decision_tree() %>% 
+  set_engine('rpart') %>%
+  set_mode("classification")
+
+# Model, formula, data inputs
+(output <- fit(dt_model, forested ~ ., data = forested_train) )
+```
+
+## Component extracts:
+
+::: columns
+::: {.column width="50%"}
+- While `tidymodels` provides a standard interface to all models all base models have specific methods (remember `summary.lm`? )
+
+- To use these, you must extract a the underlying object.
+
+- `extract_fit_engine()` extracts the underlying model object
+- `extract_fit_parsnip()` extracts the parsnip object
+- `extract_recipe()` extracts the recipe object
+- `extract_preprocessor()` extracts the preprocessor object
+- ...  many more
+:::
+::: {.column width="50%"}
+```{r}
+ex <- extract_fit_engine(output)
+class(ex) # the class of the engine used!
+
+# Use rpart plot and text methods ...
+plot(ex)
+text(ex, cex = 0.9, use.n = TRUE, xpd = TRUE,)
+```
+:::
+:::
+
+# A model workflow
+
+## Workflows? `r hexes("workflows")`
+
+The `workflows` package in `tidymodels` helps:
+
+  - Manage preprocessing and modeling in a structured pipeline
+
+  - Avoid repetitive code
+
+  - Reduce errors when integrating steps
+
+. . . 
+
+Think of them as containers for:
+
+  - Preprocessing steps (e.g., feature engineering, transformations)
+
+  - Model specification
+
+  - Fitting approaches
+  
+. . .   
+
+Why Use Workflows? 
+
+  ✅ Keeps preprocessing and modeling together\
+  
+  ✅ Ensures consistency in data handling \ 
+  
+  ✅ Makes code easier to read and maintain\ 
+
+## Basic Workflow Structure:  `r hexes("workflows")`
+
+1. Create a workflow object (similar to how `ggplot()` instantiates a canvas)
+
+2. Add a formula or recipe (preprocessor)
+
+3. Add the model
+
+4. Fit the workflow
+
+
+## A model workflow `r hexes("parsnip", "workflows")`
+
+```{r tree-wflow}
+dt_wf <- workflow() %>%
+  add_formula(forested ~ .) %>%
+  add_model(dt_model) %>%
+  fit(data = forested_train)
+```
+
+<br>
+
+```{r}
+#| echo: false
+dt_wf
+```
+
+## Predict with your model `r hexes("broom")`
+
+_How do you use your new model?_
+
+  * `augment()` will return the dataset with predictions and residuals added.
+
+```{r augment}
+dt_preds <- augment(dt_wf, new_data = forested_test)
+```
+
+<br> 
+
+```{r}
+#| echo: false
+dt_preds
+```
+
+## Evaluate your model `r hexes("yardstick")`
+
+_How do you evaluate the skill of your models?_
+
+We will learn more about model evaluation and tuning latter in this unit, but for now we can blindly use the `metrics()` function defaults to get a sense of how our model is doing.
+
+  - The default metrics for _classification_ models are **accuracy** and **kap** (Cohen's Kappa)
+
+  - The default metric for _regression_ models are **RMSE**, **R^2**, and **MAE**
+
+```{r}
+# We have a classification model
+metrics(dt_preds, truth = forested, estimate = .pred_class)
+```
+
+# `tidymodels` advantage! `r hexes("tidymodels")`
+
+- OK! while that was not too much work, it certainly wasn't minimal.
+
+. . .
+
+- Now lets say you want to check if the logistic regression model performs better than the decision tree 
+- That sounds like a lot to repeat.
+
+- Fortunately, the `tidymodels` framework makes this a straight forward swap!
+
+. . . 
+
+```{r}
+log_mod = logistic_reg() %>% 
+  set_engine("glm") %>% 
+  set_mode("classification")
+
+log_wf <- workflow() %>%
+  add_formula(forested ~ .) %>%
+  add_model(log_mod) %>%
+  fit(data = forested_train)
+
+log_preds <- augment(log_wf, new_data = forested_test)
+
+metrics(log_preds, truth = forested, estimate = .pred_class)
+```
+
+## So who wins?
+
+```{r}
+metrics(dt_preds, truth = forested, estimate = .pred_class)
+metrics(log_preds, truth = forested, estimate = .pred_class)
+```
+Right out of the gate, there doesn't seem to be much difference, but ...
+
+## Don't get to confident!
+
+ - We have evaluated the model on the same data we trained it on
+ - This is not a good practice and can give us a false sense of confidence
+ - Instead, we can use our `resamples` to better understand the skill of a model based on the iterative leave out policy:
+ 
+```{r}
+dt_wf_rs <- workflow() %>%
+  add_formula(forested ~ .) %>%
+  add_model(dt_model) %>%
+  fit_resamples(resamples = forested_folds, 
+                # Here we just ask tidymodels to save all predictions...
+                control   = control_resamples(save_pred = TRUE))
+```
+
+<br>
+
+```{r}
+#| echo: false
+dt_wf_rs[1,]
+```
+
+:::{.callout-note}
+`tidyr::unnest` could be used to expand any of those list columns!
+:::
+
+## Don't get to confident!
+
+- We can execute the same workflow for the logistic regression model, this time evaluating the resamples instead of the test data.
+
+```{r}
+log_wf_rs <- workflow() %>%
+  add_formula(forested ~ .) %>%
+  add_model(log_mod) %>%
+  fit_resamples(resamples = forested_folds,
+                control = control_resamples(save_pred = TRUE))
+```
+
+<br>
+
+```{r}
+#| echo: false
+log_wf_rs
+```
+
+## Don't get to confident!
+
+- Since we now have an "ensemble" of models (across the folds), we can collect a summary of the metrics across them.
+
+- The default metrics for classification ensembles are: 
+
+  - **accuracy**: accuracy is the proportion of correct predictions
+  - **brier_class**: the Brier score for classification is the mean squared difference between the predicted probability and the actual outcome
+  - **roc_auc**: the area under the ROC (Receiver Operating Characteristic) curve
+
+```{r}
+
+collect_metrics(log_wf_rs)
+collect_metrics(dt_wf_rs)
+```
+
+## Further simplification: `workflowsets`
+
+OK, so we have streamlined a lot of things with `tidymodels`:
+
+  - We have a specified preprocesser (e.g. formula or recipe)
+  
+  - We have defined a model (complete with engine and mode)
+  
+  - We have implemented workflows pairing each model with the preprocesser to either fit the model to the resamples, or, the training data.
+
+While a significant improvement, we can do better! 
+
+:::{callout-note}
+Does the idea of implementing a process over an list of elements ring a bell?
+::::
+
+## Model mappings: `r hexes("workflows")`
+
+ - `workflowsets` is a package that builds off of `purrr` and allows you to iterate over multiple models and/or multiple resamples
+
+- Remember how `map`, `map_*`,  `map2`, and `walk2` functions allow lists to map to lists or vectors? `workflow_set` maps a preprocessor (formula or recipe) to a set of models - each provided as a `list` object.
+
+- To start, we will create a `workflow_set` object (instead of a `workflow`). The first argument is a list of preprocessor objects (formulas or recipes) and the second argument is a list of model objects.
+
+- Both must be lists, by nature of the underlying `purrr` code. 
+
+```{r}
+(wf_obj <- workflow_set(list(forested ~.), list(log_mod, dt_model)))
+```
+
+## Iteritive extecution
+
+- Once the `workflow_set` object is created, the `workflow_map` function can be used to map a function across the preprocessor/model combinations.
+
+- Here we are mapping the `fit_resamples` function across the `workflow_set` combinations using the `resamples` argument to specify the resamples we want to use (`forested_folds`).
+
+```{r}
+wf_obj <- 
+  workflow_set(list(forested ~.), list(log_mod, dt_model)) %>%
+  workflow_map("fit_resamples", resamples = forested_folds) 
+```
+<br>
+
+```{r}
+#| echo: false
+wf_obj
+```
+
+## Rapid comparision
+
+With that single function, all models have been fit to the resamples and we can quickly compare the results both graphically and statistically: 
+
+::: columns
+::: {.column width="50%"}
+```{r}
+# Quick plot function
+autoplot(wf_obj) + 
+  theme_linedraw()
+```
+:::
+::: {.column width="50%"}
+```{r}
+# Long list of results, ranked by accuracy
+rank_results(wf_obj, 
+            rank_metric = "accuracy", 
+            select_best = TRUE)
+```
+:::
+:::
+
+. . . 
+
+Overall, the logistic regression model appears to the best model for this data set!
+
+## The whole game - status update
+
+```{r diagram-model-1, echo = FALSE}
+#| fig-align: "center"
+
+knitr::include_graphics("images/whole-game-transparent-select.jpg")
+```
+
+On Wednesday, we'll talk more about models we can chose from...
+
+Next week we will cover
+  
+
+

@@ -68,21 +68,21 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 04**: [Raster's in R](slides/week-4.qmd)\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 04**: STAC\
-<i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: [Lab 4: Remote Sensing](labs/lab4.qmd)\
+<i class="fa fa-laptop" aria-hidden="true"></i>**Lab 04**: [Lab 4: Remote Sensing for Flooding](labs/lab4.qmd)\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 05**: Time Series\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 01**: OSM + HAND\
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 05**: Lab 5: Terrain & Flood Modeling\
+### **Component 3**: _Machine Learning & Time series_
 
-### **Component 3**: _Machine Learning_
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 05**: [Feature Engineering & Model Workflows](slides/week-5.qmd)\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 05**: Model Options\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 05**:  Lab 5: CAMELS Data Part 1\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: Feature Engineering & Model Workflows\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 08**: Model Options\
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**:  Lab 6: CAMELS Data Part 1\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: Model Evaluation & Tuning\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 06**: Personal Website\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**: Lab 6: CAMELS Data Part 2\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Model Evaluation & Tuning\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up\
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: Lab 6: CAMELS Data Part 2\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Time Series\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: Lab 7: Forecasting the Poudre River + Personal Webpage
 
 ## Reuse and licensing {.appendix}
 
