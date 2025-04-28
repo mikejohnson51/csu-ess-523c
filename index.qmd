@@ -73,16 +73,16 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 ### **Component 3**: _Machine Learning & Time series_
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 05**: [Feature Engineering & Model Workflows](slides/week-5.qmd)\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 05**: Live Demo
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 05**: Live Demo\
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 05**:  [Lab 5: CAMELS Data Part 1](labs/lab5.qmd)\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: [Model Evaluation & Tuning](slides/week-5.qmd)\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 06**: Quarto Websites
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**: Personal Website
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 06**: [Models, Evaluation, Tuning](slides/week-6.qmd)\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 06**: Quarto Websites\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**: Personal Website\
 
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Time Series\
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: ...
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: ...\
 
 ## Reuse and licensing {.appendix}
 
