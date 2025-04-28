@@ -25,7 +25,7 @@
     "href": "index.html#schedule",
     "title": "Ecosystem Science and Sustainability 523c",
     "section": "Schedule",
-    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Tech Talk 01: Quarto/Flextable\n Lab 01: Lab 1: COVID Trends\n\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Tech Talk 02: Interactive Mapping\n Lab 02: Lab 2: Border summaries\n Lab 02: Lab 2: Hints & Tricks\n\n Week 03: Predicates, Simplification & Tesselations\n Tech Talk 03: Functions\n Lab 03: Lab 3: Dams in the US\n\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\n Tech Talk 04: STAC\nLab 04: Lab 4: Remote Sensing for Flooding\n\n\n\nComponent 3: Machine Learning & Time series\n Week 05: Feature Engineering & Model Workflows\n Tech Talk 05: Model Options\n Lab 05: Lab 5: CAMELS Data Part 1\n\n Week 06: Model Evaluation & Tuning\n Tech Talk 06: Personal Website\n Lab 06: Lab 6: CAMELS Data Part 2\n\n Week 07: Time Series\n Tech Talk 07: Wrap up  Lab 07: Lab 7: Forecasting the Poudre River + Personal Webpage"
+    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Tech Talk 01: Quarto/Flextable\n Lab 01: Lab 1: COVID Trends\n\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Tech Talk 02: Interactive Mapping\n Lab 02: Lab 2: Border summaries\n Lab 02: Lab 2: Hints & Tricks\n\n Week 03: Predicates, Simplification & Tesselations\n Tech Talk 03: Functions\n Lab 03: Lab 3: Dams in the US\n\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\n Tech Talk 04: STAC\nLab 04: Lab 4: Remote Sensing for Flooding\n\n\n\nComponent 3: Machine Learning & Time series\n Week 05: Feature Engineering & Model Workflows\n Tech Talk 05: Live Demo  Lab 05: Lab 5: CAMELS Data Part 1\n\n Week 06: Model Evaluation & Tuning\n Tech Talk 06: Quarto Websites  Lab 06: Personal Website\n Week 07: Time Series\n Tech Talk 07: Wrap up  Lab 07: …"
   },
   {
     "objectID": "index.html#component-1-data-science-tools",
@@ -6298,5 +6298,775 @@
     "title": "Lab 6: Machine Learning in Hydrology",
     "section": "Extact and Evaluate",
     "text": "Extact and Evaluate\n\nUse augment to make predictions on the test data\nUse metrics to evaluate the model performance on the test data\nCreate a plot of the observed vs predicted values with clear title, axis labels, and a compelling color scale\nDescribe what you think of the results!"
+  },
+  {
+    "objectID": "slides/week-6.html#introduction",
+    "href": "slides/week-6.html#introduction",
+    "title": "Week 6",
+    "section": "Introduction ",
+    "text": "Introduction \nMachine learning (ML) is widely used in environmental science for tasks such as land cover classification, climate modeling, and forested distribution prediction. This lecture explores five common ML model specifications the tidymodels framework in R, applied to the forested dataset.\n\nLinear Regression\n\nLogistic Regression\n\nTrees\n\n\nDecision Tree\n\nRandom Forest\n\nBoost\n\n\nSupport Vector Machines\n\nNeural Nets"
+  },
+  {
+    "objectID": "slides/week-6.html#classification-vs.-prediction",
+    "href": "slides/week-6.html#classification-vs.-prediction",
+    "title": "Week 6",
+    "section": "Classification vs. Prediction",
+    "text": "Classification vs. Prediction\nMost machine learning applications in environmental science serve different purposes (modes):\nClassification Models → Categorize features into predefined classes.\nPrediction Models → Forecast numerical environmental variables based on past trends."
+  },
+  {
+    "objectID": "slides/week-6.html#classification-models",
+    "href": "slides/week-6.html#classification-models",
+    "title": "Week 6",
+    "section": "Classification Models",
+    "text": "Classification Models\n\n\n\n\n\n\nGoal: Categorize phenomena into discrete classes.\n\n\n\nExamples:\n✅ Land Cover Classification (Forest, Urban, Water, Agriculture)\n✅ Flood Risk Assessment (High, Medium, Low)\n✅ Drought Severity Levels (No Drought, Moderate, Severe)\n✅ Wildfire Prediction (Fire vs. No Fire)\n✅ forested Identification (Bird forested, Plant Types)\nCommon Algorithms:\n\nDecision Trees\n\nRandom Forest\n\nSupport Vector Machines (SVM) \nNeural Networks (for remote sensing & image analysis)\n\nK-Nearest Neighbors (KNN)"
+  },
+  {
+    "objectID": "slides/week-6.html#prediction-models",
+    "href": "slides/week-6.html#prediction-models",
+    "title": "Week 6",
+    "section": "Prediction Models",
+    "text": "Prediction Models\n\n\n\n\n\n\nGoal: Estimate continuous environmental variables.\n\n\n\nExamples:\n📈 Streamflow Forecasting (Predict river discharge over time)\n🌡️ Temperature Projections (Future temperature changes under climate scenarios)\n☔ Precipitation Forecasting (Rainfall estimates for flood preparedness)\n📊 Air Quality Index Prediction (Forecast pollution levels)\n\nCommon Algorithms:\n\nLinear & Multiple Regression\n\nRandom Forest Regression\n\nLong Short-Term Memory (LSTM) Neural Networks (for time series forecasting)"
+  },
+  {
+    "objectID": "slides/week-6.html#choosing-the-right-model",
+    "href": "slides/week-6.html#choosing-the-right-model",
+    "title": "Week 6",
+    "section": "Choosing the Right Model",
+    "text": "Choosing the Right Model\n\nUse classification if: You need to categorize environmental states (e.g., classifying land use changes).\nUse prediction if: You need to forecast environmental conditions (e.g., predicting flood levels)\nUse hybrid approaches if: You need to classify and predict (e.g., classifying drought severity and then predicting future water availability)."
+  },
+  {
+    "objectID": "slides/week-6.html#model-selection-considerations",
+    "href": "slides/week-6.html#model-selection-considerations",
+    "title": "Week 6",
+    "section": "Model Selection Considerations",
+    "text": "Model Selection Considerations\nChoosing an ML algorithm (model) depends on:\n\nDataset Size: e.g. Large datasets benefit from ensemble methods like Random Forest and XGBoost.\nFeature Complexity: e.g. SVM works well for high-dimensional data.\nInterpretability Needs: e.g. Decision trees and LASSO regression provide intuitive insights.\nComputation Constraints: e.g. GLM and Decision Trees are efficient compared to XGBoost.\nData: Variance, linearity, diminsionality"
+  },
+  {
+    "objectID": "slides/week-6.html#load-required-libraries",
+    "href": "slides/week-6.html#load-required-libraries",
+    "title": "Week 6",
+    "section": "Load Required Libraries   ",
+    "text": "Load Required Libraries   \n\nlibrary(tidyverse)\nlibrary(tidymodels)\nlibrary(forested)\nlibrary(flextable)"
+  },
+  {
+    "objectID": "slides/week-6.html#data-preparation",
+    "href": "slides/week-6.html#data-preparation",
+    "title": "Week 6",
+    "section": "Data Preparation  ",
+    "text": "Data Preparation  \nWe will use the forested dataset for classification tasks. The dataset contains information about penguin forested, body measurements, and other environmental factors.\n\nset.seed(123)\nforested_split &lt;- initial_split(forested, strata = tree_no_tree)\nforested_train &lt;- training(forested_split)\nforested_test  &lt;- testing(forested_split)\nforested_folds &lt;- vfold_cv(forested_train, v = 10)\n\n# Feature Engineering: Classification\nforested_recipe &lt;- recipe(forested ~ ., data = forested_train)  |&gt; \n  step_dummy(all_nominal_predictors())  |&gt; \n  step_normalize(all_numeric_predictors()) |&gt; \n  step_impute_mean(all_numeric_predictors())"
+  },
+  {
+    "objectID": "slides/week-6.html#unified-interface-for-ml-models",
+    "href": "slides/week-6.html#unified-interface-for-ml-models",
+    "title": "Week 6",
+    "section": "Unified Interface for ML Models ",
+    "text": "Unified Interface for ML Models \n\nThe parsnip package is a part of the tidymodels framework\nIt provides a consistent interface for specifying models through specifications\nThe combination of a specification, mode, and engine is called a model\nLets look at the parsnip documentation!"
+  },
+  {
+    "objectID": "slides/week-6.html#what-are-hyperparameters",
+    "href": "slides/week-6.html#what-are-hyperparameters",
+    "title": "Week 6",
+    "section": "What are hyperparameters?",
+    "text": "What are hyperparameters?\n\nHyperparameters are settings that control the learning process of a model.\nThey are set before training and affect the model’s performance.\nHyperparameters can be tuned to optimize the model’s predictive power.\nMore on model tuning next week!"
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-linear-regression",
+    "href": "slides/week-6.html#components-of-linear-regression",
+    "title": "Week 6",
+    "section": "Components of Linear Regression",
+    "text": "Components of Linear Regression\n\nDependent Variable (Y): The variable to be predicted.\nIndependent Variables (X): Features that influence the dependent variable.\nRegression Line: Represents the relationship between X and Y.\nResiduals: Differences between predicted and actual values."
+  },
+  {
+    "objectID": "slides/week-6.html#linear-regression-in-tidymodels",
+    "href": "slides/week-6.html#linear-regression-in-tidymodels",
+    "title": "Week 6",
+    "section": "Linear Regression in tidymodels",
+    "text": "Linear Regression in tidymodels\nSpecification\n\nlinear_reg()\n#&gt; Linear Regression Model Specification (regression)\n#&gt; \n#&gt; Computational engine: lm\n\nengines & modes \n\nshow_engines(\"linear_reg\") |&gt; \n  mutate(specification = \"linear_reg\") |&gt; \n  flextable()\n\nenginemodespecificationlmregressionlinear_regglmregressionlinear_regglmnetregressionlinear_regstanregressionlinear_regsparkregressionlinear_regkerasregressionlinear_regbruleeregressionlinear_regquantregquantile regressionlinear_reg"
+  },
+  {
+    "objectID": "slides/week-6.html#example",
+    "href": "slides/week-6.html#example",
+    "title": "Week 6",
+    "section": "Example   ",
+    "text": "Example   \n\nlm_mod &lt;- linear_reg(mode = \"regression\", engine = \"lm\")\n  \nworkflow() |&gt; \n  add_formula(elevation ~ .) |&gt; \n  add_model(lm_mod) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 2 × 6\n#&gt;   .metric .estimator   mean     n  std_err .config             \n#&gt;   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 rmse    standard   82.6      10 1.23     Preprocessor1_Model1\n#&gt; 2 rsq     standard    0.971    10 0.000733 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-logistic-regression",
+    "href": "slides/week-6.html#why-use-logistic-regression",
+    "title": "Week 6",
+    "section": "Why Use Logistic Regression?",
+    "text": "Why Use Logistic Regression?\nLogistic Regression is widely used in machine learning due to its:\n\nSimplicity: Easy to implement and interpret.\nEfficiency: Computationally inexpensive, even on large datasets.\nProbabilistic Predictions: Outputs probabilities instead of hard classifications.\nRegularization Support: Extensions like L1 (Lasso) and L2 (Ridge) help prevent overfitting."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-logistic-regression",
+    "href": "slides/week-6.html#components-of-logistic-regression",
+    "title": "Week 6",
+    "section": "Components of Logistic Regression",
+    "text": "Components of Logistic Regression\n\n\n\nSigmoid Function: Converts linear outputs into probabilities between 0 and 1.\nDecision Boundary: A threshold (often 0.5) determines classification.\nLog-Loss (Binary Cross-Entropy): Measures the error between predicted probabilities and actual labels.\nRegularization (L1 and L2): Helps in feature selection and prevents overfitting."
+  },
+  {
+    "objectID": "slides/week-6.html#variants-of-logistic-regression",
+    "href": "slides/week-6.html#variants-of-logistic-regression",
+    "title": "Week 6",
+    "section": "Variants of Logistic Regression",
+    "text": "Variants of Logistic Regression\n\nBinary Logistic Regression: Used when the target variable has two classes (e.g., forested vs. not).\nMultinomial Logistic Regression: Extends logistic regression to multiple classes without assuming ordering.\nOrdinal Logistic Regression: Handles multi-class classification where order matters (e.g., rating scales)."
+  },
+  {
+    "objectID": "slides/week-6.html#building-a-logistic-regression-model",
+    "href": "slides/week-6.html#building-a-logistic-regression-model",
+    "title": "Week 6",
+    "section": "Building a Logistic Regression Model",
+    "text": "Building a Logistic Regression Model\nConstructing a Logistic Regression Model involves:\n\nDefining feature (X) and target variable (y).\nApplying the sigmoid function to map predictions to probabilities.\nUsing a loss function (log-loss) to optimize model weights.\nUpdating weights iteratively via gradient descent.\n\nHyperparameters in Logistic Regression\n\npenalty: Type of regularization (L1, L2, or none).\nmixture: A number between zero and one giving the proportion of L1 regularization (i.e. lasso) in the model"
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages",
+    "href": "slides/week-6.html#advantages-and-disadvantages",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nSimple and interpretable.\nEfficient on large datasets.\nOutputs probabilities for uncertainty estimation.\nWorks well when data is linearly separable.\n\nDisadvantages:\n\nAssumes a linear decision boundary.\nSensitive to outliers.\nCan underperform on complex, non-linear data."
+  },
+  {
+    "objectID": "slides/week-6.html#logistic-regression-in-tidymodels",
+    "href": "slides/week-6.html#logistic-regression-in-tidymodels",
+    "title": "Week 6",
+    "section": "Logistic Regression in tidymodels",
+    "text": "Logistic Regression in tidymodels\nSpecification\n\nlogistic_reg()\n#&gt; Logistic Regression Model Specification (classification)\n#&gt; \n#&gt; Computational engine: glm\n\nengines & modes \n\nshow_engines('logistic_reg') |&gt; \n  mutate(specification = \"logistic_reg\") |&gt; \n  flextable()\n\nenginemodespecificationglmclassificationlogistic_regglmnetclassificationlogistic_regLiblineaRclassificationlogistic_regsparkclassificationlogistic_regkerasclassificationlogistic_regstanclassificationlogistic_regbruleeclassificationlogistic_reg"
+  },
+  {
+    "objectID": "slides/week-6.html#example-1",
+    "href": "slides/week-6.html#example-1",
+    "title": "Week 6",
+    "section": "Example   ",
+    "text": "Example   \n\nlog_model &lt;- logistic_reg(penalty = .01) |&gt; \n  set_engine(\"glmnet\") |&gt; \n  set_mode('classification')\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(log_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator   mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.893     10 0.00429 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.0786    10 0.00330 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.958     10 0.00304 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion",
+    "href": "slides/week-6.html#conclusion",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nLogistic Regression is a fundamental classification algorithm known for its simplicity and efficiency. It serves as a strong baseline model and is widely applied in domains like medical diagnosis, credit scoring, and fraud detection. With proper tuning and regularization, it remains a powerful tool in predictive modeling."
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-decision-trees",
+    "href": "slides/week-6.html#why-use-decision-trees",
+    "title": "Week 6",
+    "section": "Why Use Decision Trees?",
+    "text": "Why Use Decision Trees?\nDecision Trees are popular due to their: - Simplicity and Interpretability: Easy to understand and visualize. - Non-Linearity Handling: Can capture complex relationships in data. - Feature Importance: Helps in identifying the most influential features. - Minimal Data Preprocessing: Requires little to no feature scaling."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-a-decision-tree",
+    "href": "slides/week-6.html#components-of-a-decision-tree",
+    "title": "Week 6",
+    "section": "Components of a Decision Tree",
+    "text": "Components of a Decision Tree\n\n\n\nRoot Node: The starting point representing the entire dataset.\nDecision Nodes: Intermediate nodes where a dataset is split based on a feature.\nSplitting: The process of dividing a node into sub-nodes based on a feature value.\nPruning: The process of removing unnecessary branches to avoid overfitting.\nLeaf Nodes: The terminal nodes that provide the final output (class label or numerical prediction)."
+  },
+  {
+    "objectID": "slides/week-6.html#building-a-decision-tree",
+    "href": "slides/week-6.html#building-a-decision-tree",
+    "title": "Week 6",
+    "section": "Building a Decision Tree",
+    "text": "Building a Decision Tree\nConstructing a Decision Tree involves:\n\nSelecting the best feature(s) to split the data.\nSplitting the data into subsets.\nRepeating this process recursively until stopping criteria (e.g., depth, minimum samples per leaf) are met.\nPruning the tree if necessary to reduce overfitting.\n\nSplitting Criteria\nSeveral criteria can be used to determine the best split:\n- Gini Impurity: Measures the impurity of a node, used in Classification and Regression Trees (CART).\n- Entropy (Information Gain): Measures the randomness in a dataset.\n- Mean Squared Error (MSE): Used for regression trees to minimize variance within nodes.\n\nHyperparameters in Decision Trees\nKey hyperparameters include:\n- cost_complexity: complexity parameter for pruning\n- tree_depth: maximum depth of the tree\n- min_n: minimum number of observations in a node"
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages-1",
+    "href": "slides/week-6.html#advantages-and-disadvantages-1",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nEasy to interpret and explain.\nCan handle both numerical and categorical data.\nRequires minimal data preparation.\nWorks well with missing values.\n\nDisadvantages:\n\nProne to overfitting, especially on small datasets.\nCan be unstable; small changes in data can lead to drastically different splits.\nBiased towards features with more levels."
+  },
+  {
+    "objectID": "slides/week-6.html#decision-tree-using-tidymodels",
+    "href": "slides/week-6.html#decision-tree-using-tidymodels",
+    "title": "Week 6",
+    "section": "Decision Tree using tidymodels",
+    "text": "Decision Tree using tidymodels\nSpecification\n\ndecision_tree()\n#&gt; Decision Tree Model Specification (unknown mode)\n#&gt; \n#&gt; Computational engine: rpart\n\nengines & modes \n\nshow_engines('decision_tree') |&gt; \n  mutate(specification = \"decision_tree\") |&gt; \n  flextable()\n\nenginemodespecificationrpartclassificationdecision_treerpartregressiondecision_treeC5.0classificationdecision_treesparkclassificationdecision_treesparkregressiondecision_tree"
+  },
+  {
+    "objectID": "slides/week-6.html#example-2",
+    "href": "slides/week-6.html#example-2",
+    "title": "Week 6",
+    "section": "Example   ",
+    "text": "Example   \n\ndt_model &lt;- decision_tree(tree_depth = 10, min_n = 3) |&gt; \n  set_engine(\"rpart\") |&gt; \n  set_mode('classification')\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(dt_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator   mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.891     10 0.00361 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.0911    10 0.00329 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.911     10 0.00526 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion-1",
+    "href": "slides/week-6.html#conclusion-1",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nDecision Trees are a powerful and interpretable tool for both classification and regression problems. While they have limitations, techniques like pruning and ensemble methods (e.g., Random Forests) can help mitigate their weaknesses. Understanding Decision Trees within the tidymodels framework makes them accessible for practical applications in environmental science."
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-random-forest",
+    "href": "slides/week-6.html#why-use-random-forest",
+    "title": "Week 6",
+    "section": "Why Use Random Forest?",
+    "text": "Why Use Random Forest?\nRandom Forest offers several advantages: - Higher Accuracy: By combining multiple decision trees, it reduces variance and improves predictive performance. - Robustness to Overfitting: By averaging multiple trees, it mitigates the risk of overfitting. - Feature Importance Analysis: Helps identify the most influential features. - Handles Missing Data: Can work well with incomplete datasets."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-a-random-forest",
+    "href": "slides/week-6.html#components-of-a-random-forest",
+    "title": "Week 6",
+    "section": "Components of a Random Forest",
+    "text": "Components of a Random Forest\n\nMultiple Decision Trees: The fundamental building blocks.\nBootstrap Sampling: Randomly selects subsets of data to train each tree.\nFeature Subsetting: Uses a random subset of features at each split to improve diversity among trees.\nAggregation (Bagging): Combines the outputs of individual trees through voting (classification) or averaging (regression)."
+  },
+  {
+    "objectID": "slides/week-6.html#building-a-random-forest",
+    "href": "slides/week-6.html#building-a-random-forest",
+    "title": "Week 6",
+    "section": "Building a Random Forest",
+    "text": "Building a Random Forest\nConstructing a Random Forest involves:\n\nCreating multiple bootstrap samples from the dataset.\nTraining a decision tree on each bootstrap sample using a random subset of features.\nAggregating predictions from all trees to produce the final output.\n\nHyperparameters in Random Forest\n\nNumber of Trees (ntree): Determines how many trees are included in the forest.\nMaximum Depth (max_depth): Limits the depth of individual trees to prevent overfitting.\nMinimum Samples per Leaf (min_n): Specifies the minimum number of observations required in a leaf node.\nNumber of Features (mtry): Controls how many features are randomly selected at each split."
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages-2",
+    "href": "slides/week-6.html#advantages-and-disadvantages-2",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nHandles large datasets with high-dimensional feature spaces.\nReduces overfitting by averaging multiple decision trees.\nWorks well with both categorical and numerical data.\nProvides built-in feature selection.\n\nDisadvantages:\n\nRequires more computational resources than a single decision tree.\nLess interpretable than a single decision tree.\nCan be slower to make predictions due to ensemble averaging."
+  },
+  {
+    "objectID": "slides/week-6.html#random-forest-implementation-using-tidymodels",
+    "href": "slides/week-6.html#random-forest-implementation-using-tidymodels",
+    "title": "Week 6",
+    "section": "Random Forest Implementation using Tidymodels",
+    "text": "Random Forest Implementation using Tidymodels\nSpecification\n\nrand_forest()\n#&gt; Random Forest Model Specification (unknown mode)\n#&gt; \n#&gt; Computational engine: ranger\n\nengines & modes \n\nshow_engines('rand_forest') |&gt; \n  mutate(specification = \"rand_forest\") |&gt; \n  flextable()\n\nenginemodespecificationrangerclassificationrand_forestrangerregressionrand_forestrandomForestclassificationrand_forestrandomForestregressionrand_forestsparkclassificationrand_forestsparkregressionrand_forest"
+  },
+  {
+    "objectID": "slides/week-6.html#example-3",
+    "href": "slides/week-6.html#example-3",
+    "title": "Week 6",
+    "section": "Example   ",
+    "text": "Example   \n\n# Define a Random Forest model\nrf_model &lt;- rand_forest(trees = 10) |&gt;\n  set_engine(\"ranger\", importance = \"impurity\") |&gt;\n  set_mode(\"classification\")\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(rf_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator   mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.909     10 0.00386 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.0677    10 0.00232 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.964     10 0.00213 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion-2",
+    "href": "slides/week-6.html#conclusion-2",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nRandom Forest is a powerful ensemble learning method that improves upon decision trees by reducing overfitting and increasing accuracy. By leveraging the tidymodels framework in R, it can be effectively applied to various environmental science problems."
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-boosting-machines",
+    "href": "slides/week-6.html#why-use-boosting-machines",
+    "title": "Week 6",
+    "section": "Why Use Boosting Machines?",
+    "text": "Why Use Boosting Machines?\nXGBoost is widely used in machine learning due to its: - High Accuracy: Often outperforms other algorithms in predictive tasks. - Efficiency: Optimized for speed and parallel processing. - Feature Importance: Provides insights into which features influence predictions. - Robustness to Overfitting: Uses regularization techniques to enhance generalization."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-gradient-boosting",
+    "href": "slides/week-6.html#components-of-gradient-boosting",
+    "title": "Week 6",
+    "section": "Components of Gradient Boosting",
+    "text": "Components of Gradient Boosting\n\nWeak Learners: Typically small decision trees (stumps).\nGradient Descent Optimization: Each tree corrects the residual errors of the previous trees.\nLearning Rate (eta): Controls the contribution of each tree to the final prediction.\nRegularization (lambda and alpha): Penalizes complex trees to prevent overfitting."
+  },
+  {
+    "objectID": "slides/week-6.html#popular-boosting-algorithms",
+    "href": "slides/week-6.html#popular-boosting-algorithms",
+    "title": "Week 6",
+    "section": "Popular Boosting Algorithms",
+    "text": "Popular Boosting Algorithms\n\nGradient Boosting Machines (GBM): A general boosting method that minimizes loss using gradient descent.\nXGBoost (Extreme Gradient Boosting): An optimized version of GBM that is computationally efficient and includes regularization.\nLightGBM: Designed for efficiency on large datasets by using histogram-based learning and reducing memory usage.\nCatBoost: Specialized for categorical data, using ordered boosting and permutation techniques to reduce bias."
+  },
+  {
+    "objectID": "slides/week-6.html#building-an-xgboost-model",
+    "href": "slides/week-6.html#building-an-xgboost-model",
+    "title": "Week 6",
+    "section": "Building an XGBoost Model",
+    "text": "Building an XGBoost Model\nThe process involves:\n\nInitializing predictions with a simple model (e.g., the mean for regression).\nComputing the residual errors.\nTraining a new tree to predict these residuals.\nUpdating the predictions by adding a fraction of the new tree’s output.\nRepeating until a stopping criterion is met (e.g., a maximum number of trees or performance threshold).\n\nHyperparameters in XGBoost\n\nnrounds (Number of Trees): The number of boosting iterations.\nmax_depth: The maximum depth of trees.\neta (Learning Rate): Controls how much each tree contributes to the model.\ngamma: Minimum loss reduction required to split a node.\ncolsample_bytree: Fraction of features to consider for each tree."
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages-3",
+    "href": "slides/week-6.html#advantages-and-disadvantages-3",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nHandles large datasets efficiently.\nReduces bias and variance compared to single decision trees.\nProvides feature importance analysis.\nCan be used for both classification and regression.\n\nDisadvantages:\n\nMore complex and harder to interpret than a single decision tree.\nRequires tuning of hyperparameters for optimal performance.\nCan overfit if not properly regularized."
+  },
+  {
+    "objectID": "slides/week-6.html#boost-implementation-using-tidymodels",
+    "href": "slides/week-6.html#boost-implementation-using-tidymodels",
+    "title": "Week 6",
+    "section": "Boost Implementation using Tidymodels",
+    "text": "Boost Implementation using Tidymodels\n\n# Define an XGBoost model\nb_model &lt;- boost_tree() |&gt;\n  set_engine(\"xgboost\") |&gt;\n  set_mode(\"classification\")\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(b_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator   mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.909     10 0.00461 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.0657    10 0.00259 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.969     10 0.00197 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion-3",
+    "href": "slides/week-6.html#conclusion-3",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nXGBoost is a powerful ensemble learning method that significantly improves predictive accuracy while mitigating overfitting. By leveraging tidymodels in R, environmental scientists can apply XGBoost to various challenges such as climate modeling, pollution forecasting, and disaster risk assessment."
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-svm",
+    "href": "slides/week-6.html#why-use-svm",
+    "title": "Week 6",
+    "section": "2. Why Use SVM?",
+    "text": "2. Why Use SVM?\nSVM is widely used in machine learning due to its:\n- Effective for High-Dimensional Data: Works well with datasets with many features.\n- Robustness to Overfitting: Uses regularization techniques to prevent overfitting.\n- Versatility: Can be applied to linear and non-linear classification tasks using different kernel functions.\n- Support for Small Datasets: Works well when the number of samples is limited."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-svm",
+    "href": "slides/week-6.html#components-of-svm",
+    "title": "Week 6",
+    "section": "3. Components of SVM",
+    "text": "3. Components of SVM\n\nSupport Vectors: Data points that define the hyperplane.\n\nMargin: The distance between the hyperplane and the nearest support vectors.\n\nKernel Functions: Transform data to a higher dimension to make it separable."
+  },
+  {
+    "objectID": "slides/week-6.html#building-an-svm-model",
+    "href": "slides/week-6.html#building-an-svm-model",
+    "title": "Week 6",
+    "section": "Building an SVM Model",
+    "text": "Building an SVM Model\nThe process involves:\n\nSelecting an appropriate kernel function (linear, polynomial, radial basis function, etc.).\n\nFinding the hyperplane that best separates the data.\n\nMaximizing the margin between the hyperplane and the closest points.\n\nUsing a regularization parameter (C) to control trade-offs between a wider margin and misclassifications.\n\n\nHyperparameters in SVM\nKey hyperparameters include:\n- C (Regularization Parameter): Controls the trade-off between maximizing margin and minimizing classification error.\n- kernel: Determines the transformation of input space (e.g., linear, radial basis function (RBF), polynomial).\n- gamma: Controls the influence of individual training"
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages-4",
+    "href": "slides/week-6.html#advantages-and-disadvantages-4",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nWorks well with small to medium-sized datasets.\nEffective for both linear and non-linear classification.\nHandles high-dimensional spaces well.\n\nDisadvantages:\n\nComputationally expensive for large datasets.\nRequires careful tuning of hyperparameters.\nNot as interpretable as decision trees."
+  },
+  {
+    "objectID": "slides/week-6.html#svm-implementation-using-tidymodels",
+    "href": "slides/week-6.html#svm-implementation-using-tidymodels",
+    "title": "Week 6",
+    "section": "SVM Implementation using Tidymodels",
+    "text": "SVM Implementation using Tidymodels\n\n# Define an SVM model\nsvm_model &lt;- svm_poly() |&gt;\n  set_engine(\"kernlab\") |&gt;\n  set_mode(\"classification\")\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(svm_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator   mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.905     10 0.00421 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.0744    10 0.00320 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.956     10 0.00293 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion-4",
+    "href": "slides/week-6.html#conclusion-4",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nSupport Vector Machines (SVM) is a powerful algorithm for classification and regression tasks, especially when working with high-dimensional datasets. By leveraging tidymodels in R, environmental scientists can apply SVM to various challenges such as land cover classification, pollution prediction, and climate modeling."
+  },
+  {
+    "objectID": "slides/week-6.html#why-use-neural-networks",
+    "href": "slides/week-6.html#why-use-neural-networks",
+    "title": "Week 6",
+    "section": "Why Use Neural Networks?",
+    "text": "Why Use Neural Networks?\nNeural Networks are popular due to their:\n- Ability to Model Complex Patterns: Can capture intricate relationships in data.\n- Scalability: Performs well with large datasets.\n- Feature Learning: Automatically extracts relevant features from raw data.\n- Generalization: Can adapt to different types of data with proper training."
+  },
+  {
+    "objectID": "slides/week-6.html#components-of-a-neural-network",
+    "href": "slides/week-6.html#components-of-a-neural-network",
+    "title": "Week 6",
+    "section": "Components of a Neural Network",
+    "text": "Components of a Neural Network\n\n\n\nNeurons: The fundamental units that receive, process, and transmit information.\nInput Layer: The initial layer that receives raw data.\nHidden Layers: Intermediate layers where computations occur to learn features.\nOutput Layer: Produces the final prediction or classification.\nWeights & Biases: Parameters that are optimized during training.\nActivation Functions: Functions like ReLU, Sigmoid, and Softmax that introduce non-linearity."
+  },
+  {
+    "objectID": "slides/week-6.html#training-a-neural-network",
+    "href": "slides/week-6.html#training-a-neural-network",
+    "title": "Week 6",
+    "section": "Training a Neural Network",
+    "text": "Training a Neural Network\nThe training process involves:\n\nForward Propagation: Inputs pass through the network, producing an output.\nLoss Calculation: The difference between predicted and actual values is measured.\nBackpropagation: Errors are propagated backward to update weights.\nOptimization: Gradient descent (or its variants) adjusts weights to minimize loss.\nIteration: The process repeats over multiple epochs until convergence.\n\nHyperparameters in Neural Networks\n\nhidden_units: Number of neurons in hidden layers.\npenalty: Regularization term to prevent overfitting.\ndropout: Fraction of neurons randomly dropped during training.\nepochs: Number of training iterations.\nactivation: Activation function for neurons (e.g., ReLU, Sigmoid).\nlearn_rate: Step size for weight updates."
+  },
+  {
+    "objectID": "slides/week-6.html#advantages-and-disadvantages-5",
+    "href": "slides/week-6.html#advantages-and-disadvantages-5",
+    "title": "Week 6",
+    "section": "Advantages and Disadvantages",
+    "text": "Advantages and Disadvantages\nAdvantages:\n\nCan model complex, non-linear relationships.\nWorks well with high-dimensional data.\nAutomatically extracts features from data.\n\nDisadvantages:\n\nRequires large datasets for effective training.\nComputationally expensive.\nDifficult to interpret compared to simpler models like Decision Trees."
+  },
+  {
+    "objectID": "slides/week-6.html#varients-of-neural-networks",
+    "href": "slides/week-6.html#varients-of-neural-networks",
+    "title": "Week 6",
+    "section": "Varients of Neural Networks",
+    "text": "Varients of Neural Networks\nmlp() → Generic MLP model (uses “nnet”, “keras”, or “brulee” as an engine).\nbag_mlp() → Bagged MLP model using “nnet” (reduces variance).\nbrulee::mlp() → MLP model using torch via brulee (more scalable and flexible).\n\n\n\n\n\n\nWhich one you choose depends on your dataset size, computational resources, and need for ensembling. If you need better scalability, brulee::mlp() is likely a better choice. If you want a quick MLP with some regularization, mlp() with “nnet” or “keras” works. If variance reduction is a concern, bag_mlp() is a solid option."
+  },
+  {
+    "objectID": "slides/week-6.html#neural-network-implementation",
+    "href": "slides/week-6.html#neural-network-implementation",
+    "title": "Week 6",
+    "section": "Neural Network Implementation",
+    "text": "Neural Network Implementation\nmlp() defines a multilayer perceptron model (a.k.a. a single layer, feed-forward neural network). This function can fit classification and regression models.\nSpecification\n\nmlp()\n#&gt; Single Layer Neural Network Model Specification (unknown mode)\n#&gt; \n#&gt; Computational engine: nnet\n\nengines & modes \n\nshow_engines(\"mlp\") |&gt; \n  mutate(specification = \"mlp\") |&gt; \n  flextable()\n\nenginemodespecificationkerasclassificationmlpkerasregressionmlpnnetclassificationmlpnnetregressionmlpbruleeclassificationmlpbruleeregressionmlpbrulee_two_layerclassificationmlpbrulee_two_layerregressionmlp"
+  },
+  {
+    "objectID": "slides/week-6.html#example-4",
+    "href": "slides/week-6.html#example-4",
+    "title": "Week 6",
+    "section": "Example   ",
+    "text": "Example   \n\nnn_model &lt;- mlp(hidden_units = 5, penalty = 0.01) |&gt; \n  set_engine(\"nnet\") |&gt; \n  set_mode(\"classification\")\n\nworkflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  add_model(nn_model) |&gt; \n  fit_resamples(resample = forested_folds) |&gt; \n  collect_metrics()\n#&gt; # A tibble: 3 × 6\n#&gt;   .metric     .estimator  mean     n std_err .config             \n#&gt;   &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 accuracy    binary     0.908    10 0.00462 Preprocessor1_Model1\n#&gt; 2 brier_class binary     0.118    10 0.00139 Preprocessor1_Model1\n#&gt; 3 roc_auc     binary     0.965    10 0.00211 Preprocessor1_Model1"
+  },
+  {
+    "objectID": "slides/week-6.html#conclusion-5",
+    "href": "slides/week-6.html#conclusion-5",
+    "title": "Week 6",
+    "section": "Conclusion",
+    "text": "Conclusion\nNeural Networks are a powerful tool for solving complex problems in various domains. While they require significant computational resources, proper training and regularization techniques can make them highly effective for predictive modeling. Understanding Neural Networks within the torch framework allows for practical applications in data science and environmental modeling."
+  },
+  {
+    "objectID": "slides/week-6.html#wrap-up",
+    "href": "slides/week-6.html#wrap-up",
+    "title": "Week 6",
+    "section": "Wrap up   ",
+    "text": "Wrap up   \nLets combine all the models and evaluate their performance using cross-validation.\n\nWe learned about cross-validation last Monday and its importance in evaluating model performance.\nWe will use a workflow set (seen last Wednesday) to fit multiple models at once and compare their performance.\nRemember, we have not implmented any hyperparameter tuning yet, so these are just base models.\n\n\nforested_folds &lt;-  vfold_cv(forested_train, v = 10)\n\nwf &lt;-  workflow_set(list(forested_recipe), \n                  list(log_model, \n                       dt_model, \n                       rf_model, \n                       b_model, \n                       svm_model, \n                       nn_model)) |&gt; \n workflow_map('fit_resamples', resamples = forested_folds)"
+  },
+  {
+    "objectID": "slides/week-6.html#model-performance-comparision",
+    "href": "slides/week-6.html#model-performance-comparision",
+    "title": "Week 6",
+    "section": "Model Performance Comparision ",
+    "text": "Model Performance Comparision \n\nautoplot(wf) +\n  theme_linedraw(18) + \n  theme(legend.position = 'bottom')"
+  },
+  {
+    "objectID": "slides/week-6.html#model-evaluation",
+    "href": "slides/week-6.html#model-evaluation",
+    "title": "Week 6",
+    "section": "Model Evaluation ",
+    "text": "Model Evaluation \nUnderstanding the boost model provided the best performance out of the box we can (1) select that model (2)\n\nfinal_fit &lt;- workflow() |&gt;\n  add_recipe(forested_recipe) |&gt;\n  # Selected Model\n  add_model(b_model) |&gt;\n  # Trained with full training dataset\n  fit(data = forested_train) |&gt; \n  # Validated against hold out data\n  augment(new_data = forested_test)\n\n# Final Results!\nmetrics(final_fit,  truth = forested, estimate = .pred_class) \n#&gt; # A tibble: 2 × 3\n#&gt;   .metric  .estimator .estimate\n#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 accuracy binary         0.917\n#&gt; 2 kap      binary         0.833\nconf_mat(final_fit, truth = forested, estimate = .pred_class)\n#&gt;           Truth\n#&gt; Prediction Yes  No\n#&gt;        Yes 910  86\n#&gt;        No   61 720"
+  },
+  {
+    "objectID": "slides/week-6.html#the-whole-game---status-update",
+    "href": "slides/week-6.html#the-whole-game---status-update",
+    "title": "Week 6",
+    "section": "The whole game - status update",
+    "text": "The whole game - status update"
+  },
+  {
+    "objectID": "slides/week-6.html#recaping",
+    "href": "slides/week-6.html#recaping",
+    "title": "Week 6",
+    "section": "Recaping",
+    "text": "Recaping\n\nlibrary(tidymodels)\nlibrary(forested)\n\n# Set a seed\nset.seed(123)\n\n# IntitalizeInitialize Split\nforested_split &lt;- initial_split(forested, prop = 0.8)\nforested_train &lt;- training(forested_split)\nforested_test  &lt;- testing(forested_split)\n\n# Build Resamples\nforested_folds &lt;- vfold_cv(forested_train, v = 10)\n\n# Set a model specification with mode (default engine)\ndt_mod         &lt;- decision_tree(cost_complexity = 0.0001, mode = \"classification\")\n\n# Bare bones workflow & fit\nforested_wflow &lt;- workflow(forested ~ ., dt_mod)\nforested_fit   &lt;- fit(forested_wflow, forested_train)\n\n# Extracting Predictions:\naugment(forested_fit, new_data = forested_train)\n#&gt; # A tibble: 5,685 × 22\n#&gt;    .pred_class .pred_Yes .pred_No forested  year elevation eastness northness\n#&gt;    &lt;fct&gt;           &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;\n#&gt;  1 No             0.0114   0.989  No        2016       464       -5       -99\n#&gt;  2 Yes            0.636    0.364  Yes       2016       166       92        37\n#&gt;  3 No             0.0114   0.989  No        2016       644      -85       -52\n#&gt;  4 Yes            0.977    0.0226 Yes       2014      1285        4        99\n#&gt;  5 Yes            0.977    0.0226 Yes       2013       822       87        48\n#&gt;  6 Yes            0.808    0.192  Yes       2017         3        6       -99\n#&gt;  7 Yes            0.977    0.0226 Yes       2014      2041      -95        28\n#&gt;  8 Yes            0.977    0.0226 Yes       2015      1009       -8        99\n#&gt;  9 No             0.0114   0.989  No        2017       436      -98        19\n#&gt; 10 No             0.0114   0.989  No        2018       775       63        76\n#&gt; # ℹ 5,675 more rows\n#&gt; # ℹ 14 more variables: roughness &lt;dbl&gt;, tree_no_tree &lt;fct&gt;, dew_temp &lt;dbl&gt;,\n#&gt; #   precip_annual &lt;dbl&gt;, temp_annual_mean &lt;dbl&gt;, temp_annual_min &lt;dbl&gt;,\n#&gt; #   temp_annual_max &lt;dbl&gt;, temp_january_min &lt;dbl&gt;, vapor_min &lt;dbl&gt;,\n#&gt; #   vapor_max &lt;dbl&gt;, canopy_cover &lt;dbl&gt;, lon &lt;dbl&gt;, lat &lt;dbl&gt;, land_type &lt;fct&gt;"
+  },
+  {
+    "objectID": "slides/week-6.html#evaluation",
+    "href": "slides/week-6.html#evaluation",
+    "title": "Week 6",
+    "section": "Evaluation",
+    "text": "Evaluation\n\nSo far we have used metrics and collect_metrics to evaluate and compare models\nThe default metrics for classification problems are: accuracy, brier_score, roc_auc\n\nAll classification metrics stem from the classic confusion matrix\n\n\n\n\nThe default metrics for regression problems are: rsq, rmse, mae\n\nThe majority of these are measures of correlation and residual error"
+  },
+  {
+    "objectID": "slides/week-6.html#confusion-matrix",
+    "href": "slides/week-6.html#confusion-matrix",
+    "title": "Week 6",
+    "section": "Confusion matrix ",
+    "text": "Confusion matrix \n\nA confusion matrix is a table that describes the performance of a classification model on a set of data for which the true values are known.\nIt counts the number of accurate and false predictions, separated by the truth state\n\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  conf_mat(truth = forested, estimate = .pred_class)\n#&gt;           Truth\n#&gt; Prediction  Yes   No\n#&gt;        Yes 2991  176\n#&gt;        No   144 2374"
+  },
+  {
+    "objectID": "slides/week-6.html#accuracy",
+    "href": "slides/week-6.html#accuracy",
+    "title": "Week 6",
+    "section": "1. Accuracy ",
+    "text": "1. Accuracy \n\nAccuracy is the proportion of true results (both true positives and true negatives) among the total number of cases examined.\nIt is a measure of the correctness of the model’s predictions.\nIt is the most common metric used to evaluate classification models.\n\n\n\n\n\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  accuracy(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 1 × 3\n#&gt;   .metric  .estimator .estimate\n#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 accuracy binary         0.944"
+  },
+  {
+    "objectID": "slides/week-6.html#sensitivity",
+    "href": "slides/week-6.html#sensitivity",
+    "title": "Week 6",
+    "section": "2. Sensitivity ",
+    "text": "2. Sensitivity \n\nSensitivity is the proportion of true positives to the sum of true positives and false negatives.\nIt is useful for identifying the presence of a condition.\nIt is also known as the true positive rate, recall, or probability of detection.\n\n\n\n\n\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  sensitivity(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 1 × 3\n#&gt;   .metric     .estimator .estimate\n#&gt;   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 sensitivity binary         0.954"
+  },
+  {
+    "objectID": "slides/week-6.html#specificity",
+    "href": "slides/week-6.html#specificity",
+    "title": "Week 6",
+    "section": "3. Specificity ",
+    "text": "3. Specificity \n\nSpecificity is the proportion of true negatives to the sum of true negatives and false positives.\nIt is useful for identifying the absence of a condition.\nIt is also known as the true negative rate, and is the complement of sensitivity.\n\n\n\n\n\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  sensitivity(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 1 × 3\n#&gt;   .metric     .estimator .estimate\n#&gt;   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 sensitivity binary         0.954\n\n\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  specificity(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 1 × 3\n#&gt;   .metric     .estimator .estimate\n#&gt;   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 specificity binary         0.931"
+  },
+  {
+    "objectID": "slides/week-6.html#two-class-data",
+    "href": "slides/week-6.html#two-class-data",
+    "title": "Week 6",
+    "section": "Two class data",
+    "text": "Two class data\nThese metrics assume that we know the threshold for converting “soft” probability predictions into “hard” class predictions.\n\nFor example, if the predicted probability of a tree is 0.7, we might say that the model predicts “Tree” for that observation.\n\nIf the predicted probability of a tree is 0.4, we might say that the model predicts “No tree” for that observation.\n\nThe threshold is the value that separates the two classes.\n\nThe default threshold is 0.5, but this can be changed.\n\n\n\nIs a 50% threshold good?\n\n\nWhat happens if we say that we need to be 80% sure to declare an event?\n\nsensitivity ⬇️, specificity ⬆️\n\n\n\nWhat happens for a 20% threshold?\n\nsensitivity ⬆️, specificity ⬇️"
+  },
+  {
+    "objectID": "slides/week-6.html#varying-the-threshold",
+    "href": "slides/week-6.html#varying-the-threshold",
+    "title": "Week 6",
+    "section": "Varying the threshold",
+    "text": "Varying the threshold\n\n\n\nThe threshold can be varied to see how it affects the sensitivity and specificity of the model.\nThis is done by plotting the sensitivity and specificity against the threshold.\nThe threshold is varied from 0 to 1, and the sensitivity and specificity are calculated at each threshold.\nThe plot shows the trade-off between sensitivity and specificity at different thresholds.\nThe threshold can be chosen based on the desired balance between sensitivity and specificity."
+  },
+  {
+    "objectID": "slides/week-6.html#roc-curves",
+    "href": "slides/week-6.html#roc-curves",
+    "title": "Week 6",
+    "section": "ROC curves",
+    "text": "ROC curves\n\n\nFor an ROC (receiver operator characteristic) curve, we plot\n\nthe false positive rate (1 - specificity) on the x-axis\nthe true positive rate (sensitivity) on the y-axis\n\nwith sensitivity and specificity calculated at all possible thresholds."
+  },
+  {
+    "objectID": "slides/week-6.html#roc-curves-1",
+    "href": "slides/week-6.html#roc-curves-1",
+    "title": "Week 6",
+    "section": "ROC curves",
+    "text": "ROC curves\n\n\nThe ROC AUC is the probability that a randomly chosen positive instance is ranked higher than a randomly chosen negative instance.\n\nThe ROC AUC is a measure of how well the model separates the two classes.\nThe ROC AUC is a number between 0 and 1.\nROC AUC = 1 💯\n\nperfect classification\n\nROC AUC = 0.5 😐\n\nrandom guessing\n\nROC AUC &lt; 0.5 😱\n\nworse than random guessing"
+  },
+  {
+    "objectID": "slides/week-6.html#roc-curves-2",
+    "href": "slides/week-6.html#roc-curves-2",
+    "title": "Week 6",
+    "section": "ROC curves ",
+    "text": "ROC curves \n(A ROC AUC of 0.7-0.8 is considered acceptable, 0.8-0.9 is good, and &gt;0.9 is excellent.)\n\n# Assumes _first_ factor level is event; there are options to change that\naugment(forested_fit, new_data = forested_train) |&gt;  \n  roc_curve(truth = forested, .pred_Yes)  |&gt; \n  dplyr::slice(1, 20, 50)\n#&gt; # A tibble: 3 × 3\n#&gt;   .threshold specificity sensitivity\n#&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;\n#&gt; 1   -Inf           0           1    \n#&gt; 2      0.235       0.885       0.972\n#&gt; 3      0.909       0.969       0.826\n\naugment(forested_fit, new_data = forested_train) |&gt;  \n  roc_auc(truth = forested, .pred_Yes)\n#&gt; # A tibble: 1 × 3\n#&gt;   .metric .estimator .estimate\n#&gt;   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 roc_auc binary         0.975"
+  },
+  {
+    "objectID": "slides/week-6.html#brier-score",
+    "href": "slides/week-6.html#brier-score",
+    "title": "Week 6",
+    "section": "Brier score",
+    "text": "Brier score\n\nThe Brier score is a measure of how well the predicted probabilities of an event match the actual outcomes.\nIt is the mean squared difference between predicted probabilities and actual outcomes.\nThe Brier score is a number between 0 and 1.\nThe Brier score is analogous to the mean squared error in regression models:\nBrier = 1 😱\n\npredicted probabilities are completely wrong\n\nBrier = 0.5 😐\n\nbad\n\nBrier &lt; 0.25\n\nacceptable\n\nBrier = 0 💯\n\npredicted probabilities are perfect\n\n\n\\[\nBrier_{class} = \\frac{1}{N}\\sum_{i=1}^N\\sum_{k=1}^C (y_{ik} - \\hat{p}_{ik})^2\n\\]"
+  },
+  {
+    "objectID": "slides/week-6.html#brier-score-1",
+    "href": "slides/week-6.html#brier-score-1",
+    "title": "Week 6",
+    "section": "Brier score",
+    "text": "Brier score\n\naugment(forested_fit, new_data = forested_train) |&gt;  \n  brier_class(truth = forested, .pred_Yes) \n#&gt; # A tibble: 1 × 3\n#&gt;   .metric     .estimator .estimate\n#&gt;   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 brier_class binary        0.0469"
+  },
+  {
+    "objectID": "slides/week-6.html#separation-vs-calibration",
+    "href": "slides/week-6.html#separation-vs-calibration",
+    "title": "Week 6",
+    "section": "Separation vs calibration",
+    "text": "Separation vs calibration\n\n\nThe ROC captures separation. - The ROC curve shows the trade-off between sensitivity and specificity at different thresholds.\n\n\n\n\n\n\n\n\n\n\nThe Brier score captures calibration. - The Brier score is a measure of how well the predicted probabilities of an event match the actual outcomes.\n\n\n\n\n\n\n\n\n\n\n\nGood separation: the densities don’t overlap.\nGood calibration: the calibration line follows the diagonal.\n\nCalibration plot: We bin observations according to predicted probability. In the bin for 20%-30% predicted prob, we should see an event rate of ~25% if the model is well-calibrated."
+  },
+  {
+    "objectID": "slides/week-6.html#r-squared-r2",
+    "href": "slides/week-6.html#r-squared-r2",
+    "title": "Week 6",
+    "section": "R-squared (\\(R^2\\))",
+    "text": "R-squared (\\(R^2\\))\n\nMeasures how well the model explains the variance in the data.\nFormula:\n\n\\[\nR^2 = 1 - \\frac{SS_{res}}{SS_{tot}}\n\\] where:\n- \\(SS_{res}\\) is the sum of squared residuals.\n\n\n\\(SS_{tot}\\) is the total sum of squares.\n\nValues range from \\(-\\infty\\) to 1.\n\n\n1: Perfect fit\n\n0: No improvement over mean prediction\n\nNegative: Worse than just using the mean"
+  },
+  {
+    "objectID": "slides/week-6.html#root-mean-squared-error-rmse",
+    "href": "slides/week-6.html#root-mean-squared-error-rmse",
+    "title": "Week 6",
+    "section": "Root Mean Squared Error (RMSE)",
+    "text": "Root Mean Squared Error (RMSE)\n\nMeasures the model’s prediction error in the same unit as the dependent variable.\nFormula:\n\n\\[\nRMSE = \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} (y_i - \\hat{y}_i)^2}\n\\]\nwhere: - \\(y_i\\) is the actual value. - \\(\\hat{y}_i\\) is the predicted value.\n\nPenalizes large errors more than MAE.\nLower RMSE indicates better model performance."
+  },
+  {
+    "objectID": "slides/week-6.html#mean-absolute-error-mae",
+    "href": "slides/week-6.html#mean-absolute-error-mae",
+    "title": "Week 6",
+    "section": "Mean Absolute Error (MAE)",
+    "text": "Mean Absolute Error (MAE)\n\nMeasures average absolute errors between predictions and actual values.\nFormula:\n\n\\[\nMAE = \\frac{1}{n} \\sum_{i=1}^{n} |y_i - \\hat{y}_i|\n\\]\n\nLess sensitive to outliers than RMSE.\nLower MAE indicates better model performance."
+  },
+  {
+    "objectID": "slides/week-6.html#comparing-metrics",
+    "href": "slides/week-6.html#comparing-metrics",
+    "title": "Week 6",
+    "section": "Comparing Metrics",
+    "text": "Comparing Metrics\n\n\n\nMetric\nInterpretation\nSensitivity to Outliers\n\n\n\n\n\\(R^2\\)\nVariance explained\nModerate\n\n\nRMSE\nPenalizes large errors more\nHigh\n\n\nMAE\nAverage error size\nLow\n\n\n\n\nChoosing the Right Metric\n\nUse \\(R^2\\) to assess model fit and explainability.\nUse RMSE if large errors are especially undesirable.\nUse MAE for a more interpretable, robust metric."
+  },
+  {
+    "objectID": "slides/week-6.html#metrics-selection-model-performance",
+    "href": "slides/week-6.html#metrics-selection-model-performance",
+    "title": "Week 6",
+    "section": "Metrics Selection model performance ",
+    "text": "Metrics Selection model performance \nWe can use metric_set() to combine multiple calculations into one\n\nforested_metrics &lt;- metric_set(accuracy, specificity, sensitivity)\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  forested_metrics(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 3 × 3\n#&gt;   .metric     .estimator .estimate\n#&gt;   &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 accuracy    binary         0.944\n#&gt; 2 specificity binary         0.931\n#&gt; 3 sensitivity binary         0.954\n\n\nMetrics and metric sets work with grouped data frames!\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  group_by(tree_no_tree) |&gt;\n  accuracy(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 2 × 4\n#&gt;   tree_no_tree .metric  .estimator .estimate\n#&gt;   &lt;fct&gt;        &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 Tree         accuracy binary         0.946\n#&gt; 2 No tree      accuracy binary         0.941\n\naugment(forested_fit, new_data = forested_train) |&gt;\n  group_by(tree_no_tree) |&gt;\n  specificity(truth = forested, estimate = .pred_class)\n#&gt; # A tibble: 2 × 4\n#&gt;   tree_no_tree .metric     .estimator .estimate\n#&gt;   &lt;fct&gt;        &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt;\n#&gt; 1 Tree         specificity binary         0.582\n#&gt; 2 No tree      specificity binary         0.974\n\n\n\n\n\n\n\nNote\n\n\nThe specificity for \"Tree\" is a good bit lower than it is for \"No tree\".\nSo, when this index classifies the plot as having a tree, the model does not do well at correctly identifying the plot as non-forested when it is indeed non-forested."
+  },
+  {
+    "objectID": "slides/week-6.html#previously---setup",
+    "href": "slides/week-6.html#previously---setup",
+    "title": "Week 6",
+    "section": "Previously - Setup ",
+    "text": "Previously - Setup \n\nlibrary(tidyverse)\n# Ingest Data\n# URLs for COVID-19 case data and census population data\ncovid_url &lt;- 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'\npop_url &lt;-  '/Users/mikejohnson/github/csu-ess-330/resources/co-est2023-alldata.csv'\n#pop_url   &lt;- 'https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/counties/totals/co-est2023-alldata.csv'\n\n# Clean Census Data\ncensus = readr::read_csv(pop_url)  |&gt; \n  filter(COUNTY == \"000\") |&gt;  # Filter for state-level data only\n  mutate(fips = STATE) |&gt;      # Create a new FIPS column for merging\n  select(fips, contains(\"2021\"))  # Select relevant columns for 2021 data\n\n# Process COVID-19 Data\nstate_data &lt;-  readr::read_csv(covid_url) |&gt; \n  group_by(fips) |&gt; \n  mutate(\n    new_cases  = pmax(0, cases  - dplyr::lag(cases)),   # Compute new cases, ensuring no negative values\n    new_deaths = pmax(0, deaths - dplyr::lag(deaths))  # Compute new deaths, ensuring no negative values\n  ) |&gt; \n  ungroup() |&gt; \n  left_join(census, by = \"fips\") |&gt;  # Merge with census data\n  mutate(\n    m = month(date), y = year(date),\n    season = case_when(   # Define seasons based on month\n      m %in% 3:5 ~ \"Spring\",\n      m %in% 6:8 ~ \"Summer\",\n      m %in% 9:11 ~ \"Fall\",\n      m %in% c(12, 1, 2) ~ \"Winter\"\n    )\n  ) |&gt; \n  group_by(state, y, season) |&gt; \n  mutate(\n    season_cases  = sum(new_cases, na.rm = TRUE),  # Aggregate seasonal cases\n    season_deaths = sum(new_deaths, na.rm = TRUE)  # Aggregate seasonal deaths\n  )  |&gt; \n  distinct(state, y, season, .keep_all = TRUE) |&gt;  # Keep only distinct rows by state, year, season\n  ungroup() |&gt; \n  select(state, contains('season'), y, POPESTIMATE2021, BIRTHS2021, DEATHS2021) |&gt;  # Select relevant columns\n  drop_na() |&gt;  # Remove rows with missing values\n  mutate(logC = log(season_cases +1))  # Log-transform case numbers for modeling"
+  },
+  {
+    "objectID": "slides/week-6.html#previously---data-usage",
+    "href": "slides/week-6.html#previously---data-usage",
+    "title": "Week 6",
+    "section": "Previously - Data Usage ",
+    "text": "Previously - Data Usage \n\nset.seed(4028)\nsplit &lt;- initial_split(state_data, prop = 0.8, strata = season)  # 80/20 train-test split\ntrain &lt;- training(split)  # Training set\ntest &lt;- testing(split)  # Test set\n\nset.seed(3045)\nfolds &lt;- vfold_cv(train, v = 10)  # 10-fold cross-validation"
+  },
+  {
+    "objectID": "slides/week-6.html#previously---feature-engineering",
+    "href": "slides/week-6.html#previously---feature-engineering",
+    "title": "Week 6",
+    "section": "Previously - Feature engineering ",
+    "text": "Previously - Feature engineering \n\nrec = recipe(logC ~ . , data = train) |&gt; \n  step_rm(state, season_cases) |&gt;  # Remove non-predictive columns\n  step_dummy(all_nominal()) |&gt;  # Convert categorical variables to dummy variables\n  step_scale(all_numeric_predictors()) |&gt;  # Scale numeric predictors\n  step_center(all_numeric_predictors())"
+  },
+  {
+    "objectID": "slides/week-6.html#tuning-parameters",
+    "href": "slides/week-6.html#tuning-parameters",
+    "title": "Week 6",
+    "section": "Tuning parameters",
+    "text": "Tuning parameters\n\nSome model or preprocessing parameters cannot be estimated directly from the data.\nTry different values and measure their performance.\n\n\n\nFind good values for these parameters.\n\n\n\n\nOnce the value(s) of the parameter(s) are determined, a model can be finalized by fitting the model to the entire training set."
+  },
+  {
+    "objectID": "slides/week-6.html#tagging-parameters-for-tuning",
+    "href": "slides/week-6.html#tagging-parameters-for-tuning",
+    "title": "Week 6",
+    "section": "Tagging parameters for tuning ",
+    "text": "Tagging parameters for tuning \nWith tidymodels, you can mark the parameters that you want to optimize with a value of tune().\n\nThe function itself just returns… itself:\n\ntune()\n#&gt; tune()\n\nstr(tune())\n#&gt;  language tune()\n\n# optionally add a label\ntune(\"Marker\")\n#&gt; tune(\"Marker\")"
+  },
+  {
+    "objectID": "slides/week-6.html#boosted-trees",
+    "href": "slides/week-6.html#boosted-trees",
+    "title": "Week 6",
+    "section": "Boosted Trees",
+    "text": "Boosted Trees\nIn last weeks live demo, a boosted tree proved most effective.\nBoosted Trees are popular ensemble methods that build a sequence of tree models.\nEach tree uses the results of the previous tree to better predict samples, especially those that have been poorly predicted.\nEach tree in the ensemble is saved and new samples are predicted using a weighted average of the votes of each tree in the ensemble."
+  },
+  {
+    "objectID": "slides/week-6.html#boosted-tree-tuning-parameters",
+    "href": "slides/week-6.html#boosted-tree-tuning-parameters",
+    "title": "Week 6",
+    "section": "Boosted Tree Tuning Parameters",
+    "text": "Boosted Tree Tuning Parameters\nSome possible parameters:\n\nmtry: The number of predictors randomly sampled at each split (in \\([1, ncol(x)]\\) or \\((0, 1]\\)).\ntrees: The number of trees (\\([1, \\infty]\\), but usually up to thousands)\nmin_n: The number of samples needed to further split (\\([1, n]\\)).\nlearn_rate: The rate that each tree adapts from previous iterations (\\((0, \\infty]\\), usual maximum is 0.1).\nstop_iter: The number of iterations of boosting where no improvement was shown before stopping (\\([1, trees]\\))"
+  },
+  {
+    "objectID": "slides/week-6.html#boosted-tree-tuning-parameters-1",
+    "href": "slides/week-6.html#boosted-tree-tuning-parameters-1",
+    "title": "Week 6",
+    "section": "Boosted Tree Tuning Parameters  ",
+    "text": "Boosted Tree Tuning Parameters  \n\nb_mod &lt;- \n  boost_tree(trees = tune(), learn_rate = tune()) |&gt; \n  set_mode(\"regression\") |&gt; \n  set_engine(\"xgboost\")\n\n(b_wflow &lt;- workflow(rec, b_mod))\n#&gt; ══ Workflow ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════\n#&gt; Preprocessor: Recipe\n#&gt; Model: boost_tree()\n#&gt; \n#&gt; ── Preprocessor ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n#&gt; 4 Recipe Steps\n#&gt; \n#&gt; • step_rm()\n#&gt; • step_dummy()\n#&gt; • step_scale()\n#&gt; • step_center()\n#&gt; \n#&gt; ── Model ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n#&gt; Boosted Tree Model Specification (regression)\n#&gt; \n#&gt; Main Arguments:\n#&gt;   trees = tune()\n#&gt;   learn_rate = tune()\n#&gt; \n#&gt; Computational engine: xgboost"
+  },
+  {
+    "objectID": "slides/week-6.html#optimize-tuning-parameters",
+    "href": "slides/week-6.html#optimize-tuning-parameters",
+    "title": "Week 6",
+    "section": "Optimize tuning parameters",
+    "text": "Optimize tuning parameters\nThe main two strategies for optimization are:\n\n\nGrid search 💠 which tests a pre-defined set of candidate values\nIterative search 🌀 which suggests/estimates new values of candidate parameters to evaluate"
+  },
+  {
+    "objectID": "slides/week-6.html#grid-search",
+    "href": "slides/week-6.html#grid-search",
+    "title": "Week 6",
+    "section": "1. Grid search",
+    "text": "1. Grid search\n\nMost basic (but very effective) way to tune models\nA small grid of points trying to minimize the error via learning rate:"
+  },
+  {
+    "objectID": "slides/week-6.html#grid-search-1",
+    "href": "slides/week-6.html#grid-search-1",
+    "title": "Week 6",
+    "section": "1. Grid search",
+    "text": "1. Grid search\nIn reality we would probably sample the space more densely:"
+  },
+  {
+    "objectID": "slides/week-6.html#iterative-search",
+    "href": "slides/week-6.html#iterative-search",
+    "title": "Week 6",
+    "section": "2. Iterative Search",
+    "text": "2. Iterative Search\nWe could start with a few points and search the space:"
+  },
+  {
+    "objectID": "slides/week-6.html#parameters",
+    "href": "slides/week-6.html#parameters",
+    "title": "Week 6",
+    "section": "Parameters",
+    "text": "Parameters\n\nThe tidymodels framework provides pre-defined information on tuning parameters (such as their type, range, transformations, etc).\nThe extract_parameter_set_dials() function extracts these tuning parameters and the info.\n\nGrids\n\nCreate your grid manually or automatically.\nThe grid_*() functions can make a grid."
+  },
+  {
+    "objectID": "slides/week-6.html#different-types-of-grids",
+    "href": "slides/week-6.html#different-types-of-grids",
+    "title": "Week 6",
+    "section": "Different types of grids ",
+    "text": "Different types of grids \n\n\n\n\n\n\n\n\n\nSpace-filling designs (SFD) attempt to cover the parameter space without redundant candidates. We recommend these the most."
+  },
+  {
+    "objectID": "slides/week-6.html#create-a-grid",
+    "href": "slides/week-6.html#create-a-grid",
+    "title": "Week 6",
+    "section": "Create a grid  ",
+    "text": "Create a grid  \n\n# Extac\n(b_wflow |&gt; \n  extract_parameter_set_dials())\n\n# Individual functions: \n(trees())\n(learn_rate())\n\n\nA parameter set can be updated (e.g. to change the ranges)."
+  },
+  {
+    "objectID": "slides/week-6.html#create-a-grid-1",
+    "href": "slides/week-6.html#create-a-grid-1",
+    "title": "Week 6",
+    "section": "Create a grid  ",
+    "text": "Create a grid  \n\nThe grid_*() functions create a grid of parameter values to evaluate.\nThe grid_space_filling() function creates a space-filling design (SFD) of parameter values to evaluate.\nThe grid_regular() function creates a regular grid of parameter values to evaluate.\nThe grid_random() function creates a random grid of parameter values to evaluate.\nThe grid_latin_hypercube() function creates a Latin hypercube design of parameter values to evaluate.\nThe grid_max_entropy() function creates a maximum entropy design of parameter values to evaluate."
+  },
+  {
+    "objectID": "slides/week-6.html#create-a-sfd-curve",
+    "href": "slides/week-6.html#create-a-sfd-curve",
+    "title": "Week 6",
+    "section": "Create a SFD curve  ",
+    "text": "Create a SFD curve  \n\nset.seed(12)\n\n(grid &lt;- \n  b_wflow |&gt; \n  extract_parameter_set_dials() |&gt; \n  grid_space_filling(size = 25))\n#&gt; # A tibble: 25 × 2\n#&gt;    trees learn_rate\n#&gt;    &lt;int&gt;      &lt;dbl&gt;\n#&gt;  1     1    0.0287 \n#&gt;  2    84    0.00536\n#&gt;  3   167    0.121  \n#&gt;  4   250    0.00162\n#&gt;  5   334    0.0140 \n#&gt;  6   417    0.0464 \n#&gt;  7   500    0.196  \n#&gt;  8   584    0.00422\n#&gt;  9   667    0.00127\n#&gt; 10   750    0.0178 \n#&gt; # ℹ 15 more rows"
+  },
+  {
+    "objectID": "slides/week-6.html#create-a-regular-grid",
+    "href": "slides/week-6.html#create-a-regular-grid",
+    "title": "Week 6",
+    "section": "Create a regular grid  ",
+    "text": "Create a regular grid  \n\nset.seed(12)\n\n(grid &lt;- \n  b_wflow |&gt; \n  extract_parameter_set_dials() |&gt; \n  grid_regular(levels = 4))\n#&gt; # A tibble: 16 × 2\n#&gt;    trees learn_rate\n#&gt;    &lt;int&gt;      &lt;dbl&gt;\n#&gt;  1     1    0.001  \n#&gt;  2   667    0.001  \n#&gt;  3  1333    0.001  \n#&gt;  4  2000    0.001  \n#&gt;  5     1    0.00681\n#&gt;  6   667    0.00681\n#&gt;  7  1333    0.00681\n#&gt;  8  2000    0.00681\n#&gt;  9     1    0.0464 \n#&gt; 10   667    0.0464 \n#&gt; 11  1333    0.0464 \n#&gt; 12  2000    0.0464 \n#&gt; 13     1    0.316  \n#&gt; 14   667    0.316  \n#&gt; 15  1333    0.316  \n#&gt; 16  2000    0.316"
+  },
+  {
+    "objectID": "slides/week-6.html#update-parameter-ranges",
+    "href": "slides/week-6.html#update-parameter-ranges",
+    "title": "Week 6",
+    "section": "Update parameter ranges  ",
+    "text": "Update parameter ranges  \n\nb_param &lt;- \n  b_wflow |&gt; \n  extract_parameter_set_dials() |&gt; \n  update(trees = trees(c(1L, 100L)),\n         learn_rate = learn_rate(c(-5, -1)))\n\nset.seed(712)\n(grid &lt;- \n  b_param |&gt; \n  grid_space_filling(size = 25))\n#&gt; # A tibble: 25 × 2\n#&gt;    trees learn_rate\n#&gt;    &lt;int&gt;      &lt;dbl&gt;\n#&gt;  1     1  0.00215  \n#&gt;  2     5  0.000147 \n#&gt;  3     9  0.0215   \n#&gt;  4    13  0.0000215\n#&gt;  5    17  0.000681 \n#&gt;  6    21  0.00464  \n#&gt;  7    25  0.0464   \n#&gt;  8    29  0.0001   \n#&gt;  9    34  0.0000147\n#&gt; 10    38  0.001    \n#&gt; # ℹ 15 more rows"
+  },
+  {
+    "objectID": "slides/week-6.html#the-results",
+    "href": "slides/week-6.html#the-results",
+    "title": "Week 6",
+    "section": "The results  ",
+    "text": "The results  \n\n\ngrid |&gt; \n  ggplot(aes(trees, learn_rate)) +\n  geom_point(size = 4) +\n  scale_y_log10()\n\n\n\n\n\n\n\n\n\nNote that the learning rates are uniform on the log-10 scale and this shows 2 of 4 dimensions."
+  },
+  {
+    "objectID": "slides/week-6.html#choosing-tuning-parameters",
+    "href": "slides/week-6.html#choosing-tuning-parameters",
+    "title": "Week 6",
+    "section": "Choosing tuning parameters    ",
+    "text": "Choosing tuning parameters    \nLet’s take our previous model and tune more parameters:\n\nb_mod &lt;- \n  boost_tree(trees = tune(), learn_rate = tune(),  min_n = tune()) |&gt; \n  set_mode(\"regression\") |&gt; \n  set_engine(\"xgboost\")\n\nb_wflow &lt;- workflow(rec, b_mod)\n\n# Update the feature hash ranges (log-2 units)\nb_param &lt;-\n  b_wflow |&gt;\n  extract_parameter_set_dials() |&gt;\n  update(trees = trees(c(1L, 1000L)))"
+  },
+  {
+    "objectID": "slides/week-6.html#grid-search-2",
+    "href": "slides/week-6.html#grid-search-2",
+    "title": "Week 6",
+    "section": "Grid Search   ",
+    "text": "Grid Search   \n\nset.seed(9)\nctrl &lt;- control_grid(save_pred = TRUE)\n\nb_res &lt;-\n  b_wflow |&gt;\n  tune_grid(\n    resamples = folds,\n    grid = 25,\n    # The options below are not required by default\n    param_info = b_param, \n    control = ctrl,\n    metrics = metric_set(mae)\n  )\n\n\n\ntune_grid() is representative of tuning function syntax\nsimilar to fit_resamples()"
+  },
+  {
+    "objectID": "slides/week-6.html#grid-search-3",
+    "href": "slides/week-6.html#grid-search-3",
+    "title": "Week 6",
+    "section": "Grid Search   ",
+    "text": "Grid Search   \n\nb_res \n#&gt; # Tuning results\n#&gt; # 10-fold cross-validation \n#&gt; # A tibble: 10 × 5\n#&gt;    splits           id     .metrics          .notes           .predictions        \n#&gt;    &lt;list&gt;           &lt;chr&gt;  &lt;list&gt;            &lt;list&gt;           &lt;list&gt;              \n#&gt;  1 &lt;split [513/57]&gt; Fold01 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  2 &lt;split [513/57]&gt; Fold02 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  3 &lt;split [513/57]&gt; Fold03 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  4 &lt;split [513/57]&gt; Fold04 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  5 &lt;split [513/57]&gt; Fold05 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  6 &lt;split [513/57]&gt; Fold06 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  7 &lt;split [513/57]&gt; Fold07 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  8 &lt;split [513/57]&gt; Fold08 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt;  9 &lt;split [513/57]&gt; Fold09 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;\n#&gt; 10 &lt;split [513/57]&gt; Fold10 &lt;tibble [25 × 7]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [1,425 × 7]&gt;"
+  },
+  {
+    "objectID": "slides/week-6.html#grid-results",
+    "href": "slides/week-6.html#grid-results",
+    "title": "Week 6",
+    "section": "Grid results ",
+    "text": "Grid results \n\nautoplot(b_res)"
+  },
+  {
+    "objectID": "slides/week-6.html#tuning-results",
+    "href": "slides/week-6.html#tuning-results",
+    "title": "Week 6",
+    "section": "Tuning results ",
+    "text": "Tuning results \n\ncollect_metrics(b_res)\n#&gt; # A tibble: 25 × 9\n#&gt;    trees min_n learn_rate .metric .estimator  mean     n std_err .config              \n#&gt;    &lt;int&gt; &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                \n#&gt;  1   458     2    0.00422 mae     standard   1.54     10  0.0259 Preprocessor1_Model01\n#&gt;  2   417     3    0.0590  mae     standard   0.347    10  0.0143 Preprocessor1_Model02\n#&gt;  3   833     5    0.0226  mae     standard   0.333    10  0.0133 Preprocessor1_Model03\n#&gt;  4   125     6    0.00536 mae     standard   5.34     10  0.0476 Preprocessor1_Model04\n#&gt;  5   708     8    0.196   mae     standard   0.359    10  0.0120 Preprocessor1_Model05\n#&gt;  6   791     9    0.00205 mae     standard   2.08     10  0.0300 Preprocessor1_Model06\n#&gt;  7    84    11    0.0464  mae     standard   0.405    10  0.0186 Preprocessor1_Model07\n#&gt;  8   250    13    0.316   mae     standard   0.356    10  0.0133 Preprocessor1_Model08\n#&gt;  9   292    14    0.00127 mae     standard   7.20     10  0.0562 Preprocessor1_Model09\n#&gt; 10   583    16    0.0110  mae     standard   0.353    10  0.0153 Preprocessor1_Model10\n#&gt; # ℹ 15 more rows"
+  },
+  {
+    "objectID": "slides/week-6.html#choose-a-parameter-combination",
+    "href": "slides/week-6.html#choose-a-parameter-combination",
+    "title": "Week 6",
+    "section": "Choose a parameter combination ",
+    "text": "Choose a parameter combination \n\nshow_best(b_res, metric = \"mae\")\n#&gt; # A tibble: 5 × 9\n#&gt;   trees min_n learn_rate .metric .estimator  mean     n std_err .config              \n#&gt;   &lt;int&gt; &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                \n#&gt; 1   833     5     0.0226 mae     standard   0.333    10  0.0133 Preprocessor1_Model03\n#&gt; 2   542    21     0.121  mae     standard   0.342    10  0.0146 Preprocessor1_Model13\n#&gt; 3   958    17     0.0750 mae     standard   0.344    10  0.0130 Preprocessor1_Model11\n#&gt; 4   750    30     0.249  mae     standard   0.346    10  0.0123 Preprocessor1_Model19\n#&gt; 5   417     3     0.0590 mae     standard   0.347    10  0.0143 Preprocessor1_Model02"
+  },
+  {
+    "objectID": "slides/week-6.html#choose-a-parameter-combination-1",
+    "href": "slides/week-6.html#choose-a-parameter-combination-1",
+    "title": "Week 6",
+    "section": "Choose a parameter combination ",
+    "text": "Choose a parameter combination \nCreate your own tibble for final parameters or use one of the tune::select_*() functions:\n\n(b_best &lt;- select_best(b_res, metric = \"mae\"))\n#&gt; # A tibble: 1 × 4\n#&gt;   trees min_n learn_rate .config              \n#&gt;   &lt;int&gt; &lt;int&gt;      &lt;dbl&gt; &lt;chr&gt;                \n#&gt; 1   833     5     0.0226 Preprocessor1_Model03"
+  },
+  {
+    "objectID": "slides/week-6.html#checking-calibration",
+    "href": "slides/week-6.html#checking-calibration",
+    "title": "Week 6",
+    "section": "Checking Calibration  ",
+    "text": "Checking Calibration  \n\n\nlibrary(probably)\n\nb_res |&gt;\n  collect_predictions(\n    parameters = b_best\n  ) |&gt;\n  cal_plot_regression(\n    truth = logC,\n    estimate = .pred\n  )"
+  },
+  {
+    "objectID": "slides/week-6.html#the-final-fit",
+    "href": "slides/week-6.html#the-final-fit",
+    "title": "Week 6",
+    "section": "The final fit!",
+    "text": "The final fit!\nSuppose that we are happy with our model.\nLet’s fit the model on the training set and verify our performance using the test set.\n\nWe’ve seen fit() and predict() (+ augment()) but there is a shortcut:\n\n\n\n# the boosted tree workflow can be `finalized` with the best parameters\nworkflow &lt;- finalize_workflow(b_wflow, b_best)\n\n# forested_split has train + test info\n(final_fit &lt;- last_fit(workflow, split))\n#&gt; # Resampling results\n#&gt; # Manual resampling \n#&gt; # A tibble: 1 × 6\n#&gt;   splits            id               .metrics         .notes           .predictions       .workflow \n#&gt;   &lt;list&gt;            &lt;chr&gt;            &lt;list&gt;           &lt;list&gt;           &lt;list&gt;             &lt;list&gt;    \n#&gt; 1 &lt;split [570/144]&gt; train/test split &lt;tibble [2 × 4]&gt; &lt;tibble [0 × 3]&gt; &lt;tibble [144 × 4]&gt; &lt;workflow&gt;"
+  },
+  {
+    "objectID": "slides/week-6.html#the-final-fit-1",
+    "href": "slides/week-6.html#the-final-fit-1",
+    "title": "Week 6",
+    "section": "The final fit!",
+    "text": "The final fit!\n\ncollect_metrics(final_fit)\n#&gt; # A tibble: 2 × 4\n#&gt;   .metric .estimator .estimate .config             \n#&gt;   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;               \n#&gt; 1 rmse    standard       0.391 Preprocessor1_Model1\n#&gt; 2 rsq     standard       0.918 Preprocessor1_Model1\n\ncollect_predictions(final_fit) |&gt; \n  ggplot(aes(.pred, logC)) +\n  geom_point() + \n  geom_abline() + \n  geom_smooth(method = \"lm\", se = FALSE)"
+  },
+  {
+    "objectID": "slides/week-6.html#the-whole-game",
+    "href": "slides/week-6.html#the-whole-game",
+    "title": "Week 6",
+    "section": "The whole game",
+    "text": "The whole game"
   }
 ]
