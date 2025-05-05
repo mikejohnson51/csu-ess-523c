@@ -1,0 +1,1197 @@
+---
+title: "Week 7"
+subtitle: "Timeseries and Prediction"
+format:
+  revealjs: 
+    smaller: true
+    incremental: false
+    logo: ../csu-rams-logo.png
+    slide-number: c/t
+    footer: "[ESS 523c: Environmental Data Science Applications: Water Resources](https://github.com/mikejohnson51/csu-ess-523c/)"
+    include-before-body: header.html
+    include-after-body: footer-annotations.html
+    theme: [default, csu-css.scss]
+    width: 1600
+    height: 1000
+    countIncrementalSlides: false
+    title-slide-attributes:
+      data-background-color: "#1E4D2B"
+knitr:
+  opts_chunk: 
+    echo: true
+    message: false
+    collapse: true
+    comment: "#>"
+    out.width: "100%"
+---
+
+```{r setup}
+#| echo: false
+hexes <- function(..., size = 64) {
+  x <- c(...)
+  x <- sort(unique(x), decreasing = TRUE)
+  right <- (seq_along(x) - 1) * size
+
+  res <- glue::glue(
+    '![](hexes/<x>.png){.absolute top=-20 right=<right> width="<size>" height="<size * 1.16>"}',
+    .open = "<", .close = ">"
+  )
+
+  paste0(res, collapse = " ")
+}
+
+train_color <- '#1E4D2B'
+test_color  <- '#C8C372'
+data_color  <- "#767381"
+assess_color <- "#84cae1"
+splits_pal <- c(data_color, train_color, test_color)
+```
+
+## Learning Objectives
+
+By the end of this lecture, you should be able to:
+
+-   Understand what time series data is and why it's useful
+-   Work with date and time objects in R
+-   Load and visualize time series data in R
+-   Apply basic time series operations: decomposition, smoothing, and forecasting
+-   Use `ts`, `zoo`, and `xts` objects for time-indexed data
+-   Understand tidy approaches using `tsibble` and `feasts`
+-   Recognize real-world environmental science applications of time series
+
+## What is Time Series Data?
+
+Time series data is a collection of observations recorded sequentially over time. Unlike other data types, time series data is **ordered**, and that order carries critical information.
+
+#### Examples:
+
+- Streamflow measurements (e.g., daily CFS at a USGS gage)
+- Atmospheric CO₂ levels (e.g., Mauna Loa Observatory)
+- Snowpack depth over time
+- Urban water consumption by month
+
+#### Why Time Series Matter
+
+Time series analysis helps us:
+
+- Understand trends and patterns
+- Detect anomalies (e.g., droughts, sensor failures)
+- Forecast future values (e.g., streamflow, temperature)
+
+## Working with Date Objects in R
+
+- Time series analysis depends on accurate and well-formatted date/time information.
+
+- Before we can analyis time series data, we need to understand how R handles dates and times. 
+
+- R has built-in classes for date and time objects, which are essential for time series analysis.
+
+## Base R Date Functions
+
+R has several native classes for handling dates and times:
+
+- **Date**: Date object
+
+```{r}         
+as.Date("2024-04-08")
+```
+
+- **POSIXct**: Date and time
+
+```{r}         
+as.POSIXct("2024-04-08 14:30:00")
+```
+
+- **POSIXlt**: List of date and time components
+
+```{r}         
+(lt <- as.POSIXlt("2024-04-08 14:30:00"))
+
+lt$hour
+```
+
+## Date Sequences
+
+You can create sequences of dates using the `seq.Date()` function:
+
+- `from`: Start date
+- `to`: End date (optional)
+- `by`: Interval (e.g., "day", "month", "year")
+- `length.out`: Number of dates to generate
+
+```{r}           
+seq.Date(from = as.Date("2024-01-01"), by = "month", length.out = 12)
+```
+
+##
+
+You can also use `seq()` to create sequences of POSIXct/lt objects:
+
+- `from`: Start date/time
+- `to`: End date/time (optional)
+- `by`: Interval (e.g., "hour", "minute", "second")
+- `length.out`: Number of dates to generate
+
+```{r}
+seq(from = as.POSIXct("2024-01-01 00:00"), 
+    to = as.POSIXct("2024-01-02 00:00"), 
+    by = "hour")
+```
+
+## Timezones
+ 
+- By default, R uses the system's timezone. 
+
+- The `Sys.timezone()` function returns the current timezone.
+
+- If you want to use anthor timezone, say GMT/UTC, you can change it:
+
+```{r}
+Sys.timezone()
+
+as.POSIXct("2024-04-08 14:30:00", tz = "GMT")
+
+(obj = as.POSIXct("2024-04-08 14:30:00"))
+
+format(obj, tz = "EST")
+```
+
+## lubridate Package `r hexes('lubridate')`
+
+- The `lubridate` package comes with the `tidyverse` and is designed to make working with dates and times easier. 
+
+- It provides a consistent set of functions for parsing, manipulating, and formatting date-time objects.
+
+```{r}           
+library(lubridate)
+ymd("20240408")        # Parse date
+ymd_hms("20240408 123000")
+
+now()                  # Current date and time
+date <- ymd("2023-12-01")
+month(date)           # Extract month
+day(date)
+week(date)
+```
+
+Use `lubridate` to handle inconsistent formats and to align data with time zones, daylight savings, etc.
+
+## lubridate timezones `r hexes('lubridate')`
+
+lubridate also provides functions for working with time zones. You can convert between time zones using `with_tz()` and `force_tz()`.
+
+```{r}
+(date <- ymd_hms("2024-04-08 14:30:00", tz = "America/New_York"))
+
+# Change time zone without changing time
+force_tz(date, "America/Los_Angeles")  
+
+# Convert to another timezone
+with_tz(date, "America/Los_Angeles")  
+```
+
+## R Packages for Time Series
+R has several packages/systme for time series analysis, including:
+
+-  `ts`: Base R time series class
+
+-  `zoo`: Provides a flexible class for ordered observations
+
+-  `xts`: Extensible time series class for irregularly spaced data
+
+-  `forecast`: Functions for forecasting time series data
+
+-  `tsibble`: Tidy time series data frames
+
+-  `feasts`: Functions for time series analysis and visualization
+
+-  `modeltime`: Time series modeling with tidymodels
+
+```{r}        
+library(tidyverse)
+library(zoo)
+library(tsibble)
+library(feasts)
+```
+
+## When to Use Which Time Series Format?
+
+| Format            | Best For                          | Advantages                                              | Limitations                               |
+| ----------------- | --------------------------------- | ------------------------------------------------------- | ----------------------------------------- |
+| `ts`              | Regular, simple time series       | Built into base R, supported by `forecast`              | Rigid time format, inflexible for joins   |
+| `zoo`             | Irregular time steps              | Arbitrary index, supports irregular data                | More complex syntax                       |
+| `xts`             | Financial-style or irregular data | Good for date-time indexing and joins                   | More complex to visualize                 |
+| `tsibble`         | Tidyverse workflows               | Pipes with `dplyr`, `ggplot2`, forecasting with `fable` | Requires `tsibble` structure              |
+| `tibble` + `Date` | General purpose                   | Flexible, tidy                                          | Needs conversion for time series modeling |
+
+## Key Concepts in Time Series
+
+-  **1. Trend**: Long-term increase or decrease in the data
+
+-  **2. Seasonality**: Repeating short-term cycle (e.g., annual snowmelt)
+
+-  **3. Noise**: Random variation
+
+-  **4. Stationarity**: Statistical properties (mean, variance) don't change over time
+
+-  **5. Autocorrelation**: Correlation of a time series with its own past values
+
+## Introducing the Mauna Loa CO₂ Dataset {background-image="images/mauna-loa.jpeg"}
+
+## Mauna Loa CO₂ Dataset {.smaller}
+
+- The `co2` dataset is a classic example of time series data. It contains monthly atmospheric CO₂ concentrations measured at the Mauna Loa Observatory in Hawaii.
+
+- `co2` is a built-in dataset representing monthly CO₂ concentrations from 1959 onward.
+
+```{r} 
+class(co2)
+co2
+```
+
+## Initial Plot
+
+- The `co2` dataset is a time series object (`ts`) with 12 observations per year, starting from January 1959.
+
+- There is a default plot method for `ts` objects that we can take advantage of:
+
+```{r}        
+plot(co2, main = "Atmospheric CO2 at Mauna Loa", ylab = "ppm")
+```
+
+We see:
+
+- An upward **trend**
+- Regular **seasonal oscillations** (higher in winter, lower in summer)
+
+## Understanding `ts` Objects
+
+You can think of `ts` objects as numeric vectors with time attributes.
+
+  -  `ts` objects are used to represent time series data and are created using the `ts()` function.
+  
+  -  They have attributes like `start`, `end`, and `frequency` that define the time index.
+  
+  -  `start` and `end` define the time range of the data.
+  
+  -  `frequency` defines the number of observations per unit of time (e.g., 12 for monthly data).
+
+```{r}         
+class(co2)    
+start(co2)    
+end(co2)      
+frequency(co2)
+```
+
+## Subsetting and Plotting
+
+- Like vectors, you can subset `ts` objects using indexing. 
+
+- For example, to extract the first year of data:
+
+```{r}        
+co2[1:12]  # First year
+```
+
+. . . 
+
+- Or, a specific range of years:
+
+```{r}
+window(co2, start = c(1990, 1), end = c(1995, 12))
+```
+
+## Decomposing a Time Series
+
+- Decomposition is a technique to separate a time series into its components: trend, seasonality, and residuals.
+
+- This helps separate structure from noise. 
+
+- In environmental science, this is useful for:
+
+-  Removing seasonality to study droughts
+-  Analyzing long-term trends
+-  Understanding seasonal patterns in streamflow
+-  Identifying anomalies in water quality data
+-  Detecting changes in vegetation phenology
+-  Monitoring seasonal patterns in temperature
+-  Analyzing seasonal patterns in water demand
+-  ... 
+
+## What is Decomposition?
+
+> **Decomposition** separates a time series into interpretable components:
+
+- **Trend**: Long-term movement
+- **Seasonality**: Regular, periodic fluctuations
+- **Residual/Irregular**: Random noise or anomalies
+
+## Additive vs Multiplicative
+
+- **Additive model**:  
+  $$ Y_t = T_t + S_t + R_t $$
+
+- **Multiplicative model**:  
+  $$ Y_t = T_t \times S_t \times R_t $$
+
+> Use additive if seasonal variation is roughly constant.  
+> Use multiplicative if it grows/shrinks with the trend.
+
+## Example
+
+```{r}
+#| echo: false
+knitr::include_graphics("images/add-vs-multi.jpg")
+```
+
+
+## Why Decompose?
+
+ - Trend: Are CO₂ levels increasing?
+
+ - Seasonality: Are there predictable cycles each year?
+
+ - Remainder: What's left after we remove trend and season? (what is the randomness?)
+
+## Decompostion in R
+
+- The `decompose()` function in R can be used to perform this operation.
+- The `decompose()` function by default assumes that the [time series is additive]{.undeline}
+
+```{r}
+#| fig.size: 10
+decomp = decompose(co2, type = "additive")
+plot(decomp)
+```
+
+## Deep Dive: Trend Component
+
+::: columns
+::: {.column width="50%"}
+```{r}
+plot(decomp$trend, main = "Trend Component of CO₂", ylab = "ppm", col = "darkred", lwd = 2)
+```
+:::
+::: {.column width="50%"}
+ - Steady upward slope from ~316 ppm in 1959 to ~365 ppm in the late 1990s
+
+ - Captures the long-term forcing from human activity:
+ 
+      - Fossil fuel combustion
+      - Deforestation
+ 
+ - This trend underpins climate change science — known as the Keeling Curve
+
+  - Notice how the trend smooths short-term fluctuations
+  
+:::
+:::
+  
+## Interpreting the Trend
+
+- A linear model or loess smoother can also help quantify the trend:
+
+::: columns
+::: {.column width="50%"}
+```{r}
+co2_df <- data.frame(time = time(co2), co2 = as.numeric(co2))
+
+lm(as.numeric(co2) ~ time(co2)) |> 
+  summary()
+```
+:::
+::: {.column width="50%"}
+
+```{r}
+co2_df |>
+  ggplot(aes(x = time, y = co2)) +
+  geom_line(alpha = 0.5) +
+  geom_smooth(method = "loess", span = 0.2, color = "red", se = FALSE) +
+  labs(title = "CO₂ Trend with Loess Smoothing", y = "ppm")
+```
+
+:::
+:::
+
+Do you see acceleration in the rise over time?
+
+## De-Trending
+
+- Detrending is the process of removing the trend component from a time series.
+- This can help for modeling the trend + residual only:
+
+```{r}
+deseasonalized <- co2 - decomp$trend
+plot(deseasonalized, main = "De-trended Series")
+```
+
+## Deep Dive: Seasonal Component
+
+::: columns
+::: {.column width="50%"}
+```{r}
+plot(decomp$seasonal, main = "Seasonal Component of CO₂", 
+     ylab = "ppm", col = "darkgreen", lwd = 2)
+```
+:::
+::: {.column width="50%"}
+ - Repeats every 12 months
+
+ - Peaks around May, drops in September–October
+
+ - Driven by biospheric fluxes:
+
+    - Photosynthesis during spring/summer → CO₂ drawdown
+    - Decomposition and respiration in winter → CO₂ release
+
+- Seasonal Cycle is Northern Hemisphere-Dominated (Mauna Loa is in the Northern Hemisphere)
+- Northern Hemisphere contains more landmass and vegetation
+- So its biosphere exerts a stronger influence on global CO₂ than the Southern Hemisphere
+
+- This explains the pronounced seasonal cycle in the signal
+:::
+:::
+
+## De-seasonalizing
+
+This can help for modeling the seasonal + residual only:
+
+```{r}
+deseasonalized <- co2 - decomp$seasonal
+plot(deseasonalized, main = "De-seasonalized Series")
+```
+
+## Deep Dive: Remainder Component
+
+::: columns
+::: {.column width="50%"}
+```{r}
+plot(decomp$random, main = "Remainder Component (Residuals)", 
+     ylab = "ppm", col = "gray40", lwd = 1)
+```
+:::
+::: {.column width="50%"}
+ - Residuals are the "leftover" part of the time series after removing trend and seasonality
+
+ - Contains irregular, short-term fluctuations
+
+ - Can be used to identify anomalies or outliers
+
+ - Important for understanding noise in the data
+
+- Possible sources:
+
+  - Volcanic activity (e.g. El Chichón, Mt. Pinatubo)
+  - Measurement error
+  - El Niño/La Niña events (which affect carbon flux)
+
+- Typically small amplitude: ±0.2 ppm
+:::
+:::
+
+## Asssessing Patterns in Error?
+
+You might compute the standard deviation of the residuals to assess noise:
+
+```{r}
+sd(na.omit(decomp$random))
+```
+
+. . .
+
+Or evaluate the residules like we did for Linear Modeling!
+
+```{r}
+#| out.width: "60%"
+ggpubr::ggdensity(decomp$random, main = "Residuals Histogram", xlab = "Residuals")
+```
+
+## Smoothing to Remove Noise
+
+If your data is noisy - and without usefull pattern - you can use a moving average to smooth it out.
+
+<br>
+
+::: columns
+::: {.column width="50%"}
+- The `zoo` package provides a convenient function for this that we have already seen in the COVID lab.
+- The `rollmean()` function from the `zoo` package is useful for this.
+- The `k` parameter specifies the window size for the moving average.
+- The `align` parameter specifies how to align the moving average with the original data (e.g., "center", "left", "right").
+- The `na.pad` parameter specifies whether to pad the result with `NA` values.
+:::
+::: {.column width="50%"}
+
+```{r}         
+co2_smooth <- zoo::rollmean(co2, k = 12, align = "center", na.pad = TRUE)
+
+plot(co2, col = "grey", main = "12-Month Moving Average")
+lines(co2_smooth, col = "blue", lwd = 2)
+```
+:::
+:::
+
+## STL Decomposition (Loess-based)
+
+- STL (Seasonal-Trend decomposition using Loess) adapts to changing trend or seasonality over time
+
+- Doesn’t assume constant seasonal effect like `decompose()` does
+
+- Particularly valuable when working with:
+   - Long datasets
+   - [Environmental time series affected by nonlinear changes]{.underline}
+
+## STL Decomposition (Loess-based)
+
+- `stl()` uses local regression (loess) to estimate the trend and seasonal components.
+
+- `s.window = "periodic"` specifies that the seasonal component is periodic. 
+
+- Other options include 
+  - "none" (no seasonal component) 
+  - or a numeric value for the seasonal window size.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+plot(decomp)
+```
+:::
+::: {.column width="50%"}
+```{r}
+?stl(co2, s.window = "periodic") |>  
+  plot()
+```
+:::
+:::
+
+
+## Comparing Classical vs STL
+
+| Method | Assumes Constant Season? |  Robust to Outliers? | Adaptive Smoothing? |
+| -------|-------------------------|----------------------|---------------------|
+| decompose | ✅ Yes | ❌ No | ❌ No|. 
+| stl | ✅ or 🔄 (customizable) | ✅ Yes | ✅ Yes |
+
+> Recommendation: Use stl() for most real-world environmental time series.
+
+## Bringing It All Together
+
+For the CO2 dataset, we can summarize the components of the time series:
+
+  - Trend: A human fingerprint — atmospheric CO₂ continues to rise year over year
+  - Seasonality: Driven by biospheric rhythms with not multiplicative gains
+  - Remainder: Small, but potentially rich with short-term signals
+
+Understanding these components lets us:\
+
+✅ Track long-term progress\
+
+✅ Forecast future CO₂\
+
+✅ Communicate patterns clearly to policymakers\
+
+## Time Series in the Tidyverse: `tsibble` / `feasts`
+
+- `tsibble` is a tidy data frame for time series data. It extends the tibble class to include time series attributes.
+
+- Compatible with `dplyr`, `ggplot2`
+
+- `feasts` provides functions for time series analysis and visualization.
+
+```{r}         
+co2_tbl <- as_tsibble(co2)
+head(co2_tbl)
+```
+
+## Decomposing with `feasts`
+
+### `feasts` provides: 
+  -  a `STL()` function for seasonal decomposition.
+  - `components()` extracts the components of the decomposition.
+  - `gg_season()` and `gg_subseries()` visualize seasonal patterns.
+  - `gg_lag()` visualizes autocorrelation and lagged relationships.
+
+```{r}
+co2_decomp <- co2_tbl |>
+  model(STL(value ~ season(window = "periodic"))) |>
+  components()
+
+glimpse(co2_decomp)
+```
+
+## Component Access
+
+::: columns
+::: {.column width="50%"}
+#### Autoplot
+```{r}
+autoplot(co2_decomp) +
+  labs(title = "STL Decomposition of CO₂", y = "ppm") +
+  theme_minimal()
+```
+::: 
+::: {.column width="50%"}
+#### Component Access
+```{r}
+ggpubr::ggdensity(co2_decomp$remainder, main = "Residual Component")
+shapiro.test(co2_decomp$remainder)
+```
+
+::: 
+::: 
+
+## Advanced Visualization/Modeling with `feasts`
+
+## gg_lag()
+
+- A lag plot is a scatterplot of a time series against itself, but with a time shift (or "lag") applied to one of the series.
+
+- It helps us visualize the relationship between current and past values of a time series.
+
+📦 Here's the simple idea:\
+
+   - You take your CO₂ measurements over time.\
+   
+   - Then you make a graph where you plot today's CO₂ (on the Y-axis)...\
+   
+   - ...against CO₂ from a few months ago (on the X-axis).\
+   
+   - This shows you if the past helps predict the present!\
+
+📊  If it makes a curvy shape or a line...\
+
+  - ...that means there’s a pattern! Your data remembers what happened before — like a smart friend who learns from their past.\
+    
+  - But if the dots look like a big messy spaghetti mess that means the data is random, with no memory of what happened before.\
+
+## gg_lag()
+
+🧠 Why this is useful:\
+
+  - It helps us see if there are patterns in the data.\
+    
+  - It helps us understand how past values affect current values.\
+    
+  - It helps us decide if we can use this data to make predictions in the future.\
+
+```{r}
+co2_tbl |> 
+  gg_lag() +
+  labs(title = "Lag Plot of CO₂", x = "Lagged CO₂", y = "Current CO₂") +
+  theme_minimal()
+```
+
+## gg_subseries
+
+- Imagine the co2 dataset as a big collection of monthly CO₂ data from Mauna Loa. Each month is a group, and each year is a new object
+
+- Now, we want to see how each month behaves across the years, so we can spot if January always has higher or lower CO₂ levels, for example.
+
+📊 What this does:
+
+  - Each month: A different color shows up for each month (like January in blue, February in red, etc.)
+  
+  - Lines: You see the CO₂ values for each month over different years. For example, you might notice that CO₂ levels tend to be higher in the spring and lower in the fall.
+
+🧠 Why this is useful:
+
+   - We can spot seasonal trends: Does CO₂ rise in the winter? Or fall in the summer?
+
+- We can also compare months across the years: Is January more or less CO₂-heavy compared to other months?
+
+## gg_subseries()
+
+```{r}
+gg_subseries(co2_tbl) +
+  labs(title = "Monthly CO₂ Patterns", y = "CO₂ (ppm)", x = "Year") + 
+  theme_minimal()
+```
+
+## gg_season
+
+- Think of `gg_season()` like a way to look at a yearly picture of CO₂ and see if the Earth follows a seasonal rhythm.
+
+- It makes the changes in CO₂ easy to spot when you look at months side-by-side.
+
+📊 What this does:
+
+  - It shows you how CO₂ changes during each month of the year, but it puts all the years together, so you can see if the same thing happens every year in January, February, and so on.
+  
+🧠 Why this is useful:
+
+  - You’ll see a smooth curve for each month. Each curve shows how CO₂ goes up and down each year in the same pattern.
+
+## gg_season
+
+```{r}         
+gg_season(co2_tbl) +
+  labs(title = "Seasonal Patterns of CO₂", y = "CO₂ (ppm)", x = "Month") +
+  theme_minimal()
+```
+
+## Bonus: Interactive Plotting
+
+- In last weeks demo, we used plotly to generate an interactive plot of the hyperparameter tuning process.
+
+- You can use the `plotly` package to add interactivity to your ggplots directly with `ggplotly()`!
+
+```{r}        
+library(plotly)
+
+co2_plot <- co2_tbl |>
+  autoplot() +
+  geom_line(color = "steelblue") +
+  labs(title = "Interactive CO₂ Time Series", x = "Date", y = "ppm")
+```
+
+## Bonus: Interactive Plotting
+
+```{r}
+ggplotly(co2_plot)
+```
+
+## Forecasting:  
+
+   - Forecasting with two distinct models (1) ARIMA (2) Prophet
+   - Understanding modeltime + tidymodels integration
+   - Forecasting Process for time series
+   
+##  Toy Example: River Time Series & ARIMA
+
+Let’s say we’re watching how much water flows in a river every day:
+
+ -  Monday: 50 cfs  
+ - Tuesday: 60 cfs  
+ -  Wednesday: 70 cfs 
+
+We want to **guess tomorrow’s flow**.
+
+## 1. AutoRegressive (AR)
+
+ - This means: _“Look at yesterday and the day before!”_
+
+ - If flow has been going up each day, AR says: ** “Tomorrow might go up again ...” **
+
+ - It’s like the river has a **pattern**.
+
+## 2. Integrated (I)
+
+ - Sometimes the flow just keeps climbing — like during a spring snowmelt!
+
+ - To help ARIMA think better, we subtract yesterday’s number from today’s.
+
+ - This makes the numbers more **steady** so ARIMA can do its magic.
+
+
+## 3. Moving Average (MA)
+
+  - The river sometimes gets a surprise flux (like a big rainstorm 🌧️).
+
+  - MA looks at those **surprises** and helps smooth them out.
+
+  - So if it rained two days ago, MA might say: “Don’t expect another surprise tomorrow.”
+
+## Put It All Together: AR + I + MA = ARIMA
+
+1. **AR**: Uses the river’s memory (trend)
+2. **I**: Calms the sturcutral components (season) 
+3. **MA**: Handles noisy surprises (noise)
+
+Now we can **forecast tomorrow’s flow**!
+
+## ARIMA
+
+The basics of a ARIMA (AutoRegressive Integrated Moving Average) Model include:\
+
+-   **AR**: AutoRegressive part (past values):\
+    -   AR(1) = current value depends on the previous value\
+    -   AR(2) = current value depends on the previous two values\
+-   **I**: Integrated part (differencing to make data stationary)\
+    -   Differencing removes trends and seasonality\
+    -   e.g., `diff(co2, lag = 12)` removes annual seasonality\
+-   **MA**: Moving Average part (past errors)\
+    -   MA(1) = current value depends on the previous error\
+    -   MA(2) = current value depends on the previous two errors\
+-   **p, d, q**: Parameters for AR, I, and MA\
+    -   p = number of lagged values (AR)\
+    -   d = number of differences (I)\
+    -   q = number of lagged errors (MA)\
+    
+## AIC
+
+The AIC metric helps choose between models/parameters:
+
+- It rewards:
+  - **Good predictions**
+  - **Simplicity**
+
+- It punishes:
+  - **Complexity** (too many parameters)
+  - **Overfitting** (fitting noise instead of the trend)
+
+- Lower AIC = better model
+
+## A Simple Forecasting Example
+
+  - `auto.arima()` is a function from the `forecast` package that automatically selects the best ARIMA model for your data accoridning toe to the AICc criterion.
+  - The AICc (Akaike Information Criterion corrected) is a measure of the relative quality of statistical models for a given dataset.
+  - It is used to compare different models and select the one that best fits the data while penalizing for complexity.
+-   The `auto.arima()` function will automatically select the best parameters (p,d,q) based on the AICc criterion.
+
+## 
+
+```{r}
+library(forecast)
+
+co2_arima <- auto.arima(co2)
+
+summary(co2_arima)
+```
+
+## Forecasting with ARIMA
+
+-   The `forecast()` function is used to generate forecasts from the fitted ARIMA model.
+-   The `h` argument specifies the number of periods to forecast into the future.
+
+```{r}
+co2_forecast <- forecast(co2_arima, h = 60)
+
+plot(co2_forecast)
+```
+
+## 🔢 ARIMA(1,1,1)(1,1,2)\[12\] {.smaller}
+
+ARIMA Notation can be broken into two parts:
+
+#### 1. Non-seasonal part: ARIMA(1, 1, 1)
+
+This is the "regular" ARIMA:
+  - AR(1): One autoregressive term — the model looks at one lag of the time series.
+  
+  - I(1): One differencing — the model uses the change in values instead of raw values to make the series more stationary.
+  
+  - MA(1): One moving average term — the model corrects using one lag of the error term.
+
+#### 2. Seasonal part: (1, 1, 2)\[12\]
+This is the seasonal pattern — repeated every 12 time units (like months in a year):
+
+  - SAR(1): One seasonal autoregressive term — it uses the value from 12 time steps ago.
+    
+  - SI(1): One seasonal difference — subtracts the value from 12 steps ago to remove seasonal patterns.
+    
+  - SMA(2): Two seasonal moving average terms — uses errors from 12 and 24 time steps ago.
+    
+  - \[12\]: This is the seasonal period, i.e., it's a yearly pattern with monthly data.
+    
+## 🔢 ARIMA(1,1,1)(1,1,2)\[12\] {.smaller}
+
+Hey, ARIMA please...
+
+> "Model the data using a mix of its last value, the last error, and their seasonal versions from 12 months ago — but first difference it once to remove trend and once seasonally to remove yearly patterns."
+
+## Note 
+
+ARIMA modeling works well when data is stationary.
+-   Stationarity means the statistical properties of the series (mean, variance) do not change over time.
+-   Non-stationary data can lead to unreliable forecasts and misleading results.
+
+
+```{r}
+#| echo: false
+knitr::include_graphics('images/stationarity.webp')
+```
+
+## Prophet
+  - Prophet is an open-source tool for forecasting time series data.
+
+  - Developed by Facebook (Meta)
+
+  - Designed for analysts and data scientists
+
+  - Handles missing data, outliers, and seasonality
+
+##  Key Features of Prophet
+
+✅ Additive Model: Trend + Seasonality + Holidays + Noise \
+✅ Automatic Changepoint Detection\
+✅ Support for Custom Holidays & Events\
+✅ Flexible Seasonality (daily/weekly/yearly)\
+✅ Easy-to-use API in R and Python\
+
+##  Prophet’s Model Structure
+
+Prophet decomposes time series into components:
+
+$$ y(t) = g(t) + s(t) + h(t) + ε(t) $$
+
+  - g(t): Trend (linear or logistic growth)
+
+  - s(t): Seasonality (Fourier series)
+
+  - h(t): Holiday effects
+
+  - ε(t): Error term (noise)
+
+📌 Assumes additive components by default; multiplicative also possible
+
+## A Simple Forecasting Example
+
+Your time series must have: (1) ds column (date/timestamp) (2) y column (value to forecast)
+
+```{r}
+library(prophet)
+prophet_mod <- tsibble::as_tsibble(co2) |> 
+  # prophet requires ds and y columns
+  dplyr::rename(ds = index, y = value) |> 
+  prophet()
+```
+
+```{r}
+# Make future dataframe and predict
+future   <- make_future_dataframe(prophet_mod, periods = 1000)
+
+forecast <- predict(prophet_mod, future)
+
+# Plot the forecast
+plot(prophet_mod, forecast) + 
+  theme_minimal() 
+```
+
+## Pros / Cons {.smaller}
+
+| Feature               | **ARIMA**                                                                 | **Prophet**                                                               |
+|-----------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Statistical rigor     | Based on strong statistical theory; well-studied                          | Intuitive, decomposable model (trend + seasonality + events)              |
+| Interpretability      | Clear interpretation of AR, MA, differencing terms                        | Plots components like trend/seasonality directly                          |
+| Flexibility (SARIMA)  | Seasonal ARIMA can handle seasonal structure                              | Handles multiple seasonalities natively (yearly, weekly, daily)           |
+| Control over params   | Fine-tuned control over differencing, lags, and model order               | Easy to specify changepoints, seasonality, and custom events              |
+| Statistical testing   | Includes AIC/BIC for model selection                                      | Cross-validation support; uncertainty intervals included                  |
+| Requires stationarity | Time series must be stationary or made so (differencing)                  | Handles non-stationary data out of the box                                |
+| Model complexity      | Needs careful tuning (p,d,q) and domain expertise                         | Defaults work well; limited tuning needed                                 |
+| Holiday effects       | Must be encoded manually                                                  | Easy to include holidays/events                                           |
+| Multivariate support  | Basic ARIMA doesn't support exogenous variables easily (need ARIMAX)      | Supports external regressors with `add_regressor()`                       |
+| Non-linear trends     | Poor performance with structural breaks or non-linear growth              | Handles changepoints and logistic growth models well                      |
+| Seasonality limits    | SARIMA handles only one seasonal period well                              | Built-in multiple seasonal components (e.g., daily, weekly, yearly)       |
+
+#### TL;DR
+
+  - Use ARIMA if you want a classic, statistical model with deep customization and you're comfortable making your data stationary.
+  - Use Prophet if you want a fast, robust, and intuitive model for business or environmental data with strong seasonal effects and irregular events.
+
+## To much complexity!!
+
+ - Each model has it own requirements, arguments, and tuning parameters.
+ 
+ - Simular to our ML models, this introduces a large time sink, opportunity for error, and complexity.
+ 
+. . . 
+
+ - `modeltime` brings tidy workflows to time series forecasting using the `parsnip` and `workflows` frameworks from `tidymodels.`
+
+  - Combine multiple models (ARIMA, Prophet, XGBoost) in one framework to
+
+## Modeltime Integration `r hexes('modeltime', 'tidymodels')`
+
+```{r}
+library(modeltime)
+library(tidymodels)
+library(timetk)
+```
+
+## 1. Create a time series split ... 
+
+- Use `time_series_split()` to make a train/test set.
+
+- Setting assess = "..." tells the function to use the last ... of data as the testing set. 
+
+- Setting cumulative = `TRUE` tells the sampling to use all of the prior data as the training set.
+
+```{r}
+co2_tbl <-  tsibble::as_tsibble(co2) |> 
+  as_tibble() |>
+  mutate(date = as.Date(index), index = NULL) 
+
+splits <- time_series_split(co2_tbl, assess = "60 months", cumulative = TRUE)
+
+training <-  training(splits)
+testing  <-  testing(splits)
+```
+
+## 2. Specify Models ... 
+
+Just like tidymodels ...
+
+- **Model Spec**: `arima_reg()`/`prophet_reg()`/`prophet_boost()` \<– This sets up your general model algorithm and key parameters 
+
+- **Model Mode**: `mode = "regression"`/`mode = "classification"` \<– This sets the model mode to regression or classification (timeseries is always regression!)
+
+- **Set Engine**: `set_engine("auto_arima")`/`set_engine("prophet")` / \<– This selects the specific package-function to use, you can add any function-level arguments here.
+
+
+```{r}
+mods <- list(
+  arima_reg() |>  set_engine("auto_arima"),
+  
+  arima_boost(min_n = 2, learn_rate = 0.015) |> set_engine(engine = "auto_arima_xgboost"),
+  
+  prophet_reg() |> set_engine("prophet"),
+  
+  prophet_boost() |> set_engine("prophet_xgboost"),
+  
+  # Exponential Smoothing State Space model
+  exp_smoothing() |> set_engine(engine = "ets"),
+  
+  # Multivariate Adaptive Regression Spline model
+  mars(mode = "regression") |> set_engine("earth") 
+)
+```
+
+## 3. Fit Models ...
+
+- Use `purrr::map()` to `fit` the `models` to the training data.
+
+- **Fit Model**: fit(value \~ date, training) \<– All `modeltime` models require a date column to be a regressor.
+
+```{r}
+#| message: false
+models <- map(mods, ~ fit(.x, value ~ date, data = training))
+```
+
+## 4. Build modeltime table ... {.smaller}
+
+-   Use `modeltime_table()` to combine multiple models into a single table that can be used for calibration, accuracy, and forecasting.
+
+#### `modeltime_table()`:
+
+-   Creates a table of models
+
+-   Validates that all objects are models (parsnip or workflows objects) and all models have been fitted
+
+-   Provides an ID and Description of the models
+
+#### `as_modeltime_table()`:
+
+-   Converts a list of models to a modeltime table. Useful if programatically creating Modeltime Tables from models stored in a list (e.g. from `map`).
+
+```{r}
+(models_tbl <- as_modeltime_table(models))
+```
+
+## Notes: 
+
+`modeltime_table()` does some basic checking to ensure all models are fit and organized into a scalable structure called a “Modeltime Table” that is used as part of our forecasting workflow.
+
+- It’s expected that tuning and parameter selection is performed prior to incorporating into a Modeltime Table.
+- If you try to add an unfitted model, the `modeltime_table()` will complain (throw an informative error) saying you need to fit() the model.
+
+## 5. Calibrate the Models ...
+
+-  Use `modeltime_calibrate()` to evaluate the models on the test set.
+
+-  Calibrating adds a new column, `.calibration_data`, with the test predictions and residuals inside. 
+
+```{r}
+(calibration_table <- modeltime_calibrate(models_tbl, testing, quiet = FALSE))
+```
+
+A few notes on Calibration:
+
+  - Calibration builds confidence intervals and accuracy metrics
+  
+  - Calibration Data is the predictions and residuals that are calculated from out-of-sample data.
+  
+  - After calibrating, the calibration data follows the data through the forecasting workflow.
+
+## Testing Forecast & Accuracy Evaluation
+
+There are 2 critical parts to an evaluation.
+
+  - Evaluating the Test (Out of Sample) Accuracy
+  - Visualizing the Forecast vs Test Data Set
+  
+## Accuracy 
+
+`modeltime_accuracy()` collects common accuracy metrics using `yardstick` functions:
+
+ - MAE - Mean absolute error, mae()
+ - MAPE - Mean absolute percentage error, mape()
+ - MASE - Mean absolute scaled error, mase()
+ - SMAPE - Symmetric mean absolute percentage error, smape()
+ - RMSE - Root mean squared error, rmse()
+ - RSQ - R-squared, rsq()
+
+```{r}
+modeltime_accuracy(calibration_table) |> 
+  arrange(mae)
+```
+
+## Forecast
+
+-   Use `modeltime_forecast()` to generate forecasts for the next 120 months (10 years).
+-   Use `plot_modeltime_forecast()` to visualize the forecasts.
+
+```{r}
+(forecast <- calibration_table  |> 
+  modeltime_forecast(h = "60 months", 
+                     new_data = testing,
+                     actual_data = co2_tbl) )
+```
+
+## Vizualize
+```{r}
+plot_modeltime_forecast(forecast)
+```
+
+##  Refit to Full Dataset & Forecast Forward
+
+The final step is to refit the models to the full dataset using modeltime_refit() and forecast them forward.
+
+```{r}
+refit_tbl <- calibration_table |>
+    modeltime_refit(data = co2_tbl)
+
+refit_tbl |>
+    modeltime_forecast(h = "3 years", actual_data = co2_tbl) |>
+    plot_modeltime_forecast()
+```
+
+## Why refit?
+
+The models have all changed! This is the (potential) benefit of refitting.
+
+More often than not refitting is a good idea. Refitting:
+
+  - Retrieves your model and preprocessing steps
+  
+  - Refits the model to the new data
+  - Recalculates any automations. This includes:
+    - Recalculating the changepoints for the Earth Model
+    - Recalculating the ARIMA and ETS parameters
+    
+  - Preserves any parameter selections. This includes:
+
+  - Any other defaults that are not automatic calculations are used.
+  
+## Growing Ecosystem
+
+```{r}
+#| echo: false
+knitr::include_graphics('images/modeltime_ecosystem.jpg')
+```
+
+## Summary & Takeaways
+
+-   Environmental science is rich with time series applications
+
+-   Time series data is sequential and ordered
+
+-   `lubridate` simplifies handling and extracting date-time features
+
+-   Use `ts`, `zoo`, `xts` for classic or irregular data
+
+-   Use `tsibble`, `feasts`, and `fable` for tidy workflows
+
+-   Learn to decompose, smooth, and forecast
+
+-   Use `modeltime` for advanced modeling and forecasting

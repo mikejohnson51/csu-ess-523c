@@ -80,9 +80,9 @@ The total points possible is 1050, with the percentage being taken out of 900 us
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 06**: Quarto Websites\
 <i class="fa fa-laptop" aria-hidden="true"></i> **Lab 06**: Personal Website\
 
-<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: Time Series\
+<i class="fa fa-commenting-o" aria-hidden="true"></i> **Week 07**: [Time Series](slides/week-7.qmd)\
 <i class="fa fa-commenting-o" aria-hidden="true"></i> **Tech Talk 07**: Wrap up\
-<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: ...\
+<i class="fa fa-laptop" aria-hidden="true"></i> **Lab 07**: [Poudre River Forecast](labs/lab6.qmd)\
 
 ## Reuse and licensing {.appendix}
 

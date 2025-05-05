@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lab 6: Timeseries Data – ESS 523c</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.ico" rel="icon">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b6eb65566b1f8a996f1287d789c0740.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-c63d9198b28a859559c0f0cce9729cfa.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="../site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="../site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="../site_libs/leaflet-binding-2.2.2/leaflet.js"></script>
+<script src="../site_libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="../site_libs/leaflet-providers-plugin-2.2.2/leaflet-providers-plugin.js"></script>
+<link href="../site_libs/HomeButton-0.0.1/home-button.css" rel="stylesheet">
+<script src="../site_libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="../site_libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="../site_libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="../site_libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet">
+<link href="../site_libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../csu-rams-logo.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">ESS 523c</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mikejohnson51/csu-ess-523c/"> <i class="bi bi-github" role="img" aria-label="ESS 523c">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn!</a>
+  <ul class="collapse">
+  <li><a href="#modeltime-prediction" id="toc-modeltime-prediction" class="nav-link" data-scroll-target="#modeltime-prediction">Modeltime Prediction</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+<script src="https://use.fontawesome.com/5235085b15.js"></script>
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 6: Timeseries Data</h1>
+<p class="subtitle lead">Using Modeltime to predict future streamflow</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="images/poudremapgeneral-1.jpg" class="img-fluid figure-img" width="600"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In this lab, you will download streamflow data from the Cache la Poudre River (USGS site 06752260) and analyze it using a few time series methods. You will then use <code>modeltime</code> to predict future streamflow data with respect to historic and future climate data.</p>
+<p>In this lab we will be using the following packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># for data cleaning</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.0.4     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)    <span class="co"># for interactive plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'plotly'
+
+The following object is masked from 'package:ggplot2':
+
+    last_plot
+
+The following object is masked from 'package:stats':
+
+    filter
+
+The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dataRetrieval) <span class="co"># for downloading data from USGS</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(climateR)      <span class="co"># for downloading climate data </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'climateR'
+
+The following object is masked from 'package:readr':
+
+    parse_date
+
+The following object is masked from 'package:graphics':
+
+    plot
+
+The following object is masked from 'package:base':
+
+    plot</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)         <span class="co"># for working with raster data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>terra 1.8.42
+
+Attaching package: 'terra'
+
+The following object is masked from 'package:tidyr':
+
+    extract</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(exactextractr) <span class="co"># for zonal extraction</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels) <span class="co"># for ML modeling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──
+✔ broom        1.0.7     ✔ rsample      1.2.1
+✔ dials        1.4.0     ✔ tune         1.3.0
+✔ infer        1.0.7     ✔ workflows    1.2.0
+✔ modeldata    1.4.0     ✔ workflowsets 1.1.0
+✔ parsnip      1.3.0     ✔ yardstick    1.3.2
+✔ recipes      1.1.1     
+── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ dials::buffer()   masks terra::buffer()
+✖ scales::discard() masks purrr::discard()
+✖ terra::extract()  masks tidyr::extract()
+✖ plotly::filter()  masks dplyr::filter(), stats::filter()
+✖ recipes::fixed()  masks stringr::fixed()
+✖ dplyr::lag()      masks stats::lag()
+✖ yardstick::spec() masks readr::spec()
+✖ recipes::step()   masks stats::step()
+✖ recipes::update() masks terra::update(), stats::update()
+• Learn how to get started at https://www.tidymodels.org/start/</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tsibble)   <span class="co"># for time series data structure</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'tsibble':
+  method               from 
+  as_tibble.grouped_df dplyr
+
+Attaching package: 'tsibble'
+
+The following objects are masked from 'package:terra':
+
+    intersect, union
+
+The following object is masked from 'package:lubridate':
+
+    interval
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modeltime) <span class="co"># for time series modeling</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(feasts)    <span class="co"># for time series analysis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: fabletools
+
+Attaching package: 'fabletools'
+
+The following object is masked from 'package:yardstick':
+
+    accuracy
+
+The following object is masked from 'package:parsnip':
+
+    null_model
+
+The following objects are masked from 'package:infer':
+
+    generate, hypothesize
+
+The following object is masked from 'package:terra':
+
+    interpolate</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(timetk)    <span class="co"># for time series analysis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="getting-requisite-data" class="level4">
+<h4 class="anchored" data-anchor-id="getting-requisite-data">Getting Requisite Data:</h4>
+<p>First, use this code to download the data from the USGS site. In this example, we will be using the Cache la Poudre River at Mouth (USGS site 06752260). You can use the <code>dataRetrieval</code> package to download the data. The code below downloads daily streamflow data for the Cache la Poudre River from January 1, 2013 to December 31, 2023. It then aggregates the data to monthly averages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Cache la Poudre River at Mouth (USGS site 06752260)</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>poudre_flow <span class="ot">&lt;-</span> <span class="fu">readNWISdv</span>(<span class="at">siteNumber =</span> <span class="st">"06752260"</span>,    <span class="co"># Download data from USGS for site 06752260</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">parameterCd =</span> <span class="st">"00060"</span>,      <span class="co"># Parameter code 00060 = discharge in cfs)</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">startDate =</span> <span class="st">"2013-01-01"</span>,   <span class="co"># Set the start date</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">endDate =</span> <span class="st">"2023-12-31"</span>) <span class="sc">|&gt;</span>  <span class="co"># Set the end date</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">renameNWISColumns</span>() <span class="sc">|&gt;</span>                              <span class="co"># Rename columns to standard names (e.g., "Flow", "Date")</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">yearmonth</span>(Date)) <span class="sc">|&gt;</span>                   <span class="co"># Convert daily Date values into a year-month format (e.g., "2023 Jan")</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Date) <span class="sc">|&gt;</span>                                   <span class="co"># Group the data by the new monthly Date</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Flow =</span> <span class="fu">mean</span>(Flow))                       <span class="co"># Calculate the average daily flow for each month</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>GET:https://waterservices.usgs.gov/nwis/dv/?site=06752260&amp;format=waterml%2C1.1&amp;ParameterCd=00060&amp;StatCd=00003&amp;startDT=2013-01-01&amp;endDT=2023-12-31</code></pre>
+</div>
+</div>
+<p>Second, we will download climate data from the GridMET and MACA datasets. The GridMET dataset provides high-resolution climate data for the United States, while the MACA dataset provides downscaled climate data futures. We will use these datasets to obtain climate data for the Cache la Poudre River Basin.</p>
+<p>To start, we will use the findNLDI function to find the basin for the Cache la Poudre River. This function will return a list of features, including the basin polygon, which we can use to extract climate data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>basin <span class="ot">=</span> <span class="fu">findNLDI</span>(<span class="at">nwis =</span> <span class="st">"06752260"</span>, <span class="at">find =</span> <span class="st">"basin"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>mapview<span class="sc">::</span><span class="fu">mapview</span>(basin<span class="sc">$</span>basin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-9ce7253f90307135be1f" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-9ce7253f90307135be1f">{"x":{"options":{"minZoom":1,"maxZoom":52,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron","CartoDB.Positron","CartoDB.Positron",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter","CartoDB.DarkMatter","CartoDB.DarkMatter",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap","OpenStreetMap","OpenStreetMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldImagery","Esri.WorldImagery","Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenTopoMap","OpenTopoMap","OpenTopoMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"createMapPane","args":["polygon",420]},{"method":"addPolygons","args":[[[[{"lng":[-105.221212595,-105.234033847,-105.236722561,-105.237257384,-105.243202993,-105.241476536,-105.244567304,-105.245087133,-105.248131937,-105.246955078,-105.251020355,-105.256496531,-105.271146868,-105.279967988,-105.287122255,-105.289214012,-105.303694583,-105.315510973,-105.319336692,-105.323601636,-105.326690635,-105.331198068,-105.33583895,-105.337062716,-105.349726026,-105.350564998,-105.361778069,-105.364456538,-105.372855778,-105.376068519,-105.388937256,-105.391894618,-105.394967395,-105.397089004,-105.401087,-105.400938693,-105.405824982,-105.409010347,-105.417883909,-105.427153496,-105.437030155,-105.440164044,-105.445726253,-105.446214434,-105.449727984,-105.455130827,-105.471793047,-105.473019231,-105.479811749,-105.480948427,-105.498099137,-105.503831296,-105.513330565,-105.513645718,-105.518362638,-105.518864876,-105.5170895,-105.521387382,-105.521544905,-105.519781306,-105.509602851,-105.506127612,-105.508709194,-105.508083155,-105.51177078,-105.515888739,-105.522824907,-105.53101983,-105.538763382,-105.550209864,-105.556806135,-105.562613491,-105.577608314,-105.587097329,-105.59026615,-105.611250854,-105.617223471,-105.632210356,-105.631474132,-105.629206144,-105.631361382,-105.636791052,-105.637404664,-105.646673923,-105.647485073,-105.645853996,-105.647063056,-105.661165652,-105.665634218,-105.664491982,-105.671463296,-105.677699936,-105.683220261,-105.681608944,-105.683266783,-105.691394835,-105.689057932,-105.697212626,-105.701580745,-105.702089076,-105.711328574,-105.72162314,-105.725528036,-105.734527034,-105.736796963,-105.750684055,-105.754029916,-105.759967685,-105.778972,-105.784361316,-105.793869895,-105.793011092,-105.79873203,-105.803345522,-105.814914613,-105.817315902,-105.817412756,-105.814320118,-105.815881914,-105.806028712,-105.807370416,-105.804464638,-105.811278956,-105.808027584,-105.807256513,-105.816201758,-105.835114679,-105.838173255,-105.846394948,-105.854870105,-105.856070356,-105.851724417,-105.852352151,-105.856930747,-105.868640511,-105.879285245,-105.893243309,-105.904018068,-105.90738747,-105.911170493,-105.907056733,-105.904885252,-105.906622179,-105.909039393,-105.911426488,-105.909158493,-105.914180495,-105.917627275,-105.92184742,-105.927899424,-105.929874581,-105.921767294,-105.92053107,-105.91651143,-105.915381382,-105.904624981,-105.899050544,-105.894187369,-105.894530386,-105.891538462,-105.889230786,-105.872135927,-105.861174575,-105.855076128,-105.850016864,-105.844130932,-105.843348803,-105.835732905,-105.832143715,-105.833465719,-105.83261977,-105.828796375,-105.827329871,-105.828565048,-105.837206044,-105.840467057,-105.844578621,-105.847604868,-105.847282408,-105.842167436,-105.842275534,-105.837978122,-105.830985577,-105.834062746,-105.844141083,-105.846209664,-105.844380876,-105.845696405,-105.844459657,-105.841882444,-105.838016881,-105.823852814,-105.815540782,-105.820971239,-105.817491776,-105.822880661,-105.822343246,-105.821180179,-105.814567498,-105.812579627,-105.794438778,-105.791055257,-105.790870431,-105.788173448,-105.790423793,-105.787923674,-105.78945637,-105.777592161,-105.777963116,-105.773378997,-105.773808708,-105.778689859,-105.773579603,-105.776248371,-105.775071217,-105.781034291,-105.782310399,-105.779104443,-105.776863221,-105.773923148,-105.777932238,-105.776540841,-105.771303575,-105.773241764,-105.764052861,-105.763669842,-105.757706167,-105.755001996,-105.761006067,-105.760595407,-105.769432434,-105.783234553,-105.785849426,-105.794086828,-105.787784848,-105.789002503,-105.787804332,-105.778956289,-105.771518011,-105.774210458,-105.777778214,-105.781821657,-105.774668186,-105.775462909,-105.774140619,-105.77132482,-105.771796671,-105.763624716,-105.761963139,-105.746088043,-105.739070771,-105.740001945,-105.73640411,-105.736354659,-105.728422449,-105.713867288,-105.712392029,-105.704036486,-105.695451739,-105.685706916,-105.675123099,-105.670269732,-105.664748794,-105.664131996,-105.653616311,-105.6528202,-105.645599318,-105.64219599,-105.634713714,-105.635350921,-105.630264468,-105.631015217,-105.628517325,-105.625932152,-105.621908016,-105.61880071,-105.608996993,-105.607090187,-105.60216042,-105.59667803,-105.588887849,-105.586608843,-105.583627849,-105.570575876,-105.569436368,-105.565978069,-105.547057899,-105.542736103,-105.540419213,-105.534617853,-105.53361587,-105.529608228,-105.523674315,-105.520225058,-105.518999988,-105.511057167,-105.509180819,-105.504137621,-105.500317889,-105.49761598,-105.499663617,-105.49910693,-105.495509918,-105.494632619,-105.487014767,-105.482620852,-105.476583632,-105.465733957,-105.463437992,-105.463330553,-105.45896769,-105.46071966,-105.455644236,-105.457113796,-105.455786608,-105.46070025,-105.457003447,-105.461486937,-105.467350145,-105.469462614,-105.468568667,-105.464075013,-105.467457926,-105.470470164,-105.467456984,-105.469542435,-105.467656042,-105.468815518,-105.459257121,-105.45157825,-105.45081921,-105.450730311,-105.454338377,-105.454650999,-105.453905244,-105.448793544,-105.449559607,-105.448343765,-105.456176909,-105.46315104,-105.463530221,-105.459650517,-105.458474978,-105.458806789,-105.462465776,-105.460500302,-105.461849075,-105.454852983,-105.452162707,-105.451706377,-105.446317675,-105.442823914,-105.431031861,-105.430323206,-105.423203386,-105.426747249,-105.424277542,-105.423903179,-105.421004966,-105.415739723,-105.409816464,-105.412812599,-105.41381359,-105.404534018,-105.396577073,-105.397232211,-105.399831635,-105.396551263,-105.396988802,-105.389534723,-105.387168242,-105.365758382,-105.36279822,-105.356229263,-105.356784889,-105.353852986,-105.347851389,-105.343424912,-105.346735256,-105.343966886,-105.344675897,-105.337931293,-105.340549517,-105.326107528,-105.324526353,-105.317903406,-105.317190561,-105.313556957,-105.300337311,-105.297847276,-105.279561834,-105.276265676,-105.281616808,-105.283335701,-105.292580708,-105.296911539,-105.297257047,-105.293720336,-105.287901626,-105.283764377,-105.285528178,-105.283414407,-105.283271066,-105.286066966,-105.276097961,-105.275711479,-105.277756233,-105.272478801,-105.272565956,-105.280243375,-105.280218368,-105.272470961,-105.273304857,-105.271356177,-105.272434785,-105.268292549,-105.262580171,-105.25228832,-105.253156805,-105.245812145,-105.244992272,-105.243344012,-105.241149379,-105.235784434,-105.234874595,-105.230551256,-105.228987938,-105.23031116,-105.228598908,-105.223965808,-105.216311311,-105.222240905,-105.207189778,-105.212051312,-105.211813685,-105.214678431,-105.21536504,-105.218936577,-105.212181722,-105.213414442,-105.216688589,-105.216053229,-105.217549366,-105.213443045,-105.204121668,-105.200483571,-105.205824463,-105.205189528,-105.208927556,-105.210913849,-105.215163585,-105.216295969,-105.215115866,-105.218498408,-105.212899393,-105.209890828,-105.203066741,-105.198893983,-105.187217288,-105.18358087,-105.1832096,-105.173554447,-105.171389171,-105.166045683,-105.160976977,-105.157295995,-105.158219236,-105.156841216,-105.162278377,-105.160707978,-105.164558122,-105.166306312,-105.164742998,-105.1677207,-105.169814231,-105.166835238,-105.1689374,-105.171214046,-105.169894671,-105.167514114,-105.163298234,-105.156953751,-105.155255652,-105.151620289,-105.148969102,-105.147509114,-105.141976206,-105.12160975,-105.113168272,-105.113673236,-105.108860663,-105.100450784,-105.09593889,-105.091629728,-105.089985069,-105.086865275,-105.081475078,-105.06878306,-105.068135392,-105.057507745,-105.056783746,-105.05003544,-105.051236924,-105.044781307,-105.053948078,-105.057336237,-105.06064021,-105.079032128,-105.083297218,-105.087562563,-105.093552835,-105.097089593,-105.102072762,-105.11028915,-105.111936738,-105.1159709,-105.129752351,-105.140840052,-105.143177032,-105.144619615,-105.152134161,-105.152302381,-105.147921557,-105.147551683,-105.149105812,-105.146549469,-105.144414761,-105.141357144,-105.140896588,-105.148001164,-105.143298115,-105.143390234,-105.149186603,-105.148874745,-105.152125267,-105.152723058,-105.159320696,-105.176925302,-105.181774067,-105.182016736,-105.180515251,-105.181418065,-105.178892393,-105.185131879,-105.18444101,-105.18616114,-105.191356837,-105.192761376,-105.192236937,-105.196753814,-105.196292842,-105.199010734,-105.198495234,-105.200678509,-105.199843647,-105.201944,-105.206329566,-105.204758601,-105.209728995,-105.215607122,-105.21788549,-105.220419179,-105.221212595],"lat":[40.582259299,40.590509832,40.59060146,40.593201957,40.597724953,40.602612095,40.606712996,40.611662,40.615233269,40.62079519,40.625719427,40.621818146,40.618099096,40.623367655,40.623817084,40.621203479,40.622023037,40.626067099,40.62894554,40.62833792,40.625128629,40.62349568,40.624659765,40.627099996,40.62429525,40.622534248,40.617396275,40.60865675,40.606590933,40.603873633,40.604272883,40.601507859,40.601800005,40.605803723,40.607177196,40.612784794,40.617160114,40.617173392,40.621376729,40.617955528,40.616719439,40.610563821,40.607366322,40.604728586,40.604932878,40.60208329,40.605237544,40.601669523,40.599365526,40.595204778,40.590390654,40.583586729,40.580045683,40.571677301,40.568863721,40.56169677,40.560308998,40.557096763,40.55476741,40.547796478,40.54233625,40.535766473,40.530425273,40.527508348,40.525519964,40.518749597,40.515649612,40.515572867,40.510025197,40.506058077,40.505430688,40.507836345,40.518659806,40.519824111,40.515401526,40.515296061,40.516994918,40.513698943,40.507090185,40.504775152,40.499495895,40.497197106,40.492968142,40.489760498,40.487590078,40.484659895,40.483139443,40.477840677,40.471975542,40.468696883,40.468618109,40.463410896,40.461683378,40.457423948,40.453796989,40.448679347,40.443660784,40.441460948,40.438233129,40.434044375,40.432670773,40.435625688,40.434468612,40.43848049,40.442158535,40.444445863,40.442796866,40.432540136,40.43361519,40.429265937,40.427364653,40.41848449,40.418375531,40.4116751,40.420513978,40.424588663,40.426355399,40.428860511,40.437353741,40.446737063,40.453172467,40.463777983,40.470588453,40.471887725,40.473835558,40.474927994,40.480178308,40.482659836,40.482775903,40.486012371,40.491582697,40.498851407,40.50667323,40.50784832,40.520502337,40.523575449,40.52087418,40.514209269,40.51586355,40.52172657,40.52684402,40.534726963,40.542852445,40.545052772,40.553307172,40.563778268,40.571578872,40.571475605,40.5750165,40.594105643,40.606702621,40.612994733,40.616285582,40.6194592,40.624476381,40.624798782,40.627971533,40.624043356,40.62029047,40.615363716,40.614334522,40.617273807,40.615788781,40.616864977,40.608911375,40.610361817,40.612446564,40.615824743,40.619514146,40.620611531,40.621843868,40.623329786,40.626804552,40.630507964,40.631367571,40.636556391,40.637071589,40.639674032,40.643593347,40.646691786,40.650709066,40.652302549,40.66027905,40.662789577,40.660481437,40.663699248,40.667975678,40.669777309,40.678792953,40.679829741,40.686176908,40.685404883,40.689685333,40.700305047,40.707561921,40.713712165,40.717006482,40.719663468,40.724230475,40.733271389,40.738844699,40.741669904,40.747424586,40.750630011,40.75228329,40.755804848,40.758759115,40.757955577,40.760335857,40.763547713,40.768046268,40.770853798,40.772838663,40.778690872,40.77979787,40.78247354,40.787856755,40.790927652,40.790162246,40.792795906,40.796646067,40.799780945,40.801697549,40.810908444,40.8148482,40.821898474,40.823851403,40.828629195,40.833875065,40.842044723,40.841781858,40.844070493,40.848113577,40.852120227,40.863918043,40.866361563,40.870735769,40.871495992,40.878459086,40.886911934,40.890590585,40.892081085,40.899516834,40.904344449,40.91170539,40.914214597,40.916117194,40.919371922,40.922788389,40.9304171,40.93592745,40.937903269,40.941201676,40.946245744,40.955761181,40.961183252,40.963700982,40.962708982,40.967834504,40.97157924,40.972956973,40.976188946,40.974527201,40.980577754,40.989864485,40.993373342,40.997425758,40.997467319,41.008070549,41.009666477,41.013041652,41.014869903,41.015861788,41.020261245,41.020676349,41.025217192,41.028321251,41.034924381,41.038622004,41.039818538,41.038917716,41.036957267,41.037750024,41.029238418,41.024470662,41.021396377,41.022052827,41.020320875,41.02363146,41.023623825,41.025728023,41.027523176,41.027340878,41.029268496,41.032192877,41.03559885,41.033873193,41.035347314,41.033051527,41.035732553,41.037735879,41.040796261,41.045548909,41.04990174,41.050274553,41.05227149,41.050502083,41.054746304,41.054004166,41.056635398,41.057375376,41.060000851,41.063846068,41.066008762,41.067605211,41.069586528,41.077975194,41.09058165,41.090949204,41.09284105,41.09815951,41.103660492,41.103864362,41.109967285,41.116822462,41.125462164,41.128396274,41.130869303,41.13332485,41.133351255,41.134534155,41.139205837,41.141581398,41.146376895,41.147838638,41.148827033,41.157500905,41.161839715,41.166016233,41.165614039,41.180996597,41.186254035,41.191524189,41.1952897,41.195556655,41.198371369,41.200477172,41.200931174,41.205045007,41.209015228,41.210219449,41.209321197,41.198718861,41.196323501,41.189537344,41.186190006,41.18471701,41.180788533,41.176671199,41.171629595,41.168835902,41.16608272,41.162268326,41.150952191,41.145565081,41.139916823,41.135806933,41.128777839,41.123969277,41.118615474,41.113743495,41.105738856,41.102967539,41.100699197,41.099284777,41.096135767,41.093620289,41.089477616,41.08393282,41.080847415,41.079139957,41.073954838,41.071271186,41.064662759,41.062489159,41.061354837,41.057690467,41.056195014,41.054142902,41.051708453,41.049651145,41.04716789,41.044802607,41.040460203,41.042505619,41.041993531,41.040575923,41.031873571,41.025807109,41.025100741,41.021415457,41.019349886,41.013549272,41.00903254,41.003450856,41.001712421,41.000488502,40.993603069,40.988798464,40.97972367,40.975540319,40.96993016,40.966892406,40.964393158,40.960995818,40.957415825,40.953946018,40.952542486,40.95059284,40.942903896,40.93700482,40.936593783,40.931315256,40.927542755,40.921508357,40.919346513,40.916775795,40.913040567,40.908443006,40.906307753,40.906437783,40.896586454,40.880721966,40.869868953,40.866390341,40.865624066,40.862895271,40.861113433,40.856608903,40.853229636,40.851232879,40.848571738,40.846146864,40.840779321,40.836569275,40.831953896,40.82788771,40.825982494,40.821458438,40.81441106,40.813910966,40.811367469,40.808259251,40.804269547,40.802798807,40.79963945,40.799108878,40.795669009,40.797474478,40.793346656,40.779378766,40.777117504,40.767979939,40.7648879,40.766232059,40.76154987,40.756912349,40.749059328,40.739746541,40.733994249,40.729865122,40.721126992,40.711821214,40.707030804,40.697027271,40.683790775,40.681526685,40.67287022,40.671497298,40.672061831,40.675867547,40.676593663,40.673253917,40.67052833,40.670443533,40.663132059,40.658032216,40.659857063,40.650602564,40.643299869,40.633468616,40.629784348,40.625703761,40.619729182,40.611370559,40.610697135,40.604243007,40.598198037,40.595796642,40.586186926,40.583403175,40.581009809,40.579488139,40.575149228,40.570273321,40.573452654,40.573749803,40.570831661,40.572996222,40.572947174,40.571562067,40.568705228,40.568175186,40.568691084,40.567509715,40.569626813,40.564024294,40.561921685,40.567221433,40.565671832,40.565668204,40.562566863,40.556426148,40.552563923,40.5516547,40.53891365,40.533459682,40.531559911,40.528318143,40.511174073,40.49935406,40.490562841,40.486043943,40.484262965,40.483203375,40.48611661,40.494520586,40.489206304,40.493428075,40.503635322,40.507370713,40.51362106,40.51686119,40.523119923,40.527945302,40.531741905,40.531478579,40.533341968,40.536655401,40.539732325,40.542647007,40.547471458,40.552086664,40.554880366,40.559422148,40.56434416,40.566715736,40.56844472,40.574857376,40.57734176,40.580013808,40.580103389,40.582259299]}]]],null,"basin$basin",{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"pane":"polygon","stroke":true,"color":"#333333","weight":0.5,"opacity":0.9,"fill":true,"fillColor":"#6666FF","fillOpacity":0.6,"smoothFactor":1,"noClip":false},"<div class='scrollableContainer'><table class=mapview-popup id='popup'><tr class='coord'><td><\/td><th><b>Feature ID&emsp;<\/b><\/th><td>1&emsp;<\/td><\/tr><tr><td>1<\/td><th>geometry&emsp;<\/th><td>sfc_POLYGON&emsp;<\/td><\/tr><\/table><\/div>",{"maxWidth":800,"minWidth":50,"autoPan":true,"keepInView":false,"closeButton":true,"closeOnClick":true,"className":""},"1",{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},{"stroke":true,"weight":1,"opacity":0.9,"fillOpacity":0.84,"bringToFront":false,"sendToBack":false}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-105.929874581,40.4116751,-105.044781307,41.210219449,true,"basin$basin","Zoom to basin$basin","<strong> basin$basin <\/strong>","bottomright"]},{"method":"addLayersControl","args":[["CartoDB.Positron","CartoDB.DarkMatter","OpenStreetMap","Esri.WorldImagery","OpenTopoMap"],"basin$basin",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]},{"method":"addLegend","args":[{"colors":["#6666FF"],"labels":["basin$basin"],"na_color":null,"na_label":"NA","opacity":1,"position":"topright","type":"factor","title":"","extra":null,"layerId":null,"className":"info legend","group":"basin$basin"}]}],"limits":{"lat":[40.4116751,41.210219449],"lng":[-105.929874581,-105.044781307]},"fitBounds":[40.4116751,-105.929874581,41.210219449,-105.044781307,[]]},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null},{"code":"function(el, x, data) {\n  return (function(el,x,data){\n           var map = this;\n\n           map.on('keypress', function(e) {\n               console.log(e.originalEvent.code);\n               var key = e.originalEvent.code;\n               if (key === 'KeyE') {\n                   var bb = this.getBounds();\n                   var txt = JSON.stringify(bb);\n                   console.log(txt);\n\n                   setClipboardText('\\'' + txt + '\\'');\n               }\n           })\n        }).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
+</div>
+</div>
+<p>With an AOI defined, we can use the <code>climateR</code> package to download climate data from the GridMET and MACA datasets. The code below downloads monthly climate data for the Cache la Poudre River Basin from January 1, 2013 to December 31, 2023. It then uses the <code>exactextractr</code> package to extract the climate data for the basin polygon. The code also converts the climate data into a tidy format, necessary for time series analysis and joins the data to the streamflow data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sdate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2013-01-01"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>edate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2023-12-31"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>gm <span class="ot">&lt;-</span> climateR<span class="sc">::</span><span class="fu">getTerraClim</span>(<span class="at">AOI =</span> basin<span class="sc">$</span>basin, </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">c</span>(<span class="st">"tmax"</span>, <span class="st">"ppt"</span>, <span class="st">"srad"</span>), </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">startDate =</span> sdate,   </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">endDate =</span> edate) <span class="sc">|&gt;</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  terra<span class="sc">::</span><span class="fu">rast</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  exactextractr<span class="sc">::</span><span class="fu">exact_extract</span>(basin<span class="sc">$</span>basin, <span class="st">"mean"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in .local(x, y, ...): Polygons transformed to raster CRS (EPSG:NA)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>historic <span class="ot">&lt;-</span> <span class="fu">mutate</span>(gm, <span class="at">id =</span> <span class="st">"gridmet"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>id) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">sub</span>(<span class="st">"^mean</span><span class="sc">\\</span><span class="st">."</span>, <span class="st">""</span>, name)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">extract</span>(name, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"index"</span>), <span class="st">"(.*)_([^_]+$)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">as.integer</span>(index)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">yearmonth</span>(<span class="fu">seq.Date</span>(sdate, edate, <span class="at">by =</span> <span class="st">"month"</span>)[<span class="fu">as.numeric</span>(index)])) <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> Date, <span class="at">names_from =</span> var, <span class="at">values_from =</span> value) <span class="sc">|&gt;</span> </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(poudre_flow, <span class="at">by =</span> <span class="st">"Date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Third, we are interested in using exogenous climate data to predict future streamflow. Any time exogenous data is used to predict future values, it is required that we have values for the future. In other words, if we want to use PPT to predict streamflow in the future, we must have future PPT values.</p>
+<p>We will use the MACA dataset to download future climate data for the Cache la Poudre River Basin from January 1, 2024 to December 31, 2033. The code below downloads the future climate data and converts it into a tidy format. We chose MAVA because it is developed by the same lab that created GridMET ensuring many of the same assumptions and methods are used.</p>
+<p>Two quirks with MACA vs GridMET are that the units of temperature are in Kelvin and the names of the variables are different. The code below converts the temperature from Kelvin to Celsius and renames the variables to match those in the GridMET dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sdate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2024-01-01"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>edate <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2033-12-31"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>maca <span class="ot">&lt;-</span> <span class="fu">getMACA</span>(<span class="at">AOI =</span> basin<span class="sc">$</span>basin, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">var =</span> <span class="fu">c</span>(<span class="st">"tasmax"</span>, <span class="st">"pr"</span>, <span class="st">"rsds"</span>), </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">timeRes =</span> <span class="st">"month"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">startDate =</span> sdate,   </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">endDate =</span> edate) <span class="sc">|&gt;</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rast</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exact_extract</span>(basin<span class="sc">$</span>basin, <span class="st">"mean"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Multiple ensembles available per model. Since `ensemble = NULL`, we default to:
+    &gt; CCSM4 [rcp45] [r6i1p1]
+    &gt; CCSM4 [rcp45] [r6i1p1]
+    &gt; CCSM4 [rcp45] [r6i1p1]</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in .local(x, y, ...): Polygons transformed to raster CRS (EPSG:NA)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">mutate</span>(maca, <span class="at">id =</span> <span class="st">"maca"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>id) <span class="sc">|&gt;</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">sub</span>(<span class="st">"^mean</span><span class="sc">\\</span><span class="st">."</span>, <span class="st">""</span>, name))  <span class="sc">|&gt;</span> </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">extract</span>(name, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"var"</span>, <span class="st">"index"</span>), <span class="st">"(.*)_([^_]+$)"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">as.integer</span>(index)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Date =</span> <span class="fu">yearmonth</span>(<span class="fu">seq.Date</span>(sdate, edate, <span class="at">by =</span> <span class="st">"month"</span>)[<span class="fu">as.numeric</span>(index)])) <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> Date, <span class="at">names_from =</span> var, <span class="at">values_from =</span> value) </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(future) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Date"</span>, <span class="st">"ppt"</span>, <span class="st">"srad"</span>, <span class="st">"tmax"</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">mutate</span>(future, <span class="at">tmax =</span> tmax <span class="sc">-</span> <span class="fl">273.15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="your-turn" class="level1">
+<h1>Your turn!</h1>
+<p>Through this lab, we will use the above datasets to analysis patterns in streamflow and predict future streamflow based on climate data.</p>
+<section id="convert-to-tsibble" class="level4">
+<h4 class="anchored" data-anchor-id="convert-to-tsibble">1. Convert to tsibble</h4>
+<p>First, use <code>as_tsibble()</code> to convert <code>historic</code> data.frame into a <code>tsibble</code> object. This will allow you to use the <code>feast</code> functions for analysis.</p>
+</section>
+<section id="plotting-the-time-series" class="level4">
+<h4 class="anchored" data-anchor-id="plotting-the-time-series">2. Plotting the time series</h4>
+<p>Use <code>ggplot</code> to make plot focusing on Flow through time. Animate this plot with plotly!</p>
+</section>
+<section id="subseries" class="level4">
+<h4 class="anchored" data-anchor-id="subseries">3. Subseries</h4>
+<p>Next, we are going to use the <code>gg_subseries()</code> function to visualize the seasonal patterns in the data. This function will create a subseries plot, which shows the seasonal patterns in the data by plotting each “season” as a separate plot</p>
+<p>Remember, season does not necessarily mean “winter, spring, summer, fall”. In this case, we are looking at monthly data, so the seasons are defined as the months of the year.</p>
+<p>Describe what you see in the plot. How are “seasons” defined in this plot? What do you think the “subseries” represent?</p>
+</section>
+<section id="decomposition" class="level4">
+<h4 class="anchored" data-anchor-id="decomposition">4. Decomposition</h4>
+<p>Next, use the <code>model(STL(...))</code> pattern to decompose the time series data into its components of trend, seasonality, and residuals. Chose a window that you feel is most appropriate to this data and explain your choice. Use the <code>components()</code> function to extract the components of the time series and <code>autoplot</code> to visualize the components.</p>
+<p>Describe what you see and if it matches your understanding of the Poudre System / Western water trends. How do the components change over time? What do you think the trend and seasonal components represent?</p>
+</section>
+<section id="modeltime-prediction" class="level2">
+<h2 class="anchored" data-anchor-id="modeltime-prediction">Modeltime Prediction</h2>
+<section id="data-prep" class="level4">
+<h4 class="anchored" data-anchor-id="data-prep">Data Prep</h4>
+<p>Now we are going to use the <code>modeltime</code> package to predict future streamflow using the climate data. We will use the <code>modeltime</code> package to create a time series model. First, we need to prep the data. In this case we want both the histroic and future data to be in the same format where the date column is a <code>Date</code> object (name it date for ease) and the other columns are numeric. In both cases each need to be a tibble:</p>
+<p>We will use the <code>time_series_split()</code> function to split the data into training and testing sets. The training set will be used to train the model and the testing set will be used to test the model. Rememer in this case we are using a time series split, so the training set will be defined by a period rather then a perent of hold out data. In this case we will use a 24 month period testing set (<code>assess</code>). Make sure to set a seed and extract the trainign and testing data.frames with <code>training()</code> and <code>testing()</code>.</p>
+</section>
+<section id="model-definition" class="level4">
+<h4 class="anchored" data-anchor-id="model-definition">Model Definition</h4>
+<p>Chose at least three models to test - with one being arima and one being prophet. Store these models (specification + engine) in a list.</p>
+</section>
+<section id="model-fitting" class="level4">
+<h4 class="anchored" data-anchor-id="model-fitting">Model Fitting</h4>
+<p>Next, we will use the <code>fit()</code> function to fit the models to the training data. We will use the <code>map()</code> function from the <code>purrr</code> package to iterate over the list of models and fit each model to the training data. The <code>fit()</code> function takes a formula, a model specification, and a data.frame as arguments. Here you can build any formula you see fit. What components of the date object do you want to use (e.g.&nbsp;month? season?). What climate variables do you want to use?</p>
+<p>The only requirement is that the response variable is <code>Flow</code> and the date variable is included as a predictor.</p>
+<p>Once the models are fitted, we will use the <code>as_modeltime_table()</code> function to convert the list of fit models into a modeltime table. This will allow us to use the <code>modeltime</code> package to make predictions.</p>
+</section>
+<section id="model-calibration" class="level4">
+<h4 class="anchored" data-anchor-id="model-calibration">Model Calibration</h4>
+<p>Next, we will use the <code>modeltime_calibrate()</code> function to calibrate the models. This function takes a modeltime table and a data.frame of testing data as arguments. The function will return a modeltime table with the calibrated models.</p>
+<p>The results of the calibration can be passed to <code>modeltime_accuracy()</code> to assess the accuracy of the models.</p>
+<p>Calibrate the models using the testing data and assess the accuracy of the models describing what you see!</p>
+</section>
+<section id="forecasting" class="level4">
+<h4 class="anchored" data-anchor-id="forecasting">Forecasting</h4>
+<p>With a calibrated model set in place, we can now make predictions using the <code>modeltime_forecast()</code>. Becasue we are using exogenous data, we need to pass the actual data to the function. This is because the model needs to know what the actual values are in order to make predictions.</p>
+<p>As a first step, lets use the calibrated models to make predictions on the testing data. Here you will need to specifcy the <code>actual_data</code> (historic data tibble) and the <code>new_data</code> (testing).</p>
+<p>The outputs can be passed to the <code>plot_modeltime_forecast()</code> function to visualize the predictions.</p>
+</section>
+<section id="refitting-the-model" class="level4">
+<h4 class="anchored" data-anchor-id="refitting-the-model">Refitting the Model</h4>
+<p>Now that we have a calibrated model set, we can refit the models to the full dataset. This is important because the models are only as good as the data they are trained on. By refitting the models to the full dataset, we can improve the accuracy of the predictions.</p>
+<p>To do this, we will use the <code>modeltime_refit()</code> function. This function takes a calibrataion table and the full historic tibble as the <code>data</code> argument. The function will return a modeltime table with the refitted models. Like before, the accuracy of the models can be assessed using the <code>modeltime_accuracy()</code> function.</p>
+</section>
+<section id="looking-into-the-future" class="level4">
+<h4 class="anchored" data-anchor-id="looking-into-the-future">Looking into the future</h4>
+<p>Now we are at the end! We can use the refitted models to make predictions on the future data. This is where we will use the <code>future</code> tibble we created earlier as the <code>new_data</code>. The <code>actual_data</code> argument will be the historic data tibble.</p>
+<p>Using your refitted models, the <code>modeltime_forecast()</code> function will return a modeltime table with the predictions that can be passed to the <code>plot_modeltime_forecast()</code> function to visualize the predictions.</p>
+</section>
+<section id="wrap-up" class="level4">
+<h4 class="anchored" data-anchor-id="wrap-up">Wrap up</h4>
+<p>Looking at your predictions what do you think? How do the models compare? What do you think the future streamflow will be? What are the limitations of this analysis? What are the assumptions of the models?</p>
+<p>Perhaps you see negative values in the predictions; perhaps you dont see strong agreement between the furture starting points around Jan 2024; perhaps you see other patterns that seem systemic and questionablly wrong. At this stage that is quite alright. In this simple lab, we did not worry about issue like cross validation, featrue engineering, or hyperparameter tuning. These are all important steps in the modeling process and should be considered in a real world application.</p>
+<p>If interested, the processes learned in tidymodels are directly applicable here and you can take this model as far as you like adding new data, correcting non-normal data, and implemeting a resampling approach to improve the model. That said, you now have a string introdcutory grasp on what the world of timeseries is about.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script>
+  Reveal.addEventListener( 'slidechanged', function( event ) {
+    console.log("hello")
+    
+    slide_id = event.currentSlide.id
+    link = "annotations" + ".html#" + slide_id
+    
+    var annotation_div = document.createElement('div')
+    annotation_div.setAttribute("class", "annotation-link")
+    
+    var notes_link = document.createElement('a')
+    notes_link.setAttribute("href", link)
+    notes_link.setAttribute("target", "_blank")
+    
+    var iii = document.createElement('i')
+    iii.setAttribute("class", "fa fa-info")
+    notes_link.appendChild(iii)
+    
+    annotation_div.appendChild(notes_link)
+    
+    var tmp = event.currentTarget.getElementsByClassName("annotation-link")
+    if (tmp.length === 1) {
+      tmp[0].remove()
+    }
+    
+    if (event.currentSlide.classList.contains("annotation")) {
+      event.currentTarget.append(annotation_div)
+    }
+  } );
+
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

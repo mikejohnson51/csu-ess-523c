@@ -25,7 +25,7 @@
     "href": "index.html#schedule",
     "title": "Ecosystem Science and Sustainability 523c",
     "section": "Schedule",
-    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Tech Talk 01: Quarto/Flextable\n Lab 01: Lab 1: COVID Trends\n\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Tech Talk 02: Interactive Mapping\n Lab 02: Lab 2: Border summaries\n Lab 02: Lab 2: Hints & Tricks\n\n Week 03: Predicates, Simplification & Tesselations\n Tech Talk 03: Functions\n Lab 03: Lab 3: Dams in the US\n\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\n Tech Talk 04: STAC\nLab 04: Lab 4: Remote Sensing for Flooding\n\n\n\nComponent 3: Machine Learning & Time series\n Week 05: Feature Engineering & Model Workflows\n Tech Talk 05: Live Demo\n Lab 05: Lab 5: CAMELS Data Part 1\n\n Week 06: Models, Evaluation, Tuning\n Tech Talk 06: Quarto Websites\n Lab 06: Personal Website\n\n Week 07: Time Series\n Tech Talk 07: Wrap up\n Lab 07: …"
+    "text": "Schedule\n\nComponent 1: Data Science Tools\n Week 01: Level Setting\n Tech Talk 01: Quarto/Flextable\n Lab 01: Lab 1: COVID Trends\n\n\n\nComponent 2: Working with Vector Data\n Week 02: Projections & Measures\n Tech Talk 02: Interactive Mapping\n Lab 02: Lab 2: Border summaries\n Lab 02: Lab 2: Hints & Tricks\n\n Week 03: Predicates, Simplification & Tesselations\n Tech Talk 03: Functions\n Lab 03: Lab 3: Dams in the US\n\n\n\nComponent 3: Working with Raster Data\n Week 04: Raster’s in R\n Tech Talk 04: STAC\nLab 04: Lab 4: Remote Sensing for Flooding\n\n\n\nComponent 3: Machine Learning & Time series\n Week 05: Feature Engineering & Model Workflows\n Tech Talk 05: Live Demo\n Lab 05: Lab 5: CAMELS Data Part 1\n\n Week 06: Models, Evaluation, Tuning\n Tech Talk 06: Quarto Websites\n Lab 06: Personal Website\n\n Week 07: Time Series\n Tech Talk 07: Wrap up\n Lab 07: Poudre River Forecast"
   },
   {
     "objectID": "index.html#component-1-data-science-tools",
@@ -7068,5 +7068,628 @@
     "title": "Week 6",
     "section": "The whole game",
     "text": "The whole game"
+  },
+  {
+    "objectID": "labs/lab6.html",
+    "href": "labs/lab6.html",
+    "title": "Lab 6: Timeseries Data",
+    "section": "",
+    "text": "library(dataRetrieval)\nlibrary(tidymodels)\n\n── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──\n\n\n✔ broom        1.0.7     ✔ recipes      1.1.1\n✔ dials        1.4.0     ✔ rsample      1.2.1\n✔ dplyr        1.1.4     ✔ tibble       3.2.1\n✔ ggplot2      3.5.1     ✔ tidyr        1.3.1\n✔ infer        1.0.7     ✔ tune         1.3.0\n✔ modeldata    1.4.0     ✔ workflows    1.2.0\n✔ parsnip      1.3.0     ✔ workflowsets 1.1.0\n✔ purrr        1.0.4     ✔ yardstick    1.3.2\n\n\n── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──\n✖ purrr::discard() masks scales::discard()\n✖ dplyr::filter()  masks stats::filter()\n✖ dplyr::lag()     masks stats::lag()\n✖ recipes::step()  masks stats::step()\n• Dig deeper into tidy modeling with R at https://www.tmwr.org\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ forcats   1.0.0     ✔ readr     2.1.5\n✔ lubridate 1.9.4     ✔ stringr   1.5.1\n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ readr::col_factor() masks scales::col_factor()\n✖ purrr::discard()    masks scales::discard()\n✖ dplyr::filter()     masks stats::filter()\n✖ stringr::fixed()    masks recipes::fixed()\n✖ dplyr::lag()        masks stats::lag()\n✖ readr::spec()       masks yardstick::spec()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(tsibble)\n\nRegistered S3 method overwritten by 'tsibble':\n  method               from \n  as_tibble.grouped_df dplyr\n\nAttaching package: 'tsibble'\n\nThe following object is masked from 'package:lubridate':\n\n    interval\n\nThe following objects are masked from 'package:base':\n\n    intersect, setdiff, union\n\nlibrary(modeltime)\nlibrary(plotly)\n\n\nAttaching package: 'plotly'\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\nThe following object is masked from 'package:stats':\n\n    filter\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\nlibrary(feasts)\n\nLoading required package: fabletools\n\nAttaching package: 'fabletools'\n\nThe following object is masked from 'package:yardstick':\n\n    accuracy\n\nThe following object is masked from 'package:parsnip':\n\n    null_model\n\nThe following objects are masked from 'package:infer':\n\n    generate, hypothesize\n\nlibrary(timetk)\nIn this lab, you will download streamflow data from the Cache la Poudre River (USGS site 06752260) and analyze it using a few time series methods. You will then use modeltime to\nFirst, use this code to download the data from the USGS site.\n# Example: Cache la Poudre River at Mouth (USGS site 06752260)\npoudre_flow &lt;- readNWISdv(siteNumber = \"06752260\",    # Download data from USGS for site 06752260\n                          parameterCd = \"00060\",      # Parameter code 00060 = discharge in cfs)\n                          startDate = \"2013-01-01\",   # Set the start date\n                          endDate = \"2023-12-31\") |&gt;  # Set the end date\n  renameNWISColumns() |&gt;                              # Rename columns to standard names (e.g., \"Flow\", \"Date\")\n  mutate(Date = yearmonth(Date)) |&gt;                   # Convert daily Date values into a year-month format (e.g., \"2023 Jan\")\n  group_by(Date) |&gt;                                   # Group the data by the new monthly Date\n  summarise(Flow = mean(Flow))                       # Calculate the average daily flow for each month\n\nGET:https://waterservices.usgs.gov/nwis/dv/?site=06752260&format=waterml%2C1.1&ParameterCd=00060&StatCd=00003&startDT=2013-01-01&endDT=2023-12-31"
+  },
+  {
+    "objectID": "labs/lab6.html#predict",
+    "href": "labs/lab6.html#predict",
+    "title": "Lab 6: Timeseries Data",
+    "section": "5. Predict",
+    "text": "5. Predict\n\nUse modeltime to forecast the next 12 months of streamflow data in the Poudre River based on last time assignment.\nUse the prophet_reg(), and arima_reg() function to create a Prophet model for forecasting.\nUse dataRetrieval to download daily streamflow for the next 12 months. Aggregate this data to monthly averages and compare it to the predictions made by your modeltime model.\nCompute the R2 value between the model predictions and the observed data using a linear model and report the meaning.\nLast, generate a plot of the Predicted vs Observed values and include a 1:1 line, and a linear model line.\n\n\n\npf_tbl &lt;-  pf |&gt;\n  as_tibble() |&gt;\n  mutate(date = as.Date(Date), Date = NULL) \n\nsplits &lt;- time_series_split(pf_tbl, \n                            assess = \"60 months\", \n                            cumulative = TRUE)\n\nUsing date_var: date\n\ntraining &lt;-  training(splits)\ntesting  &lt;-  testing(splits)\n\nmods &lt;- list(\n  arima_reg() |&gt;  set_engine(\"auto_arima\"),\n  \n  arima_boost() |&gt; set_engine(engine = \"auto_arima_xgboost\"),\n  \n  prophet_reg() |&gt; set_engine(\"prophet\"),\n  \n  prophet_boost() |&gt; set_engine(\"prophet_xgboost\"),\n  \n  # Exponential Smoothing State Space model\n  exp_smoothing() |&gt; set_engine(engine = \"ets\"),\n  \n  # Multivariate Adaptive Regression Spline model\n  mars(mode = \"regression\") |&gt; set_engine(\"earth\") \n)\n\nmodels &lt;- map(mods, ~ fit(.x, Flow ~ date + factor(month(date, label = TRUE), ordered = F), data = training))\n\nfrequency = 12 observations per 1 year\n\n\nfrequency = 12 observations per 1 year\n\n\nDisabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.\n\n\nDisabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.\n\n\nDisabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.\n\n\nDisabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.\n\n\nfrequency = 12 observations per 1 year\n\n\n\nAttaching package: 'plotrix'\n\n\nThe following object is masked from 'package:scales':\n\n    rescale\n\n(models_tbl &lt;- as_modeltime_table(models))\n\n# Modeltime Table\n# A tibble: 6 × 3\n  .model_id .model   .model_desc                              \n      &lt;int&gt; &lt;list&gt;   &lt;chr&gt;                                    \n1         1 &lt;fit[+]&gt; REGRESSION WITH ARIMA(1,0,0) ERRORS      \n2         2 &lt;fit[+]&gt; ARIMA(1,0,0)(0,1,0)[12] W/ XGBOOST ERRORS\n3         3 &lt;fit[+]&gt; PROPHET W/ REGRESSORS                    \n4         4 &lt;fit[+]&gt; PROPHET W/ XGBOOST ERRORS                \n5         5 &lt;fit[+]&gt; ETS(M,A,M)                               \n6         6 &lt;fit[+]&gt; EARTH                                    \n\n(calibration_table &lt;- modeltime_calibrate(models_tbl, testing, quiet = FALSE))\n\n# Modeltime Table\n# A tibble: 6 × 5\n  .model_id .model   .model_desc                         .type .calibration_data\n      &lt;int&gt; &lt;list&gt;   &lt;chr&gt;                               &lt;chr&gt; &lt;list&gt;           \n1         1 &lt;fit[+]&gt; REGRESSION WITH ARIMA(1,0,0) ERRORS Test  &lt;tibble [60 × 4]&gt;\n2         2 &lt;fit[+]&gt; ARIMA(1,0,0)(0,1,0)[12] W/ XGBOOST… Test  &lt;tibble [60 × 4]&gt;\n3         3 &lt;fit[+]&gt; PROPHET W/ REGRESSORS               Test  &lt;tibble [60 × 4]&gt;\n4         4 &lt;fit[+]&gt; PROPHET W/ XGBOOST ERRORS           Test  &lt;tibble [60 × 4]&gt;\n5         5 &lt;fit[+]&gt; ETS(M,A,M)                          Test  &lt;tibble [60 × 4]&gt;\n6         6 &lt;fit[+]&gt; EARTH                               Test  &lt;tibble [60 × 4]&gt;\n\n\n\nmodeltime_accuracy(calibration_table) |&gt; \n  arrange(mae)\n\n# A tibble: 6 × 9\n  .model_id .model_desc                .type   mae  mape  mase smape  rmse   rsq\n      &lt;int&gt; &lt;chr&gt;                      &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1         2 ARIMA(1,0,0)(0,1,0)[12] W… Test   115.  143. 0.734  94.0  227. 0.406\n2         1 REGRESSION WITH ARIMA(1,0… Test   155.  230. 0.986  87.5  286. 0.628\n3         3 PROPHET W/ REGRESSORS      Test   170.  299. 1.08  155.   277. 0.662\n4         4 PROPHET W/ XGBOOST ERRORS  Test   180.  326. 1.14  150.   270. 0.645\n5         6 EARTH                      Test   392. 1218. 2.50  177.   430. 0.510\n6         5 ETS(M,A,M)                 Test   509.  992. 3.25  125.   932. 0.485\n\n\n\n(forecast &lt;- calibration_table  |&gt; \n  modeltime_forecast(h = \"60 months\", \n                     new_data = testing,\n                     actual_data = pf_tbl) )\n\n# Forecast Results\n  \n\n\nConf Method: conformal_default | Conf Interval: 0.95 | Conf By ID: FALSE\n(GLOBAL CONFIDENCE)\n\n\n# A tibble: 492 × 7\n   .model_id .model_desc .key   .index      .value .conf_lo .conf_hi\n       &lt;int&gt; &lt;chr&gt;       &lt;fct&gt;  &lt;date&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n 1        NA ACTUAL      actual 2013-01-01   18.1        NA       NA\n 2        NA ACTUAL      actual 2013-02-01   18.0        NA       NA\n 3        NA ACTUAL      actual 2013-03-01    8.21       NA       NA\n 4        NA ACTUAL      actual 2013-04-01    5.94       NA       NA\n 5        NA ACTUAL      actual 2013-05-01  333.         NA       NA\n 6        NA ACTUAL      actual 2013-06-01  300.         NA       NA\n 7        NA ACTUAL      actual 2013-07-01   75.6        NA       NA\n 8        NA ACTUAL      actual 2013-08-01   48.8        NA       NA\n 9        NA ACTUAL      actual 2013-09-01 1085.         NA       NA\n10        NA ACTUAL      actual 2013-10-01  146.         NA       NA\n# ℹ 482 more rows"
+  },
+  {
+    "objectID": "labs/lab6.html#vizualize",
+    "href": "labs/lab6.html#vizualize",
+    "title": "Lab 6: Timeseries Data",
+    "section": "Vizualize",
+    "text": "Vizualize\n\nplot_modeltime_forecast(forecast)"
+  },
+  {
+    "objectID": "labs/lab6.html#refit-to-full-dataset-forecast-forward",
+    "href": "labs/lab6.html#refit-to-full-dataset-forecast-forward",
+    "title": "Lab 6: Timeseries Data",
+    "section": "Refit to Full Dataset & Forecast Forward",
+    "text": "Refit to Full Dataset & Forecast Forward\nThe final step is to refit the models to the full dataset using modeltime_refit() and forecast them forward.\n\nrefit_tbl &lt;-  modeltime_refit(calibration_table, data = pf_tbl)\n\nfrequency = 12 observations per 1 year\nfrequency = 12 observations per 1 year\n\n\nDisabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.\n\n\nDisabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.\n\n\nDisabling weekly seasonality. Run prophet with weekly.seasonality=TRUE to override this.\n\n\nDisabling daily seasonality. Run prophet with daily.seasonality=TRUE to override this.\n\n\nfrequency = 12 observations per 1 year\n\nmodeltime_accuracy(refit_tbl)\n\n# A tibble: 6 × 9\n  .model_id .model_desc                .type   mae  mape  mase smape  rmse   rsq\n      &lt;int&gt; &lt;chr&gt;                      &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1         1 UPDATE: REGRESSION WITH A… Test   155.  230. 0.986  87.5  286. 0.628\n2         2 UPDATE: ARIMA(0,0,2)(0,1,… Test   115.  143. 0.734  94.0  227. 0.406\n3         3 PROPHET W/ REGRESSORS      Test   170.  299. 1.08  155.   277. 0.662\n4         4 PROPHET W/ XGBOOST ERRORS  Test   180.  326. 1.14  150.   270. 0.645\n5         5 UPDATE: ETS(M,N,M)         Test   509.  992. 3.25  125.   932. 0.485\n6         6 EARTH                      Test   392. 1218. 2.50  177.   430. 0.510\n\nrefit_tbl |&gt;\n    modeltime_forecast(h = \"10 years\", actual_data = pf_tbl) |&gt;\n    plot_modeltime_forecast()"
+  },
+  {
+    "objectID": "slides/week-7.html#learning-objectives",
+    "href": "slides/week-7.html#learning-objectives",
+    "title": "Week 7",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\nBy the end of this lecture, you should be able to:\n\nUnderstand what time series data is and why it’s useful\nWork with date and time objects in R\nLoad and visualize time series data in R\nApply basic time series operations: decomposition, smoothing, and forecasting\nUse ts, zoo, and xts objects for time-indexed data\nUnderstand tidy approaches using tsibble and feasts\nRecognize real-world environmental science applications of time series"
+  },
+  {
+    "objectID": "slides/week-7.html#what-is-time-series-data",
+    "href": "slides/week-7.html#what-is-time-series-data",
+    "title": "Week 7",
+    "section": "What is Time Series Data?",
+    "text": "What is Time Series Data?\nTime series data is a collection of observations recorded sequentially over time. Unlike other data types, time series data is ordered, and that order carries critical information.\nExamples:\n\nStreamflow measurements (e.g., daily CFS at a USGS gage)\nAtmospheric CO₂ levels (e.g., Mauna Loa Observatory)\nSnowpack depth over time\nUrban water consumption by month\n\nWhy Time Series Matter\nTime series analysis helps us:\n\nUnderstand trends and patterns\nDetect anomalies (e.g., droughts, sensor failures)\nForecast future values (e.g., streamflow, temperature)"
+  },
+  {
+    "objectID": "slides/week-7.html#working-with-date-objects-in-r",
+    "href": "slides/week-7.html#working-with-date-objects-in-r",
+    "title": "Week 7",
+    "section": "Working with Date Objects in R",
+    "text": "Working with Date Objects in R\n\nTime series analysis depends on accurate and well-formatted date/time information.\nBefore we can analyis time series data, we need to understand how R handles dates and times.\nR has built-in classes for date and time objects, which are essential for time series analysis."
+  },
+  {
+    "objectID": "slides/week-7.html#base-r-date-functions",
+    "href": "slides/week-7.html#base-r-date-functions",
+    "title": "Week 7",
+    "section": "Base R Date Functions",
+    "text": "Base R Date Functions\nR has several native classes for handling dates and times:\n\nDate: Date object\n\n\nas.Date(\"2024-04-08\")\n#&gt; [1] \"2024-04-08\"\n\n\nPOSIXct: Date and time\n\n\nas.POSIXct(\"2024-04-08 14:30:00\")\n#&gt; [1] \"2024-04-08 14:30:00 MDT\"\n\n\nPOSIXlt: List of date and time components\n\n\n(lt &lt;- as.POSIXlt(\"2024-04-08 14:30:00\"))\n#&gt; [1] \"2024-04-08 14:30:00 MDT\"\n\nlt$hour\n#&gt; [1] 14"
+  },
+  {
+    "objectID": "slides/week-7.html#date-sequences",
+    "href": "slides/week-7.html#date-sequences",
+    "title": "Week 7",
+    "section": "Date Sequences",
+    "text": "Date Sequences\nYou can create sequences of dates using the seq.Date() function:\n\nfrom: Start date\nto: End date (optional)\nby: Interval (e.g., “day”, “month”, “year”)\nlength.out: Number of dates to generate\n\n\nseq.Date(from = as.Date(\"2024-01-01\"), by = \"month\", length.out = 12)\n#&gt;  [1] \"2024-01-01\" \"2024-02-01\" \"2024-03-01\" \"2024-04-01\" \"2024-05-01\"\n#&gt;  [6] \"2024-06-01\" \"2024-07-01\" \"2024-08-01\" \"2024-09-01\" \"2024-10-01\"\n#&gt; [11] \"2024-11-01\" \"2024-12-01\""
+  },
+  {
+    "objectID": "slides/week-7.html#section",
+    "href": "slides/week-7.html#section",
+    "title": "Week 7",
+    "section": "",
+    "text": "You can also use seq() to create sequences of POSIXct/lt objects:\n\nfrom: Start date/time\nto: End date/time (optional)\nby: Interval (e.g., “hour”, “minute”, “second”)\nlength.out: Number of dates to generate\n\n\nseq(from = as.POSIXct(\"2024-01-01 00:00\"), \n    to = as.POSIXct(\"2024-01-02 00:00\"), \n    by = \"hour\")\n#&gt;  [1] \"2024-01-01 00:00:00 MST\" \"2024-01-01 01:00:00 MST\"\n#&gt;  [3] \"2024-01-01 02:00:00 MST\" \"2024-01-01 03:00:00 MST\"\n#&gt;  [5] \"2024-01-01 04:00:00 MST\" \"2024-01-01 05:00:00 MST\"\n#&gt;  [7] \"2024-01-01 06:00:00 MST\" \"2024-01-01 07:00:00 MST\"\n#&gt;  [9] \"2024-01-01 08:00:00 MST\" \"2024-01-01 09:00:00 MST\"\n#&gt; [11] \"2024-01-01 10:00:00 MST\" \"2024-01-01 11:00:00 MST\"\n#&gt; [13] \"2024-01-01 12:00:00 MST\" \"2024-01-01 13:00:00 MST\"\n#&gt; [15] \"2024-01-01 14:00:00 MST\" \"2024-01-01 15:00:00 MST\"\n#&gt; [17] \"2024-01-01 16:00:00 MST\" \"2024-01-01 17:00:00 MST\"\n#&gt; [19] \"2024-01-01 18:00:00 MST\" \"2024-01-01 19:00:00 MST\"\n#&gt; [21] \"2024-01-01 20:00:00 MST\" \"2024-01-01 21:00:00 MST\"\n#&gt; [23] \"2024-01-01 22:00:00 MST\" \"2024-01-01 23:00:00 MST\"\n#&gt; [25] \"2024-01-02 00:00:00 MST\""
+  },
+  {
+    "objectID": "slides/week-7.html#timezones",
+    "href": "slides/week-7.html#timezones",
+    "title": "Week 7",
+    "section": "Timezones",
+    "text": "Timezones\n\nBy default, R uses the system’s timezone.\nThe Sys.timezone() function returns the current timezone.\nIf you want to use anthor timezone, say GMT/UTC, you can change it:\n\n\nSys.timezone()\n#&gt; [1] \"America/Denver\"\n\nas.POSIXct(\"2024-04-08 14:30:00\", tz = \"GMT\")\n#&gt; [1] \"2024-04-08 14:30:00 GMT\"\n\n(obj = as.POSIXct(\"2024-04-08 14:30:00\"))\n#&gt; [1] \"2024-04-08 14:30:00 MDT\"\n\nformat(obj, tz = \"EST\")\n#&gt; [1] \"2024-04-08 15:30:00\""
+  },
+  {
+    "objectID": "slides/week-7.html#lubridate-package",
+    "href": "slides/week-7.html#lubridate-package",
+    "title": "Week 7",
+    "section": "lubridate Package ",
+    "text": "lubridate Package \n\nThe lubridate package comes with the tidyverse and is designed to make working with dates and times easier.\nIt provides a consistent set of functions for parsing, manipulating, and formatting date-time objects.\n\n\nlibrary(lubridate)\nymd(\"20240408\")        # Parse date\n#&gt; [1] \"2024-04-08\"\nymd_hms(\"20240408 123000\")\n#&gt; [1] \"2024-04-08 12:30:00 UTC\"\n\nnow()                  # Current date and time\n#&gt; [1] \"2025-05-04 23:26:49 MDT\"\ndate &lt;- ymd(\"2023-12-01\")\nmonth(date)           # Extract month\n#&gt; [1] 12\nday(date)\n#&gt; [1] 1\nweek(date)\n#&gt; [1] 48\n\nUse lubridate to handle inconsistent formats and to align data with time zones, daylight savings, etc."
+  },
+  {
+    "objectID": "slides/week-7.html#lubridate-timezones",
+    "href": "slides/week-7.html#lubridate-timezones",
+    "title": "Week 7",
+    "section": "lubridate timezones ",
+    "text": "lubridate timezones \nlubridate also provides functions for working with time zones. You can convert between time zones using with_tz() and force_tz().\n\n(date &lt;- ymd_hms(\"2024-04-08 14:30:00\", tz = \"America/New_York\"))\n#&gt; [1] \"2024-04-08 14:30:00 EDT\"\n\n# Change time zone without changing time\nforce_tz(date, \"America/Los_Angeles\")  \n#&gt; [1] \"2024-04-08 14:30:00 PDT\"\n\n# Convert to another timezone\nwith_tz(date, \"America/Los_Angeles\")  \n#&gt; [1] \"2024-04-08 11:30:00 PDT\""
+  },
+  {
+    "objectID": "slides/week-7.html#r-packages-for-time-series",
+    "href": "slides/week-7.html#r-packages-for-time-series",
+    "title": "Week 7",
+    "section": "R Packages for Time Series",
+    "text": "R Packages for Time Series\nR has several packages/systme for time series analysis, including:\n\nts: Base R time series class\nzoo: Provides a flexible class for ordered observations\nxts: Extensible time series class for irregularly spaced data\nforecast: Functions for forecasting time series data\ntsibble: Tidy time series data frames\nfeasts: Functions for time series analysis and visualization\nmodeltime: Time series modeling with tidymodels\n\n\nlibrary(tidyverse)\nlibrary(zoo)\nlibrary(tsibble)\nlibrary(feasts)"
+  },
+  {
+    "objectID": "slides/week-7.html#when-to-use-which-time-series-format",
+    "href": "slides/week-7.html#when-to-use-which-time-series-format",
+    "title": "Week 7",
+    "section": "When to Use Which Time Series Format?",
+    "text": "When to Use Which Time Series Format?\n\n\n\n\n\n\n\n\n\nFormat\nBest For\nAdvantages\nLimitations\n\n\n\n\nts\nRegular, simple time series\nBuilt into base R, supported by forecast\nRigid time format, inflexible for joins\n\n\nzoo\nIrregular time steps\nArbitrary index, supports irregular data\nMore complex syntax\n\n\nxts\nFinancial-style or irregular data\nGood for date-time indexing and joins\nMore complex to visualize\n\n\ntsibble\nTidyverse workflows\nPipes with dplyr, ggplot2, forecasting with fable\nRequires tsibble structure\n\n\ntibble + Date\nGeneral purpose\nFlexible, tidy\nNeeds conversion for time series modeling"
+  },
+  {
+    "objectID": "slides/week-7.html#key-concepts-in-time-series",
+    "href": "slides/week-7.html#key-concepts-in-time-series",
+    "title": "Week 7",
+    "section": "Key Concepts in Time Series",
+    "text": "Key Concepts in Time Series\n\n1. Trend: Long-term increase or decrease in the data\n2. Seasonality: Repeating short-term cycle (e.g., annual snowmelt)\n3. Noise: Random variation\n4. Stationarity: Statistical properties (mean, variance) don’t change over time\n5. Autocorrelation: Correlation of a time series with its own past values"
+  },
+  {
+    "objectID": "slides/week-7.html#introducing-the-mauna-loa-co₂-dataset",
+    "href": "slides/week-7.html#introducing-the-mauna-loa-co₂-dataset",
+    "title": "Week 7",
+    "section": "Introducing the Mauna Loa CO₂ Dataset",
+    "text": "Introducing the Mauna Loa CO₂ Dataset"
+  },
+  {
+    "objectID": "slides/week-7.html#mauna-loa-co₂-dataset",
+    "href": "slides/week-7.html#mauna-loa-co₂-dataset",
+    "title": "Week 7",
+    "section": "Mauna Loa CO₂ Dataset",
+    "text": "Mauna Loa CO₂ Dataset\n\nThe co2 dataset is a classic example of time series data. It contains monthly atmospheric CO₂ concentrations measured at the Mauna Loa Observatory in Hawaii.\nco2 is a built-in dataset representing monthly CO₂ concentrations from 1959 onward.\n\n\nclass(co2)\n#&gt; [1] \"ts\"\nco2\n#&gt;         Jan    Feb    Mar    Apr    May    Jun    Jul    Aug    Sep    Oct\n#&gt; 1959 315.42 316.31 316.50 317.56 318.13 318.00 316.39 314.65 313.68 313.18\n#&gt; 1960 316.27 316.81 317.42 318.87 319.87 319.43 318.01 315.74 314.00 313.68\n#&gt; 1961 316.73 317.54 318.38 319.31 320.42 319.61 318.42 316.63 314.83 315.16\n#&gt; 1962 317.78 318.40 319.53 320.42 320.85 320.45 319.45 317.25 316.11 315.27\n#&gt; 1963 318.58 318.92 319.70 321.22 322.08 321.31 319.58 317.61 316.05 315.83\n#&gt; 1964 319.41 320.07 320.74 321.40 322.06 321.73 320.27 318.54 316.54 316.71\n#&gt; 1965 319.27 320.28 320.73 321.97 322.00 321.71 321.05 318.71 317.66 317.14\n#&gt; 1966 320.46 321.43 322.23 323.54 323.91 323.59 322.24 320.20 318.48 317.94\n#&gt; 1967 322.17 322.34 322.88 324.25 324.83 323.93 322.38 320.76 319.10 319.24\n#&gt; 1968 322.40 322.99 323.73 324.86 325.40 325.20 323.98 321.95 320.18 320.09\n#&gt; 1969 323.83 324.26 325.47 326.50 327.21 326.54 325.72 323.50 322.22 321.62\n#&gt; 1970 324.89 325.82 326.77 327.97 327.91 327.50 326.18 324.53 322.93 322.90\n#&gt; 1971 326.01 326.51 327.01 327.62 328.76 328.40 327.20 325.27 323.20 323.40\n#&gt; 1972 326.60 327.47 327.58 329.56 329.90 328.92 327.88 326.16 324.68 325.04\n#&gt; 1973 328.37 329.40 330.14 331.33 332.31 331.90 330.70 329.15 327.35 327.02\n#&gt; 1974 329.18 330.55 331.32 332.48 332.92 332.08 331.01 329.23 327.27 327.21\n#&gt; 1975 330.23 331.25 331.87 333.14 333.80 333.43 331.73 329.90 328.40 328.17\n#&gt; 1976 331.58 332.39 333.33 334.41 334.71 334.17 332.89 330.77 329.14 328.78\n#&gt; 1977 332.75 333.24 334.53 335.90 336.57 336.10 334.76 332.59 331.42 330.98\n#&gt; 1978 334.80 335.22 336.47 337.59 337.84 337.72 336.37 334.51 332.60 332.38\n#&gt; 1979 336.05 336.59 337.79 338.71 339.30 339.12 337.56 335.92 333.75 333.70\n#&gt; 1980 337.84 338.19 339.91 340.60 341.29 341.00 339.39 337.43 335.72 335.84\n#&gt; 1981 339.06 340.30 341.21 342.33 342.74 342.08 340.32 338.26 336.52 336.68\n#&gt; 1982 340.57 341.44 342.53 343.39 343.96 343.18 341.88 339.65 337.81 337.69\n#&gt; 1983 341.20 342.35 342.93 344.77 345.58 345.14 343.81 342.21 339.69 339.82\n#&gt; 1984 343.52 344.33 345.11 346.88 347.25 346.62 345.22 343.11 340.90 341.18\n#&gt; 1985 344.79 345.82 347.25 348.17 348.74 348.07 346.38 344.51 342.92 342.62\n#&gt; 1986 346.11 346.78 347.68 349.37 350.03 349.37 347.76 345.73 344.68 343.99\n#&gt; 1987 347.84 348.29 349.23 350.80 351.66 351.07 349.33 347.92 346.27 346.18\n#&gt; 1988 350.25 351.54 352.05 353.41 354.04 353.62 352.22 350.27 348.55 348.72\n#&gt; 1989 352.60 352.92 353.53 355.26 355.52 354.97 353.75 351.52 349.64 349.83\n#&gt; 1990 353.50 354.55 355.23 356.04 357.00 356.07 354.67 352.76 350.82 351.04\n#&gt; 1991 354.59 355.63 357.03 358.48 359.22 358.12 356.06 353.92 352.05 352.11\n#&gt; 1992 355.88 356.63 357.72 359.07 359.58 359.17 356.94 354.92 352.94 353.23\n#&gt; 1993 356.63 357.10 358.32 359.41 360.23 359.55 357.53 355.48 353.67 353.95\n#&gt; 1994 358.34 358.89 359.95 361.25 361.67 360.94 359.55 357.49 355.84 356.00\n#&gt; 1995 359.98 361.03 361.66 363.48 363.82 363.30 361.94 359.50 358.11 357.80\n#&gt; 1996 362.09 363.29 364.06 364.76 365.45 365.01 363.70 361.54 359.51 359.65\n#&gt; 1997 363.23 364.06 364.61 366.40 366.84 365.68 364.52 362.57 360.24 360.83\n#&gt;         Nov    Dec\n#&gt; 1959 314.66 315.43\n#&gt; 1960 314.84 316.03\n#&gt; 1961 315.94 316.85\n#&gt; 1962 316.53 317.53\n#&gt; 1963 316.91 318.20\n#&gt; 1964 317.53 318.55\n#&gt; 1965 318.70 319.25\n#&gt; 1966 319.63 320.87\n#&gt; 1967 320.56 321.80\n#&gt; 1968 321.16 322.74\n#&gt; 1969 322.69 323.95\n#&gt; 1970 323.85 324.96\n#&gt; 1971 324.63 325.85\n#&gt; 1972 326.34 327.39\n#&gt; 1973 327.99 328.48\n#&gt; 1974 328.29 329.41\n#&gt; 1975 329.32 330.59\n#&gt; 1976 330.14 331.52\n#&gt; 1977 332.24 333.68\n#&gt; 1978 333.75 334.78\n#&gt; 1979 335.12 336.56\n#&gt; 1980 336.93 338.04\n#&gt; 1981 338.19 339.44\n#&gt; 1982 339.09 340.32\n#&gt; 1983 340.98 342.82\n#&gt; 1984 342.80 344.04\n#&gt; 1985 344.06 345.38\n#&gt; 1986 345.48 346.72\n#&gt; 1987 347.64 348.78\n#&gt; 1988 349.91 351.18\n#&gt; 1989 351.14 352.37\n#&gt; 1990 352.69 354.07\n#&gt; 1991 353.64 354.89\n#&gt; 1992 354.09 355.33\n#&gt; 1993 355.30 356.78\n#&gt; 1994 357.59 359.05\n#&gt; 1995 359.61 360.74\n#&gt; 1996 360.80 362.38\n#&gt; 1997 362.49 364.34"
+  },
+  {
+    "objectID": "slides/week-7.html#initial-plot",
+    "href": "slides/week-7.html#initial-plot",
+    "title": "Week 7",
+    "section": "Initial Plot",
+    "text": "Initial Plot\n\nThe co2 dataset is a time series object (ts) with 12 observations per year, starting from January 1959.\nThere is a default plot method for ts objects that we can take advantage of:\n\n\nplot(co2, main = \"Atmospheric CO2 at Mauna Loa\", ylab = \"ppm\")\n\n\nWe see:\n\nAn upward trend\nRegular seasonal oscillations (higher in winter, lower in summer)"
+  },
+  {
+    "objectID": "slides/week-7.html#understanding-ts-objects",
+    "href": "slides/week-7.html#understanding-ts-objects",
+    "title": "Week 7",
+    "section": "Understanding ts Objects",
+    "text": "Understanding ts Objects\nYou can think of ts objects as numeric vectors with time attributes.\n\nts objects are used to represent time series data and are created using the ts() function.\nThey have attributes like start, end, and frequency that define the time index.\nstart and end define the time range of the data.\nfrequency defines the number of observations per unit of time (e.g., 12 for monthly data).\n\n\nclass(co2)    \n#&gt; [1] \"ts\"\nstart(co2)    \n#&gt; [1] 1959    1\nend(co2)      \n#&gt; [1] 1997   12\nfrequency(co2)\n#&gt; [1] 12"
+  },
+  {
+    "objectID": "slides/week-7.html#subsetting-and-plotting",
+    "href": "slides/week-7.html#subsetting-and-plotting",
+    "title": "Week 7",
+    "section": "Subsetting and Plotting",
+    "text": "Subsetting and Plotting\n\nLike vectors, you can subset ts objects using indexing.\nFor example, to extract the first year of data:\n\n\nco2[1:12]  # First year\n#&gt;  [1] 315.42 316.31 316.50 317.56 318.13 318.00 316.39 314.65 313.68 313.18\n#&gt; [11] 314.66 315.43\n\n\n\nOr, a specific range of years:\n\n\nwindow(co2, start = c(1990, 1), end = c(1995, 12))\n#&gt;         Jan    Feb    Mar    Apr    May    Jun    Jul    Aug    Sep    Oct\n#&gt; 1990 353.50 354.55 355.23 356.04 357.00 356.07 354.67 352.76 350.82 351.04\n#&gt; 1991 354.59 355.63 357.03 358.48 359.22 358.12 356.06 353.92 352.05 352.11\n#&gt; 1992 355.88 356.63 357.72 359.07 359.58 359.17 356.94 354.92 352.94 353.23\n#&gt; 1993 356.63 357.10 358.32 359.41 360.23 359.55 357.53 355.48 353.67 353.95\n#&gt; 1994 358.34 358.89 359.95 361.25 361.67 360.94 359.55 357.49 355.84 356.00\n#&gt; 1995 359.98 361.03 361.66 363.48 363.82 363.30 361.94 359.50 358.11 357.80\n#&gt;         Nov    Dec\n#&gt; 1990 352.69 354.07\n#&gt; 1991 353.64 354.89\n#&gt; 1992 354.09 355.33\n#&gt; 1993 355.30 356.78\n#&gt; 1994 357.59 359.05\n#&gt; 1995 359.61 360.74"
+  },
+  {
+    "objectID": "slides/week-7.html#decomposing-a-time-series",
+    "href": "slides/week-7.html#decomposing-a-time-series",
+    "title": "Week 7",
+    "section": "Decomposing a Time Series",
+    "text": "Decomposing a Time Series\n\nDecomposition is a technique to separate a time series into its components: trend, seasonality, and residuals.\nThis helps separate structure from noise.\nIn environmental science, this is useful for:\nRemoving seasonality to study droughts\nAnalyzing long-term trends\nUnderstanding seasonal patterns in streamflow\nIdentifying anomalies in water quality data\nDetecting changes in vegetation phenology\nMonitoring seasonal patterns in temperature\nAnalyzing seasonal patterns in water demand\n…"
+  },
+  {
+    "objectID": "slides/week-7.html#what-is-decomposition",
+    "href": "slides/week-7.html#what-is-decomposition",
+    "title": "Week 7",
+    "section": "What is Decomposition?",
+    "text": "What is Decomposition?\n\nDecomposition separates a time series into interpretable components:\n\n\nTrend: Long-term movement\nSeasonality: Regular, periodic fluctuations\nResidual/Irregular: Random noise or anomalies"
+  },
+  {
+    "objectID": "slides/week-7.html#additive-vs-multiplicative",
+    "href": "slides/week-7.html#additive-vs-multiplicative",
+    "title": "Week 7",
+    "section": "Additive vs Multiplicative",
+    "text": "Additive vs Multiplicative\n\nAdditive model:\n\\[ Y_t = T_t + S_t + R_t \\]\nMultiplicative model:\n\\[ Y_t = T_t \\times S_t \\times R_t \\]\n\n\nUse additive if seasonal variation is roughly constant.\nUse multiplicative if it grows/shrinks with the trend."
+  },
+  {
+    "objectID": "slides/week-7.html#example",
+    "href": "slides/week-7.html#example",
+    "title": "Week 7",
+    "section": "Example",
+    "text": "Example"
+  },
+  {
+    "objectID": "slides/week-7.html#why-decompose",
+    "href": "slides/week-7.html#why-decompose",
+    "title": "Week 7",
+    "section": "Why Decompose?",
+    "text": "Why Decompose?\n\nTrend: Are CO₂ levels increasing?\nSeasonality: Are there predictable cycles each year?\nRemainder: What’s left after we remove trend and season? (what is the randomness?)"
+  },
+  {
+    "objectID": "slides/week-7.html#decompostion-in-r",
+    "href": "slides/week-7.html#decompostion-in-r",
+    "title": "Week 7",
+    "section": "Decompostion in R",
+    "text": "Decompostion in R\n\nThe decompose() function in R can be used to perform this operation.\nThe decompose() function by default assumes that the time series is additive\n\n\ndecomp = decompose(co2, type = \"additive\")\nplot(decomp)"
+  },
+  {
+    "objectID": "slides/week-7.html#deep-dive-trend-component",
+    "href": "slides/week-7.html#deep-dive-trend-component",
+    "title": "Week 7",
+    "section": "Deep Dive: Trend Component",
+    "text": "Deep Dive: Trend Component\n\n\n\nplot(decomp$trend, main = \"Trend Component of CO₂\", ylab = \"ppm\", col = \"darkred\", lwd = 2)\n\n\n\n\n\n\n\n\n\n\nSteady upward slope from ~316 ppm in 1959 to ~365 ppm in the late 1990s\nCaptures the long-term forcing from human activity:\n\nFossil fuel combustion\nDeforestation\n\nThis trend underpins climate change science — known as the Keeling Curve\nNotice how the trend smooths short-term fluctuations"
+  },
+  {
+    "objectID": "slides/week-7.html#interpreting-the-trend",
+    "href": "slides/week-7.html#interpreting-the-trend",
+    "title": "Week 7",
+    "section": "Interpreting the Trend",
+    "text": "Interpreting the Trend\n\nA linear model or loess smoother can also help quantify the trend:\n\n\n\n\nco2_df &lt;- data.frame(time = time(co2), co2 = as.numeric(co2))\n\nlm(as.numeric(co2) ~ time(co2)) |&gt; \n  summary()\n#&gt; \n#&gt; Call:\n#&gt; lm(formula = as.numeric(co2) ~ time(co2))\n#&gt; \n#&gt; Residuals:\n#&gt;     Min      1Q  Median      3Q     Max \n#&gt; -6.0399 -1.9476 -0.0017  1.9113  6.5149 \n#&gt; \n#&gt; Coefficients:\n#&gt;               Estimate Std. Error t value Pr(&gt;|t|)    \n#&gt; (Intercept) -2.250e+03  2.127e+01  -105.8   &lt;2e-16 ***\n#&gt; time(co2)    1.308e+00  1.075e-02   121.6   &lt;2e-16 ***\n#&gt; ---\n#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n#&gt; \n#&gt; Residual standard error: 2.618 on 466 degrees of freedom\n#&gt; Multiple R-squared:  0.9695, Adjusted R-squared:  0.9694 \n#&gt; F-statistic: 1.479e+04 on 1 and 466 DF,  p-value: &lt; 2.2e-16\n\n\n\nco2_df |&gt;\n  ggplot(aes(x = time, y = co2)) +\n  geom_line(alpha = 0.5) +\n  geom_smooth(method = \"loess\", span = 0.2, color = \"red\", se = FALSE) +\n  labs(title = \"CO₂ Trend with Loess Smoothing\", y = \"ppm\")\n\n\n\n\n\n\n\n\n\nDo you see acceleration in the rise over time?"
+  },
+  {
+    "objectID": "slides/week-7.html#de-trending",
+    "href": "slides/week-7.html#de-trending",
+    "title": "Week 7",
+    "section": "De-Trending",
+    "text": "De-Trending\n\nDetrending is the process of removing the trend component from a time series.\nThis can help for modeling the trend + residual only:\n\n\ndeseasonalized &lt;- co2 - decomp$trend\nplot(deseasonalized, main = \"De-trended Series\")"
+  },
+  {
+    "objectID": "slides/week-7.html#deep-dive-seasonal-component",
+    "href": "slides/week-7.html#deep-dive-seasonal-component",
+    "title": "Week 7",
+    "section": "Deep Dive: Seasonal Component",
+    "text": "Deep Dive: Seasonal Component\n\n\n\nplot(decomp$seasonal, main = \"Seasonal Component of CO₂\", \n     ylab = \"ppm\", col = \"darkgreen\", lwd = 2)\n\n\n\n\n\n\n\n\n\n\nRepeats every 12 months\nPeaks around May, drops in September–October\nDriven by biospheric fluxes:\n\nPhotosynthesis during spring/summer → CO₂ drawdown\nDecomposition and respiration in winter → CO₂ release\n\nSeasonal Cycle is Northern Hemisphere-Dominated (Mauna Loa is in the Northern Hemisphere)\nNorthern Hemisphere contains more landmass and vegetation\nSo its biosphere exerts a stronger influence on global CO₂ than the Southern Hemisphere\nThis explains the pronounced seasonal cycle in the signal"
+  },
+  {
+    "objectID": "slides/week-7.html#de-seasonalizing",
+    "href": "slides/week-7.html#de-seasonalizing",
+    "title": "Week 7",
+    "section": "De-seasonalizing",
+    "text": "De-seasonalizing\nThis can help for modeling the seasonal + residual only:\n\ndeseasonalized &lt;- co2 - decomp$seasonal\nplot(deseasonalized, main = \"De-seasonalized Series\")"
+  },
+  {
+    "objectID": "slides/week-7.html#deep-dive-remainder-component",
+    "href": "slides/week-7.html#deep-dive-remainder-component",
+    "title": "Week 7",
+    "section": "Deep Dive: Remainder Component",
+    "text": "Deep Dive: Remainder Component\n\n\n\nplot(decomp$random, main = \"Remainder Component (Residuals)\", \n     ylab = \"ppm\", col = \"gray40\", lwd = 1)\n\n\n\n\n\n\n\n\n\n\nResiduals are the “leftover” part of the time series after removing trend and seasonality\nContains irregular, short-term fluctuations\nCan be used to identify anomalies or outliers\nImportant for understanding noise in the data\nPossible sources:\n\nVolcanic activity (e.g. El Chichón, Mt. Pinatubo)\nMeasurement error\nEl Niño/La Niña events (which affect carbon flux)\n\nTypically small amplitude: ±0.2 ppm"
+  },
+  {
+    "objectID": "slides/week-7.html#asssessing-patterns-in-error",
+    "href": "slides/week-7.html#asssessing-patterns-in-error",
+    "title": "Week 7",
+    "section": "Asssessing Patterns in Error?",
+    "text": "Asssessing Patterns in Error?\nYou might compute the standard deviation of the residuals to assess noise:\n\nsd(na.omit(decomp$random))\n#&gt; [1] 0.2651064\n\n\nOr evaluate the residules like we did for Linear Modeling!\n\nggpubr::ggdensity(decomp$random, main = \"Residuals Histogram\", xlab = \"Residuals\")"
+  },
+  {
+    "objectID": "slides/week-7.html#smoothing-to-remove-noise",
+    "href": "slides/week-7.html#smoothing-to-remove-noise",
+    "title": "Week 7",
+    "section": "Smoothing to Remove Noise",
+    "text": "Smoothing to Remove Noise\nIf your data is noisy - and without usefull pattern - you can use a moving average to smooth it out.\n\n\n\n\nThe zoo package provides a convenient function for this that we have already seen in the COVID lab.\nThe rollmean() function from the zoo package is useful for this.\nThe k parameter specifies the window size for the moving average.\nThe align parameter specifies how to align the moving average with the original data (e.g., “center”, “left”, “right”).\nThe na.pad parameter specifies whether to pad the result with NA values.\n\n\n\nco2_smooth &lt;- zoo::rollmean(co2, k = 12, align = \"center\", na.pad = TRUE)\n\nplot(co2, col = \"grey\", main = \"12-Month Moving Average\")\nlines(co2_smooth, col = \"blue\", lwd = 2)"
+  },
+  {
+    "objectID": "slides/week-7.html#stl-decomposition-loess-based",
+    "href": "slides/week-7.html#stl-decomposition-loess-based",
+    "title": "Week 7",
+    "section": "STL Decomposition (Loess-based)",
+    "text": "STL Decomposition (Loess-based)\n\nSTL (Seasonal-Trend decomposition using Loess) adapts to changing trend or seasonality over time\nDoesn’t assume constant seasonal effect like decompose() does\nParticularly valuable when working with:\n\nLong datasets\nEnvironmental time series affected by nonlinear changes"
+  },
+  {
+    "objectID": "slides/week-7.html#stl-decomposition-loess-based-1",
+    "href": "slides/week-7.html#stl-decomposition-loess-based-1",
+    "title": "Week 7",
+    "section": "STL Decomposition (Loess-based)",
+    "text": "STL Decomposition (Loess-based)\n\nstl() uses local regression (loess) to estimate the trend and seasonal components.\ns.window = \"periodic\" specifies that the seasonal component is periodic.\nOther options include\n\n“none” (no seasonal component)\nor a numeric value for the seasonal window size.\n\n\n\n\n\nplot(decomp)\n\n\n\n\n\n\n\n\n\n\n?stl(co2, s.window = \"periodic\") |&gt;  \n  plot()\n#&gt; Help on topic 'plot' was found in the following packages:\n#&gt; \n#&gt;   Package               Library\n#&gt;   graphics              /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library\n#&gt;   base                  /Library/Frameworks/R.framework/Resources/library\n#&gt; \n#&gt; \n#&gt; Using the first match ..."
+  },
+  {
+    "objectID": "slides/week-7.html#comparing-classical-vs-stl",
+    "href": "slides/week-7.html#comparing-classical-vs-stl",
+    "title": "Week 7",
+    "section": "Comparing Classical vs STL",
+    "text": "Comparing Classical vs STL\n\n\n\n\n\n\n\n\n\nMethod\nAssumes Constant Season?\nRobust to Outliers?\nAdaptive Smoothing?\n\n\n\n\ndecompose\n✅ Yes\n❌ No\n❌ No\n\n\nstl\n✅ or 🔄 (customizable)\n✅ Yes\n✅ Yes\n\n\n\n\nRecommendation: Use stl() for most real-world environmental time series."
+  },
+  {
+    "objectID": "slides/week-7.html#bringing-it-all-together",
+    "href": "slides/week-7.html#bringing-it-all-together",
+    "title": "Week 7",
+    "section": "Bringing It All Together",
+    "text": "Bringing It All Together\nFor the CO2 dataset, we can summarize the components of the time series:\n\nTrend: A human fingerprint — atmospheric CO₂ continues to rise year over year\nSeasonality: Driven by biospheric rhythms with not multiplicative gains\nRemainder: Small, but potentially rich with short-term signals\n\nUnderstanding these components lets us:\n\n✅ Track long-term progress\n\n✅ Forecast future CO₂\n\n✅ Communicate patterns clearly to policymakers"
+  },
+  {
+    "objectID": "slides/week-7.html#time-series-in-the-tidyverse-tsibble-feasts",
+    "href": "slides/week-7.html#time-series-in-the-tidyverse-tsibble-feasts",
+    "title": "Week 7",
+    "section": "Time Series in the Tidyverse: tsibble / feasts",
+    "text": "Time Series in the Tidyverse: tsibble / feasts\n\ntsibble is a tidy data frame for time series data. It extends the tibble class to include time series attributes.\nCompatible with dplyr, ggplot2\nfeasts provides functions for time series analysis and visualization.\n\n\nco2_tbl &lt;- as_tsibble(co2)\nhead(co2_tbl)\n#&gt; # A tsibble: 6 x 2 [1M]\n#&gt;      index value\n#&gt;      &lt;mth&gt; &lt;dbl&gt;\n#&gt; 1 1959 Jan  315.\n#&gt; 2 1959 Feb  316.\n#&gt; 3 1959 Mar  316.\n#&gt; 4 1959 Apr  318.\n#&gt; 5 1959 May  318.\n#&gt; 6 1959 Jun  318"
+  },
+  {
+    "objectID": "slides/week-7.html#decomposing-with-feasts",
+    "href": "slides/week-7.html#decomposing-with-feasts",
+    "title": "Week 7",
+    "section": "Decomposing with feasts",
+    "text": "Decomposing with feasts\nfeasts provides:\n\na STL() function for seasonal decomposition.\ncomponents() extracts the components of the decomposition.\ngg_season() and gg_subseries() visualize seasonal patterns.\ngg_lag() visualizes autocorrelation and lagged relationships.\n\n\nco2_decomp &lt;- co2_tbl |&gt;\n  model(STL(value ~ season(window = \"periodic\"))) |&gt;\n  components()\n\nglimpse(co2_decomp)\n#&gt; Rows: 468\n#&gt; Columns: 7\n#&gt; Key: .model [1]\n#&gt; : value = trend + season_year + remainder\n#&gt; $ .model        &lt;chr&gt; \"STL(value ~ season(window = \\\"periodic\\\"))\", \"STL(value…\n#&gt; $ index         &lt;mth&gt; 1959 Jan, 1959 Feb, 1959 Mar, 1959 Apr, 1959 May, 1959 J…\n#&gt; $ value         &lt;dbl&gt; 315.42, 316.31, 316.50, 317.56, 318.13, 318.00, 316.39, …\n#&gt; $ trend         &lt;dbl&gt; 315.1954, 315.3023, 315.4093, 315.5147, 315.6201, 315.71…\n#&gt; $ season_year   &lt;dbl&gt; -0.06100103, 0.59463870, 1.32899651, 2.46904706, 2.95704…\n#&gt; $ remainder     &lt;dbl&gt; 0.28564410, 0.41305456, -0.23825306, -0.42371128, -0.447…\n#&gt; $ season_adjust &lt;dbl&gt; 315.4810, 315.7154, 315.1710, 315.0910, 315.1730, 315.68…"
+  },
+  {
+    "objectID": "slides/week-7.html#component-access",
+    "href": "slides/week-7.html#component-access",
+    "title": "Week 7",
+    "section": "Component Access",
+    "text": "Component Access\n\n\nAutoplot\n\nautoplot(co2_decomp) +\n  labs(title = \"STL Decomposition of CO₂\", y = \"ppm\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nComponent Access\n\nggpubr::ggdensity(co2_decomp$remainder, main = \"Residual Component\")\n\n\n\n\n\n\n\nshapiro.test(co2_decomp$remainder)\n#&gt; \n#&gt;  Shapiro-Wilk normality test\n#&gt; \n#&gt; data:  co2_decomp$remainder\n#&gt; W = 0.99485, p-value = 0.1202"
+  },
+  {
+    "objectID": "slides/week-7.html#advanced-visualizationmodeling-with-feasts",
+    "href": "slides/week-7.html#advanced-visualizationmodeling-with-feasts",
+    "title": "Week 7",
+    "section": "Advanced Visualization/Modeling with feasts",
+    "text": "Advanced Visualization/Modeling with feasts"
+  },
+  {
+    "objectID": "slides/week-7.html#gg_lag",
+    "href": "slides/week-7.html#gg_lag",
+    "title": "Week 7",
+    "section": "gg_lag()",
+    "text": "gg_lag()\n\nA lag plot is a scatterplot of a time series against itself, but with a time shift (or “lag”) applied to one of the series.\nIt helps us visualize the relationship between current and past values of a time series.\n\n📦 Here’s the simple idea:\n\n\nYou take your CO₂ measurements over time.\n\nThen you make a graph where you plot today’s CO₂ (on the Y-axis)…\n\n…against CO₂ from a few months ago (on the X-axis).\n\nThis shows you if the past helps predict the present!\n\n\n📊 If it makes a curvy shape or a line…\n\n\n…that means there’s a pattern! Your data remembers what happened before — like a smart friend who learns from their past.\n\nBut if the dots look like a big messy spaghetti mess that means the data is random, with no memory of what happened before."
+  },
+  {
+    "objectID": "slides/week-7.html#gg_lag-1",
+    "href": "slides/week-7.html#gg_lag-1",
+    "title": "Week 7",
+    "section": "gg_lag()",
+    "text": "gg_lag()\n🧠 Why this is useful:\n\n\nIt helps us see if there are patterns in the data.\n\nIt helps us understand how past values affect current values.\n\nIt helps us decide if we can use this data to make predictions in the future.\n\n\n\nco2_tbl |&gt; \n  gg_lag() +\n  labs(title = \"Lag Plot of CO₂\", x = \"Lagged CO₂\", y = \"Current CO₂\") +\n  theme_minimal()"
+  },
+  {
+    "objectID": "slides/week-7.html#gg_subseries",
+    "href": "slides/week-7.html#gg_subseries",
+    "title": "Week 7",
+    "section": "gg_subseries",
+    "text": "gg_subseries\n\nImagine the co2 dataset as a big collection of monthly CO₂ data from Mauna Loa. Each month is a group, and each year is a new object\nNow, we want to see how each month behaves across the years, so we can spot if January always has higher or lower CO₂ levels, for example.\n\n📊 What this does:\n\nEach month: A different color shows up for each month (like January in blue, February in red, etc.)\nLines: You see the CO₂ values for each month over different years. For example, you might notice that CO₂ levels tend to be higher in the spring and lower in the fall.\n\n🧠 Why this is useful:\n\nWe can spot seasonal trends: Does CO₂ rise in the winter? Or fall in the summer?\nWe can also compare months across the years: Is January more or less CO₂-heavy compared to other months?"
+  },
+  {
+    "objectID": "slides/week-7.html#gg_subseries-1",
+    "href": "slides/week-7.html#gg_subseries-1",
+    "title": "Week 7",
+    "section": "gg_subseries()",
+    "text": "gg_subseries()\n\ngg_subseries(co2_tbl) +\n  labs(title = \"Monthly CO₂ Patterns\", y = \"CO₂ (ppm)\", x = \"Year\") + \n  theme_minimal()"
+  },
+  {
+    "objectID": "slides/week-7.html#gg_season",
+    "href": "slides/week-7.html#gg_season",
+    "title": "Week 7",
+    "section": "gg_season",
+    "text": "gg_season\n\nThink of gg_season() like a way to look at a yearly picture of CO₂ and see if the Earth follows a seasonal rhythm.\nIt makes the changes in CO₂ easy to spot when you look at months side-by-side.\n\n📊 What this does:\n\nIt shows you how CO₂ changes during each month of the year, but it puts all the years together, so you can see if the same thing happens every year in January, February, and so on.\n\n🧠 Why this is useful:\n\nYou’ll see a smooth curve for each month. Each curve shows how CO₂ goes up and down each year in the same pattern."
+  },
+  {
+    "objectID": "slides/week-7.html#gg_season-1",
+    "href": "slides/week-7.html#gg_season-1",
+    "title": "Week 7",
+    "section": "gg_season",
+    "text": "gg_season\n\ngg_season(co2_tbl) +\n  labs(title = \"Seasonal Patterns of CO₂\", y = \"CO₂ (ppm)\", x = \"Month\") +\n  theme_minimal()"
+  },
+  {
+    "objectID": "slides/week-7.html#bonus-interactive-plotting",
+    "href": "slides/week-7.html#bonus-interactive-plotting",
+    "title": "Week 7",
+    "section": "Bonus: Interactive Plotting",
+    "text": "Bonus: Interactive Plotting\n\nIn last weeks demo, we used plotly to generate an interactive plot of the hyperparameter tuning process.\nYou can use the plotly package to add interactivity to your ggplots directly with ggplotly()!\n\n\nlibrary(plotly)\n\nco2_plot &lt;- co2_tbl |&gt;\n  autoplot() +\n  geom_line(color = \"steelblue\") +\n  labs(title = \"Interactive CO₂ Time Series\", x = \"Date\", y = \"ppm\")"
+  },
+  {
+    "objectID": "slides/week-7.html#bonus-interactive-plotting-1",
+    "href": "slides/week-7.html#bonus-interactive-plotting-1",
+    "title": "Week 7",
+    "section": "Bonus: Interactive Plotting",
+    "text": "Bonus: Interactive Plotting\n\nggplotly(co2_plot)"
+  },
+  {
+    "objectID": "slides/week-7.html#monday",
+    "href": "slides/week-7.html#monday",
+    "title": "Week 7",
+    "section": "Monday",
+    "text": "Monday\n\nWe covered the following topics:\n\nsate-time data in R (date, POSIXct, POSIXlt)\nTime series data/structure (ts, tsibble, tibble + Date column)\nTime series decomposition\n\nTrend, seasonality, and residuals\n\nSmoothing time series data\n\nSmoothing with moving averages"
+  },
+  {
+    "objectID": "slides/week-7.html#today",
+    "href": "slides/week-7.html#today",
+    "title": "Week 7",
+    "section": "Today",
+    "text": "Today\n\nForecasting with two distinct models (1) ARIMA (2) Prophet\nUnderstanding modeltime + tidymodels integration\nForecasting Process for time series"
+  },
+  {
+    "objectID": "slides/week-7.html#toy-example-river-time-series-arima",
+    "href": "slides/week-7.html#toy-example-river-time-series-arima",
+    "title": "Week 7",
+    "section": "Toy Example: River Time Series & ARIMA",
+    "text": "Toy Example: River Time Series & ARIMA\nLet’s say we’re watching how much water flows in a river every day:\n\nMonday: 50 cfs\n\nTuesday: 60 cfs\n\nWednesday: 70 cfs\n\nWe want to guess tomorrow’s flow."
+  },
+  {
+    "objectID": "slides/week-7.html#autoregressive-ar",
+    "href": "slides/week-7.html#autoregressive-ar",
+    "title": "Week 7",
+    "section": "1. AutoRegressive (AR)",
+    "text": "1. AutoRegressive (AR)\n\nThis means: “Look at yesterday and the day before!”\nIf flow has been going up each day, AR says: ** “Tomorrow might go up again …” **\nIt’s like the river has a pattern."
+  },
+  {
+    "objectID": "slides/week-7.html#integrated-i",
+    "href": "slides/week-7.html#integrated-i",
+    "title": "Week 7",
+    "section": "2. Integrated (I)",
+    "text": "2. Integrated (I)\n\nSometimes the flow just keeps climbing — like during a spring snowmelt!\nTo help ARIMA think better, we subtract yesterday’s number from today’s.\nThis makes the numbers more steady so ARIMA can do its magic."
+  },
+  {
+    "objectID": "slides/week-7.html#moving-average-ma",
+    "href": "slides/week-7.html#moving-average-ma",
+    "title": "Week 7",
+    "section": "3. Moving Average (MA)",
+    "text": "3. Moving Average (MA)\n\nThe river sometimes gets a surprise flux (like a big rainstorm 🌧️).\nMA looks at those surprises and helps smooth them out.\nSo if it rained two days ago, MA might say: “Don’t expect another surprise tomorrow.”"
+  },
+  {
+    "objectID": "slides/week-7.html#put-it-all-together-ar-i-ma-arima",
+    "href": "slides/week-7.html#put-it-all-together-ar-i-ma-arima",
+    "title": "Week 7",
+    "section": "Put It All Together: AR + I + MA = ARIMA",
+    "text": "Put It All Together: AR + I + MA = ARIMA\n\nAR: Uses the river’s memory (trend)\nI: Calms the sturcutral components (season)\nMA: Handles noisy surprises (noise)\n\nNow we can forecast tomorrow’s flow!"
+  },
+  {
+    "objectID": "slides/week-7.html#arima",
+    "href": "slides/week-7.html#arima",
+    "title": "Week 7",
+    "section": "ARIMA",
+    "text": "ARIMA\nThe basics of a ARIMA (AutoRegressive Integrated Moving Average) Model include:\n\n\nAR: AutoRegressive part (past values):\n\n\nAR(1) = current value depends on the previous value\n\nAR(2) = current value depends on the previous two values\n\n\nI: Integrated part (differencing to make data stationary)\n\n\nDifferencing removes trends and seasonality\n\ne.g., diff(co2, lag = 12) removes annual seasonality\n\n\nMA: Moving Average part (past errors)\n\n\nMA(1) = current value depends on the previous error\n\nMA(2) = current value depends on the previous two errors\n\n\np, d, q: Parameters for AR, I, and MA\n\n\np = number of lagged values (AR)\n\nd = number of differences (I)\n\nq = number of lagged errors (MA)"
+  },
+  {
+    "objectID": "slides/week-7.html#aic",
+    "href": "slides/week-7.html#aic",
+    "title": "Week 7",
+    "section": "AIC",
+    "text": "AIC\nThe AIC metric helps choose between models/parameters:\n\nIt rewards:\n\nGood predictions\nSimplicity\n\nIt punishes:\n\nComplexity (too many parameters)\nOverfitting (fitting noise instead of the trend)\n\nLower AIC = better model"
+  },
+  {
+    "objectID": "slides/week-7.html#a-simple-forecasting-example",
+    "href": "slides/week-7.html#a-simple-forecasting-example",
+    "title": "Week 7",
+    "section": "A Simple Forecasting Example",
+    "text": "A Simple Forecasting Example\n\nauto.arima() is a function from the forecast package that automatically selects the best ARIMA model for your data accoridning toe to the AICc criterion.\nThe AICc (Akaike Information Criterion corrected) is a measure of the relative quality of statistical models for a given dataset.\nIt is used to compare different models and select the one that best fits the data while penalizing for complexity.\nThe auto.arima() function will automatically select the best parameters (p,d,q) based on the AICc criterion."
+  },
+  {
+    "objectID": "slides/week-7.html#section-1",
+    "href": "slides/week-7.html#section-1",
+    "title": "Week 7",
+    "section": "",
+    "text": "library(forecast)\n\nco2_arima &lt;- auto.arima(co2)\n\nsummary(co2_arima)\n#&gt; Series: co2 \n#&gt; ARIMA(1,1,1)(1,1,2)[12] \n#&gt; \n#&gt; Coefficients:\n#&gt;          ar1      ma1     sar1     sma1     sma2\n#&gt;       0.2569  -0.5847  -0.5489  -0.2620  -0.5123\n#&gt; s.e.  0.1406   0.1204   0.5880   0.5701   0.4819\n#&gt; \n#&gt; sigma^2 = 0.08576:  log likelihood = -84.39\n#&gt; AIC=180.78   AICc=180.97   BIC=205.5\n#&gt; \n#&gt; Training set error measures:\n#&gt;                      ME     RMSE       MAE         MPE       MAPE      MASE\n#&gt; Training set 0.01742092 0.287159 0.2303994 0.005073769 0.06845665 0.1819636\n#&gt;                      ACF1\n#&gt; Training set -0.002858162"
+  },
+  {
+    "objectID": "slides/week-7.html#forecasting-with-arima",
+    "href": "slides/week-7.html#forecasting-with-arima",
+    "title": "Week 7",
+    "section": "Forecasting with ARIMA",
+    "text": "Forecasting with ARIMA\n\nThe forecast() function is used to generate forecasts from the fitted ARIMA model.\nThe h argument specifies the number of periods to forecast into the future.\n\n\nco2_forecast &lt;- forecast(co2_arima, h = 60)\n\nplot(co2_forecast)"
+  },
+  {
+    "objectID": "slides/week-7.html#arima11111212",
+    "href": "slides/week-7.html#arima11111212",
+    "title": "Week 7",
+    "section": "🔢 ARIMA(1,1,1)(1,1,2)[12]",
+    "text": "🔢 ARIMA(1,1,1)(1,1,2)[12]\nARIMA Notation can be broken into two parts:\n1. Non-seasonal part: ARIMA(1, 1, 1)\nThis is the “regular” ARIMA: - AR(1): One autoregressive term — the model looks at one lag of the time series.\n\nI(1): One differencing — the model uses the change in values instead of raw values to make the series more stationary.\nMA(1): One moving average term — the model corrects using one lag of the error term.\n\n2. Seasonal part: (1, 1, 2)[12]\nThis is the seasonal pattern — repeated every 12 time units (like months in a year):\n\nSAR(1): One seasonal autoregressive term — it uses the value from 12 time steps ago.\nSI(1): One seasonal difference — subtracts the value from 12 steps ago to remove seasonal patterns.\nSMA(2): Two seasonal moving average terms — uses errors from 12 and 24 time steps ago.\n[12]: This is the seasonal period, i.e., it’s a yearly pattern with monthly data."
+  },
+  {
+    "objectID": "slides/week-7.html#arima11111212-1",
+    "href": "slides/week-7.html#arima11111212-1",
+    "title": "Week 7",
+    "section": "🔢 ARIMA(1,1,1)(1,1,2)[12]",
+    "text": "🔢 ARIMA(1,1,1)(1,1,2)[12]\nHey, ARIMA please…\n\n“Model the data using a mix of its last value, the last error, and their seasonal versions from 12 months ago — but first difference it once to remove trend and once seasonally to remove yearly patterns.”"
+  },
+  {
+    "objectID": "slides/week-7.html#note",
+    "href": "slides/week-7.html#note",
+    "title": "Week 7",
+    "section": "Note",
+    "text": "Note\nARIMA modeling works well when data is stationary. - Stationarity means the statistical properties of the series (mean, variance) do not change over time. - Non-stationary data can lead to unreliable forecasts and misleading results."
+  },
+  {
+    "objectID": "slides/week-7.html#prophet",
+    "href": "slides/week-7.html#prophet",
+    "title": "Week 7",
+    "section": "Prophet",
+    "text": "Prophet\n\nProphet is an open-source tool for forecasting time series data.\nDeveloped by Facebook (Meta)\nDesigned for analysts and data scientists\nHandles missing data, outliers, and seasonality"
+  },
+  {
+    "objectID": "slides/week-7.html#key-features-of-prophet",
+    "href": "slides/week-7.html#key-features-of-prophet",
+    "title": "Week 7",
+    "section": "Key Features of Prophet",
+    "text": "Key Features of Prophet\n✅ Additive Model: Trend + Seasonality + Holidays + Noise\n✅ Automatic Changepoint Detection\n✅ Support for Custom Holidays & Events\n✅ Flexible Seasonality (daily/weekly/yearly)\n✅ Easy-to-use API in R and Python"
+  },
+  {
+    "objectID": "slides/week-7.html#prophets-model-structure",
+    "href": "slides/week-7.html#prophets-model-structure",
+    "title": "Week 7",
+    "section": "Prophet’s Model Structure",
+    "text": "Prophet’s Model Structure\nProphet decomposes time series into components:\n\\[ y(t) = g(t) + s(t) + h(t) + ε(t) \\]\n\ng(t): Trend (linear or logistic growth)\ns(t): Seasonality (Fourier series)\nh(t): Holiday effects\nε(t): Error term (noise)\n\n📌 Assumes additive components by default; multiplicative also possible"
+  },
+  {
+    "objectID": "slides/week-7.html#a-simple-forecasting-example-1",
+    "href": "slides/week-7.html#a-simple-forecasting-example-1",
+    "title": "Week 7",
+    "section": "A Simple Forecasting Example",
+    "text": "A Simple Forecasting Example\nYour time series must have: (1) ds column (date/timestamp) (2) y column (value to forecast)\n\nlibrary(prophet)\nprophet_mod &lt;- tsibble::as_tsibble(co2) |&gt; \n  # prophet requires ds and y columns\n  dplyr::rename(ds = index, y = value) |&gt; \n  prophet()\n\n\n# Make future dataframe and predict\nfuture   &lt;- make_future_dataframe(prophet_mod, periods = 1000)\n\nforecast &lt;- predict(prophet_mod, future)\n\n# Plot the forecast\nplot(prophet_mod, forecast) + \n  theme_minimal()"
+  },
+  {
+    "objectID": "slides/week-7.html#pros-cons",
+    "href": "slides/week-7.html#pros-cons",
+    "title": "Week 7",
+    "section": "Pros / Cons",
+    "text": "Pros / Cons\n\n\n\n\n\n\n\n\nFeature\nARIMA\nProphet\n\n\n\n\nStatistical rigor\nBased on strong statistical theory; well-studied\nIntuitive, decomposable model (trend + seasonality + events)\n\n\nInterpretability\nClear interpretation of AR, MA, differencing terms\nPlots components like trend/seasonality directly\n\n\nFlexibility (SARIMA)\nSeasonal ARIMA can handle seasonal structure\nHandles multiple seasonalities natively (yearly, weekly, daily)\n\n\nControl over params\nFine-tuned control over differencing, lags, and model order\nEasy to specify changepoints, seasonality, and custom events\n\n\nStatistical testing\nIncludes AIC/BIC for model selection\nCross-validation support; uncertainty intervals included\n\n\nRequires stationarity\nTime series must be stationary or made so (differencing)\nHandles non-stationary data out of the box\n\n\nModel complexity\nNeeds careful tuning (p,d,q) and domain expertise\nDefaults work well; limited tuning needed\n\n\nHoliday effects\nMust be encoded manually\nEasy to include holidays/events\n\n\nMultivariate support\nBasic ARIMA doesn’t support exogenous variables easily (need ARIMAX)\nSupports external regressors with add_regressor()\n\n\nNon-linear trends\nPoor performance with structural breaks or non-linear growth\nHandles changepoints and logistic growth models well\n\n\nSeasonality limits\nSARIMA handles only one seasonal period well\nBuilt-in multiple seasonal components (e.g., daily, weekly, yearly)\n\n\n\nTL;DR\n\nUse ARIMA if you want a classic, statistical model with deep customization and you’re comfortable making your data stationary.\nUse Prophet if you want a fast, robust, and intuitive model for business or environmental data with strong seasonal effects and irregular events."
+  },
+  {
+    "objectID": "slides/week-7.html#to-much-complexity",
+    "href": "slides/week-7.html#to-much-complexity",
+    "title": "Week 7",
+    "section": "To much complexity!!",
+    "text": "To much complexity!!\n\nEach model has it own requirements, arguments, and tuning parameters.\nSimular to our ML models, this introduces a large time sink, opportunity for error, and complexity.\n\n\n\nmodeltime brings tidy workflows to time series forecasting using the parsnip and workflows frameworks from tidymodels.\nCombine multiple models (ARIMA, Prophet, XGBoost) in one framework to"
+  },
+  {
+    "objectID": "slides/week-7.html#modeltime-integration",
+    "href": "slides/week-7.html#modeltime-integration",
+    "title": "Week 7",
+    "section": "Modeltime Integration  ",
+    "text": "Modeltime Integration  \n\nlibrary(modeltime)\nlibrary(tidymodels)\nlibrary(timetk)"
+  },
+  {
+    "objectID": "slides/week-7.html#create-a-time-series-split",
+    "href": "slides/week-7.html#create-a-time-series-split",
+    "title": "Week 7",
+    "section": "1. Create a time series split …",
+    "text": "1. Create a time series split …\n\nUse time_series_split() to make a train/test set.\nSetting assess = “…” tells the function to use the last … of data as the testing set.\nSetting cumulative = TRUE tells the sampling to use all of the prior data as the training set.\n\n\nco2_tbl &lt;-  tsibble::as_tsibble(co2) |&gt; \n  as_tibble() |&gt;\n  mutate(date = as.Date(index), index = NULL) \n\nsplits &lt;- time_series_split(co2_tbl, assess = \"60 months\", cumulative = TRUE)\n\ntraining &lt;-  training(splits)\ntesting  &lt;-  testing(splits)"
+  },
+  {
+    "objectID": "slides/week-7.html#specify-models",
+    "href": "slides/week-7.html#specify-models",
+    "title": "Week 7",
+    "section": "2. Specify Models …",
+    "text": "2. Specify Models …\nJust like tidymodels …\n\nModel Spec: arima_reg()/prophet_reg()/prophet_boost() &lt;– This sets up your general model algorithm and key parameters\nModel Mode: mode = \"regression\"/mode = \"classification\" &lt;– This sets the model mode to regression or classification (timeseries is always regression!)\nSet Engine: set_engine(\"auto_arima\")/set_engine(\"prophet\") / &lt;– This selects the specific package-function to use, you can add any function-level arguments here.\n\n\nmods &lt;- list(\n  arima_reg() |&gt;  set_engine(\"auto_arima\"),\n  \n  arima_boost(min_n = 2, learn_rate = 0.015) |&gt; set_engine(engine = \"auto_arima_xgboost\"),\n  \n  prophet_reg() |&gt; set_engine(\"prophet\"),\n  \n  prophet_boost() |&gt; set_engine(\"prophet_xgboost\"),\n  \n  # Exponential Smoothing State Space model\n  exp_smoothing() |&gt; set_engine(engine = \"ets\"),\n  \n  # Multivariate Adaptive Regression Spline model\n  mars(mode = \"regression\") |&gt; set_engine(\"earth\") \n)"
+  },
+  {
+    "objectID": "slides/week-7.html#fit-models",
+    "href": "slides/week-7.html#fit-models",
+    "title": "Week 7",
+    "section": "3. Fit Models …",
+    "text": "3. Fit Models …\n\nUse purrr::map() to fit the models to the training data.\nFit Model: fit(value ~ date, training) &lt;– All modeltime models require a date column to be a regressor.\n\n\nmodels &lt;- map(mods, ~ fit(.x, value ~ date, data = training))"
+  },
+  {
+    "objectID": "slides/week-7.html#build-modeltime-table",
+    "href": "slides/week-7.html#build-modeltime-table",
+    "title": "Week 7",
+    "section": "4. Build modeltime table …",
+    "text": "4. Build modeltime table …\n\nUse modeltime_table() to combine multiple models into a single table that can be used for calibration, accuracy, and forecasting.\n\nmodeltime_table():\n\nCreates a table of models\nValidates that all objects are models (parsnip or workflows objects) and all models have been fitted\nProvides an ID and Description of the models\n\nas_modeltime_table():\n\nConverts a list of models to a modeltime table. Useful if programatically creating Modeltime Tables from models stored in a list (e.g. from map).\n\n\n(models_tbl &lt;- as_modeltime_table(models))\n#&gt; # Modeltime Table\n#&gt; # A tibble: 6 × 3\n#&gt;   .model_id .model   .model_desc            \n#&gt;       &lt;int&gt; &lt;list&gt;   &lt;chr&gt;                  \n#&gt; 1         1 &lt;fit[+]&gt; ARIMA(1,1,1)(2,1,2)[12]\n#&gt; 2         2 &lt;fit[+]&gt; ARIMA(1,1,1)(0,1,1)[12]\n#&gt; 3         3 &lt;fit[+]&gt; PROPHET                \n#&gt; 4         4 &lt;fit[+]&gt; PROPHET                \n#&gt; 5         5 &lt;fit[+]&gt; ETS(M,A,A)             \n#&gt; 6         6 &lt;fit[+]&gt; EARTH"
+  },
+  {
+    "objectID": "slides/week-7.html#notes",
+    "href": "slides/week-7.html#notes",
+    "title": "Week 7",
+    "section": "Notes:",
+    "text": "Notes:\nmodeltime_table() does some basic checking to ensure all models are fit and organized into a scalable structure called a “Modeltime Table” that is used as part of our forecasting workflow.\n\nIt’s expected that tuning and parameter selection is performed prior to incorporating into a Modeltime Table.\nIf you try to add an unfitted model, the modeltime_table() will complain (throw an informative error) saying you need to fit() the model."
+  },
+  {
+    "objectID": "slides/week-7.html#calibrate-the-models",
+    "href": "slides/week-7.html#calibrate-the-models",
+    "title": "Week 7",
+    "section": "5. Calibrate the Models …",
+    "text": "5. Calibrate the Models …\n\nUse modeltime_calibrate() to evaluate the models on the test set.\nCalibrating adds a new column, .calibration_data, with the test predictions and residuals inside.\n\n\n(calibration_table &lt;- modeltime_calibrate(models_tbl, testing, quiet = FALSE))\n#&gt; # Modeltime Table\n#&gt; # A tibble: 6 × 5\n#&gt;   .model_id .model   .model_desc             .type .calibration_data\n#&gt;       &lt;int&gt; &lt;list&gt;   &lt;chr&gt;                   &lt;chr&gt; &lt;list&gt;           \n#&gt; 1         1 &lt;fit[+]&gt; ARIMA(1,1,1)(2,1,2)[12] Test  &lt;tibble [60 × 4]&gt;\n#&gt; 2         2 &lt;fit[+]&gt; ARIMA(1,1,1)(0,1,1)[12] Test  &lt;tibble [60 × 4]&gt;\n#&gt; 3         3 &lt;fit[+]&gt; PROPHET                 Test  &lt;tibble [60 × 4]&gt;\n#&gt; 4         4 &lt;fit[+]&gt; PROPHET                 Test  &lt;tibble [60 × 4]&gt;\n#&gt; 5         5 &lt;fit[+]&gt; ETS(M,A,A)              Test  &lt;tibble [60 × 4]&gt;\n#&gt; 6         6 &lt;fit[+]&gt; EARTH                   Test  &lt;tibble [60 × 4]&gt;\n\nA few notes on Calibration:\n\nCalibration builds confidence intervals and accuracy metrics\nCalibration Data is the predictions and residuals that are calculated from out-of-sample data.\nAfter calibrating, the calibration data follows the data through the forecasting workflow."
+  },
+  {
+    "objectID": "slides/week-7.html#testing-forecast-accuracy-evaluation",
+    "href": "slides/week-7.html#testing-forecast-accuracy-evaluation",
+    "title": "Week 7",
+    "section": "Testing Forecast & Accuracy Evaluation",
+    "text": "Testing Forecast & Accuracy Evaluation\nThere are 2 critical parts to an evaluation.\n\nEvaluating the Test (Out of Sample) Accuracy\nVisualizing the Forecast vs Test Data Set"
+  },
+  {
+    "objectID": "slides/week-7.html#accuracy",
+    "href": "slides/week-7.html#accuracy",
+    "title": "Week 7",
+    "section": "Accuracy",
+    "text": "Accuracy\nmodeltime_accuracy() collects common accuracy metrics using yardstick functions:\n\nMAE - Mean absolute error, mae()\nMAPE - Mean absolute percentage error, mape()\nMASE - Mean absolute scaled error, mase()\nSMAPE - Symmetric mean absolute percentage error, smape()\nRMSE - Root mean squared error, rmse()\nRSQ - R-squared, rsq()\n\n\nmodeltime_accuracy(calibration_table) |&gt; \n  arrange(mae)\n#&gt; # A tibble: 6 × 9\n#&gt;   .model_id .model_desc             .type   mae  mape  mase smape  rmse   rsq\n#&gt;       &lt;int&gt; &lt;chr&gt;                   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n#&gt; 1         1 ARIMA(1,1,1)(2,1,2)[12] Test  0.810 0.224 0.687 0.224 0.967 0.973\n#&gt; 2         2 ARIMA(1,1,1)(0,1,1)[12] Test  0.885 0.244 0.750 0.245 1.05  0.969\n#&gt; 3         3 PROPHET                 Test  1.06  0.295 0.899 0.294 1.16  0.986\n#&gt; 4         4 PROPHET                 Test  1.06  0.295 0.899 0.294 1.16  0.986\n#&gt; 5         5 ETS(M,A,A)              Test  1.48  0.409 1.25  0.410 1.71  0.958\n#&gt; 6         6 EARTH                   Test  1.89  0.526 1.61  0.526 2.25  0.499"
+  },
+  {
+    "objectID": "slides/week-7.html#forecast",
+    "href": "slides/week-7.html#forecast",
+    "title": "Week 7",
+    "section": "Forecast",
+    "text": "Forecast\n\nUse modeltime_forecast() to generate forecasts for the next 120 months (10 years).\nUse plot_modeltime_forecast() to visualize the forecasts.\n\n\n(forecast &lt;- calibration_table  |&gt; \n  modeltime_forecast(h = \"60 months\", \n                     new_data = testing,\n                     actual_data = co2_tbl) )\n#&gt; # Forecast Results\n#&gt; \n#&gt; # A tibble: 828 × 7\n#&gt;    .model_id .model_desc .key   .index     .value .conf_lo .conf_hi\n#&gt;        &lt;int&gt; &lt;chr&gt;       &lt;fct&gt;  &lt;date&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n#&gt;  1        NA ACTUAL      actual 1959-01-01   315.       NA       NA\n#&gt;  2        NA ACTUAL      actual 1959-02-01   316.       NA       NA\n#&gt;  3        NA ACTUAL      actual 1959-03-01   316.       NA       NA\n#&gt;  4        NA ACTUAL      actual 1959-04-01   318.       NA       NA\n#&gt;  5        NA ACTUAL      actual 1959-05-01   318.       NA       NA\n#&gt;  6        NA ACTUAL      actual 1959-06-01   318        NA       NA\n#&gt;  7        NA ACTUAL      actual 1959-07-01   316.       NA       NA\n#&gt;  8        NA ACTUAL      actual 1959-08-01   315.       NA       NA\n#&gt;  9        NA ACTUAL      actual 1959-09-01   314.       NA       NA\n#&gt; 10        NA ACTUAL      actual 1959-10-01   313.       NA       NA\n#&gt; # ℹ 818 more rows"
+  },
+  {
+    "objectID": "slides/week-7.html#vizualize",
+    "href": "slides/week-7.html#vizualize",
+    "title": "Week 7",
+    "section": "Vizualize",
+    "text": "Vizualize\n\nplot_modeltime_forecast(forecast)"
+  },
+  {
+    "objectID": "slides/week-7.html#refit-to-full-dataset-forecast-forward",
+    "href": "slides/week-7.html#refit-to-full-dataset-forecast-forward",
+    "title": "Week 7",
+    "section": "Refit to Full Dataset & Forecast Forward",
+    "text": "Refit to Full Dataset & Forecast Forward\nThe final step is to refit the models to the full dataset using modeltime_refit() and forecast them forward.\n\nrefit_tbl &lt;- calibration_table |&gt;\n    modeltime_refit(data = co2_tbl)\n\nrefit_tbl |&gt;\n    modeltime_forecast(h = \"3 years\", actual_data = co2_tbl) |&gt;\n    plot_modeltime_forecast()"
+  },
+  {
+    "objectID": "slides/week-7.html#why-refit",
+    "href": "slides/week-7.html#why-refit",
+    "title": "Week 7",
+    "section": "Why refit?",
+    "text": "Why refit?\nThe models have all changed! This is the (potential) benefit of refitting.\nMore often than not refitting is a good idea. Refitting:\n\nRetrieves your model and preprocessing steps\nRefits the model to the new data\nRecalculates any automations. This includes:\n\nRecalculating the changepoints for the Earth Model\nRecalculating the ARIMA and ETS parameters\n\nPreserves any parameter selections. This includes:\nAny other defaults that are not automatic calculations are used."
+  },
+  {
+    "objectID": "slides/week-7.html#growing-ecosystem",
+    "href": "slides/week-7.html#growing-ecosystem",
+    "title": "Week 7",
+    "section": "Growing Ecosystem",
+    "text": "Growing Ecosystem"
+  },
+  {
+    "objectID": "slides/week-7.html#summary-takeaways",
+    "href": "slides/week-7.html#summary-takeaways",
+    "title": "Week 7",
+    "section": "Summary & Takeaways",
+    "text": "Summary & Takeaways\n\nEnvironmental science is rich with time series applications\nTime series data is sequential and ordered\nlubridate simplifies handling and extracting date-time features\nUse ts, zoo, xts for classic or irregular data\nUse tsibble, feasts, and fable for tidy workflows\nLearn to decompose, smooth, and forecast\nUse modeltime for advanced modeling and forecasting"
+  },
+  {
+    "objectID": "slides/week-7.html#forecasting",
+    "href": "slides/week-7.html#forecasting",
+    "title": "Week 7",
+    "section": "Forecasting:",
+    "text": "Forecasting:\n\nForecasting with two distinct models (1) ARIMA (2) Prophet\nUnderstanding modeltime + tidymodels integration\nForecasting Process for time series"
+  },
+  {
+    "objectID": "labs/lab6.html#modeltime-prediction",
+    "href": "labs/lab6.html#modeltime-prediction",
+    "title": "Lab 6: Timeseries Data",
+    "section": "Modeltime Prediction",
+    "text": "Modeltime Prediction\n\nData Prep\nNow we are going to use the modeltime package to predict future streamflow using the climate data. We will use the modeltime package to create a time series model. First, we need to prep the data. In this case we want both the histroic and future data to be in the same format where the date column is a Date object (name it date for ease) and the other columns are numeric. In both cases each need to be a tibble:\nWe will use the time_series_split() function to split the data into training and testing sets. The training set will be used to train the model and the testing set will be used to test the model. Rememer in this case we are using a time series split, so the training set will be defined by a period rather then a perent of hold out data. In this case we will use a 24 month period testing set (assess). Make sure to set a seed and extract the trainign and testing data.frames with training() and testing().\n\n\nModel Definition\nChose at least three models to test - with one being arima and one being prophet. Store these models (specification + engine) in a list.\n\n\nModel Fitting\nNext, we will use the fit() function to fit the models to the training data. We will use the map() function from the purrr package to iterate over the list of models and fit each model to the training data. The fit() function takes a formula, a model specification, and a data.frame as arguments. Here you can build any formula you see fit. What components of the date object do you want to use (e.g. month? season?). What climate variables do you want to use?\nThe only requirement is that the response variable is Flow and the date variable is included as a predictor.\nOnce the models are fitted, we will use the as_modeltime_table() function to convert the list of fit models into a modeltime table. This will allow us to use the modeltime package to make predictions.\n\n\nModel Calibration\nNext, we will use the modeltime_calibrate() function to calibrate the models. This function takes a modeltime table and a data.frame of testing data as arguments. The function will return a modeltime table with the calibrated models.\nThe results of the calibration can be passed to modeltime_accuracy() to assess the accuracy of the models.\nCalibrate the models using the testing data and assess the accuracy of the models describing what you see!\n\n\nForecasting\nWith a calibrated model set in place, we can now make predictions using the modeltime_forecast(). Becasue we are using exogenous data, we need to pass the actual data to the function. This is because the model needs to know what the actual values are in order to make predictions.\nAs a first step, lets use the calibrated models to make predictions on the testing data. Here you will need to specifcy the actual_data (historic data tibble) and the new_data (testing).\nThe outputs can be passed to the plot_modeltime_forecast() function to visualize the predictions.\n\n\nRefitting the Model\nNow that we have a calibrated model set, we can refit the models to the full dataset. This is important because the models are only as good as the data they are trained on. By refitting the models to the full dataset, we can improve the accuracy of the predictions.\nTo do this, we will use the modeltime_refit() function. This function takes a calibrataion table and the full historic tibble as the data argument. The function will return a modeltime table with the refitted models. Like before, the accuracy of the models can be assessed using the modeltime_accuracy() function.\n\n\nLooking into the future\nNow we are at the end! We can use the refitted models to make predictions on the future data. This is where we will use the future tibble we created earlier as the new_data. The actual_data argument will be the historic data tibble.\nUsing your refitted models, the modeltime_forecast() function will return a modeltime table with the predictions that can be passed to the plot_modeltime_forecast() function to visualize the predictions.\n\n\nWrap up\nLooking at your predictions what do you think? How do the models compare? What do you think the future streamflow will be? What are the limitations of this analysis? What are the assumptions of the models?\nPerhaps you see negative values in the predictions; perhaps you dont see strong agreement between the furture starting points around Jan 2024; perhaps you see other patterns that seem systemic and questionablly wrong. At this stage that is quite alright. In this simple lab, we did not worry about issue like cross validation, featrue engineering, or hyperparameter tuning. These are all important steps in the modeling process and should be considered in a real world application.\nIf interested, the processes learned in tidymodels are directly applicable here and you can take this model as far as you like adding new data, correcting non-normal data, and implemeting a resampling approach to improve the model. That said, you now have a string introdcutory grasp on what the world of timeseries is about."
   }
 ]
