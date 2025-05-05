@@ -7151,7 +7151,7 @@
     "href": "slides/week-7.html#lubridate-package",
     "title": "Week 7",
     "section": "lubridate Package ",
-    "text": "lubridate Package \n\nThe lubridate package comes with the tidyverse and is designed to make working with dates and times easier.\nIt provides a consistent set of functions for parsing, manipulating, and formatting date-time objects.\n\n\nlibrary(lubridate)\nymd(\"20240408\")        # Parse date\n#&gt; [1] \"2024-04-08\"\nymd_hms(\"20240408 123000\")\n#&gt; [1] \"2024-04-08 12:30:00 UTC\"\n\nnow()                  # Current date and time\n#&gt; [1] \"2025-05-04 23:26:49 MDT\"\ndate &lt;- ymd(\"2023-12-01\")\nmonth(date)           # Extract month\n#&gt; [1] 12\nday(date)\n#&gt; [1] 1\nweek(date)\n#&gt; [1] 48\n\nUse lubridate to handle inconsistent formats and to align data with time zones, daylight savings, etc."
+    "text": "lubridate Package \n\nThe lubridate package comes with the tidyverse and is designed to make working with dates and times easier.\nIt provides a consistent set of functions for parsing, manipulating, and formatting date-time objects.\n\n\nlibrary(lubridate)\nymd(\"20240408\")        # Parse date\n#&gt; [1] \"2024-04-08\"\nymd_hms(\"20240408 123000\")\n#&gt; [1] \"2024-04-08 12:30:00 UTC\"\n\nnow()                  # Current date and time\n#&gt; [1] \"2025-05-04 23:43:24 MDT\"\ndate &lt;- ymd(\"2023-12-01\")\nmonth(date)           # Extract month\n#&gt; [1] 12\nday(date)\n#&gt; [1] 1\nweek(date)\n#&gt; [1] 48\n\nUse lubridate to handle inconsistent formats and to align data with time zones, daylight savings, etc."
   },
   {
     "objectID": "slides/week-7.html#lubridate-timezones",
